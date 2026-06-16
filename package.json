@@ -3,6 +3,9 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "imports": {
     "#/*": "./src/*"
   },
@@ -21,6 +24,7 @@
     "start": "prisma db push && node .output/server/index.mjs",
     "seo:og-images": "python3 scripts/generate-og-images.py",
     "seo:gsc": "dotenv -e .env.local -- python3 scripts/write-gsc-verification.py",
+    "seo:verify": "dotenv -e .env.local -- tsx scripts/verify-seo.ts",
     "seo:lighthouse": "dotenv -e .env.local -- node scripts/lighthouse-audit.mjs",
     "outreach:check": "dotenv -e .env.local -- node scripts/outreach/check-env.mjs",
     "outreach:draft": "dotenv -e .env.local -- node scripts/outreach/draft.mjs",
