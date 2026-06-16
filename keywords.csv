@@ -1,29 +1,109 @@
 Keyword,Volume,KD,Intent,Status,Priority,Cluster,Source,SERP_Notes,Onie_Angle
-how to write claude code skills,,,Informational,Published,P1,Skills,estimated,Replaced placeholder vol/KD — validate in SEMrush,Extends published /blog/how-to-write-claude-code-skills
-how to document ai agent workflows,,,Informational,Published,P1,Documentation,estimated,Replaced placeholder vol/KD — validate in SEMrush,Extends published /blog/document-ai-agent-workflows
-claude code workflow examples,,,Informational,Published,P1,Skills,estimated,Replaced placeholder vol/KD — validate in SEMrush,Extends published /blog/claude-code-workflow-examples
-cursor rules vs skills,,,Informational,Queued,P1,Skills,serp-2026-06,DEV + Cursor docs rank; few side-by-side tests,Decision guide + migrate-to-skills; CTA publish team workflow on Onie
-how to build an mcp server,,,Informational,Queued,P1,MCP,serp-2026-06,Official MCP docs + YouTube tutorials; gap Cursor+Claude config,Minimal server + mcp.json; document shipped workflow on Onie
+install claude code,22200,11,Informational,Queued,P1,Skills,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 22200, KD 11",Review cluster fit before /blog
+how to build an mcp server,480,2,Informational,Queued,P1,MCP,dataforseo:2026-06-16,Official MCP docs + YouTube tutorials; gap Cursor+Claude config; DataForSEO validated 2026-06-16,Minimal server + mcp.json; document shipped workflow on Onie
+claude code mcp add,110,17,Navigational,Queued,P1,MCP,dataforseo:2026-06-16,Claude Code docs rank for MCP install; DataForSEO validated 2026-06-16,CLI setup + env vars + first tool call
+model context protocol tutorial,50,35,Navigational,Queued,P1,MCP,dataforseo:2026-06-16,Broad head term; official docs dominate; DataForSEO validated 2026-06-16,Hub page linking to MCP setup post
 shared prompt library for teams,,,Informational,Queued,P1,Team libs,serp-2026-06,SaaS blogs rank; gap agent-era (skills+MCP),Governance + versioning; Onie as public practitioner library
 claude code skills vs rules,,,Informational,Queued,P1,Skills,serp-2026-06,Related to published skills post; comparison intent,Link from how-to-write-claude-code-skills
-mcp server cursor setup,,,Informational,Queued,P2,MCP,serp-2026-06,mcp.json config questions common in tutorials,Step-by-step Cursor MCP.json + verify tools
-agent skills best practices,,,Informational,Queued,P2,Skills,serp-2026-06,Listicles + Anthropic repo SEO,Checklist format with practitioner examples
+mcp server cursor setup,,,Informational,Queued,P1,MCP,serp-2026-06,mcp.json config questions common in tutorials,Step-by-step Cursor MCP.json + verify tools
+agent skills best practices,,,Informational,Queued,P1,Skills,serp-2026-06,Listicles + Anthropic repo SEO,Checklist format with practitioner examples
 claude code hooks tutorial,,,Informational,Queued,P2,Skills,serp-2026-06,Emerging topic; fewer definitive guides,Hooks for quality gates; link workflow examples post
 share claude code skills with team,,,Informational,Queued,P2,Team libs,serp-2026-06,Git-shared .claude/skills angle under-served,Review process + Onie public feed
 agent workflow template,,,Informational,Queued,P2,Documentation,serp-2026-06,Template posts rank on Notion/Medium,Downloadable template + Onie /p/ examples
-model context protocol tutorial,,,Informational,Queued,P3,MCP,serp-2026-06,Broad head term; official docs dominate,Hub page linking to MCP setup post
-claude code mcp add,,,Informational,Queued,P2,MCP,serp-2026-06,Claude Code docs rank for MCP install,CLI setup + env vars + first tool call
-what is model context protocol,,,Informational,Skip,P3,MCP,serp-2026-06,Anthropic + modelcontextprotocol.io own SERP,Skip — link out from tutorial cluster
 share ai prompts with team,,,Informational,Queued,P2,Team libs,serp-2026-06,Prompt wallet / Glean content ranks,Agent workflow angle not ChatGPT-only
-prompt library governance,,,Informational,Queued,P3,Team libs,serp-2026-06,Enterprise governance posts; niche KD,Ownership + lifecycle for agent assets
+prompt library governance,,,Informational,Queued,P2,Team libs,serp-2026-06,Enterprise governance posts; niche KD,Ownership + lifecycle for agent assets
 claude code SKILL.md format,,,Informational,Queued,P2,Skills,serp-2026-06,Long-tail; supports skills cluster,Frontmatter deep-dive; link skills 101 post
 when to use skills vs rules,,,Informational,Queued,P2,Skills,serp-2026-06,PAA under cursor/claude comparisons,Short FAQ-heavy post; internal link rules vs skills
-claude code subagents workflow,,,Informational,Queued,P2,Skills,serp-2026-06,Multi-agent content growing on Medium/Substack,Orchestration examples from practitioners
+claude code subagents workflow,,,Informational,Queued,P3,Skills,serp-2026-06,Multi-agent content growing on Medium/Substack,Orchestration examples from practitioners
 mcp tools resources prompts difference,,,Informational,Queued,P3,MCP,serp-2026-06,Conceptual MCP questions in courses,Explain primitives; link MCP build post
 agent observability for developers,,,Informational,Queued,P3,Documentation,serp-2026-06,Eng audience; overlaps dev tooling,Trace runs + document in public workflow
 ux research ai agent workflow,,,Informational,Queued,P3,Field,product-seed,Maps to demo post UX synthesis,Field silo; link /p/ UX workflow
 literature review ai agent workflow,,,Informational,Queued,P3,Field,product-seed,Maps to demo science post,Field silo; link /p/ literature triage
 saas mvp agent workflow,,,Informational,Queued,P3,Field,product-seed,Maps to demo SaaS post,Field silo; link /p/ SaaS MVP loop
-cursor agent skills migrate,,,Informational,Queued,P2,Skills,serp-2026-06,Cursor /migrate-to-skills command docs new,Migration walkthrough from .mdc rules
+cursor agent skills migrate,,,Informational,Queued,P3,Skills,serp-2026-06,Cursor /migrate-to-skills command docs new,Migration walkthrough from .mdc rules
 public agent workflow feed,,,Informational,Queued,P3,Product,product-seed,Branded / category creation,Onie positioning post — use after 5+ how-tos
+cursor rules vs skills,90,0,Informational,Published,P1,Skills,dataforseo:2026-06-16,DEV + Cursor docs rank; few side-by-side tests; DataForSEO validated 2026-06-16; Published /blog/cursor-rules-vs-skills,Decision guide + migrate-to-skills; CTA publish team workflow on Onie
+how to write claude code skills,,,Informational,Published,P1,Skills,estimated,Replaced placeholder vol/KD — validate in SEMrush,Extends published /blog/how-to-write-claude-code-skills
+how to document ai agent workflows,,,Informational,Published,P1,Documentation,estimated,Replaced placeholder vol/KD — validate in SEMrush,Extends published /blog/document-ai-agent-workflows
+claude code workflow examples,,,Informational,Published,P1,Skills,estimated,Replaced placeholder vol/KD — validate in SEMrush,Extends published /blog/claude-code-workflow-examples
+flashpoint code,60500,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 60500, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+code flashpoint,60500,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 60500, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+flash point code,60500,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 60500, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+blooket code,40500,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 40500, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+4.2 code practice question 1,33100,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 33100, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+edhesive 3.2 code practice answers,27100,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 27100, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+4.2 code practice: question 1,27100,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 27100, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+rogue piece code,18100,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 18100, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+code to read,18100,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 18100, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+knockout code,12100,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 12100, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+paradox code,9900,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 9900, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+what will be the output of the following c code,9900,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 9900, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+code cake,8100,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 8100, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+invoke vs evoke,8100,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 8100, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+duck in amazon source code,8100,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 8100, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+code focus,8100,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 8100, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+focus on code,8100,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 8100, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+hypershot code,8100,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 8100, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+shift code,40500,5,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 40500, KD 5; off-niche (cleanup)",Review cluster fit before /blog
+code pressure,6600,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 6600, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+explode the code,6600,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 6600, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+arx code,5400,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 5400, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+imbedded vs embedded,5400,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 5400, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+embedding vs imbedding,5400,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 5400, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+code dig,4400,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 4400, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+code for ninja time,4400,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 4400, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+template strand coding strand,4400,0,Informational,Skip,P3,Documentation,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 4400, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+dig code,4400,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 4400, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+code division multiple access,4400,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 4400, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+template strand,4400,0,Informational,Skip,P3,Documentation,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 4400, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+cast source code,4400,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 4400, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+coding template strand,4400,0,Informational,Skip,P3,Documentation,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 4400, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+printful vs printify,4400,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 4400, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+coding strand and template strand,4400,0,Informational,Skip,P3,Documentation,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 4400, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+code beautify drive mad,4400,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 4400, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+4.2 code practice: question 2,4400,0,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 4400, KD 0; off-niche (cleanup)",Review cluster fit before /blog
+yba code,12100,2,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 12100, KD 2; off-niche (cleanup)",Review cluster fit before /blog
+code monkey,40500,16,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 40500, KD 16; off-niche (cleanup)",Review cluster fit before /blog
+binary code translator,33100,17,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 33100, KD 17; off-niche (cleanup)",Review cluster fit before /blog
+gimkit code,40500,22,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 40500, KD 22; off-niche (cleanup)",Review cluster fit before /blog
+code torch,22200,13,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 22200, KD 13; off-niche (cleanup)",Review cluster fit before /blog
+illuminate code,9900,6,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 9900, KD 6; off-niche (cleanup)",Review cluster fit before /blog
+binary code,33100,23,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 33100, KD 23; off-niche (cleanup)",Review cluster fit before /blog
+workflow diagram,5400,3,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 5400, KD 3; off-niche (cleanup)",Review cluster fit before /blog
+blooket join code,40500,29,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 40500, KD 29; off-niche (cleanup)",Review cluster fit before /blog
+reflected code,5400,3,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 5400, KD 3; off-niche (cleanup)",Review cluster fit before /blog
+shifted code,40500,30,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 40500, KD 30; off-niche (cleanup)",Review cluster fit before /blog
+gimkit join code,22200,19,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 22200, KD 19; off-niche (cleanup)",Review cluster fit before /blog
+code for a line break,12100,10,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 12100, KD 10; off-niche (cleanup)",Review cluster fit before /blog
+quizlet code,9900,9,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 9900, KD 9; off-niche (cleanup)",Review cluster fit before /blog
+cage code lookup,9900,10,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 9900, KD 10; off-niche (cleanup)",Review cluster fit before /blog
+vex iq code,8100,8,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 8100, KD 8; off-niche (cleanup)",Review cluster fit before /blog
+quizizz code,14800,17,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 14800, KD 17; off-niche (cleanup)",Review cluster fit before /blog
+code history,8100,9,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 8100, KD 9; off-niche (cleanup)",Review cluster fit before /blog
+wayground code,12100,15,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 12100, KD 15; off-niche (cleanup)",Review cluster fit before /blog
+visual studio code red,6600,8,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 6600, KD 8; off-niche (cleanup)",Review cluster fit before /blog
+swift code,14800,20,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 14800, KD 20; off-niche (cleanup)",Review cluster fit before /blog
+cage code,8100,11,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 8100, KD 11; off-niche (cleanup)",Review cluster fit before /blog
+ln log rules,14800,21,Informational,Skip,P3,Skills,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 14800, KD 21; off-niche (cleanup)",Review cluster fit before /blog
+code university,8100,13,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 8100, KD 13; off-niche (cleanup)",Review cluster fit before /blog
+define code,12100,21,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 12100, KD 21; off-niche (cleanup)",Review cluster fit before /blog
+code line break,12100,22,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 12100, KD 22; off-niche (cleanup)",Review cluster fit before /blog
+code for line break,12100,22,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 12100, KD 22; off-niche (cleanup)",Review cluster fit before /blog
+quizzes join code,9900,20,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 9900, KD 20; off-niche (cleanup)",Review cluster fit before /blog
+batch code,6600,13,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 6600, KD 13; off-niche (cleanup)",Review cluster fit before /blog
+batch code checker,12100,25,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 12100, KD 25; off-niche (cleanup)",Review cluster fit before /blog
+line break code,12100,26,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 12100, KD 26; off-niche (cleanup)",Review cluster fit before /blog
+full code,5400,12,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 5400, KD 12; off-niche (cleanup)",Review cluster fit before /blog
+assembly code,5400,12,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 5400, KD 12; off-niche (cleanup)",Review cluster fit before /blog
+line break in code,12100,29,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 12100, KD 29; off-niche (cleanup)",Review cluster fit before /blog
+advent of code,9900,25,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 9900, KD 25; off-niche (cleanup)",Review cluster fit before /blog
+ui vs ux,6600,17,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 6600, KD 17; off-niche (cleanup)",Review cluster fit before /blog
+quizzes code,6600,19,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 6600, KD 19; off-niche (cleanup)",Review cluster fit before /blog
+source code film,8100,24,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 8100, KD 24; off-niche (cleanup)",Review cluster fit before /blog
+source code 2011,8100,26,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 8100, KD 26; off-niche (cleanup)",Review cluster fit before /blog
+inline code block,5400,17,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 5400, KD 17; off-niche (cleanup)",Review cluster fit before /blog
+the code,6600,25,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 6600, KD 25; off-niche (cleanup)",Review cluster fit before /blog
+code in,6600,27,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 6600, KD 27; off-niche (cleanup)",Review cluster fit before /blog
+quizlet live code,5400,26,Informational,Skip,P3,General,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 5400, KD 26; off-niche (cleanup)",Review cluster fit before /blog
+what is model context protocol,1300,61,Informational,Skip,P3,MCP,dataforseo:2026-06-16,Anthropic + modelcontextprotocol.io own SERP; DataForSEO validated 2026-06-16,Skip — link out from tutorial cluster
 browse claude code skills,,,Informational,Skip,P3,Skills,serp-2026-06,SkillsMP + GitHub dominate,Skip — compete via practitioner stories not directories

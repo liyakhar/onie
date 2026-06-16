@@ -43,9 +43,12 @@ const CLUSTER_RULES = [
   { cluster: 'Skills', re: /claude code|cursor|skill|hooks?|rules|skill\.md|agents\.md|subagent/i },
   { cluster: 'MCP', re: /\bmcp\b|model context protocol/i },
   { cluster: 'Team libs', re: /team|share|library|prompt/i },
-  { cluster: 'Documentation', re: /document|template|observability|harness|versioning/i },
+  { cluster: 'Documentation', re: /document|template|observability|harness|versioning|workflow diagram/i },
   { cluster: 'Field', re: /ux research|literature review|saas mvp/i },
 ]
+
+/** New API rows must contain a guide seed term (claude, cursor, mcp, skill, agent) */
+const SEED_TERMS_RE = /\b(claude|cursor|mcp|skill|agent)\b/i
 
 const dryRun = process.argv.includes('--dry-run')
 
@@ -284,6 +287,7 @@ function mergeRows(existingRows, apiMetrics, validatedDate) {
     const vol = Number(m.volume)
     const kd = Number(m.kd)
     if (vol < MIN_VOLUME || kd > MAX_KD) continue
+    if (!SEED_TERMS_RE.test(m.keyword)) continue
 
     const row = {
       Keyword: m.keyword,

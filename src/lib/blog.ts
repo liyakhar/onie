@@ -1,10 +1,12 @@
 import type { BlogPost } from '#/content/blog/types'
 import { claudeCodeSkillsPost } from '#/content/blog/how-to-write-claude-code-skills'
+import { cursorRulesVsSkillsPost } from '#/content/blog/cursor-rules-vs-skills'
 import { documentWorkflowsPost } from '#/content/blog/document-ai-agent-workflows'
 import { claudeCodeWorkflowExamplesPost } from '#/content/blog/claude-code-workflow-examples'
 
 const posts: BlogPost[] = [
   claudeCodeSkillsPost,
+  cursorRulesVsSkillsPost,
   documentWorkflowsPost,
   claudeCodeWorkflowExamplesPost,
 ]

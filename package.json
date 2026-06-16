@@ -25,6 +25,8 @@
     "seo:og-images": "python3 scripts/generate-og-images.py",
     "seo:gsc": "dotenv -e .env.local -- python3 scripts/write-gsc-verification.py",
     "seo:keywords": "dotenv -e .env.local -- node scripts/fetch-keywords-dataforseo.mjs",
+    "seo:keywords:clean": "node scripts/cleanup-keywords.mjs",
+    "blog:next": "node scripts/next-blog-keyword.mjs",
     "seo:verify": "dotenv -e .env.local -- tsx scripts/verify-seo.ts",
     "seo:lighthouse": "dotenv -e .env.local -- node scripts/lighthouse-audit.mjs",
     "outreach:check": "dotenv -e .env.local -- node scripts/outreach/check-env.mjs",

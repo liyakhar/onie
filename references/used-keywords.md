@@ -43,3 +43,16 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - multi-agent orchestration (invented)
   - deep-research workflow (invented)
   - when to use workflows vs skills (invented)
+
+### cursor rules vs skills
+
+- **Page:** `/blog/cursor-rules-vs-skills`
+- **Published:** 2026-06-16
+- **Intent:** Informational
+- **Volume / KD:** 90 / 0 (dataforseo:2026-06-16)
+- **Cluster:**
+  - cursor rules vs skills ✓
+  - when to use skills vs rules ✓
+  - cursor agent skills (invented)
+  - migrate rules to skills (invented)
+  - cursor .mdc vs SKILL.md (invented)
