@@ -1,0 +1,10 @@
+{
+  "date": "2026-06-16",
+  "framework": "TanStack Start (Vite 8, React 19)",
+  "font_stack": "Bricolage Grotesque + Fraunces + JetBrains Mono (press-01 tokens)",
+  "palette": "OKLCH custom properties (tokens.css)",
+  "motion": "motion-cut",
+  "spacing": "4pt Hallmark scale",
+  "preserved": [],
+  "introduced": ["press-01 DNA", "N3 side-rail", "Ft1 mast-headed footer", "Type Specimen macrostructure"]
+}

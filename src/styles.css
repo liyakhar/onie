@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=JetBrains+Mono:wght@400;500&display=swap');
+@import '../tokens.css';
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+@import 'tw-animate-css';
+@import './press.css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --ink: var(--color-ink);
+  --ink-soft: var(--color-ink-2);
+  --ink-muted: var(--color-muted);
+  --accent: var(--color-accent);
+  --accent-hover: var(--color-focus);
+  --surface: var(--color-paper-2);
+  --surface-strong: var(--color-paper);
+  --code-bg: var(--color-paper-3);
+  --line: var(--color-rule);
+  --header-bg: var(--color-paper);
+  --bg-base: var(--color-paper);
+
+  --background: var(--color-paper);
+  --foreground: var(--color-ink);
+  --card: var(--color-paper-2);
+  --card-foreground: var(--color-ink);
+  --popover: var(--color-paper-2);
+  --popover-foreground: var(--color-ink);
+  --primary: var(--color-accent);
+  --primary-foreground: var(--color-accent-ink);
+  --secondary: var(--color-paper-3);
+  --secondary-foreground: var(--color-ink);
+  --muted: var(--color-paper-3);
+  --muted-foreground: var(--color-muted);
+  --accent-color: var(--color-paper-3);
+  --accent-foreground: var(--color-ink);
+  --destructive: var(--color-accent);
+  --destructive-foreground: var(--color-accent-ink);
+  --border: var(--color-rule);
+  --input: var(--color-rule-2);
+  --ring: var(--color-focus);
+  --radius: 0;
+}
+
+@theme inline {
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent-color);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  background-color: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  border: 1px solid var(--color-rule);
+  background: var(--color-paper-3);
+  border-radius: 0;
+  padding: 2px 6px;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+}
