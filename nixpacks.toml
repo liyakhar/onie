@@ -8,12 +8,8 @@ cmds = ["pnpm install --frozen-lockfile"]
 [phases.build]
 cmds = [
   "pnpm exec prisma generate",
-  "pnpm exec prisma db push",
   "pnpm run build"
 ]
 
 [start]
-cmd = "pnpm run start"
-
-[variables]
-NODE_ENV = "production"
+cmd = "pnpm exec prisma db push && pnpm run start"

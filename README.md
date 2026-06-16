@@ -50,20 +50,25 @@ Open http://localhost:3000
 
 ## Deploy to Railway
 
-1. Create a new Railway project
-2. Add **PostgreSQL** plugin
-3. Add a **service** from this repo (GitHub deploy or `railway up`)
-4. Set environment variables:
-   - `DATABASE_URL` — from Postgres plugin
-   - `BETTER_AUTH_SECRET` — long random string
-   - `BETTER_AUTH_URL` — your public URL (e.g. `https://weavel.up.railway.app`)
-5. Deploy — `nixpacks.toml` runs `prisma generate`, `db push`, and build
+1. Create a Railway project and add **PostgreSQL**
+2. Add a service from [github.com/liyakhar/onie](https://github.com/liyakhar/onie) (or `railway up`)
+3. Set environment variables on the web service:
+   - `DATABASE_URL` — `${{Postgres.DATABASE_URL}}`
+   - `BETTER_AUTH_SECRET` — long random string (`openssl rand -base64 48`)
+   - `BETTER_AUTH_URL` — your public Railway URL (e.g. `https://onie-web-production.up.railway.app`)
+   - `NODE_ENV` — `production`
+4. Generate a public domain: `railway domain -s <service-name>`
+5. Deploy — `nixpacks.toml` runs `prisma generate`, `db push`, and `pnpm build`
 
-After first deploy, run seed once:
+**Production:** https://onie-web-production.up.railway.app
+
+After first deploy, seed demo data once (from a machine that can reach the DB):
 
 ```bash
-railway run npm run db:seed
+railway run -s onie-web -- pnpm exec prisma db seed
 ```
+
+Or use `DATABASE_PUBLIC_URL` from the Postgres service variables locally.
 
 ## Project structure
 
