@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { authClient } from '#/lib/auth-client'
+import { loginSearch } from '#/lib/auth-nav'
 import { Button } from '#/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
 import {
@@ -70,7 +71,9 @@ export default function BetterAuthHeader() {
         <Link to="/login">Sign in</Link>
       </Button>
       <Button variant="brand" size="sm" asChild>
-        <Link to="/login">Join</Link>
+        <Link to="/login" search={loginSearch({ signup: true })}>
+          Join
+        </Link>
       </Button>
     </div>
   )

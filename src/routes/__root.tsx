@@ -8,7 +8,6 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
-import AccentInit from '#/components/AccentInit'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
@@ -51,7 +50,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="antialiased [overflow-wrap:anywhere]">
-        <AccentInit />
         <a className="skip-link" href="#main">
           Skip to content
         </a>

@@ -1,6 +1,6 @@
 /* Hallmark · tokens — gen-13
  * route: custom (tuned) · vibe: "ink-black press, off-register, broken-grid, kinetic"
- * paper: oklch(13% 0.014 25) · accent: oklch(78% 0.14 88) caution-yellow
+ * paper: oklch(13% 0.014 25) · accent: oklch(72% 0.16 330) rosin pink
  * display: Bricolage Grotesque (variable) · body: Fraunces (variable) · outlier: JetBrains Mono
  * axes: dark / display-heavy / warm
  *
@@ -20,10 +20,10 @@
   --color-neutral:    oklch(74%  0.016 28);   /* mid text */
   --color-ink-2:      oklch(86%  0.012 30);   /* secondary headings/body */
   --color-ink:        oklch(95%  0.010 32);   /* primary text — warm bone */
-  --color-accent:     oklch(78%  0.14  88);   /* caution yellow — the one chromatic note */
-  --color-accent-2:   oklch(78%  0.15  85);   /* off-register amber ghost (misprint only) */
-  --color-accent-ink: oklch(17%  0.024 32);   /* dark ink on yellow fill — APCA-checked */
-  --color-focus:      oklch(84%  0.13  88);   /* brighter yellow, ≥3:1 on ground + on fill */
+  --color-accent:     oklch(72%  0.16 330);   /* rosin pink — the one chromatic note */
+  --color-accent-2:   oklch(72%  0.17 322);   /* off-register magenta ghost (misprint only) */
+  --color-accent-ink: oklch(17%  0.024 32);   /* dark ink on accent fill — APCA-checked */
+  --color-focus:      oklch(78%  0.15 330);   /* brighter rosin, ≥3:1 on ground + on fill */
 
   /* Off-register misprint ghosts — translucent, decorative only */
   --ghost-cyan:  oklch(70% 0.16 220 / 0.42);
@@ -37,7 +37,7 @@
   --proof-muted:    oklch(46%  0.018 40);
   --proof-ink-2:    oklch(28%  0.020 35);
   --proof-ink:      oklch(17%  0.024 32);     /* near-black warm ink */
-  --proof-accent:   oklch(58%  0.12  85);     /* yellow reads darker on bone for contrast */
+  --proof-accent:   oklch(48%  0.14 330);     /* rosin reads darker on bone for contrast */
 
   /* ── Type stack — 2+1: display + body + mono outlier ──────── */
   --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;

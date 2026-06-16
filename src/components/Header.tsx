@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import BetterAuthHeader from '#/integrations/better-auth/header-user'
 import ThemeToggle from './ThemeToggle'
 import { NotificationBell } from '#/components/NotificationBell'
-import { OnieIcon } from '#/components/OnieIcon'
+import { OnieMark } from '#/components/OnieMark'
 import { Button } from '#/components/ui/button'
 import { Plus } from 'lucide-react'
 import { authClient } from '#/lib/auth-client'
@@ -18,7 +18,7 @@ export default function Header() {
             to="/"
             className="inline-flex items-center rounded-lg px-2 py-1 text-[var(--ink)] no-underline"
           >
-            <OnieIcon />
+            <OnieMark variant="nav" />
           </Link>
         </h2>
 

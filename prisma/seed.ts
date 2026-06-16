@@ -40,13 +40,18 @@ const DEMO_USERS = [
 
 async function main() {
   console.log('Seeding Weavel demo data...')
+  console.log('Example IDs are listed in src/lib/example-content.ts')
 
   const passwordHash = await hashPassword('demo12345')
 
   for (const demo of DEMO_USERS) {
     await prisma.user.upsert({
       where: { id: demo.id },
-      update: {},
+      update: {
+        profile: {
+          update: { onboarded: true },
+        },
+      },
       create: {
         id: demo.id,
         name: demo.name,
@@ -66,6 +71,7 @@ async function main() {
             field: demo.field,
             headline: demo.headline,
             bio: demo.bio,
+            onboarded: true,
           },
         },
       },

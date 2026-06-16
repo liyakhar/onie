@@ -31,6 +31,7 @@ export type ProfileMinAggregateOutputType = {
   bio: string | null
   field: $Enums.Category | null
   headline: string | null
+  onboarded: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -42,6 +43,7 @@ export type ProfileMaxAggregateOutputType = {
   bio: string | null
   field: $Enums.Category | null
   headline: string | null
+  onboarded: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -53,6 +55,7 @@ export type ProfileCountAggregateOutputType = {
   bio: number
   field: number
   headline: number
+  onboarded: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -66,6 +69,7 @@ export type ProfileMinAggregateInputType = {
   bio?: true
   field?: true
   headline?: true
+  onboarded?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -77,6 +81,7 @@ export type ProfileMaxAggregateInputType = {
   bio?: true
   field?: true
   headline?: true
+  onboarded?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -88,6 +93,7 @@ export type ProfileCountAggregateInputType = {
   bio?: true
   field?: true
   headline?: true
+  onboarded?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -172,6 +178,7 @@ export type ProfileGroupByOutputType = {
   bio: string | null
   field: $Enums.Category
   headline: string | null
+  onboarded: boolean
   createdAt: Date
   updatedAt: Date
   _count: ProfileCountAggregateOutputType | null
@@ -204,6 +211,7 @@ export type ProfileWhereInput = {
   bio?: Prisma.StringNullableFilter<"Profile"> | string | null
   field?: Prisma.EnumCategoryFilter<"Profile"> | $Enums.Category
   headline?: Prisma.StringNullableFilter<"Profile"> | string | null
+  onboarded?: Prisma.BoolFilter<"Profile"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -216,6 +224,7 @@ export type ProfileOrderByWithRelationInput = {
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   field?: Prisma.SortOrder
   headline?: Prisma.SortOrderInput | Prisma.SortOrder
+  onboarded?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -231,6 +240,7 @@ export type ProfileWhereUniqueInput = Prisma.AtLeast<{
   bio?: Prisma.StringNullableFilter<"Profile"> | string | null
   field?: Prisma.EnumCategoryFilter<"Profile"> | $Enums.Category
   headline?: Prisma.StringNullableFilter<"Profile"> | string | null
+  onboarded?: Prisma.BoolFilter<"Profile"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -243,6 +253,7 @@ export type ProfileOrderByWithAggregationInput = {
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   field?: Prisma.SortOrder
   headline?: Prisma.SortOrderInput | Prisma.SortOrder
+  onboarded?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProfileCountOrderByAggregateInput
@@ -260,6 +271,7 @@ export type ProfileScalarWhereWithAggregatesInput = {
   bio?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   field?: Prisma.EnumCategoryWithAggregatesFilter<"Profile"> | $Enums.Category
   headline?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
+  onboarded?: Prisma.BoolWithAggregatesFilter<"Profile"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Profile"> | Date | string
 }
@@ -270,6 +282,7 @@ export type ProfileCreateInput = {
   bio?: string | null
   field?: $Enums.Category
   headline?: string | null
+  onboarded?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutProfileInput
@@ -282,6 +295,7 @@ export type ProfileUncheckedCreateInput = {
   bio?: string | null
   field?: $Enums.Category
   headline?: string | null
+  onboarded?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -292,6 +306,7 @@ export type ProfileUpdateInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   field?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
   headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
@@ -304,6 +319,7 @@ export type ProfileUncheckedUpdateInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   field?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
   headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -315,6 +331,7 @@ export type ProfileCreateManyInput = {
   bio?: string | null
   field?: $Enums.Category
   headline?: string | null
+  onboarded?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -325,6 +342,7 @@ export type ProfileUpdateManyMutationInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   field?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
   headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -336,6 +354,7 @@ export type ProfileUncheckedUpdateManyInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   field?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
   headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -352,6 +371,7 @@ export type ProfileCountOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   field?: Prisma.SortOrder
   headline?: Prisma.SortOrder
+  onboarded?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -363,6 +383,7 @@ export type ProfileMaxOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   field?: Prisma.SortOrder
   headline?: Prisma.SortOrder
+  onboarded?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -374,6 +395,7 @@ export type ProfileMinOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   field?: Prisma.SortOrder
   headline?: Prisma.SortOrder
+  onboarded?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -420,6 +442,7 @@ export type ProfileCreateWithoutUserInput = {
   bio?: string | null
   field?: $Enums.Category
   headline?: string | null
+  onboarded?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -430,6 +453,7 @@ export type ProfileUncheckedCreateWithoutUserInput = {
   bio?: string | null
   field?: $Enums.Category
   headline?: string | null
+  onboarded?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -456,6 +480,7 @@ export type ProfileUpdateWithoutUserInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   field?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
   headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -466,6 +491,7 @@ export type ProfileUncheckedUpdateWithoutUserInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   field?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
   headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -479,6 +505,7 @@ export type ProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   bio?: boolean
   field?: boolean
   headline?: boolean
+  onboarded?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -491,6 +518,7 @@ export type ProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   bio?: boolean
   field?: boolean
   headline?: boolean
+  onboarded?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -503,6 +531,7 @@ export type ProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   bio?: boolean
   field?: boolean
   headline?: boolean
+  onboarded?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -515,11 +544,12 @@ export type ProfileSelectScalar = {
   bio?: boolean
   field?: boolean
   headline?: boolean
+  onboarded?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "username" | "bio" | "field" | "headline" | "createdAt" | "updatedAt", ExtArgs["result"]["profile"]>
+export type ProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "username" | "bio" | "field" | "headline" | "onboarded" | "createdAt" | "updatedAt", ExtArgs["result"]["profile"]>
 export type ProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -542,6 +572,7 @@ export type $ProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     bio: string | null
     field: $Enums.Category
     headline: string | null
+    onboarded: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["profile"]>
@@ -974,6 +1005,7 @@ export interface ProfileFieldRefs {
   readonly bio: Prisma.FieldRef<"Profile", 'String'>
   readonly field: Prisma.FieldRef<"Profile", 'Category'>
   readonly headline: Prisma.FieldRef<"Profile", 'String'>
+  readonly onboarded: Prisma.FieldRef<"Profile", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Profile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Profile", 'DateTime'>
 }

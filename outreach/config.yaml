@@ -1,0 +1,21 @@
+# X outreach configuration
+# Credentials live in .env.local — never commit tokens.
+
+site_url: https://onie-web-production.up.railway.app
+
+# Personal founder account for replies and DMs (decided 2026-06-16)
+reply_from: personal
+# Set X_HANDLE in .env.local
+
+# Brand account — optional, for feed posts only later
+brand_handle: "@onie"
+
+daily_limits:
+  replies: 10
+  dms: 3
+  feed_posts: 2
+
+require_approval: true
+
+# Minimum classify score (1-5) to draft a reply
+min_classify_score: 3

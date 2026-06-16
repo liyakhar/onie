@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { OnieMark } from '#/components/OnieMark'
+import { loginSearch } from '#/lib/auth-nav'
 
 export default function Footer({ variant = 'landing' }: { variant?: 'landing' | 'minimal' }) {
   if (variant === 'minimal') {
@@ -51,7 +52,9 @@ export default function Footer({ variant = 'landing' }: { variant?: 'landing' | 
         <span className="foot__sep" aria-hidden="true">
           ·
         </span>
-        <Link to="/login">Get started</Link>
+        <Link to="/login" search={loginSearch({ signup: true })}>
+          Get started
+        </Link>
         <span className="foot__sep" aria-hidden="true">
           ·
         </span>

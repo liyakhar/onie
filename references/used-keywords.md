@@ -9,6 +9,7 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
 - **Page:** `/blog/how-to-write-claude-code-skills`
 - **Published:** 2026-06-16
 - **Intent:** Informational
+- **Volume / KD:** pending SEMrush/Ahrefs validation (was placeholder)
 - **Cluster:**
   - how to write claude code skills ✓
   - claude code skills ✓
@@ -21,6 +22,7 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
 - **Page:** `/blog/document-ai-agent-workflows`
 - **Published:** 2026-06-10
 - **Intent:** Informational
+- **Volume / KD:** pending SEMrush/Ahrefs validation (was placeholder)
 - **Cluster:**
   - how to document ai agent workflows ✓
   - agent workflow template (invented)
@@ -33,7 +35,8 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
 - **Page:** `/blog/claude-code-workflow-examples`
 - **Published:** 2026-06-16
 - **Intent:** Informational
-- **Volume / KD:** 2400 / 28
+- **Volume / KD:** pending SEMrush/Ahrefs validation (was placeholder)
+- **Volume / KD:** pending SEMrush/Ahrefs validation (was placeholder 2400 / 28)
 - **Cluster:**
   - claude code workflow examples ✓
   - claude code dynamic workflows (invented)

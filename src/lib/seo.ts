@@ -235,6 +235,6 @@ export function googleSiteVerificationMeta(): MetaTag[] {
 
 export const defaultHeadLinks = (): HeadLink[] => [
   { rel: 'icon', href: '/onie-logo.svg', type: 'image/svg+xml' },
-  { rel: 'apple-touch-icon', href: '/onie-logo.svg', type: 'image/svg+xml' },
+  { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', type: 'image/png', sizes: '180x180' },
   { rel: 'manifest', href: '/manifest.json' },
 ]

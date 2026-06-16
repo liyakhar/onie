@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import BetterAuthHeader from '#/integrations/better-auth/header-user'
 import { NotificationBell } from '#/components/NotificationBell'
-import { OnieIcon } from '#/components/OnieIcon'
+import { OnieMark } from '#/components/OnieMark'
 import { authClient } from '#/lib/auth-client'
 import { Plus } from 'lucide-react'
 
@@ -12,8 +12,8 @@ export default function AppNav() {
   return (
     <header className="app-nav" role="banner">
       <div className="app-nav__inner">
-        <Link to="/" className="app-nav__brand" aria-label="Onie home">
-          <OnieIcon />
+        <Link to="/" className="app-nav__brand">
+          <OnieMark variant="nav" />
         </Link>
 
         <nav className="app-nav__tabs" aria-label="App sections">

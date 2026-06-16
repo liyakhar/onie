@@ -8,6 +8,7 @@ import { Badge } from '#/components/ui/badge'
 import { Card, CardContent, CardHeader } from '#/components/ui/card'
 import { PostEngagement } from '#/components/PostEngagement'
 import { cn } from '#/lib/utils'
+import { isExamplePost } from '#/lib/example-content'
 import { Pin, TrendingUp } from 'lucide-react'
 
 export type PostCardData = {
@@ -56,9 +57,11 @@ export function PostCard({
   })
   const likeCount = post._count?.likes ?? 0
   const commentCount = post._count?.comments ?? 0
+  const example = isExamplePost({ id: post.id, author: post.author })
 
   if (variant === 'ledger') {
     const meta = [
+      example ? 'Example' : null,
       kindLabel(post.kind),
       categoryLabel(post.category),
       username ? post.author.name : null,
@@ -127,6 +130,11 @@ export function PostCard({
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-1.5">
+            {example && (
+              <Badge variant="outline" className="border-[var(--color-rule-2)] text-[var(--ink-muted)]">
+                Example
+              </Badge>
+            )}
             {ranked !== undefined && (
               <Badge variant="outline" className="gap-1 border-[var(--accent)]/30 text-[var(--accent)]">
                 <TrendingUp className="h-3 w-3" />

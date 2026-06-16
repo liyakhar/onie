@@ -166,7 +166,8 @@ min_engagement: 3           # Optional floor (likes + replies)
 
 ```yaml
 site_url: https://onie-web-production.up.railway.app
-x_handle: "@onie"           # Or your personal founder handle
+x_handle: "${X_HANDLE}"     # Personal founder account (decided)
+x_brand_handle: "@onie"     # Optional: feed posts only
 daily_limits:
   replies: 10
   dms: 5
@@ -218,7 +219,7 @@ Checklist for the agent (like `onie-blog`):
 
 ## Open Questions
 
-1. **Account:** Reply from `@onie` brand account or your personal founder handle? (Personal often converts better early.)
+1. ~~**Account:** Reply from `@onie` brand account or your personal founder handle?~~ **Decided: personal founder account** — replies and DMs come from you; `@onie` can still be used for brand feed posts later.
 2. **Volume appetite:** How many minutes per day for review? (Sets discover frequency.)
 3. **DMs in v1:** Public replies only first, or include DMs for high-intent leads?
 4. **Discovery source:** X API search vs. manual paste (URLs from your timeline) vs. both?

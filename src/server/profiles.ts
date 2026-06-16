@@ -1,5 +1,7 @@
+import { redirect } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import type { Category } from '#/generated/prisma/client'
+import { loginSearch } from '#/lib/auth-nav'
 import { getDb } from '#/server/db-access.server'
 import { getSessionUser } from '#/server/session.server'
 import { emitNotification } from '#/server/notifications.server'
@@ -136,6 +138,49 @@ export const updateProfile = createServerFn({ method: 'POST' })
     })
   })
 
+export const completeOnboarding = createServerFn({ method: 'POST' })
+  .inputValidator(
+    (data: {
+      username: string
+      field: Category
+      headline?: string
+    }) => data,
+  )
+  .handler(async ({ data }) => {
+    const prisma = await getDb()
+    const user = await getSessionUser()
+    if (!user) {
+      throw new Error('Sign in required')
+    }
+
+    const profile = await prisma.profile.findUnique({
+      where: { userId: user.id },
+    })
+    if (!profile) {
+      throw new Error('Profile not found')
+    }
+
+    const username = data.username.trim().toLowerCase()
+    if (username !== profile.username) {
+      const taken = await prisma.profile.findUnique({
+        where: { username },
+      })
+      if (taken) {
+        throw new Error('Username already taken')
+      }
+    }
+
+    return prisma.profile.update({
+      where: { userId: user.id },
+      data: {
+        username,
+        field: data.field,
+        headline: data.headline?.trim() || null,
+        onboarded: true,
+      },
+    })
+  })
+
 export const toggleFollow = createServerFn({ method: 'POST' })
   .inputValidator((data: { username: string }) => data)
   .handler(async ({ data }) => {
@@ -231,5 +276,41 @@ export const getMyProfile = createServerFn({ method: 'GET' }).handler(
     return prisma.profile.findUnique({
       where: { userId: user.id },
     })
+  },
+)
+
+export const requireOnboarded = createServerFn({ method: 'GET' }).handler(
+  async () => {
+    const user = await getSessionUser()
+    if (!user) return
+
+    const prisma = await getDb()
+    const profile = await prisma.profile.findUnique({
+      where: { userId: user.id },
+      select: { onboarded: true },
+    })
+
+    if (profile && !profile.onboarded) {
+      throw redirect({ to: '/welcome' })
+    }
+  },
+)
+
+export const requireNeedsOnboarding = createServerFn({ method: 'GET' }).handler(
+  async () => {
+    const user = await getSessionUser()
+    if (!user) {
+      throw redirect({ to: '/login', search: loginSearch({ signup: true }) })
+    }
+
+    const prisma = await getDb()
+    const profile = await prisma.profile.findUnique({
+      where: { userId: user.id },
+      select: { onboarded: true },
+    })
+
+    if (profile?.onboarded) {
+      throw redirect({ to: '/app' })
+    }
   },
 )

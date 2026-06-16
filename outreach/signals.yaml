@@ -1,0 +1,37 @@
+# What to look for on X — skills, workflows, harnesses, agent setups
+
+keywords:
+  - "claude code skill"
+  - "cursor rules"
+  - "cursor skill"
+  - "agent workflow"
+  - "SKILL.md"
+  - "harness"
+  - "subagent"
+  - "mcp server"
+  - "my workflow"
+  - "how I use claude"
+  - "how I use cursor"
+
+hashtags:
+  - "#ClaudeCode"
+  - "#CursorAI"
+  - "#AIAgents"
+  - "#BuildInPublic"
+
+# Optional: accounts whose posts you always want to review
+watch_accounts: []
+
+# Skip posts matching these (case-insensitive substring)
+negative:
+  - "giveaway"
+  - "waitlist"
+  - "nft"
+  - "airdrop"
+  - "sign up now"
+  - "limited spots"
+
+blocklist: []
+
+# Optional: minimum likes + replies before drafting
+min_engagement: 0

@@ -1,0 +1,42 @@
+[
+  {
+    "name": "home",
+    "url": "http://localhost:4173/",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    }
+  },
+  {
+    "name": "explore",
+    "url": "http://localhost:4173/app/explore",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    }
+  },
+  {
+    "name": "blog",
+    "url": "http://localhost:4173/blog",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    }
+  },
+  {
+    "name": "post",
+    "url": "http://localhost:4173/p/post-science-lit",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    }
+  }
+]

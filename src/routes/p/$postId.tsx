@@ -9,6 +9,8 @@ import { MarkdownContent } from '#/components/MarkdownContent'
 import { PostEngagement } from '#/components/PostEngagement'
 import { CommentsSection } from '#/components/CommentsSection'
 import { authClient } from '#/lib/auth-client'
+import { loginSearch } from '#/lib/auth-nav'
+import { isExamplePost } from '#/lib/example-content'
 import { GitFork, Pencil } from 'lucide-react'
 import {
   articleJsonLd,
@@ -80,6 +82,7 @@ function PostPage() {
 
   const username = post.author.profile?.username
   const isOwn = session?.user?.id === post.author.id
+  const example = isExamplePost({ id: post.id, author: post.author })
   const date = new Date(post.createdAt).toLocaleDateString(undefined, {
     month: 'long',
     day: 'numeric',
@@ -88,7 +91,10 @@ function PostPage() {
 
   const handleFork = async () => {
     if (!session?.user) {
-      void router.navigate({ to: '/login' })
+      void router.navigate({
+        to: '/login',
+        search: loginSearch({ redirect: `/p/${post.id}` }),
+      })
       return
     }
     setForkError('')
@@ -106,6 +112,7 @@ function PostPage() {
     <main id="main" className="app-page">
       <header className="app-page__head">
         <p className="app-page__eyebrow">
+          {example && <span className="post-detail__example-tag">Example · </span>}
           {kindLabel(post.kind)} · {categoryLabel(post.category)}
         </p>
         <h1 className="app-page__title">{post.title}</h1>

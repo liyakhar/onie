@@ -1,8 +1,29 @@
-Keyword,Volume,KD,Intent,Notes
-how to write claude code skills,1200,18,Informational,Published /blog/how-to-write-claude-code-skills
-how to document ai agent workflows,880,22,Informational,Published /blog/document-ai-agent-workflows
-claude code workflow examples,2400,28,Informational,Published /blog/claude-code-workflow-examples
-cursor agent rules vs skills,1600,24,Informational,
-share ai prompts with team,720,15,Informational,
-agent skills best practices,1900,26,Informational,
-mcp server setup guide,3200,32,Informational,
+Keyword,Volume,KD,Intent,Status,Priority,Cluster,Source,SERP_Notes,Onie_Angle
+how to write claude code skills,,,Informational,Published,P1,Skills,estimated,Replaced placeholder vol/KD — validate in SEMrush,Extends published /blog/how-to-write-claude-code-skills
+how to document ai agent workflows,,,Informational,Published,P1,Documentation,estimated,Replaced placeholder vol/KD — validate in SEMrush,Extends published /blog/document-ai-agent-workflows
+claude code workflow examples,,,Informational,Published,P1,Skills,estimated,Replaced placeholder vol/KD — validate in SEMrush,Extends published /blog/claude-code-workflow-examples
+cursor rules vs skills,,,Informational,Queued,P1,Skills,serp-2026-06,DEV + Cursor docs rank; few side-by-side tests,Decision guide + migrate-to-skills; CTA publish team workflow on Onie
+how to build an mcp server,,,Informational,Queued,P1,MCP,serp-2026-06,Official MCP docs + YouTube tutorials; gap Cursor+Claude config,Minimal server + mcp.json; document shipped workflow on Onie
+shared prompt library for teams,,,Informational,Queued,P1,Team libs,serp-2026-06,SaaS blogs rank; gap agent-era (skills+MCP),Governance + versioning; Onie as public practitioner library
+claude code skills vs rules,,,Informational,Queued,P1,Skills,serp-2026-06,Related to published skills post; comparison intent,Link from how-to-write-claude-code-skills
+mcp server cursor setup,,,Informational,Queued,P2,MCP,serp-2026-06,mcp.json config questions common in tutorials,Step-by-step Cursor MCP.json + verify tools
+agent skills best practices,,,Informational,Queued,P2,Skills,serp-2026-06,Listicles + Anthropic repo SEO,Checklist format with practitioner examples
+claude code hooks tutorial,,,Informational,Queued,P2,Skills,serp-2026-06,Emerging topic; fewer definitive guides,Hooks for quality gates; link workflow examples post
+share claude code skills with team,,,Informational,Queued,P2,Team libs,serp-2026-06,Git-shared .claude/skills angle under-served,Review process + Onie public feed
+agent workflow template,,,Informational,Queued,P2,Documentation,serp-2026-06,Template posts rank on Notion/Medium,Downloadable template + Onie /p/ examples
+model context protocol tutorial,,,Informational,Queued,P3,MCP,serp-2026-06,Broad head term; official docs dominate,Hub page linking to MCP setup post
+claude code mcp add,,,Informational,Queued,P2,MCP,serp-2026-06,Claude Code docs rank for MCP install,CLI setup + env vars + first tool call
+what is model context protocol,,,Informational,Skip,P3,MCP,serp-2026-06,Anthropic + modelcontextprotocol.io own SERP,Skip — link out from tutorial cluster
+share ai prompts with team,,,Informational,Queued,P2,Team libs,serp-2026-06,Prompt wallet / Glean content ranks,Agent workflow angle not ChatGPT-only
+prompt library governance,,,Informational,Queued,P3,Team libs,serp-2026-06,Enterprise governance posts; niche KD,Ownership + lifecycle for agent assets
+claude code SKILL.md format,,,Informational,Queued,P2,Skills,serp-2026-06,Long-tail; supports skills cluster,Frontmatter deep-dive; link skills 101 post
+when to use skills vs rules,,,Informational,Queued,P2,Skills,serp-2026-06,PAA under cursor/claude comparisons,Short FAQ-heavy post; internal link rules vs skills
+claude code subagents workflow,,,Informational,Queued,P2,Skills,serp-2026-06,Multi-agent content growing on Medium/Substack,Orchestration examples from practitioners
+mcp tools resources prompts difference,,,Informational,Queued,P3,MCP,serp-2026-06,Conceptual MCP questions in courses,Explain primitives; link MCP build post
+agent observability for developers,,,Informational,Queued,P3,Documentation,serp-2026-06,Eng audience; overlaps dev tooling,Trace runs + document in public workflow
+ux research ai agent workflow,,,Informational,Queued,P3,Field,product-seed,Maps to demo post UX synthesis,Field silo; link /p/ UX workflow
+literature review ai agent workflow,,,Informational,Queued,P3,Field,product-seed,Maps to demo science post,Field silo; link /p/ literature triage
+saas mvp agent workflow,,,Informational,Queued,P3,Field,product-seed,Maps to demo SaaS post,Field silo; link /p/ SaaS MVP loop
+cursor agent skills migrate,,,Informational,Queued,P2,Skills,serp-2026-06,Cursor /migrate-to-skills command docs new,Migration walkthrough from .mdc rules
+public agent workflow feed,,,Informational,Queued,P3,Product,product-seed,Branded / category creation,Onie positioning post — use after 5+ how-tos
+browse claude code skills,,,Informational,Skip,P3,Skills,serp-2026-06,SkillsMP + GitHub dominate,Skip — compete via practitioner stories not directories

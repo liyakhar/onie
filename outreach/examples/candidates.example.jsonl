@@ -1,0 +1,8 @@
+# Example candidates for paste mode (no X API search needed).
+# Copy this file, add real posts from your timeline, then:
+#   pnpm outreach:discover -- --file outreach/examples/my-candidates.jsonl
+#   pnpm outreach:batch -- outreach/examples/my-candidates.jsonl
+
+{"url":"https://x.com/example/status/1001","text":"Here's my Claude Code skill for refactors — SKILL.md in the repo with step-by-step prompts for safe extraction.","author":"@example_dev"}
+{"url":"https://x.com/example/status/1002","text":"Finally documented my subagent harness: loops until tests pass, spawns reviewer subagent. Thread 🧵","author":"@example_builder"}
+{"url":"https://x.com/example/status/1003","text":"My Cursor workflow for PRDs → implementation: file layout + MCP server for Linear. How I use Claude daily.","author":"@example_founder"}

@@ -1258,6 +1258,7 @@ export const ProfileScalarFieldEnum = {
   bio: 'bio',
   field: 'field',
   headline: 'headline',
+  onboarded: 'onboarded',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

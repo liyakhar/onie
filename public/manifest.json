@@ -10,10 +10,10 @@
       "purpose": "any"
     },
     {
-      "src": "/onie-logo.svg",
-      "type": "image/svg+xml",
-      "sizes": "32x32",
-      "purpose": "any maskable"
+      "src": "/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180",
+      "purpose": "any"
     },
     {
       "src": "/og/default.png",

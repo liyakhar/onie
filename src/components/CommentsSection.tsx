@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useRouter } from '@tanstack/react-router'
 import { createComment } from '#/server/comments'
 import { authClient } from '#/lib/auth-client'
+import { loginSearch } from '#/lib/auth-nav'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
 
 type Comment = {
@@ -33,7 +34,10 @@ export function CommentsSection({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!session?.user) {
-      void router.navigate({ to: '/login' })
+      void router.navigate({
+        to: '/login',
+        search: loginSearch({ redirect: router.state.location.pathname }),
+      })
       return
     }
 
@@ -79,7 +83,13 @@ export function CommentsSection({
         </form>
       ) : (
         <p className="post-comments__signin">
-          <Link to="/login">Sign in</Link> to join the discussion.
+          <Link
+            to="/login"
+            search={loginSearch({ redirect: router.state.location.pathname })}
+          >
+            Sign in
+          </Link>{' '}
+          to join the discussion.
         </p>
       )}
 

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { PostCard } from '#/components/PostCard'
 import { getFeedPosts } from '#/server/posts'
 import { authClient } from '#/lib/auth-client'
+import { loginSearch } from '#/lib/auth-nav'
 import { buildPageMeta } from '#/lib/seo'
 
 const feedMeta = buildPageMeta({
@@ -43,7 +44,7 @@ function FeedPage() {
       {!isSignedIn && (
         <div className="app-banner">
           <p>You are browsing as a guest.</p>
-          <Link to="/login" className="btn btn--compact">
+          <Link to="/login" className="btn btn--compact" search={loginSearch({ redirect: '/app' })}>
             <span className="btn__label">Sign in</span>
           </Link>
         </div>
@@ -62,7 +63,7 @@ function FeedPage() {
                 <span className="btn__label">Explore workflows</span>
               </Link>
               {!isSignedIn && (
-                <Link to="/login" className="link-arrow">
+                <Link to="/login" className="link-arrow" search={loginSearch({ redirect: '/app' })}>
                   <span>Sign in</span>
                   <svg
                     className="link-arrow__glyph"

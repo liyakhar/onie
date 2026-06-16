@@ -12,15 +12,19 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as ExploreRouteImport } from './routes/explore'
+import { Route as WelcomeRouteRouteImport } from './routes/welcome/route'
 import { Route as URouteRouteImport } from './routes/u/route'
 import { Route as SettingsRouteRouteImport } from './routes/settings/route'
+import { Route as ResetPasswordRouteRouteImport } from './routes/reset-password/route'
 import { Route as PRouteRouteImport } from './routes/p/route'
 import { Route as NewRouteRouteImport } from './routes/new/route'
 import { Route as LoginRouteRouteImport } from './routes/login/route'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as AboutRouteRouteImport } from './routes/about/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as WelcomeIndexRouteImport } from './routes/welcome/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
+import { Route as ResetPasswordIndexRouteImport } from './routes/reset-password/index'
 import { Route as NewIndexRouteImport } from './routes/new/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
@@ -33,8 +37,9 @@ import { Route as DemoPrismaRouteImport } from './routes/demo/prisma'
 import { Route as DemoBetterAuthRouteImport } from './routes/demo/better-auth'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
-import { Route as PPostIdEditRouteImport } from './routes/p/$postId.edit'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as PPostIdEditRouteRouteImport } from './routes/p/$postId/edit/route'
+import { Route as PPostIdEditIndexRouteImport } from './routes/p/$postId/edit/index'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -51,6 +56,11 @@ const ExploreRoute = ExploreRouteImport.update({
   path: '/explore',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WelcomeRouteRoute = WelcomeRouteRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const URouteRoute = URouteRouteImport.update({
   id: '/u',
   path: '/u',
@@ -59,6 +69,11 @@ const URouteRoute = URouteRouteImport.update({
 const SettingsRouteRoute = SettingsRouteRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRouteRoute = ResetPasswordRouteRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PRouteRoute = PRouteRouteImport.update({
@@ -91,10 +106,20 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WelcomeIndexRoute = WelcomeIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => WelcomeRouteRoute,
+} as any)
 const SettingsIndexRoute = SettingsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => SettingsRouteRoute,
+} as any)
+const ResetPasswordIndexRoute = ResetPasswordIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ResetPasswordRouteRoute,
 } as any)
 const NewIndexRoute = NewIndexRouteImport.update({
   id: '/',
@@ -156,15 +181,20 @@ const AppExploreRoute = AppExploreRouteImport.update({
   path: '/explore',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const PPostIdEditRoute = PPostIdEditRouteImport.update({
-  id: '/edit',
-  path: '/edit',
-  getParentRoute: () => PPostIdRoute,
-} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PPostIdEditRouteRoute = PPostIdEditRouteRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => PPostIdRoute,
+} as any)
+const PPostIdEditIndexRoute = PPostIdEditIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PPostIdEditRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -174,8 +204,10 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRouteRouteWithChildren
   '/new': typeof NewRouteRouteWithChildren
   '/p': typeof PRouteRouteWithChildren
+  '/reset-password': typeof ResetPasswordRouteRouteWithChildren
   '/settings': typeof SettingsRouteRouteWithChildren
   '/u': typeof URouteRouteWithChildren
+  '/welcome': typeof WelcomeRouteRouteWithChildren
   '/explore': typeof ExploreRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -191,9 +223,12 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/login/': typeof LoginIndexRoute
   '/new/': typeof NewIndexRoute
+  '/reset-password/': typeof ResetPasswordIndexRoute
   '/settings/': typeof SettingsIndexRoute
+  '/welcome/': typeof WelcomeIndexRoute
+  '/p/$postId/edit': typeof PPostIdEditRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/p/$postId/edit': typeof PPostIdEditRoute
+  '/p/$postId/edit/': typeof PPostIdEditIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -214,9 +249,11 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/login': typeof LoginIndexRoute
   '/new': typeof NewIndexRoute
+  '/reset-password': typeof ResetPasswordIndexRoute
   '/settings': typeof SettingsIndexRoute
+  '/welcome': typeof WelcomeIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/p/$postId/edit': typeof PPostIdEditRoute
+  '/p/$postId/edit': typeof PPostIdEditIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -226,8 +263,10 @@ export interface FileRoutesById {
   '/login': typeof LoginRouteRouteWithChildren
   '/new': typeof NewRouteRouteWithChildren
   '/p': typeof PRouteRouteWithChildren
+  '/reset-password': typeof ResetPasswordRouteRouteWithChildren
   '/settings': typeof SettingsRouteRouteWithChildren
   '/u': typeof URouteRouteWithChildren
+  '/welcome': typeof WelcomeRouteRouteWithChildren
   '/explore': typeof ExploreRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -243,9 +282,12 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/login/': typeof LoginIndexRoute
   '/new/': typeof NewIndexRoute
+  '/reset-password/': typeof ResetPasswordIndexRoute
   '/settings/': typeof SettingsIndexRoute
+  '/welcome/': typeof WelcomeIndexRoute
+  '/p/$postId/edit': typeof PPostIdEditRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/p/$postId/edit': typeof PPostIdEditRoute
+  '/p/$postId/edit/': typeof PPostIdEditIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -256,8 +298,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/new'
     | '/p'
+    | '/reset-password'
     | '/settings'
     | '/u'
+    | '/welcome'
     | '/explore'
     | '/robots.txt'
     | '/sitemap.xml'
@@ -273,9 +317,12 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/login/'
     | '/new/'
+    | '/reset-password/'
     | '/settings/'
-    | '/api/auth/$'
+    | '/welcome/'
     | '/p/$postId/edit'
+    | '/api/auth/$'
+    | '/p/$postId/edit/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -296,7 +343,9 @@ export interface FileRouteTypes {
     | '/blog'
     | '/login'
     | '/new'
+    | '/reset-password'
     | '/settings'
+    | '/welcome'
     | '/api/auth/$'
     | '/p/$postId/edit'
   id:
@@ -307,8 +356,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/new'
     | '/p'
+    | '/reset-password'
     | '/settings'
     | '/u'
+    | '/welcome'
     | '/explore'
     | '/robots.txt'
     | '/sitemap.xml'
@@ -324,9 +375,12 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/login/'
     | '/new/'
+    | '/reset-password/'
     | '/settings/'
-    | '/api/auth/$'
+    | '/welcome/'
     | '/p/$postId/edit'
+    | '/api/auth/$'
+    | '/p/$postId/edit/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -336,8 +390,10 @@ export interface RootRouteChildren {
   LoginRouteRoute: typeof LoginRouteRouteWithChildren
   NewRouteRoute: typeof NewRouteRouteWithChildren
   PRouteRoute: typeof PRouteRouteWithChildren
+  ResetPasswordRouteRoute: typeof ResetPasswordRouteRouteWithChildren
   SettingsRouteRoute: typeof SettingsRouteRouteWithChildren
   URouteRoute: typeof URouteRouteWithChildren
+  WelcomeRouteRoute: typeof WelcomeRouteRouteWithChildren
   ExploreRoute: typeof ExploreRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -372,6 +428,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExploreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/u': {
       id: '/u'
       path: '/u'
@@ -384,6 +447,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/p': {
@@ -428,12 +498,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/welcome/': {
+      id: '/welcome/'
+      path: '/'
+      fullPath: '/welcome/'
+      preLoaderRoute: typeof WelcomeIndexRouteImport
+      parentRoute: typeof WelcomeRouteRoute
+    }
     '/settings/': {
       id: '/settings/'
       path: '/'
       fullPath: '/settings/'
       preLoaderRoute: typeof SettingsIndexRouteImport
       parentRoute: typeof SettingsRouteRoute
+    }
+    '/reset-password/': {
+      id: '/reset-password/'
+      path: '/'
+      fullPath: '/reset-password/'
+      preLoaderRoute: typeof ResetPasswordIndexRouteImport
+      parentRoute: typeof ResetPasswordRouteRoute
     }
     '/new/': {
       id: '/new/'
@@ -519,19 +603,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppExploreRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/p/$postId/edit': {
-      id: '/p/$postId/edit'
-      path: '/edit'
-      fullPath: '/p/$postId/edit'
-      preLoaderRoute: typeof PPostIdEditRouteImport
-      parentRoute: typeof PPostIdRoute
-    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/p/$postId/edit': {
+      id: '/p/$postId/edit'
+      path: '/edit'
+      fullPath: '/p/$postId/edit'
+      preLoaderRoute: typeof PPostIdEditRouteRouteImport
+      parentRoute: typeof PPostIdRoute
+    }
+    '/p/$postId/edit/': {
+      id: '/p/$postId/edit/'
+      path: '/'
+      fullPath: '/p/$postId/edit/'
+      preLoaderRoute: typeof PPostIdEditIndexRouteImport
+      parentRoute: typeof PPostIdEditRouteRoute
     }
   }
 }
@@ -586,12 +677,23 @@ const NewRouteRouteWithChildren = NewRouteRoute._addFileChildren(
   NewRouteRouteChildren,
 )
 
+interface PPostIdEditRouteRouteChildren {
+  PPostIdEditIndexRoute: typeof PPostIdEditIndexRoute
+}
+
+const PPostIdEditRouteRouteChildren: PPostIdEditRouteRouteChildren = {
+  PPostIdEditIndexRoute: PPostIdEditIndexRoute,
+}
+
+const PPostIdEditRouteRouteWithChildren =
+  PPostIdEditRouteRoute._addFileChildren(PPostIdEditRouteRouteChildren)
+
 interface PPostIdRouteChildren {
-  PPostIdEditRoute: typeof PPostIdEditRoute
+  PPostIdEditRouteRoute: typeof PPostIdEditRouteRouteWithChildren
 }
 
 const PPostIdRouteChildren: PPostIdRouteChildren = {
-  PPostIdEditRoute: PPostIdEditRoute,
+  PPostIdEditRouteRoute: PPostIdEditRouteRouteWithChildren,
 }
 
 const PPostIdRouteWithChildren =
@@ -607,6 +709,17 @@ const PRouteRouteChildren: PRouteRouteChildren = {
 
 const PRouteRouteWithChildren =
   PRouteRoute._addFileChildren(PRouteRouteChildren)
+
+interface ResetPasswordRouteRouteChildren {
+  ResetPasswordIndexRoute: typeof ResetPasswordIndexRoute
+}
+
+const ResetPasswordRouteRouteChildren: ResetPasswordRouteRouteChildren = {
+  ResetPasswordIndexRoute: ResetPasswordIndexRoute,
+}
+
+const ResetPasswordRouteRouteWithChildren =
+  ResetPasswordRouteRoute._addFileChildren(ResetPasswordRouteRouteChildren)
 
 interface SettingsRouteRouteChildren {
   SettingsIndexRoute: typeof SettingsIndexRoute
@@ -631,6 +744,18 @@ const URouteRouteChildren: URouteRouteChildren = {
 const URouteRouteWithChildren =
   URouteRoute._addFileChildren(URouteRouteChildren)
 
+interface WelcomeRouteRouteChildren {
+  WelcomeIndexRoute: typeof WelcomeIndexRoute
+}
+
+const WelcomeRouteRouteChildren: WelcomeRouteRouteChildren = {
+  WelcomeIndexRoute: WelcomeIndexRoute,
+}
+
+const WelcomeRouteRouteWithChildren = WelcomeRouteRoute._addFileChildren(
+  WelcomeRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRouteRoute: AboutRouteRouteWithChildren,
@@ -638,8 +763,10 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRouteRoute: LoginRouteRouteWithChildren,
   NewRouteRoute: NewRouteRouteWithChildren,
   PRouteRoute: PRouteRouteWithChildren,
+  ResetPasswordRouteRoute: ResetPasswordRouteRouteWithChildren,
   SettingsRouteRoute: SettingsRouteRouteWithChildren,
   URouteRoute: URouteRouteWithChildren,
+  WelcomeRouteRoute: WelcomeRouteRouteWithChildren,
   ExploreRoute: ExploreRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,

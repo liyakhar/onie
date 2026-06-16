@@ -1,6 +1,8 @@
-import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
-import { useState } from 'react'
+import { createFileRoute, Link, useRouter, useSearch } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 import { authClient } from '#/lib/auth-client'
+import { loginSearch, type LoginSearch } from '#/lib/auth-nav'
+import { getMyProfile } from '#/server/profiles'
 import { buildPageMeta } from '#/lib/seo'
 
 const loginMeta = buildPageMeta({
@@ -9,6 +11,33 @@ const loginMeta = buildPageMeta({
   description: 'Sign in to Onie to follow practitioners, publish workflows, and build your feed.',
   noindex: true,
 })
+
+export type { LoginSearch }
+
+async function goAfterAuth(
+  router: ReturnType<typeof useRouter>,
+  redirectTo: string,
+  isSignUp: boolean,
+) {
+  if (isSignUp) {
+    void router.navigate({
+      to: '/welcome',
+      search: { redirect: redirectTo },
+    })
+    return
+  }
+
+  const profile = await getMyProfile()
+  if (profile && !profile.onboarded) {
+    void router.navigate({
+      to: '/welcome',
+      search: { redirect: redirectTo },
+    })
+    return
+  }
+
+  void router.navigate({ href: redirectTo })
+}
 
 export const Route = createFileRoute('/login/')({
   head: () => ({
@@ -19,19 +48,23 @@ export const Route = createFileRoute('/login/')({
     googleEnabled: Boolean(
       process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET,
     ),
+    isDev: process.env.NODE_ENV === 'development',
   }),
-  validateSearch: (search: Record<string, unknown>) => ({
+  validateSearch: (search: Record<string, unknown>): LoginSearch => ({
     redirect: typeof search.redirect === 'string' ? search.redirect : '/app',
+    signup: search.signup === '1' || search.signup === true ? '1' : undefined,
   }),
   component: LoginPage,
 })
 
+type AuthMode = 'signin' | 'signup' | 'forgot' | 'forgot-sent'
+
 function LoginPage() {
   const router = useRouter()
-  const { redirect: redirectTo } = useSearch({ from: '/login/' })
-  const { googleEnabled } = Route.useLoaderData()
+  const { redirect: redirectTo, signup } = useSearch({ from: '/login/' })
+  const { googleEnabled, isDev } = Route.useLoaderData()
   const { data: session, isPending } = authClient.useSession()
-  const [isSignUp, setIsSignUp] = useState(false)
+  const [mode, setMode] = useState<AuthMode>(signup === '1' ? 'signup' : 'signin')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
@@ -39,14 +72,21 @@ function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
 
+  useEffect(() => {
+    if (!isPending && session?.user) {
+      void goAfterAuth(router, redirectTo, false)
+    }
+  }, [isPending, session?.user, router, redirectTo])
+
   if (isPending) {
     return <main className="app-loading">Loading…</main>
   }
 
   if (session?.user) {
-    void router.navigate({ href: redirectTo })
     return null
   }
+
+  const isSignUp = mode === 'signup'
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -59,15 +99,37 @@ function LoginPage() {
         if (result.error) {
           setError(result.error.message || 'Sign up failed')
         } else {
-          void router.navigate({ href: redirectTo })
+          await goAfterAuth(router, redirectTo, true)
         }
       } else {
         const result = await authClient.signIn.email({ email, password })
         if (result.error) {
           setError(result.error.message || 'Sign in failed')
         } else {
-          void router.navigate({ href: redirectTo })
+          await goAfterAuth(router, redirectTo, false)
         }
+      }
+    } catch {
+      setError('Something went wrong. Try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleForgot = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    setLoading(true)
+
+    try {
+      const result = await authClient.requestPasswordReset({
+        email,
+        redirectTo: `${window.location.origin}/reset-password`,
+      })
+      if (result.error) {
+        setError(result.error.message || 'Could not send reset email')
+      } else {
+        setMode('forgot-sent')
       }
     } catch {
       setError('Something went wrong. Try again.')
@@ -93,6 +155,80 @@ function LoginPage() {
       setError('Something went wrong. Try again.')
       setGoogleLoading(false)
     }
+  }
+
+  if (mode === 'forgot' || mode === 'forgot-sent') {
+    return (
+      <main id="main" className="app-page">
+        <header className="app-page__head">
+          <p className="app-page__eyebrow">Account</p>
+          <h1 className="app-page__title">
+            {mode === 'forgot-sent' ? 'Check your email' : 'Reset password'}
+          </h1>
+          <p className="app-page__lede">
+            {mode === 'forgot-sent'
+              ? 'If an account exists for that address, we sent a reset link.'
+              : 'Enter your email and we will send a reset link.'}
+          </p>
+        </header>
+
+        <div className="app-form app-form--narrow">
+          {mode === 'forgot' ? (
+            <form onSubmit={handleForgot} className="login-form">
+              <div className="app-form__field">
+                <label className="app-form__label" htmlFor="forgot-email">
+                  Email
+                </label>
+                <input
+                  id="forgot-email"
+                  type="email"
+                  className="app-form__input"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              {error && <p className="post-detail__error">{error}</p>}
+              <div className="app-form__actions">
+                <button type="submit" className="btn" disabled={loading}>
+                  <span className="btn__label">{loading ? 'Sending…' : 'Send reset link'}</span>
+                </button>
+              </div>
+            </form>
+          ) : (
+            <>
+              {isDev && (
+                <p className="app-form__hint">
+                  Local dev: the reset URL is printed in the server console.
+                </p>
+              )}
+              <button
+                type="button"
+                className="login-switch"
+                onClick={() => {
+                  setMode('signin')
+                  setError('')
+                }}
+              >
+                Back to sign in
+              </button>
+            </>
+          )}
+          {mode === 'forgot' && (
+            <button
+              type="button"
+              className="login-switch"
+              onClick={() => {
+                setMode('signin')
+                setError('')
+              }}
+            >
+              Back to sign in
+            </button>
+          )}
+        </div>
+      </main>
+    )
   }
 
   return (
@@ -173,6 +309,18 @@ function LoginPage() {
               minLength={8}
             />
           </div>
+          {!isSignUp && (
+            <button
+              type="button"
+              className="login-switch login-switch--inline"
+              onClick={() => {
+                setMode('forgot')
+                setError('')
+              }}
+            >
+              Forgot password?
+            </button>
+          )}
           {error && <p className="post-detail__error">{error}</p>}
           <div className="app-form__actions">
             <button type="submit" className="btn" disabled={loading || googleLoading}>
@@ -186,7 +334,7 @@ function LoginPage() {
         <button
           type="button"
           onClick={() => {
-            setIsSignUp(!isSignUp)
+            setMode(isSignUp ? 'signin' : 'signup')
             setError('')
           }}
           className="login-switch"

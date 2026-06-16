@@ -33,6 +33,12 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    sendResetPassword: async ({ user, url }) => {
+      if (process.env.NODE_ENV === 'development') {
+        console.info(`[onie] Password reset for ${user.email}: ${url}`)
+      }
+      // Production: plug in your email provider here (Resend, Postmark, etc.)
+    },
   },
   socialProviders: {
     ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
@@ -55,6 +61,7 @@ export const auth = betterAuth({
               userId: user.id,
               username,
               field: 'OTHER',
+              onboarded: false,
             },
           })
         },

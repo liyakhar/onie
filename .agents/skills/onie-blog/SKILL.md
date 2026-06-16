@@ -20,7 +20,8 @@ Read these files:
 
 1. `keywords.csv` — candidate primaries (informational intent only for blog)
 2. `references/used-keywords.md` — primaries already published (never reuse)
-3. `/tmp/claude-code-seo-guide/on-page-seo.md` or the SEO guide repo — on-page checklist
+3. `references/keyword-research.md` — clusters, SERP notes, publish queue
+4. `/tmp/claude-code-seo-guide/on-page-seo.md` or the SEO guide repo — on-page checklist
 4. `src/content/blog/types.ts` — `BlogPost` shape
 5. `src/routes/blog/$slug.tsx` — post template (head, JSON-LD, layout)
 6. One existing post in `src/content/blog/` — voice and length reference
@@ -30,10 +31,12 @@ Read these files:
 ## Inputs
 
 - **No args** → pick the highest-value unused primary from `keywords.csv`:
-  - Skip rows marked Published in Notes or listed in `used-keywords.md`
+  - Skip rows with `Status=Published` or `Status=Skip`
+  - Skip primaries listed in `used-keywords.md`
   - Skip `Commercial` intent rows
-  - Rank by `Volume / (KD + 1)` descending
-  - Announce: `Picking "<keyword>" (vol X, KD Y).`
+  - Prefer `Priority=P1`, then `P2`, then `P3`
+  - Among same priority: rank by `Volume / (KD + 1)` when Volume/KD are set; otherwise use order in `references/keyword-research.md` queue
+  - Announce: `Picking "<keyword>" (priority X, cluster Y).`
 - **User-supplied keyword** → verify unused, then proceed
 
 ---
@@ -47,7 +50,7 @@ Read these files:
 - [ ] 4. Write src/content/blog/<slug>.ts (BlogPost)
 - [ ] 5. Register in src/lib/blog.ts
 - [ ] 6. Cross-link relatedSlugs on sibling posts
-- [ ] 7. Update references/used-keywords.md + keywords.csv Notes
+- [ ] 7. Update references/used-keywords.md + keywords.csv Status column
 - [ ] 8. pnpm run generate-routes && pnpm run build
 ```
 

@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import AccentPicker from '#/components/AccentPicker'
 import Footer from '#/components/Footer'
 import { OnieMark } from '#/components/OnieMark'
 import { authClient } from '#/lib/auth-client'
+import { loginSearch } from '#/lib/auth-nav'
 import { buildPageMeta, jsonLdScript, webSiteJsonLd } from '#/lib/seo'
 
 const SECTIONS = [
@@ -67,8 +67,6 @@ function LandingPage() {
               </Link>
             )}
           </div>
-
-          <AccentPicker />
         </aside>
 
         <article className="index-main">
@@ -191,7 +189,12 @@ function LandingPage() {
                 <li>
                   <span className="index-links__label">Account</span>
                   <div>
-                    <Link to="/login">{session?.user ? 'You are signed in' : 'Create an account'}</Link>
+                    <Link
+                      to="/login"
+                      search={session?.user ? undefined : loginSearch({ signup: true })}
+                    >
+                      {session?.user ? 'You are signed in' : 'Create an account'}
+                    </Link>
                     <span className="index-links__sub">
                       Publish workflows from your own practice.
                     </span>

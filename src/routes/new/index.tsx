@@ -1,8 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { useEffect } from 'react'
-import { useRouter } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { PostForm } from '#/components/PostForm'
 import { authClient } from '#/lib/auth-client'
+import { loginSearch } from '#/lib/auth-nav'
 import { buildPageMeta } from '#/lib/seo'
 
 const newPostMeta = buildPageMeta({
@@ -26,7 +26,10 @@ function NewPostPage() {
 
   useEffect(() => {
     if (!isPending && !session?.user) {
-      void router.navigate({ to: '/login' })
+      void router.navigate({
+        to: '/login',
+        search: loginSearch({ redirect: '/new' }),
+      })
     }
   }, [isPending, session?.user, router])
 

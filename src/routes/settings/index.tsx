@@ -4,6 +4,7 @@ import type { Category } from '#/generated/prisma/client'
 import { CATEGORIES, categoryLabel } from '#/lib/categories'
 import { getMyProfile, updateProfile } from '#/server/profiles'
 import { authClient } from '#/lib/auth-client'
+import { loginSearch } from '#/lib/auth-nav'
 import { buildPageMeta } from '#/lib/seo'
 
 const settingsMeta = buildPageMeta({
@@ -36,7 +37,10 @@ function SettingsPage() {
 
   useEffect(() => {
     if (!isPending && !session?.user) {
-      void router.navigate({ to: '/login' })
+      void router.navigate({
+        to: '/login',
+        search: loginSearch({ redirect: '/settings' }),
+      })
     }
   }, [isPending, session?.user, router])
 

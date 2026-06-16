@@ -3,9 +3,10 @@ import { useEffect } from 'react'
 import { getPost } from '#/server/posts'
 import { PostForm } from '#/components/PostForm'
 import { authClient } from '#/lib/auth-client'
+import { loginSearch } from '#/lib/auth-nav'
 import { buildPageMeta } from '#/lib/seo'
 
-export const Route = createFileRoute('/p/$postId/edit')({
+export const Route = createFileRoute('/p/$postId/edit/')({
   loader: async ({ params }) => {
     const post = await getPost({ data: { id: params.postId } })
     if (!post) {
@@ -40,7 +41,10 @@ function EditPostPage() {
 
   useEffect(() => {
     if (!isPending && !session?.user) {
-      void router.navigate({ to: '/login' })
+      void router.navigate({
+        to: '/login',
+        search: loginSearch({ redirect: `/p/${post.id}/edit` }),
+      })
       return
     }
     if (!isPending && session?.user && !isOwner) {
