@@ -25,7 +25,13 @@
     "outreach:check": "dotenv -e .env.local -- node scripts/outreach/check-env.mjs",
     "outreach:draft": "dotenv -e .env.local -- node scripts/outreach/draft.mjs",
     "outreach:review": "node scripts/outreach/review.mjs",
-    "outreach:send": "dotenv -e .env.local -- node scripts/outreach/send.mjs"
+    "outreach:send": "dotenv -e .env.local -- node scripts/outreach/send.mjs",
+    "outreach:oauth": "dotenv -e .env.local -- node scripts/outreach/oauth.mjs",
+    "outreach:fetch": "dotenv -e .env.local -- node scripts/outreach/fetch.mjs",
+    "outreach:discover": "dotenv -e .env.local -- node scripts/outreach/discover.mjs",
+    "outreach:batch": "dotenv -e .env.local -- node scripts/outreach/batch.mjs",
+    "outreach:feed": "dotenv -e .env.local -- node scripts/outreach/feed.mjs",
+    "outreach:copy": "node scripts/outreach/copy.mjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.2",
@@ -74,7 +80,9 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",
-      "lightningcss"
+      "lightningcss",
+      "prisma",
+      "@prisma/engines"
     ]
   }
 }
