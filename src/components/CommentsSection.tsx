@@ -3,8 +3,6 @@ import { Link, useRouter } from '@tanstack/react-router'
 import { createComment } from '#/server/comments'
 import { authClient } from '#/lib/auth-client'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
-import { Button } from '#/components/ui/button'
-import { Textarea } from '#/components/ui/textarea'
 
 type Comment = {
   id: string
@@ -54,50 +52,42 @@ export function CommentsSection({
   }
 
   return (
-    <section className="mt-10 border-t border-[var(--line)] pt-8">
-      <h2 className="mb-6 text-lg font-semibold text-[var(--ink)]">
+    <section className="post-comments" aria-labelledby="comments-h">
+      <h2 className="post-comments__title" id="comments-h">
         Comments ({comments.length})
       </h2>
 
       {session?.user ? (
-        <form onSubmit={handleSubmit} className="mb-8 grid gap-3">
-          <Textarea
+        <form onSubmit={handleSubmit} className="post-comments__form">
+          <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Ask a question or share how you adapted this workflow..."
-            rows={3}
-            className="border-[var(--line)] resize-none"
+            rows={4}
+            className="post-comments__input"
           />
-          {error && (
-            <p className="text-sm text-red-600">{error}</p>
-          )}
+          {error && <p className="post-detail__error">{error}</p>}
           <div>
-            <Button
+            <button
               type="submit"
-              size="sm"
               disabled={loading || !content.trim()}
-              className="bg-[var(--accent)] hover:bg-[var(--accent-hover)]"
+              className="btn btn--compact"
             >
-              {loading ? 'Posting…' : 'Post comment'}
-            </Button>
+              <span className="btn__label">{loading ? 'Posting…' : 'Post comment'}</span>
+            </button>
           </div>
         </form>
       ) : (
-        <p className="mb-8 text-sm text-[var(--ink-soft)]">
-          <Link to="/login" className="font-medium text-[var(--accent)]">
-            Sign in
-          </Link>{' '}
-          to join the discussion.
+        <p className="post-comments__signin">
+          <Link to="/login">Sign in</Link> to join the discussion.
         </p>
       )}
 
-      <div className="space-y-5">
-        {comments.length === 0 ? (
-          <p className="text-sm text-[var(--ink-muted)]">
-            No comments yet. Be the first to respond.
-          </p>
-        ) : (
-          comments.map((comment) => {
+      {comments.length === 0 ? (
+        <p className="post-comments__empty">No comments yet. Be the first to respond.</p>
+      ) : (
+        <ul className="post-comments__list">
+          {comments.map((comment) => {
             const username = comment.author.profile?.username
             const date = new Date(comment.createdAt).toLocaleDateString(undefined, {
               month: 'short',
@@ -105,10 +95,7 @@ export function CommentsSection({
             })
 
             return (
-              <article
-                key={comment.id}
-                className="flex gap-3 rounded-xl border border-[var(--line)] bg-[var(--surface-strong)] p-4"
-              >
+              <li key={comment.id} className="post-comments__item">
                 {username ? (
                   <Link to="/u/$username" params={{ username }} className="shrink-0">
                     <Avatar className="h-8 w-8 border border-[var(--line)]">
@@ -123,30 +110,28 @@ export function CommentsSection({
                     <AvatarFallback className="text-xs">?</AvatarFallback>
                   </Avatar>
                 )}
-                <div className="min-w-0 flex-1">
-                  <div className="mb-1 flex flex-wrap items-center gap-2">
+                <div className="post-comments__item-body">
+                  <div className="post-comments__item-head">
                     {username ? (
                       <Link
                         to="/u/$username"
                         params={{ username }}
-                        className="text-sm font-semibold text-[var(--ink)] no-underline hover:text-[var(--accent)]"
+                        className="post-comments__item-name"
                       >
                         {comment.author.name}
                       </Link>
                     ) : (
-                      <span className="text-sm font-semibold">{comment.author.name}</span>
+                      <span className="post-comments__item-name">{comment.author.name}</span>
                     )}
-                    <span className="text-xs text-[var(--ink-muted)]">{date}</span>
+                    <span className="post-comments__item-date">{date}</span>
                   </div>
-                  <p className="whitespace-pre-wrap text-sm leading-relaxed text-[var(--ink-soft)]">
-                    {comment.content}
-                  </p>
+                  <p className="post-comments__item-text">{comment.content}</p>
                 </div>
-              </article>
+              </li>
             )
-          })
-        )}
-      </div>
+          })}
+        </ul>
+      )}
     </section>
   )
 }

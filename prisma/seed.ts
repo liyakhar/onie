@@ -94,6 +94,7 @@ async function main() {
       description:
         'Turn raw interview notes into themes, quotes, and a shareable readout using skills + structured prompts.',
       category: 'UX_UI' as const,
+      kind: 'WORKFLOW' as const,
       tools: ['Claude', 'Cursor', 'SKILL.md', 'Notion export'],
       content: `## What this solves
 Interview synthesis without losing nuance.
@@ -121,6 +122,7 @@ prompts/synthesis.md
       description:
         'My weekly loop for validating and shipping small products with an agent pair-programmer.',
       category: 'SAAS' as const,
+      kind: 'PLAYBOOK' as const,
       tools: ['Claude Code', 'TanStack Start', 'Railway', 'Prisma'],
       content: `## Loop
 1. Problem interview notes → PRD draft
@@ -141,6 +143,7 @@ prompts/synthesis.md
       description:
         'Filter 40 papers down to 6 worth deep reading using structured agent criteria.',
       category: 'SCIENCE' as const,
+      kind: 'PROMPT' as const,
       tools: ['Claude', 'Zotero', 'MCP'],
       content: `## Criteria rubric
 - Directly tests hypothesis? (Y/N)
@@ -155,7 +158,14 @@ Export Zotero library → batch score → human review top quartile only.`,
   for (const post of posts) {
     await prisma.post.upsert({
       where: { id: post.id },
-      update: {},
+      update: {
+        kind: post.kind,
+        category: post.category,
+        title: post.title,
+        description: post.description,
+        content: post.content,
+        tools: post.tools,
+      },
       create: post,
     })
   }

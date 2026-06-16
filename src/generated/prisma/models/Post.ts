@@ -30,6 +30,7 @@ export type PostMinAggregateOutputType = {
   description: string | null
   content: string | null
   category: $Enums.Category | null
+  kind: $Enums.PostKind | null
   authorId: string | null
   forkedFromId: string | null
   createdAt: Date | null
@@ -42,6 +43,7 @@ export type PostMaxAggregateOutputType = {
   description: string | null
   content: string | null
   category: $Enums.Category | null
+  kind: $Enums.PostKind | null
   authorId: string | null
   forkedFromId: string | null
   createdAt: Date | null
@@ -54,6 +56,7 @@ export type PostCountAggregateOutputType = {
   description: number
   content: number
   category: number
+  kind: number
   tools: number
   authorId: number
   forkedFromId: number
@@ -69,6 +72,7 @@ export type PostMinAggregateInputType = {
   description?: true
   content?: true
   category?: true
+  kind?: true
   authorId?: true
   forkedFromId?: true
   createdAt?: true
@@ -81,6 +85,7 @@ export type PostMaxAggregateInputType = {
   description?: true
   content?: true
   category?: true
+  kind?: true
   authorId?: true
   forkedFromId?: true
   createdAt?: true
@@ -93,6 +98,7 @@ export type PostCountAggregateInputType = {
   description?: true
   content?: true
   category?: true
+  kind?: true
   tools?: true
   authorId?: true
   forkedFromId?: true
@@ -179,6 +185,7 @@ export type PostGroupByOutputType = {
   description: string | null
   content: string
   category: $Enums.Category
+  kind: $Enums.PostKind
   tools: string[]
   authorId: string
   forkedFromId: string | null
@@ -213,6 +220,7 @@ export type PostWhereInput = {
   description?: Prisma.StringNullableFilter<"Post"> | string | null
   content?: Prisma.StringFilter<"Post"> | string
   category?: Prisma.EnumCategoryFilter<"Post"> | $Enums.Category
+  kind?: Prisma.EnumPostKindFilter<"Post"> | $Enums.PostKind
   tools?: Prisma.StringNullableListFilter<"Post">
   authorId?: Prisma.StringFilter<"Post"> | string
   forkedFromId?: Prisma.StringNullableFilter<"Post"> | string | null
@@ -232,6 +240,7 @@ export type PostOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   content?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
   tools?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   forkedFromId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -254,6 +263,7 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Post"> | string | null
   content?: Prisma.StringFilter<"Post"> | string
   category?: Prisma.EnumCategoryFilter<"Post"> | $Enums.Category
+  kind?: Prisma.EnumPostKindFilter<"Post"> | $Enums.PostKind
   tools?: Prisma.StringNullableListFilter<"Post">
   authorId?: Prisma.StringFilter<"Post"> | string
   forkedFromId?: Prisma.StringNullableFilter<"Post"> | string | null
@@ -273,6 +283,7 @@ export type PostOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   content?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
   tools?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   forkedFromId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -292,6 +303,7 @@ export type PostScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
   content?: Prisma.StringWithAggregatesFilter<"Post"> | string
   category?: Prisma.EnumCategoryWithAggregatesFilter<"Post"> | $Enums.Category
+  kind?: Prisma.EnumPostKindWithAggregatesFilter<"Post"> | $Enums.PostKind
   tools?: Prisma.StringNullableListFilter<"Post">
   authorId?: Prisma.StringWithAggregatesFilter<"Post"> | string
   forkedFromId?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
@@ -305,6 +317,7 @@ export type PostCreateInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -322,6 +335,7 @@ export type PostUncheckedCreateInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   authorId: string
   forkedFromId?: string | null
@@ -339,6 +353,7 @@ export type PostUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -356,6 +371,7 @@ export type PostUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   forkedFromId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -373,6 +389,7 @@ export type PostCreateManyInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   authorId: string
   forkedFromId?: string | null
@@ -386,6 +403,7 @@ export type PostUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -397,6 +415,7 @@ export type PostUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   forkedFromId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -433,6 +452,7 @@ export type PostCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   content?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
   tools?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   forkedFromId?: Prisma.SortOrder
@@ -446,6 +466,7 @@ export type PostMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   content?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   forkedFromId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -458,6 +479,7 @@ export type PostMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   content?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   forkedFromId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -551,6 +573,10 @@ export type PostUncheckedCreateNestedManyWithoutForkedFromInput = {
   connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
 }
 
+export type EnumPostKindFieldUpdateOperationsInput = {
+  set?: $Enums.PostKind
+}
+
 export type PostUpdatetoolsInput = {
   set?: string[]
   push?: string | string[]
@@ -628,6 +654,7 @@ export type PostCreateWithoutAuthorInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -644,6 +671,7 @@ export type PostUncheckedCreateWithoutAuthorInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   forkedFromId?: string | null
   createdAt?: Date | string
@@ -670,6 +698,7 @@ export type PostCreateWithoutPinnedByInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -686,6 +715,7 @@ export type PostUncheckedCreateWithoutPinnedByInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   authorId: string
   forkedFromId?: string | null
@@ -726,6 +756,7 @@ export type PostScalarWhereInput = {
   description?: Prisma.StringNullableFilter<"Post"> | string | null
   content?: Prisma.StringFilter<"Post"> | string
   category?: Prisma.EnumCategoryFilter<"Post"> | $Enums.Category
+  kind?: Prisma.EnumPostKindFilter<"Post"> | $Enums.PostKind
   tools?: Prisma.StringNullableListFilter<"Post">
   authorId?: Prisma.StringFilter<"Post"> | string
   forkedFromId?: Prisma.StringNullableFilter<"Post"> | string | null
@@ -750,6 +781,7 @@ export type PostUpdateWithoutPinnedByInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -766,6 +798,7 @@ export type PostUncheckedUpdateWithoutPinnedByInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   forkedFromId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -782,6 +815,7 @@ export type PostCreateWithoutForksInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -798,6 +832,7 @@ export type PostUncheckedCreateWithoutForksInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   authorId: string
   forkedFromId?: string | null
@@ -819,6 +854,7 @@ export type PostCreateWithoutForkedFromInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -835,6 +871,7 @@ export type PostUncheckedCreateWithoutForkedFromInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   authorId: string
   createdAt?: Date | string
@@ -872,6 +909,7 @@ export type PostUpdateWithoutForksInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -888,6 +926,7 @@ export type PostUncheckedUpdateWithoutForksInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   forkedFromId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -920,6 +959,7 @@ export type PostCreateWithoutLikesInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -936,6 +976,7 @@ export type PostUncheckedCreateWithoutLikesInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   authorId: string
   forkedFromId?: string | null
@@ -968,6 +1009,7 @@ export type PostUpdateWithoutLikesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -984,6 +1026,7 @@ export type PostUncheckedUpdateWithoutLikesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   forkedFromId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1000,6 +1043,7 @@ export type PostCreateWithoutCommentsInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1016,6 +1060,7 @@ export type PostUncheckedCreateWithoutCommentsInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   authorId: string
   forkedFromId?: string | null
@@ -1048,6 +1093,7 @@ export type PostUpdateWithoutCommentsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1064,6 +1110,7 @@ export type PostUncheckedUpdateWithoutCommentsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   forkedFromId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1080,6 +1127,7 @@ export type PostCreateManyAuthorInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   forkedFromId?: string | null
   createdAt?: Date | string
@@ -1092,6 +1140,7 @@ export type PostUpdateWithoutAuthorInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1108,6 +1157,7 @@ export type PostUncheckedUpdateWithoutAuthorInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   forkedFromId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1124,6 +1174,7 @@ export type PostUncheckedUpdateManyWithoutAuthorInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   forkedFromId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1136,6 +1187,7 @@ export type PostCreateManyForkedFromInput = {
   description?: string | null
   content: string
   category: $Enums.Category
+  kind?: $Enums.PostKind
   tools?: Prisma.PostCreatetoolsInput | string[]
   authorId: string
   createdAt?: Date | string
@@ -1148,6 +1200,7 @@ export type PostUpdateWithoutForkedFromInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1164,6 +1217,7 @@ export type PostUncheckedUpdateWithoutForkedFromInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1180,6 +1234,7 @@ export type PostUncheckedUpdateManyWithoutForkedFromInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+  kind?: Prisma.EnumPostKindFieldUpdateOperationsInput | $Enums.PostKind
   tools?: Prisma.PostUpdatetoolsInput | string[]
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1241,6 +1296,7 @@ export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   description?: boolean
   content?: boolean
   category?: boolean
+  kind?: boolean
   tools?: boolean
   authorId?: boolean
   forkedFromId?: boolean
@@ -1261,6 +1317,7 @@ export type PostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   description?: boolean
   content?: boolean
   category?: boolean
+  kind?: boolean
   tools?: boolean
   authorId?: boolean
   forkedFromId?: boolean
@@ -1276,6 +1333,7 @@ export type PostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   description?: boolean
   content?: boolean
   category?: boolean
+  kind?: boolean
   tools?: boolean
   authorId?: boolean
   forkedFromId?: boolean
@@ -1291,6 +1349,7 @@ export type PostSelectScalar = {
   description?: boolean
   content?: boolean
   category?: boolean
+  kind?: boolean
   tools?: boolean
   authorId?: boolean
   forkedFromId?: boolean
@@ -1298,7 +1357,7 @@ export type PostSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "content" | "category" | "tools" | "authorId" | "forkedFromId" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
+export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "content" | "category" | "kind" | "tools" | "authorId" | "forkedFromId" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
 export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   pinnedBy?: boolean | Prisma.Post$pinnedByArgs<ExtArgs>
@@ -1333,6 +1392,7 @@ export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     description: string | null
     content: string
     category: $Enums.Category
+    kind: $Enums.PostKind
     tools: string[]
     authorId: string
     forkedFromId: string | null
@@ -1772,6 +1832,7 @@ export interface PostFieldRefs {
   readonly description: Prisma.FieldRef<"Post", 'String'>
   readonly content: Prisma.FieldRef<"Post", 'String'>
   readonly category: Prisma.FieldRef<"Post", 'Category'>
+  readonly kind: Prisma.FieldRef<"Post", 'PostKind'>
   readonly tools: Prisma.FieldRef<"Post", 'String[]'>
   readonly authorId: Prisma.FieldRef<"Post", 'String'>
   readonly forkedFromId: Prisma.FieldRef<"Post", 'String'>

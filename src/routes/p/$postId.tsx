@@ -3,14 +3,20 @@ import { createFileRoute, Link, notFound, useRouter } from '@tanstack/react-rout
 import { getPost, forkPost } from '#/server/posts'
 import { getComments } from '#/server/comments'
 import { categoryLabel } from '#/lib/categories'
+import { kindLabel } from '#/lib/kinds'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
-import { Badge } from '#/components/ui/badge'
-import { Button } from '#/components/ui/button'
 import { MarkdownContent } from '#/components/MarkdownContent'
 import { PostEngagement } from '#/components/PostEngagement'
 import { CommentsSection } from '#/components/CommentsSection'
 import { authClient } from '#/lib/auth-client'
-import { GitFork } from 'lucide-react'
+import { GitFork, Pencil } from 'lucide-react'
+import {
+  articleJsonLd,
+  breadcrumbJsonLd,
+  buildPageMeta,
+  jsonLdScript,
+  pageDescription,
+} from '#/lib/seo'
 
 export const Route = createFileRoute('/p/$postId')({
   loader: async ({ params }) => {
@@ -22,6 +28,45 @@ export const Route = createFileRoute('/p/$postId')({
       throw notFound()
     }
     return { post, comments }
+  },
+  head: ({ loaderData }) => {
+    const post = loaderData?.post
+    if (!post) return {}
+
+    const description =
+      post.description ??
+      pageDescription(`Agent workflow by ${post.author.name} on Onie.`)
+
+    const pageMeta = buildPageMeta({
+      path: `/p/${post.id}`,
+      title: post.title,
+      description,
+      ogType: 'article',
+    })
+
+    const breadcrumbs = breadcrumbJsonLd([
+      { name: 'Home', path: '/' },
+      { name: 'Explore', path: '/app/explore' },
+      { name: post.title, path: `/p/${post.id}` },
+    ])
+
+    const article = articleJsonLd({
+      title: post.title,
+      description,
+      path: `/p/${post.id}`,
+      publishedAt: new Date(post.createdAt).toISOString(),
+      updatedAt: new Date(post.updatedAt).toISOString(),
+      authorName: post.author.name,
+      authorUrl: post.author.profile?.username
+        ? `/u/${post.author.profile.username}`
+        : undefined,
+    })
+
+    return {
+      meta: pageMeta.meta,
+      links: pageMeta.links,
+      scripts: [jsonLdScript([article, breadcrumbs])],
+    }
   },
   component: PostPage,
 })
@@ -58,95 +103,89 @@ function PostPage() {
   }
 
   return (
-    <main className="page-wrap px-4 pb-12 pt-8">
-      <article className="mx-auto max-w-3xl">
-        <div className="mb-6 flex flex-wrap items-center gap-2">
-          <Badge variant="secondary">{categoryLabel(post.category)}</Badge>
+    <main id="main" className="app-page">
+      <header className="app-page__head">
+        <p className="app-page__eyebrow">
+          {kindLabel(post.kind)} · {categoryLabel(post.category)}
+        </p>
+        <h1 className="app-page__title">{post.title}</h1>
+        {post.description && <p className="app-page__lede">{post.description}</p>}
+      </header>
+
+      {post.tools.length > 0 && (
+        <ul className="post-detail__tools" aria-label="Tools used">
           {post.tools.map((tool) => (
-            <Badge key={tool} variant="outline" className="font-mono text-[10px] uppercase">
+            <li key={tool} className="post-detail__tool">
               {tool}
-            </Badge>
+            </li>
           ))}
-          {post.forkedFromId && (
-            <Badge variant="outline" className="gap-1 border-violet-200 text-violet-600 dark:border-violet-800 dark:text-violet-400">
-              <GitFork className="h-3 w-3" />
-              Forked
-            </Badge>
-          )}
-        </div>
+        </ul>
+      )}
 
-        <h1 className="mb-4 text-3xl font-semibold leading-tight text-[var(--ink)] sm:text-4xl">
-          {post.title}
-        </h1>
+      {post.forkedFromId && (
+        <p className="post-detail__fork-note">
+          <GitFork className="h-3.5 w-3.5" aria-hidden="true" />
+          Forked from{' '}
+          <Link to="/p/$postId" params={{ postId: post.forkedFromId }}>
+            original workflow
+          </Link>
+        </p>
+      )}
 
-        {post.description && (
-          <p className="mb-6 text-lg text-[var(--ink-soft)]">{post.description}</p>
-        )}
-
-        {post.forkedFromId && (
-          <p className="mb-4 flex items-center gap-1.5 text-sm text-[var(--ink-muted)]">
-            <GitFork className="h-3.5 w-3.5" />
-            Forked from{' '}
-            <Link
-              to="/p/$postId"
-              params={{ postId: post.forkedFromId }}
-              className="font-medium text-[var(--accent)]"
-            >
-              original workflow
-            </Link>
+      <div className="post-detail__meta">
+        {username ? (
+          <Link to="/u/$username" params={{ username }} className="post-detail__author">
+            <Avatar className="h-10 w-10 border border-[var(--line)]">
+              <AvatarImage src={post.author.image ?? undefined} />
+              <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="post-detail__author-name">{post.author.name}</p>
+              <p className="post-detail__author-handle">
+                @{username} ·{' '}
+                <time dateTime={new Date(post.createdAt).toISOString()}>{date}</time>
+              </p>
+            </div>
+          </Link>
+        ) : (
+          <p className="post-detail__author-handle">
+            <time dateTime={new Date(post.createdAt).toISOString()}>{date}</time>
           </p>
         )}
-
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-[var(--line)] pb-6">
-          {username ? (
-            <Link to="/u/$username" params={{ username }} className="flex items-center gap-3 no-underline">
-              <Avatar className="h-10 w-10 border border-[var(--line)]">
-                <AvatarImage src={post.author.image ?? undefined} />
-                <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-semibold text-[var(--ink)]">{post.author.name}</p>
-                <p className="text-sm text-[var(--ink-muted)]">@{username} · {date}</p>
-              </div>
+        <div className="post-detail__actions">
+          <PostEngagement
+            postId={post.id}
+            likeCount={post._count.likes}
+            commentCount={post._count.comments}
+            likedByMe={post.likedByMe}
+            interactive
+          />
+          {isOwn ? (
+            <Link to="/p/$postId/edit" params={{ postId: post.id }} className="feed-tab">
+              <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
+              Edit
             </Link>
           ) : (
-            <p className="text-sm text-[var(--ink-muted)]">{date}</p>
+            <button
+              type="button"
+              onClick={handleFork}
+              disabled={forking}
+              className="feed-tab"
+            >
+              <GitFork className="h-3.5 w-3.5" aria-hidden="true" />
+              {forking ? 'Forking…' : 'Fork'}
+            </button>
           )}
-          <div className="flex items-center gap-3">
-            <PostEngagement
-              postId={post.id}
-              likeCount={post._count.likes}
-              commentCount={post._count.comments}
-              likedByMe={post.likedByMe}
-              interactive
-            />
-            {!isOwn && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleFork}
-                disabled={forking}
-                className="gap-1.5 border-[var(--line)] text-[var(--ink-soft)] hover:text-[var(--ink)]"
-              >
-                <GitFork className="h-3.5 w-3.5" />
-                {forking ? 'Forking…' : 'Fork'}
-              </Button>
-            )}
-          </div>
         </div>
+      </div>
 
-        {forkError && (
-          <p className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-            {forkError}
-          </p>
-        )}
+      {forkError && <p className="post-detail__error">{forkError}</p>}
 
-        <div className="rounded-xl border border-[var(--line)] bg-[var(--surface-strong)] p-6 sm:p-8">
-          <MarkdownContent content={post.content} />
-        </div>
-
-        <CommentsSection postId={post.id} initialComments={comments} />
+      <article className="post-detail__body">
+        <MarkdownContent content={post.content} />
       </article>
+
+      <CommentsSection postId={post.id} initialComments={comments} />
     </main>
   )
 }

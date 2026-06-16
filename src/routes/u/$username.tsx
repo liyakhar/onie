@@ -1,11 +1,16 @@
-import { createFileRoute, notFound, useRouter } from '@tanstack/react-router'
+import { createFileRoute, Link, notFound, useRouter } from '@tanstack/react-router'
 import { getProfile, toggleFollow } from '#/server/profiles'
 import { pinPost } from '#/server/posts'
 import { categoryLabel } from '#/lib/categories'
 import { PostCard } from '#/components/PostCard'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
-import { Badge } from '#/components/ui/badge'
-import { Button } from '#/components/ui/button'
+import {
+  breadcrumbJsonLd,
+  buildPageMeta,
+  jsonLdScript,
+  pageDescription,
+  personJsonLd,
+} from '#/lib/seo'
 
 export const Route = createFileRoute('/u/$username')({
   loader: async ({ params }) => {
@@ -14,6 +19,42 @@ export const Route = createFileRoute('/u/$username')({
       throw notFound()
     }
     return profile
+  },
+  head: ({ loaderData, params }) => {
+    const profile = loaderData
+    if (!profile) return {}
+
+    const description = pageDescription(
+      profile.bio ??
+        profile.headline ??
+        `${profile.user.name} shares agent workflows on Onie.`,
+    )
+
+    const pageMeta = buildPageMeta({
+      path: `/u/${params.username}`,
+      title: `${profile.user.name} (@${profile.username})`,
+      description,
+      ogType: 'profile',
+    })
+
+    const breadcrumbs = breadcrumbJsonLd([
+      { name: 'Home', path: '/' },
+      { name: 'Explore', path: '/app/explore' },
+      { name: profile.user.name, path: `/u/${params.username}` },
+    ])
+
+    const person = personJsonLd({
+      name: profile.user.name,
+      username: profile.username,
+      description: profile.bio ?? profile.headline ?? undefined,
+      image: profile.user.image,
+    })
+
+    return {
+      meta: pageMeta.meta,
+      links: pageMeta.links,
+      scripts: [jsonLdScript([person, breadcrumbs])],
+    }
   },
   component: ProfilePage,
 })
@@ -42,98 +83,120 @@ function ProfilePage() {
   }
 
   return (
-    <main className="page-wrap px-4 pb-12 pt-8">
-      <section className="mb-8 rounded-2xl border border-[var(--line)] bg-[var(--surface-strong)] p-6 sm:p-8">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-          <div className="flex items-start gap-4">
-            <Avatar className="h-16 w-16 border border-[var(--line)]">
-              <AvatarImage src={user.image ?? undefined} />
-              <AvatarFallback className="text-lg">
-                {user.name.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <h1 className="text-2xl font-semibold text-[var(--ink)]">{user.name}</h1>
-              <p className="font-mono text-sm text-[var(--ink-muted)]">@{profile.username}</p>
-              {profile.headline && (
-                <p className="mt-2 text-[var(--ink-soft)]">{profile.headline}</p>
-              )}
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                <Badge variant="secondary">{categoryLabel(profile.field)}</Badge>
-                <span className="text-sm text-[var(--ink-muted)]">
-                  {user._count.posts} workflows · {user._count.followers} followers ·{' '}
-                  {user._count.following} following
-                </span>
-              </div>
-              {profile.bio && (
-                <p className="mt-4 max-w-xl text-sm leading-relaxed text-[var(--ink-soft)]">
-                  {profile.bio}
-                </p>
-              )}
+    <main id="main" className="app-page">
+      <header className="app-page__head">
+        <p className="app-page__eyebrow">{categoryLabel(profile.field)}</p>
+        <h1 className="app-page__title">{user.name}</h1>
+        {profile.headline && <p className="app-page__lede">{profile.headline}</p>}
+      </header>
+
+      <section className="profile-card" aria-label="Profile">
+        <div className="profile-card__main">
+          <Avatar className="h-16 w-16 border border-[var(--line)]">
+            <AvatarImage src={user.image ?? undefined} />
+            <AvatarFallback className="text-lg">
+              {user.name.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <p className="profile-card__handle">@{profile.username}</p>
+            <div className="profile-card__meta">
+              <span className="profile-card__field">{categoryLabel(profile.field)}</span>
+              <span>
+                {user._count.posts} workflows · {user._count.followers} followers ·{' '}
+                {user._count.following} following
+              </span>
             </div>
+            {profile.bio && <p className="profile-card__bio">{profile.bio}</p>}
           </div>
-          <div className="flex gap-2">
-            {isOwner ? null : (
-              <Button
-                onClick={handleFollow}
-                variant={isFollowing ? 'outline' : 'default'}
-                className={
-                  isFollowing
-                    ? 'border-[var(--line)]'
-                    : 'bg-[var(--accent)] hover:bg-[var(--accent-hover)]'
-                }
-              >
-                {isFollowing ? 'Following' : 'Follow'}
-              </Button>
-            )}
-          </div>
+        </div>
+        <div className="profile-card__actions">
+          {isOwner ? (
+            <>
+              <Link to="/settings" className="btn btn--compact">
+                <span className="btn__label">Edit profile</span>
+              </Link>
+              <Link to="/new" className="feed-tab">
+                New workflow
+              </Link>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={handleFollow}
+              className={isFollowing ? 'feed-tab' : 'btn btn--compact'}
+            >
+              {isFollowing ? (
+                'Following'
+              ) : (
+                <span className="btn__label">Follow</span>
+              )}
+            </button>
+          )}
         </div>
       </section>
 
       {user.pinnedPost && (
-        <section className="mb-8">
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--ink-muted)]">
+        <section className="app-section" aria-labelledby="pinned-h">
+          <h2 className="app-section__title" id="pinned-h">
             Pinned workflow
           </h2>
-          <PostCard post={user.pinnedPost} pinned />
-          {isOwner && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="mt-2 text-[var(--ink-muted)]"
-              onClick={() => handlePin(null)}
-            >
-              Unpin
-            </Button>
-          )}
+          <ol className="ledger" aria-label="Pinned workflow">
+            <PostCard
+              post={user.pinnedPost}
+              pinned
+              variant="ledger"
+              actions={
+                isOwner ? (
+                  <button type="button" className="feed-tab" onClick={() => handlePin(null)}>
+                    Unpin
+                  </button>
+                ) : undefined
+              }
+            />
+          </ol>
         </section>
       )}
 
-      <section>
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-[var(--ink-muted)]">
+      <section className="app-section" aria-labelledby="workflows-h">
+        <h2 className="app-section__title" id="workflows-h">
           Workflows
         </h2>
-        <div className="grid gap-4">
-          {user.posts.length === 0 ? (
-            <p className="text-[var(--ink-soft)]">No workflows published yet.</p>
-          ) : (
-            user.posts.map((post) => (
-              <div key={post.id} className="space-y-2">
-                <PostCard post={post} />
-                {isOwner && user.pinnedPostId !== post.id && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-[var(--ink-muted)]"
-                    onClick={() => handlePin(post.id)}
-                  >
-                    Pin to profile
-                  </Button>
-                )}
-              </div>
-            ))
-          )}
-        </div>
+        {user.posts.length === 0 ? (
+          <p className="feed-empty">No workflows published yet.</p>
+        ) : (
+          <ol className="ledger" aria-label="Published workflows">
+            {user.posts.map((post) => (
+              <PostCard
+                key={post.id}
+                post={post}
+                variant="ledger"
+                actions={
+                  isOwner ? (
+                    <>
+                      {user.pinnedPostId !== post.id && (
+                        <button
+                          type="button"
+                          className="feed-tab"
+                          onClick={() => handlePin(post.id)}
+                        >
+                          Pin to profile
+                        </button>
+                      )}
+                      <Link
+                        to="/p/$postId/edit"
+                        params={{ postId: post.id }}
+                        className="feed-tab"
+                      >
+                        Edit
+                      </Link>
+                    </>
+                  ) : undefined
+                }
+              />
+            ))}
+          </ol>
+        )}
       </section>
     </main>
   )

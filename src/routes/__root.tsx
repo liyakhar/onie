@@ -8,44 +8,38 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
+import AccentInit from '#/components/AccentInit'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
+import {
+  buildPageMeta,
+  defaultHeadLinks,
+  googleSiteVerificationMeta,
+  jsonLdScript,
+  organizationJsonLd,
+} from '#/lib/seo'
 
 interface MyRouterContext {
   queryClient: QueryClient
 }
 
+const rootMeta = buildPageMeta({ path: '/' })
+
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   head: () => ({
     meta: [
-      {
-        charSet: 'utf-8',
-      },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
-      },
-      {
-        title: 'Onie — Agent workflows from people doing the work',
-      },
-      {
-        name: 'description',
-        content:
-          'A public feed of agent workflows from practitioners in the field — prompts, skills, and setups tagged by discipline and stack.',
-      },
+      { charSet: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'theme-color', content: '#1a1a18' },
+      ...googleSiteVerificationMeta(),
+      ...rootMeta.meta,
     ],
     links: [
-      {
-        rel: 'stylesheet',
-        href: appCss,
-      },
-      {
-        rel: 'icon',
-        href: '/onie-logo.svg',
-        type: 'image/svg+xml',
-      },
+      { rel: 'stylesheet', href: appCss },
+      ...defaultHeadLinks(),
     ],
+    scripts: [jsonLdScript(organizationJsonLd())],
   }),
   shellComponent: RootDocument,
 })
@@ -57,6 +51,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="antialiased [overflow-wrap:anywhere]">
+        <AccentInit />
         <a className="skip-link" href="#main">
           Skip to content
         </a>

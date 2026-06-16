@@ -8,6 +8,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { nitro } from 'nitro/vite'
 
 const config = defineConfig({
+  envPrefix: ['VITE_', 'SITE_'],
   resolve: { tsconfigPaths: true },
   plugins: [
     ...(process.env.NODE_ENV === 'development' ? [devtools()] : []),

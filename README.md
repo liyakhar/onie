@@ -8,7 +8,7 @@ Production: deploy via Railway (see below).
 
 - [TanStack Start](https://tanstack.com/start) (React, SSR)
 - [Prisma](https://www.prisma.io/) + PostgreSQL on [Railway](https://railway.com/)
-- [Better Auth](https://www.better-auth.com/) (email/password)
+- [Better Auth](https://www.better-auth.com/) (email/password, Google OAuth)
 - [shadcn/ui](https://ui.shadcn.com/) + Tailwind
 
 ## Features (MVP)
@@ -27,7 +27,7 @@ Production: deploy via Railway (see below).
 
 ```bash
 cp .env.example .env.local
-# Edit DATABASE_URL and BETTER_AUTH_SECRET
+# Edit DATABASE_URL, BETTER_AUTH_SECRET, and optionally Google OAuth vars
 
 # Start Postgres (example with Docker)
 docker run --name weavel-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=weavel -p 5432:5432 -d postgres:16
@@ -39,6 +39,13 @@ npm run dev
 ```
 
 Open http://localhost:3000
+
+### Google sign-in (optional)
+
+1. [Google Cloud Console](https://console.cloud.google.com/apis/credentials) → Create OAuth client (Web application)
+2. **Authorized redirect URI:** `http://localhost:3000/api/auth/callback/google` (use your `BETTER_AUTH_URL` + `/api/auth/callback/google`)
+3. Add `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` to `.env.local`
+4. Restart the dev server — the login page shows **Continue with Google**
 
 **Demo accounts** (after seed):
 
@@ -56,6 +63,7 @@ Open http://localhost:3000
    - `DATABASE_URL` — `${{Postgres.DATABASE_URL}}`
    - `BETTER_AUTH_SECRET` — long random string (`openssl rand -base64 48`)
    - `BETTER_AUTH_URL` — your public Railway URL (e.g. `https://onie-web-production.up.railway.app`)
+   - `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` — optional; redirect URI must be `https://<your-domain>/api/auth/callback/google`
    - `NODE_ENV` — `production`
 4. Generate a public domain: `railway domain -s <service-name>`
 5. Deploy — `nixpacks.toml` runs `prisma generate`, `db push`, and `pnpm build`

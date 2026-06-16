@@ -1,31 +1,61 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import type { Category } from '#/generated/prisma/client'
+import type { Category, PostKind } from '#/generated/prisma/client'
 import { FeedSearchBar } from '#/components/FeedSearchBar'
 import { PostCard } from '#/components/PostCard'
 import { getFeedPosts, getTopWorkflowsWeek } from '#/server/posts'
 import { searchProfiles } from '#/server/profiles'
 import { categoryLabel } from '#/lib/categories'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
+import { breadcrumbJsonLd, buildPageMeta, jsonLdScript } from '#/lib/seo'
+
+const exploreMeta = buildPageMeta({
+  path: '/app/explore',
+  title: 'Explore agent workflows',
+  description:
+    'Discover agent workflows and practitioners by field, tool, or keyword — prompts, skills, and setups from the Onie community.',
+})
 
 type ExploreSearch = {
   q?: string
   category?: Category
+  kind?: PostKind
 }
 
 export const Route = createFileRoute('/app/explore')({
+  head: () => ({
+    meta: exploreMeta.meta,
+    links: exploreMeta.links,
+    scripts: [
+      jsonLdScript(
+        breadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Explore', path: '/app/explore' },
+        ]),
+      ),
+    ],
+  }),
   validateSearch: (search: Record<string, unknown>): ExploreSearch => ({
     q: typeof search.q === 'string' ? search.q : undefined,
     category:
       typeof search.category === 'string'
         ? (search.category as Category)
         : undefined,
+    kind:
+      typeof search.kind === 'string' ? (search.kind as PostKind) : undefined,
   }),
   loaderDeps: ({ search }) => search,
   loader: async ({ deps }) => {
     const [posts, people, topThisWeek] = await Promise.all([
-      getFeedPosts({ data: { tab: 'discover', category: deps.category, q: deps.q } }),
+      getFeedPosts({
+        data: {
+          tab: 'discover',
+          category: deps.category,
+          kind: deps.kind,
+          q: deps.q,
+        },
+      }),
       searchProfiles({ data: { category: deps.category, q: deps.q } }),
-      !deps.q && !deps.category ? getTopWorkflowsWeek() : Promise.resolve([]),
+      !deps.q && !deps.category && !deps.kind ? getTopWorkflowsWeek() : Promise.resolve([]),
     ])
     return { posts, people, topThisWeek }
   },
@@ -33,9 +63,9 @@ export const Route = createFileRoute('/app/explore')({
 })
 
 function ExplorePage() {
-  const { q, category } = Route.useSearch()
+  const { q, category, kind } = Route.useSearch()
   const { posts, people, topThisWeek } = Route.useLoaderData()
-  const hasFilters = Boolean(q || category)
+  const hasFilters = Boolean(q || category || kind)
 
   return (
     <main id="main" className="app-page">
@@ -43,12 +73,12 @@ function ExplorePage() {
         <p className="app-page__eyebrow">Discover</p>
         <h1 className="app-page__title">Explore</h1>
         <p className="app-page__lede">
-          Find workflows and people by field, tool, or keyword.
+          Find workflows and people by type, field, tool, or keyword.
         </p>
       </header>
 
       <div className="feed-controls">
-        <FeedSearchBar q={q} category={category} basePath="/app/explore" />
+        <FeedSearchBar q={q} category={category} kind={kind} basePath="/app/explore" />
       </div>
 
       {!hasFilters && topThisWeek.length > 0 && (
@@ -102,7 +132,7 @@ function ExplorePage() {
         <ol className="ledger" aria-label="Workflow results">
           {posts.length === 0 ? (
             <li className="feed-empty">
-              <p>No matches. Try another field or keyword.</p>
+              <p>No matches. Try another type, field, or keyword.</p>
             </li>
           ) : (
             posts.map((post) => <PostCard key={post.id} post={post} variant="ledger" />)

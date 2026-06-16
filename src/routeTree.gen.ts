@@ -9,35 +9,41 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as NewRouteImport } from './routes/new'
-import { Route as LoginRouteImport } from './routes/login'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as ExploreRouteImport } from './routes/explore'
-import { Route as AboutRouteImport } from './routes/about'
+import { Route as URouteRouteImport } from './routes/u/route'
+import { Route as SettingsRouteRouteImport } from './routes/settings/route'
+import { Route as PRouteRouteImport } from './routes/p/route'
+import { Route as NewRouteRouteImport } from './routes/new/route'
+import { Route as LoginRouteRouteImport } from './routes/login/route'
 import { Route as AppRouteRouteImport } from './routes/app/route'
+import { Route as AboutRouteRouteImport } from './routes/about/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SettingsIndexRouteImport } from './routes/settings/index'
+import { Route as NewIndexRouteImport } from './routes/new/index'
+import { Route as LoginIndexRouteImport } from './routes/login/index'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as UUsernameRouteImport } from './routes/u/$username'
 import { Route as PPostIdRouteImport } from './routes/p/$postId'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoPrismaRouteImport } from './routes/demo/prisma'
 import { Route as DemoBetterAuthRouteImport } from './routes/demo/better-auth'
+import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
+import { Route as PPostIdEditRouteImport } from './routes/p/$postId.edit'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
-const SettingsRoute = SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NewRoute = NewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreRoute = ExploreRouteImport.update({
@@ -45,9 +51,29 @@ const ExploreRoute = ExploreRouteImport.update({
   path: '/explore',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
+const URouteRoute = URouteRouteImport.update({
+  id: '/u',
+  path: '/u',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRouteRoute = SettingsRouteRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PRouteRoute = PRouteRouteImport.update({
+  id: '/p',
+  path: '/p',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewRouteRoute = NewRouteRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRouteRoute = LoginRouteRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRouteRoute = AppRouteRouteImport.update({
@@ -55,9 +81,34 @@ const AppRouteRoute = AppRouteRouteImport.update({
   path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRouteRoute = AboutRouteRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsIndexRoute = SettingsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SettingsRouteRoute,
+} as any)
+const NewIndexRoute = NewIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => NewRouteRoute,
+} as any)
+const LoginIndexRoute = LoginIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LoginRouteRoute,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -65,15 +116,20 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AboutIndexRoute = AboutIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AboutRouteRoute,
+} as any)
 const UUsernameRoute = UUsernameRouteImport.update({
-  id: '/u/$username',
-  path: '/u/$username',
-  getParentRoute: () => rootRouteImport,
+  id: '/$username',
+  path: '/$username',
+  getParentRoute: () => URouteRoute,
 } as any)
 const PPostIdRoute = PPostIdRouteImport.update({
-  id: '/p/$postId',
-  path: '/p/$postId',
-  getParentRoute: () => rootRouteImport,
+  id: '/$postId',
+  path: '/$postId',
+  getParentRoute: () => PRouteRoute,
 } as any)
 const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
   id: '/demo/tanstack-query',
@@ -90,10 +146,20 @@ const DemoBetterAuthRoute = DemoBetterAuthRouteImport.update({
   path: '/demo/better-auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppExploreRoute = AppExploreRouteImport.update({
   id: '/explore',
   path: '/explore',
   getParentRoute: () => AppRouteRoute,
+} as any)
+const PPostIdEditRoute = PPostIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => PPostIdRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -103,145 +169,200 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRouteRouteWithChildren
   '/app': typeof AppRouteRouteWithChildren
-  '/about': typeof AboutRoute
+  '/login': typeof LoginRouteRouteWithChildren
+  '/new': typeof NewRouteRouteWithChildren
+  '/p': typeof PRouteRouteWithChildren
+  '/settings': typeof SettingsRouteRouteWithChildren
+  '/u': typeof URouteRouteWithChildren
   '/explore': typeof ExploreRoute
-  '/login': typeof LoginRoute
-  '/new': typeof NewRoute
-  '/settings': typeof SettingsRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app/explore': typeof AppExploreRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/prisma': typeof DemoPrismaRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/p/$postId': typeof PPostIdRoute
+  '/p/$postId': typeof PPostIdRouteWithChildren
   '/u/$username': typeof UUsernameRoute
+  '/about/': typeof AboutIndexRoute
   '/app/': typeof AppIndexRoute
+  '/blog/': typeof BlogIndexRoute
+  '/login/': typeof LoginIndexRoute
+  '/new/': typeof NewIndexRoute
+  '/settings/': typeof SettingsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/p/$postId/edit': typeof PPostIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/p': typeof PRouteRouteWithChildren
+  '/u': typeof URouteRouteWithChildren
   '/explore': typeof ExploreRoute
-  '/login': typeof LoginRoute
-  '/new': typeof NewRoute
-  '/settings': typeof SettingsRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app/explore': typeof AppExploreRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/prisma': typeof DemoPrismaRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/p/$postId': typeof PPostIdRoute
+  '/p/$postId': typeof PPostIdRouteWithChildren
   '/u/$username': typeof UUsernameRoute
+  '/about': typeof AboutIndexRoute
   '/app': typeof AppIndexRoute
+  '/blog': typeof BlogIndexRoute
+  '/login': typeof LoginIndexRoute
+  '/new': typeof NewIndexRoute
+  '/settings': typeof SettingsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/p/$postId/edit': typeof PPostIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRouteRouteWithChildren
   '/app': typeof AppRouteRouteWithChildren
-  '/about': typeof AboutRoute
+  '/login': typeof LoginRouteRouteWithChildren
+  '/new': typeof NewRouteRouteWithChildren
+  '/p': typeof PRouteRouteWithChildren
+  '/settings': typeof SettingsRouteRouteWithChildren
+  '/u': typeof URouteRouteWithChildren
   '/explore': typeof ExploreRoute
-  '/login': typeof LoginRoute
-  '/new': typeof NewRoute
-  '/settings': typeof SettingsRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app/explore': typeof AppExploreRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/prisma': typeof DemoPrismaRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
-  '/p/$postId': typeof PPostIdRoute
+  '/p/$postId': typeof PPostIdRouteWithChildren
   '/u/$username': typeof UUsernameRoute
+  '/about/': typeof AboutIndexRoute
   '/app/': typeof AppIndexRoute
+  '/blog/': typeof BlogIndexRoute
+  '/login/': typeof LoginIndexRoute
+  '/new/': typeof NewIndexRoute
+  '/settings/': typeof SettingsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/p/$postId/edit': typeof PPostIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/app'
     | '/about'
-    | '/explore'
+    | '/app'
     | '/login'
     | '/new'
+    | '/p'
     | '/settings'
+    | '/u'
+    | '/explore'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/app/explore'
+    | '/blog/$slug'
     | '/demo/better-auth'
     | '/demo/prisma'
     | '/demo/tanstack-query'
     | '/p/$postId'
     | '/u/$username'
+    | '/about/'
     | '/app/'
+    | '/blog/'
+    | '/login/'
+    | '/new/'
+    | '/settings/'
     | '/api/auth/$'
+    | '/p/$postId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/about'
+    | '/p'
+    | '/u'
     | '/explore'
-    | '/login'
-    | '/new'
-    | '/settings'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/app/explore'
+    | '/blog/$slug'
     | '/demo/better-auth'
     | '/demo/prisma'
     | '/demo/tanstack-query'
     | '/p/$postId'
     | '/u/$username'
+    | '/about'
     | '/app'
+    | '/blog'
+    | '/login'
+    | '/new'
+    | '/settings'
     | '/api/auth/$'
+    | '/p/$postId/edit'
   id:
     | '__root__'
     | '/'
-    | '/app'
     | '/about'
-    | '/explore'
+    | '/app'
     | '/login'
     | '/new'
+    | '/p'
     | '/settings'
+    | '/u'
+    | '/explore'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/app/explore'
+    | '/blog/$slug'
     | '/demo/better-auth'
     | '/demo/prisma'
     | '/demo/tanstack-query'
     | '/p/$postId'
     | '/u/$username'
+    | '/about/'
     | '/app/'
+    | '/blog/'
+    | '/login/'
+    | '/new/'
+    | '/settings/'
     | '/api/auth/$'
+    | '/p/$postId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRouteRoute: typeof AboutRouteRouteWithChildren
   AppRouteRoute: typeof AppRouteRouteWithChildren
-  AboutRoute: typeof AboutRoute
+  LoginRouteRoute: typeof LoginRouteRouteWithChildren
+  NewRouteRoute: typeof NewRouteRouteWithChildren
+  PRouteRoute: typeof PRouteRouteWithChildren
+  SettingsRouteRoute: typeof SettingsRouteRouteWithChildren
+  URouteRoute: typeof URouteRouteWithChildren
   ExploreRoute: typeof ExploreRoute
-  LoginRoute: typeof LoginRoute
-  NewRoute: typeof NewRoute
-  SettingsRoute: typeof SettingsRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   DemoBetterAuthRoute: typeof DemoBetterAuthRoute
   DemoPrismaRoute: typeof DemoPrismaRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
-  PPostIdRoute: typeof PPostIdRoute
-  UUsernameRoute: typeof UUsernameRoute
+  BlogIndexRoute: typeof BlogIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/new': {
-      id: '/new'
-      path: '/new'
-      fullPath: '/new'
-      preLoaderRoute: typeof NewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore': {
@@ -251,11 +372,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExploreRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
+    '/u': {
+      id: '/u'
+      path: '/u'
+      fullPath: '/u'
+      preLoaderRoute: typeof URouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/p': {
+      id: '/p'
+      path: '/p'
+      fullPath: '/p'
+      preLoaderRoute: typeof PRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/new': {
+      id: '/new'
+      path: '/new'
+      fullPath: '/new'
+      preLoaderRoute: typeof NewRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -265,11 +414,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings/': {
+      id: '/settings/'
+      path: '/'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof SettingsIndexRouteImport
+      parentRoute: typeof SettingsRouteRoute
+    }
+    '/new/': {
+      id: '/new/'
+      path: '/'
+      fullPath: '/new/'
+      preLoaderRoute: typeof NewIndexRouteImport
+      parentRoute: typeof NewRouteRoute
+    }
+    '/login/': {
+      id: '/login/'
+      path: '/'
+      fullPath: '/login/'
+      preLoaderRoute: typeof LoginIndexRouteImport
+      parentRoute: typeof LoginRouteRoute
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/': {
@@ -279,19 +463,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/about/': {
+      id: '/about/'
+      path: '/'
+      fullPath: '/about/'
+      preLoaderRoute: typeof AboutIndexRouteImport
+      parentRoute: typeof AboutRouteRoute
+    }
     '/u/$username': {
       id: '/u/$username'
-      path: '/u/$username'
+      path: '/$username'
       fullPath: '/u/$username'
       preLoaderRoute: typeof UUsernameRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof URouteRoute
     }
     '/p/$postId': {
       id: '/p/$postId'
-      path: '/p/$postId'
+      path: '/$postId'
       fullPath: '/p/$postId'
       preLoaderRoute: typeof PPostIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PRouteRoute
     }
     '/demo/tanstack-query': {
       id: '/demo/tanstack-query'
@@ -314,12 +505,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoBetterAuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/explore': {
       id: '/app/explore'
       path: '/explore'
       fullPath: '/app/explore'
       preLoaderRoute: typeof AppExploreRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/p/$postId/edit': {
+      id: '/p/$postId/edit'
+      path: '/edit'
+      fullPath: '/p/$postId/edit'
+      preLoaderRoute: typeof PPostIdEditRouteImport
+      parentRoute: typeof PPostIdRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -330,6 +535,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AboutRouteRouteChildren {
+  AboutIndexRoute: typeof AboutIndexRoute
+}
+
+const AboutRouteRouteChildren: AboutRouteRouteChildren = {
+  AboutIndexRoute: AboutIndexRoute,
+}
+
+const AboutRouteRouteWithChildren = AboutRouteRoute._addFileChildren(
+  AboutRouteRouteChildren,
+)
 
 interface AppRouteRouteChildren {
   AppExploreRoute: typeof AppExploreRoute
@@ -345,19 +562,92 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
   AppRouteRouteChildren,
 )
 
+interface LoginRouteRouteChildren {
+  LoginIndexRoute: typeof LoginIndexRoute
+}
+
+const LoginRouteRouteChildren: LoginRouteRouteChildren = {
+  LoginIndexRoute: LoginIndexRoute,
+}
+
+const LoginRouteRouteWithChildren = LoginRouteRoute._addFileChildren(
+  LoginRouteRouteChildren,
+)
+
+interface NewRouteRouteChildren {
+  NewIndexRoute: typeof NewIndexRoute
+}
+
+const NewRouteRouteChildren: NewRouteRouteChildren = {
+  NewIndexRoute: NewIndexRoute,
+}
+
+const NewRouteRouteWithChildren = NewRouteRoute._addFileChildren(
+  NewRouteRouteChildren,
+)
+
+interface PPostIdRouteChildren {
+  PPostIdEditRoute: typeof PPostIdEditRoute
+}
+
+const PPostIdRouteChildren: PPostIdRouteChildren = {
+  PPostIdEditRoute: PPostIdEditRoute,
+}
+
+const PPostIdRouteWithChildren =
+  PPostIdRoute._addFileChildren(PPostIdRouteChildren)
+
+interface PRouteRouteChildren {
+  PPostIdRoute: typeof PPostIdRouteWithChildren
+}
+
+const PRouteRouteChildren: PRouteRouteChildren = {
+  PPostIdRoute: PPostIdRouteWithChildren,
+}
+
+const PRouteRouteWithChildren =
+  PRouteRoute._addFileChildren(PRouteRouteChildren)
+
+interface SettingsRouteRouteChildren {
+  SettingsIndexRoute: typeof SettingsIndexRoute
+}
+
+const SettingsRouteRouteChildren: SettingsRouteRouteChildren = {
+  SettingsIndexRoute: SettingsIndexRoute,
+}
+
+const SettingsRouteRouteWithChildren = SettingsRouteRoute._addFileChildren(
+  SettingsRouteRouteChildren,
+)
+
+interface URouteRouteChildren {
+  UUsernameRoute: typeof UUsernameRoute
+}
+
+const URouteRouteChildren: URouteRouteChildren = {
+  UUsernameRoute: UUsernameRoute,
+}
+
+const URouteRouteWithChildren =
+  URouteRoute._addFileChildren(URouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRouteRoute: AboutRouteRouteWithChildren,
   AppRouteRoute: AppRouteRouteWithChildren,
-  AboutRoute: AboutRoute,
+  LoginRouteRoute: LoginRouteRouteWithChildren,
+  NewRouteRoute: NewRouteRouteWithChildren,
+  PRouteRoute: PRouteRouteWithChildren,
+  SettingsRouteRoute: SettingsRouteRouteWithChildren,
+  URouteRoute: URouteRouteWithChildren,
   ExploreRoute: ExploreRoute,
-  LoginRoute: LoginRoute,
-  NewRoute: NewRoute,
-  SettingsRoute: SettingsRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  BlogSlugRoute: BlogSlugRoute,
   DemoBetterAuthRoute: DemoBetterAuthRoute,
   DemoPrismaRoute: DemoPrismaRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
-  PPostIdRoute: PPostIdRoute,
-  UUsernameRoute: UUsernameRoute,
+  BlogIndexRoute: BlogIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

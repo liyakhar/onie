@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import AccentPicker from '#/components/AccentPicker'
 import Footer from '#/components/Footer'
 import { OnieMark } from '#/components/OnieMark'
 import { authClient } from '#/lib/auth-client'
+import { buildPageMeta, jsonLdScript, webSiteJsonLd } from '#/lib/seo'
 
 const SECTIONS = [
   { id: 'index', num: '00', label: 'Overview' },
@@ -10,7 +12,19 @@ const SECTIONS = [
   { id: 'start', num: '03', label: 'Get started' },
 ] as const
 
+const landingMeta = buildPageMeta({
+  path: '/',
+  title: 'Agent workflows from people doing the work',
+  description:
+    'Browse agent workflows from practitioners in the field — prompts, skills, and setups tagged by discipline and stack.',
+})
+
 export const Route = createFileRoute('/')({
+  head: () => ({
+    meta: landingMeta.meta,
+    links: landingMeta.links,
+    scripts: [jsonLdScript(webSiteJsonLd())],
+  }),
   component: LandingPage,
 })
 
@@ -54,10 +68,7 @@ function LandingPage() {
             )}
           </div>
 
-          <div className="index-toc__meta">
-            <span>Press tokens · Bricolage + Fraunces</span>
-            <span>v. 26.06</span>
-          </div>
+          <AccentPicker />
         </aside>
 
         <article className="index-main">
@@ -114,32 +125,34 @@ function LandingPage() {
             <p className="index-section__num">02 · How it works</p>
             <h2 className="index-section__head">Browse, follow, share.</h2>
             <div className="index-section__body">
-              <table className="index-table" aria-label="How Onie works">
-                <thead>
-                  <tr>
-                    <th>Step</th>
-                    <th>Action</th>
-                    <th>Outcome</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>01</td>
-                    <td>Browse Explore</td>
-                    <td>Browse workflows by field or tool in Explore</td>
-                  </tr>
-                  <tr>
-                    <td>02</td>
-                    <td>Follow practitioners</td>
-                    <td>Your feed collects workflows from people in your field</td>
-                  </tr>
-                  <tr>
-                    <td>03</td>
-                    <td>Publish a workflow</td>
-                    <td>Post prompts, skills, and file layouts with full context</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div className="index-table-wrap">
+                <table className="index-table" aria-label="How Onie works">
+                  <thead>
+                    <tr>
+                      <th>Step</th>
+                      <th>Action</th>
+                      <th>Outcome</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>01</td>
+                      <td>Browse Explore</td>
+                      <td>Browse workflows by field or tool in Explore</td>
+                    </tr>
+                    <tr>
+                      <td>02</td>
+                      <td>Follow practitioners</td>
+                      <td>Your feed collects workflows from people in your field</td>
+                    </tr>
+                    <tr>
+                      <td>03</td>
+                      <td>Publish a workflow</td>
+                      <td>Post prompts, skills, and file layouts with full context</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </section>
 
@@ -163,6 +176,15 @@ function LandingPage() {
                     <Link to="/app">Your following feed</Link>
                     <span className="index-links__sub">
                       Sign in to follow practitioners and build your feed.
+                    </span>
+                  </div>
+                </li>
+                <li>
+                  <span className="index-links__label">Guides</span>
+                  <div>
+                    <Link to="/blog">Agent workflow guides</Link>
+                    <span className="index-links__sub">
+                      Skills, harnesses, and documentation patterns.
                     </span>
                   </div>
                 </li>

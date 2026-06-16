@@ -1,6 +1,8 @@
+import type { ReactNode } from 'react'
 import { Link } from '@tanstack/react-router'
-import type { Category } from '#/generated/prisma/client'
+import type { Category, PostKind } from '#/generated/prisma/client'
 import { categoryLabel } from '#/lib/categories'
+import { kindLabel } from '#/lib/kinds'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
 import { Badge } from '#/components/ui/badge'
 import { Card, CardContent, CardHeader } from '#/components/ui/card'
@@ -13,6 +15,7 @@ export type PostCardData = {
   title: string
   description: string | null
   category: Category
+  kind: PostKind
   tools: string[]
   createdAt: Date | string
   author: {
@@ -36,12 +39,14 @@ export function PostCard({
   ranked,
   className,
   variant = 'card',
+  actions,
 }: {
   post: PostCardData
   pinned?: boolean
   ranked?: number
   className?: string
   variant?: 'card' | 'ledger'
+  actions?: ReactNode
 }) {
   const username = post.author.profile?.username
   const date = new Date(post.createdAt).toLocaleDateString(undefined, {
@@ -54,6 +59,7 @@ export function PostCard({
 
   if (variant === 'ledger') {
     const meta = [
+      kindLabel(post.kind),
       categoryLabel(post.category),
       username ? post.author.name : null,
       `${likeCount} likes · ${commentCount} comments`,
@@ -64,7 +70,7 @@ export function PostCard({
       .join(' · ')
 
     return (
-      <li className={cn('ledger__row', className)}>
+      <li className={cn('ledger__row', actions && 'ledger__row--actions', className)}>
         <span className="ledger__year">{date}</span>
         <Link
           to="/p/$postId"
@@ -74,6 +80,7 @@ export function PostCard({
           {post.title}
         </Link>
         <span className="ledger__kind">{meta}</span>
+        {actions ? <div className="ledger__actions">{actions}</div> : null}
       </li>
     )
   }
@@ -132,6 +139,9 @@ export function PostCard({
                 Pinned
               </Badge>
             )}
+            <Badge variant="secondary" className="bg-[var(--code-bg)] text-[var(--ink-soft)]">
+              {kindLabel(post.kind)}
+            </Badge>
             <Badge variant="secondary" className="bg-[var(--code-bg)] text-[var(--ink-soft)]">
               {categoryLabel(post.category)}
             </Badge>

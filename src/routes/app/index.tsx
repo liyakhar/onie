@@ -2,8 +2,20 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { PostCard } from '#/components/PostCard'
 import { getFeedPosts } from '#/server/posts'
 import { authClient } from '#/lib/auth-client'
+import { buildPageMeta } from '#/lib/seo'
+
+const feedMeta = buildPageMeta({
+  path: '/app',
+  title: 'Your feed',
+  description: 'Workflows from practitioners you follow on Onie.',
+  noindex: true,
+})
 
 export const Route = createFileRoute('/app/')({
+  head: () => ({
+    meta: feedMeta.meta,
+    links: feedMeta.links,
+  }),
   loader: async () => {
     const posts = await getFeedPosts({ data: { tab: 'following' } })
     return { posts }

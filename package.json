@@ -18,6 +18,9 @@
     "db:studio": "dotenv -e .env.local -- prisma studio",
     "db:seed": "dotenv -e .env.local -- prisma db seed",
     "start": "prisma db push && node .output/server/index.mjs",
+    "seo:og-images": "python3 scripts/generate-og-images.py",
+    "seo:gsc": "dotenv -e .env.local -- python3 scripts/write-gsc-verification.py",
+    "seo:lighthouse": "dotenv -e .env.local -- node scripts/lighthouse-audit.mjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.2",

@@ -34,6 +34,21 @@ export const Category = {
 export type Category = (typeof Category)[keyof typeof Category]
 
 
+export const PostKind = {
+  WORKFLOW: 'WORKFLOW',
+  PROMPT: 'PROMPT',
+  HARNESS: 'HARNESS',
+  SKILL: 'SKILL',
+  SETUP: 'SETUP',
+  MCP: 'MCP',
+  PLAYBOOK: 'PLAYBOOK',
+  TEMPLATE: 'TEMPLATE',
+  OTHER: 'OTHER'
+} as const
+
+export type PostKind = (typeof PostKind)[keyof typeof PostKind]
+
+
 export const NotificationType = {
   LIKE: 'LIKE',
   COMMENT: 'COMMENT',

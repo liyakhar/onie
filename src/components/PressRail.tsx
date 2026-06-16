@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import BetterAuthHeader from '#/integrations/better-auth/header-user'
 import { NotificationBell } from '#/components/NotificationBell'
-import { OnieMark } from '#/components/OnieMark'
+import { OnieIcon } from '#/components/OnieIcon'
 import { authClient } from '#/lib/auth-client'
 
 const SECTIONS = [
@@ -16,7 +16,7 @@ export default function PressRail() {
   return (
     <nav className="rail" aria-label="Primary">
       <Link className="rail__mark" to="/">
-        <OnieMark variant="rail" />
+        <OnieIcon size="sm" />
         <span className="rail__role" aria-hidden="true">
           workflows
         </span>

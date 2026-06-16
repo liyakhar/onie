@@ -1,11 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 32" role="img" aria-label="Onie">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Onie">
+  <rect width="32" height="32" fill="#1a1a18"/>
   <text
-    x="0"
-    y="26"
-    font-family="'Bricolage Grotesque', system-ui, sans-serif"
+    x="16"
+    y="22.5"
+    text-anchor="middle"
+    font-family="'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif"
     font-weight="640"
-    font-size="28"
-    fill="currentColor"
+    font-size="19"
+    fill="#f2efe8"
     letter-spacing="-0.03em"
-  >Onie</text>
+  >O</text>
 </svg>

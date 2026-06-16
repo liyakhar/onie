@@ -69,7 +69,7 @@ export default function BetterAuthHeader() {
       <Button variant="ghost" size="sm" asChild>
         <Link to="/login">Sign in</Link>
       </Button>
-      <Button size="sm" className="bg-[var(--accent)] hover:bg-[var(--accent-hover)]" asChild>
+      <Button variant="brand" size="sm" asChild>
         <Link to="/login">Join</Link>
       </Button>
     </div>

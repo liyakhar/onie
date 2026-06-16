@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import BetterAuthHeader from '#/integrations/better-auth/header-user'
 import ThemeToggle from './ThemeToggle'
 import { NotificationBell } from '#/components/NotificationBell'
-import { OnieMark } from '#/components/OnieMark'
+import { OnieIcon } from '#/components/OnieIcon'
 import { Button } from '#/components/ui/button'
 import { Plus } from 'lucide-react'
 import { authClient } from '#/lib/auth-client'
@@ -18,7 +18,7 @@ export default function Header() {
             to="/"
             className="inline-flex items-center rounded-lg px-2 py-1 text-[var(--ink)] no-underline"
           >
-            <OnieMark variant="nav" />
+            <OnieIcon />
           </Link>
         </h2>
 
@@ -51,7 +51,7 @@ export default function Header() {
         <div className="ml-auto flex items-center gap-2">
           {session?.user && (
             <>
-              <Button asChild size="sm" className="hidden bg-[var(--accent)] hover:bg-[var(--accent-hover)] sm:inline-flex">
+              <Button asChild variant="brand" size="sm" className="hidden sm:inline-flex">
                 <Link to="/new">
                   <Plus className="mr-1.5 h-4 w-4" />
                   Share workflow

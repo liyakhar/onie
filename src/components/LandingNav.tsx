@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { authClient } from '#/lib/auth-client'
-import { OnieMark } from '#/components/OnieMark'
+import { OnieIcon } from '#/components/OnieIcon'
 
 export default function LandingNav() {
   const { data: session } = authClient.useSession()
@@ -8,7 +8,7 @@ export default function LandingNav() {
   return (
     <nav className="rail rail--landing" aria-label="Primary">
       <Link className="rail__mark" to="/">
-        <OnieMark variant="rail" />
+        <OnieIcon size="sm" />
         <span className="rail__role" aria-hidden="true">
           workflows
         </span>

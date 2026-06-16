@@ -1271,6 +1271,7 @@ export const PostScalarFieldEnum = {
   description: 'description',
   content: 'content',
   category: 'category',
+  kind: 'kind',
   tools: 'tools',
   authorId: 'authorId',
   forkedFromId: 'forkedFromId',
@@ -1402,6 +1403,20 @@ export type EnumCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
  * Reference to a field of type 'Category[]'
  */
 export type ListEnumCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Category[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PostKind'
+ */
+export type EnumPostKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostKind'>
+    
+
+
+/**
+ * Reference to a field of type 'PostKind[]'
+ */
+export type ListEnumPostKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostKind[]'>
     
 
 

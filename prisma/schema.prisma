@@ -29,6 +29,18 @@ enum Category {
   OTHER
 }
 
+enum PostKind {
+  WORKFLOW
+  PROMPT
+  HARNESS
+  SKILL
+  SETUP
+  MCP
+  PLAYBOOK
+  TEMPLATE
+  OTHER
+}
+
 model User {
   id            String    @id
   name          String
@@ -117,6 +129,7 @@ model Post {
   description  String?
   content      String    @db.Text
   category     Category
+  kind         PostKind  @default(WORKFLOW)
   tools        String[]  @default([])
   authorId     String
   author       User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
@@ -130,6 +143,7 @@ model Post {
   updatedAt    DateTime  @updatedAt
 
   @@index([category])
+  @@index([kind])
   @@index([createdAt])
   @@index([authorId])
   @@index([forkedFromId])

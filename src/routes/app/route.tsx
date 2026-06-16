@@ -1,17 +1,6 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
-import AppNav from '#/components/AppNav'
+import { createFileRoute } from '@tanstack/react-router'
+import { AppShell } from '#/components/AppShell'
 
 export const Route = createFileRoute('/app')({
-  component: AppLayout,
+  component: AppShell,
 })
-
-function AppLayout() {
-  return (
-    <div className="app-shell">
-      <AppNav />
-      <div className="app-shell__main">
-        <Outlet />
-      </div>
-    </div>
-  )
-}

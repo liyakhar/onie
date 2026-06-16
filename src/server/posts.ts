@@ -1,5 +1,5 @@
 import { createServerFn } from '@tanstack/react-start'
-import type { Category } from '#/generated/prisma/client'
+import type { Category, PostKind } from '#/generated/prisma/client'
 import { getDb } from '#/server/db-access.server'
 import { getSessionUser } from '#/server/session.server'
 import { emitNotification } from '#/server/notifications.server'
@@ -9,6 +9,7 @@ export type PostSummary = {
   title: string
   description: string | null
   category: Category
+  kind: PostKind
   tools: string[]
   createdAt: Date
   author: {
@@ -50,11 +51,13 @@ const postInclude = {
 
 function buildFeedWhere(data: {
   category?: Category
+  kind?: PostKind
   q?: string
   authorIds?: string[]
 }) {
   const where: {
     category?: Category
+    kind?: PostKind
     OR?: Array<{
       title?: { contains: string; mode: 'insensitive' }
       description?: { contains: string; mode: 'insensitive' }
@@ -65,6 +68,10 @@ function buildFeedWhere(data: {
 
   if (data.category) {
     where.category = data.category
+  }
+
+  if (data.kind) {
+    where.kind = data.kind
   }
 
   if (data.q) {
@@ -84,8 +91,12 @@ function buildFeedWhere(data: {
 
 export const getFeedPosts = createServerFn({ method: 'GET' })
   .inputValidator(
-    (data: { tab?: 'following' | 'discover'; category?: Category; q?: string }) =>
-      data,
+    (data: {
+      tab?: 'following' | 'discover'
+      category?: Category
+      kind?: PostKind
+      q?: string
+    }) => data,
   )
   .handler(async ({ data }) => {
     const prisma = await getDb()
@@ -110,7 +121,12 @@ export const getFeedPosts = createServerFn({ method: 'GET' })
     }
 
     return prisma.post.findMany({
-      where: buildFeedWhere({ category: data.category, q, authorIds }),
+      where: buildFeedWhere({
+        category: data.category,
+        kind: data.kind,
+        q,
+        authorIds,
+      }),
       orderBy: { createdAt: 'desc' },
       take: 50,
       include: postInclude,
@@ -234,6 +250,7 @@ export const createPost = createServerFn({ method: 'POST' })
       description?: string
       content: string
       category: Category
+      kind: PostKind
       tools?: string[]
     }) => data,
   )
@@ -250,12 +267,116 @@ export const createPost = createServerFn({ method: 'POST' })
         description: data.description?.trim() || null,
         content: data.content.trim(),
         category: data.category,
-        tools: data.tools ?? [],
+        kind: data.kind,
+        tools: normalizeTools(data.tools),
         authorId: user.id,
       },
       include: postInclude,
     })
   })
+
+export const updatePost = createServerFn({ method: 'POST' })
+  .inputValidator(
+    (data: {
+      id: string
+      title: string
+      description?: string
+      content: string
+      category: Category
+      kind: PostKind
+      tools?: string[]
+    }) => data,
+  )
+  .handler(async ({ data }) => {
+    const prisma = await getDb()
+    const user = await getSessionUser()
+    if (!user) {
+      throw new Error('Sign in required')
+    }
+
+    const post = await prisma.post.findFirst({
+      where: { id: data.id, authorId: user.id },
+    })
+    if (!post) {
+      throw new Error('Workflow not found')
+    }
+
+    return prisma.post.update({
+      where: { id: data.id },
+      data: {
+        title: data.title.trim(),
+        description: data.description?.trim() || null,
+        content: data.content.trim(),
+        category: data.category,
+        kind: data.kind,
+        tools: normalizeTools(data.tools),
+      },
+      include: postInclude,
+    })
+  })
+
+export const deletePost = createServerFn({ method: 'POST' })
+  .inputValidator((data: { id: string }) => data)
+  .handler(async ({ data }) => {
+    const prisma = await getDb()
+    const user = await getSessionUser()
+    if (!user) {
+      throw new Error('Sign in required')
+    }
+
+    const post = await prisma.post.findFirst({
+      where: { id: data.id, authorId: user.id },
+    })
+    if (!post) {
+      throw new Error('Workflow not found')
+    }
+
+    await prisma.user.updateMany({
+      where: { pinnedPostId: data.id },
+      data: { pinnedPostId: null },
+    })
+
+    await prisma.post.delete({ where: { id: data.id } })
+
+    return { ok: true }
+  })
+
+export const getPopularTools = createServerFn({ method: 'GET' }).handler(async () => {
+  const prisma = await getDb()
+  const posts = await prisma.post.findMany({
+    select: { tools: true },
+    take: 200,
+    orderBy: { createdAt: 'desc' },
+  })
+
+  const counts = new Map<string, number>()
+  for (const post of posts) {
+    for (const tool of post.tools) {
+      const key = tool.trim()
+      if (!key) continue
+      counts.set(key, (counts.get(key) ?? 0) + 1)
+    }
+  }
+
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 24)
+    .map(([tool]) => tool)
+})
+
+function normalizeTools(tools?: string[]) {
+  const seen = new Set<string>()
+  const result: string[] = []
+  for (const tool of tools ?? []) {
+    const trimmed = tool.trim()
+    if (!trimmed) continue
+    const key = trimmed.toLowerCase()
+    if (seen.has(key)) continue
+    seen.add(key)
+    result.push(trimmed)
+  }
+  return result
+}
 
 export const forkPost = createServerFn({ method: 'POST' })
   .inputValidator((data: { postId: string }) => data)
@@ -273,6 +394,7 @@ export const forkPost = createServerFn({ method: 'POST' })
         description: true,
         content: true,
         category: true,
+        kind: true,
         tools: true,
         authorId: true,
       },
@@ -290,6 +412,7 @@ export const forkPost = createServerFn({ method: 'POST' })
         description: original.description,
         content: original.content,
         category: original.category,
+        kind: original.kind,
         tools: original.tools,
         authorId: user.id,
         forkedFromId: data.postId,

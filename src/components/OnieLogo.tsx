@@ -1,1 +1,2 @@
-export { OnieMark as OnieLogo } from '#/components/OnieMark'
+export { OnieIcon as OnieLogo } from '#/components/OnieIcon'
+export { OnieMark } from '#/components/OnieMark'
