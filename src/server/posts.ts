@@ -3,6 +3,7 @@ import type { Category, PostKind } from '#/generated/prisma/client'
 import { getDb } from '#/server/db-access.server'
 import { getSessionUser } from '#/server/session.server'
 import { emitNotification } from '#/server/notifications.server'
+import { getSuggestedProfiles } from '#/server/profiles'
 
 export type PostSummary = {
   id: string
@@ -52,12 +53,14 @@ const postInclude = {
 function buildFeedWhere(data: {
   category?: Category
   kind?: PostKind
+  tool?: string
   q?: string
   authorIds?: string[]
 }) {
   const where: {
     category?: Category
     kind?: PostKind
+    tools?: { has: string }
     OR?: Array<{
       title?: { contains: string; mode: 'insensitive' }
       description?: { contains: string; mode: 'insensitive' }
@@ -72,6 +75,10 @@ function buildFeedWhere(data: {
 
   if (data.kind) {
     where.kind = data.kind
+  }
+
+  if (data.tool) {
+    where.tools = { has: data.tool }
   }
 
   if (data.q) {
@@ -89,12 +96,107 @@ function buildFeedWhere(data: {
   return where
 }
 
+function postScore(post: PostSummary) {
+  return post._count.likes * 2 + post._count.comments
+}
+
+async function getForYouFeed(prisma: Awaited<ReturnType<typeof getDb>>, userId?: string) {
+  const weekAgo = new Date()
+  weekAgo.setDate(weekAgo.getDate() - 7)
+
+  let userField: Category | undefined
+  if (userId) {
+    const profile = await prisma.profile.findUnique({
+      where: { userId },
+      select: { field: true },
+    })
+    userField = profile?.field
+  }
+
+  const [topWeek, fieldPosts, recent] = await Promise.all([
+    prisma.post.findMany({
+      where: { createdAt: { gte: weekAgo } },
+      include: postInclude,
+      take: 30,
+    }),
+    userField
+      ? prisma.post.findMany({
+          where: { category: userField },
+          include: postInclude,
+          orderBy: { createdAt: 'desc' },
+          take: 12,
+        })
+      : Promise.resolve([]),
+    prisma.post.findMany({
+      include: postInclude,
+      orderBy: { createdAt: 'desc' },
+      take: 12,
+    }),
+  ])
+
+  const ranked = [...topWeek].sort((a, b) => {
+    const scoreDiff = postScore(b) - postScore(a)
+    if (scoreDiff !== 0) return scoreDiff
+    return b.createdAt.getTime() - a.createdAt.getTime()
+  })
+
+  const seen = new Set<string>()
+  const merged: PostSummary[] = []
+
+  for (const post of [...ranked.slice(0, 5), ...fieldPosts, ...recent]) {
+    if (seen.has(post.id)) continue
+    seen.add(post.id)
+    merged.push(post)
+    if (merged.length >= 50) break
+  }
+
+  return merged
+}
+
+export const loadHomeFeed = createServerFn({ method: 'GET' })
+  .inputValidator((data: { tab?: 'for-you' | 'following' }) => data)
+  .handler(async ({ data }) => {
+    const user = await getSessionUser()
+    const tab = data.tab ?? 'for-you'
+
+    if (tab === 'following' && !user) {
+      return {
+        posts: [] as PostSummary[],
+        topThisWeek: [] as PostSummary[],
+        suggested: [],
+        tab,
+        field: 'OTHER' as Category,
+        isGuest: true,
+      }
+    }
+
+    const prisma = await getDb()
+    const profile = user
+      ? await prisma.profile.findUnique({
+          where: { userId: user.id },
+          select: { field: true },
+        })
+      : null
+    const field = profile?.field ?? ('OTHER' as Category)
+
+    const [posts, topThisWeek, suggested] = await Promise.all([
+      getFeedPosts({ data: { tab: tab === 'following' ? 'following' : 'for-you' } }),
+      tab === 'for-you' ? getTopWorkflowsWeek() : Promise.resolve([]),
+      tab === 'for-you' && user
+        ? getSuggestedProfiles({ data: { field } })
+        : Promise.resolve([]),
+    ])
+
+    return { posts, topThisWeek, suggested, tab, field, isGuest: !user }
+  })
+
 export const getFeedPosts = createServerFn({ method: 'GET' })
   .inputValidator(
     (data: {
-      tab?: 'following' | 'discover'
+      tab?: 'following' | 'discover' | 'for-you'
       category?: Category
       kind?: PostKind
+      tool?: string
       q?: string
     }) => data,
   )
@@ -103,6 +205,10 @@ export const getFeedPosts = createServerFn({ method: 'GET' })
     const user = await getSessionUser()
     const tab = data.tab ?? 'discover'
     const q = data.q?.trim()
+
+    if (tab === 'for-you') {
+      return getForYouFeed(prisma, user?.id)
+    }
 
     if (tab === 'following' && !user) {
       return [] as PostSummary[]
@@ -124,6 +230,7 @@ export const getFeedPosts = createServerFn({ method: 'GET' })
       where: buildFeedWhere({
         category: data.category,
         kind: data.kind,
+        tool: data.tool,
         q,
         authorIds,
       }),
@@ -166,6 +273,12 @@ export const getPost = createServerFn({ method: 'GET' })
       where: { id: data.id },
       include: {
         ...postInclude,
+        forkedFrom: {
+          select: {
+            id: true,
+            title: true,
+          },
+        },
         author: {
           select: {
             id: true,
@@ -258,7 +371,7 @@ export const createPost = createServerFn({ method: 'POST' })
     const prisma = await getDb()
     const user = await getSessionUser()
     if (!user) {
-      throw new Error('Sign in to share a workflow')
+      throw new Error('Sign in to publish')
     }
 
     return prisma.post.create({

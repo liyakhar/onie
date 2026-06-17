@@ -33,7 +33,7 @@ function ResetPasswordPage() {
 
   if (tokenError || !token) {
     return (
-      <main id="main" className="app-page">
+      <main id="main" className="app-page auth-page">
         <header className="app-page__head">
           <p className="app-page__eyebrow">Reset password</p>
           <h1 className="app-page__title">Link expired</h1>
@@ -41,7 +41,7 @@ function ResetPasswordPage() {
             This reset link is invalid or has expired. Request a new one from the sign-in page.
           </p>
         </header>
-        <Link to="/login" className="btn btn--compact">
+        <Link to="/login" className="btn">
           <span className="btn__label">Back to sign in</span>
         </Link>
       </main>
@@ -50,13 +50,13 @@ function ResetPasswordPage() {
 
   if (done) {
     return (
-      <main id="main" className="app-page">
+      <main id="main" className="app-page auth-page">
         <header className="app-page__head">
           <p className="app-page__eyebrow">Reset password</p>
           <h1 className="app-page__title">Password updated</h1>
           <p className="app-page__lede">You can sign in with your new password.</p>
         </header>
-        <Link to="/login" className="btn btn--compact">
+        <Link to="/login" className="btn">
           <span className="btn__label">Sign in</span>
         </Link>
       </main>
@@ -91,14 +91,14 @@ function ResetPasswordPage() {
   }
 
   return (
-    <main id="main" className="app-page">
+    <main id="main" className="app-page auth-page">
       <header className="app-page__head">
         <p className="app-page__eyebrow">Reset password</p>
         <h1 className="app-page__title">Choose a new password</h1>
         <p className="app-page__lede">Use at least 8 characters.</p>
       </header>
 
-      <form onSubmit={handleSubmit} className="app-form app-form--narrow login-form">
+      <form onSubmit={handleSubmit} className="auth-form">
         <div className="app-form__field">
           <label className="app-form__label" htmlFor="new-password">
             New password
@@ -111,6 +111,7 @@ function ResetPasswordPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
             minLength={8}
+            autoComplete="new-password"
           />
         </div>
         <div className="app-form__field">
@@ -125,6 +126,7 @@ function ResetPasswordPage() {
             onChange={(e) => setConfirm(e.target.value)}
             required
             minLength={8}
+            autoComplete="new-password"
           />
         </div>
         {error && <p className="post-detail__error">{error}</p>}
@@ -132,7 +134,7 @@ function ResetPasswordPage() {
           <button type="submit" className="btn" disabled={loading}>
             <span className="btn__label">{loading ? 'Saving…' : 'Update password'}</span>
           </button>
-          <Link to="/login" className="feed-tab">
+          <Link to="/login" className="auth-link">
             Cancel
           </Link>
         </div>

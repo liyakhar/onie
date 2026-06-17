@@ -19,10 +19,6 @@ export default function Footer({ variant = 'landing' }: { variant?: 'landing' | 
           <span className="foot__sep" aria-hidden="true">
             ·
           </span>
-          <Link to="/blog">Blog</Link>
-          <span className="foot__sep" aria-hidden="true">
-            ·
-          </span>
           <Link to="/about">About</Link>
         </p>
       </footer>

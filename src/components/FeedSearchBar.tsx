@@ -15,16 +15,26 @@ type SearchBarProps = {
   q?: string
   category?: Category
   kind?: PostKind
+  tool?: string
   basePath: '/app/explore'
+  view?: string
 }
 
-export function FeedSearchBar({ q = '', category, kind, basePath }: SearchBarProps) {
+export function FeedSearchBar({
+  q = '',
+  category,
+  kind,
+  tool,
+  basePath,
+  view,
+}: SearchBarProps) {
   const navigate = useNavigate()
 
   const update = (next: {
     q?: string
     category?: Category | 'all'
     kind?: PostKind | 'all'
+    tool?: string | null
   }) => {
     void navigate({
       to: basePath,
@@ -33,11 +43,18 @@ export function FeedSearchBar({ q = '', category, kind, basePath }: SearchBarPro
         category:
           next.category === 'all' || next.category === undefined
             ? undefined
-            : next.category ?? category,
+            : (next.category ?? category),
         kind:
           next.kind === 'all' || next.kind === undefined
             ? undefined
-            : next.kind ?? kind,
+            : (next.kind ?? kind),
+        tool:
+          next.tool === null
+            ? undefined
+            : next.tool === undefined
+              ? tool
+              : next.tool,
+        view: view as 'workflows' | 'people' | 'top' | undefined,
       },
     })
   }
@@ -90,6 +107,15 @@ export function FeedSearchBar({ q = '', category, kind, basePath }: SearchBarPro
           ))}
         </SelectContent>
       </Select>
+      {tool && (
+        <button
+          type="button"
+          className="feed-search__tool-clear"
+          onClick={() => update({ tool: null })}
+        >
+          {tool} ×
+        </button>
+      )}
     </div>
   )
 }

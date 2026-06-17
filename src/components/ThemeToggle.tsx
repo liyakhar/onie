@@ -1,76 +1,56 @@
 import { useEffect, useState } from 'react'
-import { Sun, Moon, Monitor } from 'lucide-react'
-import { Button } from '#/components/ui/button'
-
-type ThemeMode = 'light' | 'dark' | 'auto'
-
-function getInitialMode(): ThemeMode {
-  if (typeof window === 'undefined') return 'auto'
-  const stored = window.localStorage.getItem('theme')
-  if (stored === 'light' || stored === 'dark' || stored === 'auto') return stored
-  return 'auto'
-}
-
-function applyThemeMode(mode: ThemeMode) {
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-  const resolved = mode === 'auto' ? (prefersDark ? 'dark' : 'light') : mode
-  document.documentElement.classList.remove('light', 'dark')
-  document.documentElement.classList.add(resolved)
-  if (mode === 'auto') {
-    document.documentElement.removeAttribute('data-theme')
-  } else {
-    document.documentElement.setAttribute('data-theme', mode)
-  }
-  document.documentElement.style.colorScheme = resolved
-}
-
-const ICONS: Record<ThemeMode, React.ReactNode> = {
-  light: <Sun className="h-4 w-4" />,
-  dark: <Moon className="h-4 w-4" />,
-  auto: <Monitor className="h-4 w-4" />,
-}
+import { Moon, Sun } from 'lucide-react'
+import {
+  applyTheme,
+  getStoredTheme,
+  getSystemTheme,
+  setTheme,
+  type Theme,
+} from '#/lib/theme'
 
 export default function ThemeToggle() {
-  const [mode, setMode] = useState<ThemeMode>('auto')
+  const [theme, setThemeState] = useState<Theme>('dark')
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    const initialMode = getInitialMode()
-    setMode(initialMode)
-    applyThemeMode(initialMode)
+    const initial = getStoredTheme() ?? getSystemTheme()
+    setThemeState(initial)
+    applyTheme(initial)
+    setReady(true)
   }, [])
 
-  useEffect(() => {
-    if (mode !== 'auto') return
-    const media = window.matchMedia('(prefers-color-scheme: dark)')
-    const onChange = () => applyThemeMode('auto')
-    media.addEventListener('change', onChange)
-    return () => media.removeEventListener('change', onChange)
-  }, [mode])
+  const isDark = theme === 'dark'
 
-  function toggleMode() {
-    const nextMode: ThemeMode =
-      mode === 'light' ? 'dark' : mode === 'dark' ? 'auto' : 'light'
-    setMode(nextMode)
-    applyThemeMode(nextMode)
-    window.localStorage.setItem('theme', nextMode)
-  }
-
-  const labels: Record<ThemeMode, string> = {
-    light: 'Light mode',
-    dark: 'Dark mode',
-    auto: 'System theme',
+  function toggleTheme() {
+    const next: Theme = isDark ? 'light' : 'dark'
+    setThemeState(next)
+    setTheme(next)
   }
 
   return (
-    <Button
-      variant="ghost"
-      size="sm"
-      onClick={toggleMode}
-      aria-label={labels[mode]}
-      title={labels[mode]}
-      className="h-9 w-9 p-0 text-[var(--ink-muted)] hover:text-[var(--ink)]"
+    <button
+      type="button"
+      role="switch"
+      aria-checked={isDark}
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={isDark ? 'Light mode' : 'Dark mode'}
+      className="theme-toggle"
+      onClick={toggleTheme}
+      disabled={!ready}
     >
-      {ICONS[mode]}
-    </Button>
+      <Sun
+        className="theme-toggle__icon"
+        data-active={!isDark}
+        aria-hidden="true"
+      />
+      <span className="theme-toggle__track">
+        <span className="theme-toggle__thumb" />
+      </span>
+      <Moon
+        className="theme-toggle__icon"
+        data-active={isDark}
+        aria-hidden="true"
+      />
+    </button>
   )
 }

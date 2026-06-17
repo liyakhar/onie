@@ -2,9 +2,12 @@ import { useState } from 'react'
 import { Link, useRouter } from '@tanstack/react-router'
 import type { Category, PostKind } from '#/generated/prisma/client'
 import { CATEGORIES } from '#/lib/categories'
-import { POST_KINDS } from '#/lib/kinds'
 import { createPost, deletePost, updatePost } from '#/server/posts'
 import { ToolsTagPicker } from '#/components/ToolsTagPicker'
+import { KindPicker } from '#/components/KindPicker'
+import { MarkdownContent } from '#/components/MarkdownContent'
+import { templateForKind } from '#/lib/post-templates'
+import { cn } from '#/lib/utils'
 
 export type PostFormValues = {
   title: string
@@ -30,9 +33,17 @@ export function PostForm({ mode, postId, initial, cancelTo }: PostFormProps) {
   const [category, setCategory] = useState<Category>(initial.category)
   const [kind, setKind] = useState<PostKind>(initial.kind)
   const [tools, setTools] = useState<string[]>(initial.tools)
+  const [panel, setPanel] = useState<'compose' | 'preview'>('compose')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [deleting, setDeleting] = useState(false)
+
+  const handleKindChange = (next: PostKind) => {
+    setKind(next)
+    if (mode === 'create' && !content.trim()) {
+      setContent(templateForKind(next))
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -49,14 +60,14 @@ export function PostForm({ mode, postId, initial, cancelTo }: PostFormProps) {
         void router.navigate({ to: '/p/$postId', params: { postId: post.id } })
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save workflow')
+      setError(err instanceof Error ? err.message : 'Failed to save')
       setLoading(false)
     }
   }
 
   const handleDelete = async () => {
     if (!postId) return
-    if (!window.confirm('Delete this workflow permanently? This cannot be undone.')) return
+    if (!window.confirm('Delete this post permanently? This cannot be undone.')) return
 
     setError('')
     setDeleting(true)
@@ -64,13 +75,18 @@ export function PostForm({ mode, postId, initial, cancelTo }: PostFormProps) {
       await deletePost({ data: { id: postId } })
       void router.navigate({ to: cancelTo })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete workflow')
+      setError(err instanceof Error ? err.message : 'Failed to delete post')
       setDeleting(false)
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="app-form">
+      <div className="app-form__field">
+        <label className="app-form__label">What are you sharing?</label>
+        <KindPicker value={kind} onChange={handleKindChange} />
+      </div>
+
       <div className="app-form__field">
         <label className="app-form__label" htmlFor="post-title">
           Title
@@ -94,29 +110,8 @@ export function PostForm({ mode, postId, initial, cancelTo }: PostFormProps) {
           className="app-form__input"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="One line on what this workflow helps you do"
+          placeholder="One line on what this helps you do"
         />
-      </div>
-
-      <div className="app-form__field">
-        <label className="app-form__label" htmlFor="post-kind">
-          What are you sharing?
-        </label>
-        <select
-          id="post-kind"
-          className="app-form__select"
-          value={kind}
-          onChange={(e) => setKind(e.target.value as PostKind)}
-        >
-          {POST_KINDS.map((item) => (
-            <option key={item.value} value={item.value}>
-              {item.label}
-            </option>
-          ))}
-        </select>
-        <p className="app-form__hint">
-          {POST_KINDS.find((k) => k.value === kind)?.description}
-        </p>
       </div>
 
       <div className="app-form__field">
@@ -148,19 +143,50 @@ export function PostForm({ mode, postId, initial, cancelTo }: PostFormProps) {
       </div>
 
       <div className="app-form__field">
-        <label className="app-form__label" htmlFor="post-content">
-          Workflow details
-        </label>
-        <textarea
-          id="post-content"
-          className="app-form__textarea app-form__textarea--mono"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder={'## Setup\n\n- Add these skills...\n\n## Steps\n\n1. ...'}
-          required
-          rows={14}
-        />
-        <p className="app-form__hint">Markdown supported.</p>
+        <div className="post-form__panel-tabs" role="tablist" aria-label="Compose or preview">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={panel === 'compose'}
+            className={cn('feed-tab', panel === 'compose' && 'is-active')}
+            onClick={() => setPanel('compose')}
+          >
+            Compose
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={panel === 'preview'}
+            className={cn('feed-tab', panel === 'preview' && 'is-active')}
+            onClick={() => setPanel('preview')}
+          >
+            Preview
+          </button>
+        </div>
+
+        {panel === 'compose' ? (
+          <>
+            <label className="app-form__label" htmlFor="post-content">
+              Details
+            </label>
+            <textarea
+              id="post-content"
+              className="app-form__textarea app-form__textarea--mono"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder={'## Setup\n\n- Add these skills...\n\n## Steps\n\n1. ...'}
+              required
+              rows={14}
+            />
+            <p className="app-form__hint">Markdown supported.</p>
+          </>
+        ) : (
+          <div className="post-form__preview">
+            {title && <h2 className="post-form__preview-title">{title}</h2>}
+            {description && <p className="post-form__preview-desc">{description}</p>}
+            <MarkdownContent content={content || '*Nothing to preview yet.*'} />
+          </div>
+        )}
       </div>
 
       {error && <p className="post-detail__error">{error}</p>}
@@ -173,7 +199,7 @@ export function PostForm({ mode, postId, initial, cancelTo }: PostFormProps) {
                 ? 'Publishing…'
                 : 'Saving…'
               : mode === 'create'
-                ? 'Publish workflow'
+                ? 'Publish'
                 : 'Save changes'}
           </span>
         </button>

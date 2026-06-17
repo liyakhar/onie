@@ -230,6 +230,72 @@ export const toggleFollow = createServerFn({ method: 'POST' })
     return { following: true }
   })
 
+export const getSuggestedProfiles = createServerFn({ method: 'GET' })
+  .inputValidator((data: { field: Category }) => data)
+  .handler(async ({ data }) => {
+    const prisma = await getDb()
+    const user = await getSessionUser()
+
+    return prisma.profile.findMany({
+      where: {
+        field: data.field,
+        ...(user ? { userId: { not: user.id } } : {}),
+      },
+      take: 8,
+      orderBy: { updatedAt: 'desc' },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            _count: { select: { posts: true, followers: true } },
+          },
+        },
+      },
+    })
+  })
+
+export const followMany = createServerFn({ method: 'POST' })
+  .inputValidator((data: { usernames: string[] }) => data)
+  .handler(async ({ data }) => {
+    const prisma = await getDb()
+    const user = await getSessionUser()
+    if (!user) {
+      throw new Error('Sign in to follow')
+    }
+
+    const profiles = await prisma.profile.findMany({
+      where: {
+        username: { in: data.usernames },
+        userId: { not: user.id },
+      },
+      select: { userId: true },
+    })
+
+    if (profiles.length === 0) {
+      return { followed: 0 }
+    }
+
+    await prisma.follow.createMany({
+      data: profiles.map((profile) => ({
+        followerId: user.id,
+        followingId: profile.userId,
+      })),
+      skipDuplicates: true,
+    })
+
+    for (const profile of profiles) {
+      void emitNotification({
+        userId: profile.userId,
+        actorId: user.id,
+        type: 'FOLLOW',
+      })
+    }
+
+    return { followed: profiles.length }
+  })
+
 export const searchProfiles = createServerFn({ method: 'GET' })
   .inputValidator(
     (data: { q?: string; category?: Category }) => data,
@@ -310,7 +376,7 @@ export const requireNeedsOnboarding = createServerFn({ method: 'GET' }).handler(
     })
 
     if (profile?.onboarded) {
-      throw redirect({ to: '/app' })
+      throw redirect({ to: '/app/explore' })
     }
   },
 )

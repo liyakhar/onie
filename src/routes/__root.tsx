@@ -18,6 +18,7 @@ import {
   jsonLdScript,
   organizationJsonLd,
 } from '#/lib/seo'
+import { themeInitScript } from '#/lib/theme'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -47,6 +48,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" data-theme="press" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <HeadContent />
       </head>
       <body className="antialiased [overflow-wrap:anywhere]">

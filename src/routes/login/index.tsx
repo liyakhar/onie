@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useRouter, useSearch } from '@tanstack/react-router'
+import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { authClient } from '#/lib/auth-client'
 import { loginSearch, type LoginSearch } from '#/lib/auth-nav'
@@ -157,9 +157,14 @@ function LoginPage() {
     }
   }
 
+  const backToSignIn = () => {
+    setMode('signin')
+    setError('')
+  }
+
   if (mode === 'forgot' || mode === 'forgot-sent') {
     return (
-      <main id="main" className="app-page">
+      <main id="main" className="app-page auth-page">
         <header className="app-page__head">
           <p className="app-page__eyebrow">Account</p>
           <h1 className="app-page__title">
@@ -172,9 +177,9 @@ function LoginPage() {
           </p>
         </header>
 
-        <div className="app-form app-form--narrow">
+        <div className="auth-stack">
           {mode === 'forgot' ? (
-            <form onSubmit={handleForgot} className="login-form">
+            <form onSubmit={handleForgot} className="auth-form">
               <div className="app-form__field">
                 <label className="app-form__label" htmlFor="forgot-email">
                   Email
@@ -186,6 +191,7 @@ function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  autoComplete="email"
                 />
               </div>
               {error && <p className="post-detail__error">{error}</p>}
@@ -196,43 +202,25 @@ function LoginPage() {
               </div>
             </form>
           ) : (
-            <>
-              {isDev && (
-                <p className="app-form__hint">
-                  Local dev: the reset URL is printed in the server console.
-                </p>
-              )}
-              <button
-                type="button"
-                className="login-switch"
-                onClick={() => {
-                  setMode('signin')
-                  setError('')
-                }}
-              >
-                Back to sign in
-              </button>
-            </>
+            isDev && (
+              <p className="app-form__hint">
+                Local dev: the reset URL is printed in the server console.
+              </p>
+            )
           )}
-          {mode === 'forgot' && (
-            <button
-              type="button"
-              className="login-switch"
-              onClick={() => {
-                setMode('signin')
-                setError('')
-              }}
-            >
+
+          <footer className="auth-footer">
+            <button type="button" className="login-switch" onClick={backToSignIn}>
               Back to sign in
             </button>
-          )}
+          </footer>
         </div>
       </main>
     )
   }
 
   return (
-    <main id="main" className="app-page">
+    <main id="main" className="app-page auth-page">
       <header className="app-page__head">
         <p className="app-page__eyebrow">{isSignUp ? 'Join' : 'Sign in'}</p>
         <h1 className="app-page__title">{isSignUp ? 'Create your account' : 'Welcome back'}</h1>
@@ -243,7 +231,7 @@ function LoginPage() {
         </p>
       </header>
 
-      <div className="app-form app-form--narrow">
+      <div className="auth-stack">
         {googleEnabled && (
           <>
             <button
@@ -267,7 +255,7 @@ function LoginPage() {
           </>
         )}
 
-        <form onSubmit={handleSubmit} className="login-form">
+        <form onSubmit={handleSubmit} className="auth-form">
           {isSignUp && (
             <div className="app-form__field">
               <label className="app-form__label" htmlFor="name">
@@ -279,6 +267,7 @@ function LoginPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
+                autoComplete="name"
               />
             </div>
           )}
@@ -293,12 +282,27 @@ function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="email"
             />
           </div>
           <div className="app-form__field">
-            <label className="app-form__label" htmlFor="password">
-              Password
-            </label>
+            <div className="app-form__label-row">
+              <label className="app-form__label" htmlFor="password">
+                Password
+              </label>
+              {!isSignUp && (
+                <button
+                  type="button"
+                  className="auth-link"
+                  onClick={() => {
+                    setMode('forgot')
+                    setError('')
+                  }}
+                >
+                  Forgot password?
+                </button>
+              )}
+            </div>
             <input
               id="password"
               type="password"
@@ -307,20 +311,9 @@ function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={8}
+              autoComplete={isSignUp ? 'new-password' : 'current-password'}
             />
           </div>
-          {!isSignUp && (
-            <button
-              type="button"
-              className="login-switch login-switch--inline"
-              onClick={() => {
-                setMode('forgot')
-                setError('')
-              }}
-            >
-              Forgot password?
-            </button>
-          )}
           {error && <p className="post-detail__error">{error}</p>}
           <div className="app-form__actions">
             <button type="submit" className="btn" disabled={loading || googleLoading}>
@@ -331,21 +324,23 @@ function LoginPage() {
           </div>
         </form>
 
-        <button
-          type="button"
-          onClick={() => {
-            setMode(isSignUp ? 'signin' : 'signup')
-            setError('')
-          }}
-          className="login-switch"
-        >
-          {isSignUp
-            ? 'Already have an account? Sign in'
-            : "Don't have an account? Join"}
-        </button>
-        <p className="app-form__hint login-footnote">
-          By continuing you agree to share workflows responsibly.
-        </p>
+        <footer className="auth-footer">
+          <button
+            type="button"
+            onClick={() => {
+              setMode(isSignUp ? 'signin' : 'signup')
+              setError('')
+            }}
+            className="login-switch"
+          >
+            {isSignUp
+              ? 'Already have an account? Sign in'
+              : "Don't have an account? Join"}
+          </button>
+          <p className="login-footnote">
+            By continuing you agree to share workflows responsibly.
+          </p>
+        </footer>
       </div>
     </main>
   )

@@ -1,9 +1,13 @@
 import { createFileRoute, Link, notFound, useRouter } from '@tanstack/react-router'
+import { useState } from 'react'
+import type { PostKind } from '#/generated/prisma/client'
 import { getProfile, toggleFollow } from '#/server/profiles'
 import { pinPost } from '#/server/posts'
-import { categoryLabel } from '#/lib/categories'
+import { profileFieldLabel } from '#/lib/categories'
+import { kindLabel } from '#/lib/kinds'
 import { PostCard } from '#/components/PostCard'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
+import { cn } from '#/lib/utils'
 import {
   breadcrumbJsonLd,
   buildPageMeta,
@@ -63,6 +67,12 @@ function ProfilePage() {
   const router = useRouter()
   const profile = Route.useLoaderData()
   const { user, isFollowing, isOwner } = profile
+  const [kindFilter, setKindFilter] = useState<PostKind | 'all'>('all')
+
+  const filteredPosts =
+    kindFilter === 'all'
+      ? user.posts
+      : user.posts.filter((post) => post.kind === kindFilter)
 
   const handleFollow = async () => {
     try {
@@ -82,10 +92,12 @@ function ProfilePage() {
     }
   }
 
+  const fieldLabel = profileFieldLabel(profile.field)
+
   return (
     <main id="main" className="app-page">
       <header className="app-page__head">
-        <p className="app-page__eyebrow">{categoryLabel(profile.field)}</p>
+        {fieldLabel && <p className="app-page__eyebrow">{fieldLabel}</p>}
         <h1 className="app-page__title">{user.name}</h1>
         {profile.headline && <p className="app-page__lede">{profile.headline}</p>}
       </header>
@@ -101,7 +113,7 @@ function ProfilePage() {
           <div>
             <p className="profile-card__handle">@{profile.username}</p>
             <div className="profile-card__meta">
-              <span className="profile-card__field">{categoryLabel(profile.field)}</span>
+              {fieldLabel && <span className="profile-card__field">{fieldLabel}</span>}
               <span>
                 {user._count.posts} workflows · {user._count.followers} followers ·{' '}
                 {user._count.following} following
@@ -113,11 +125,11 @@ function ProfilePage() {
         <div className="profile-card__actions">
           {isOwner ? (
             <>
-              <Link to="/settings" className="btn btn--compact">
-                <span className="btn__label">Edit profile</span>
+              <Link to="/new" className="btn btn--compact">
+                <span className="btn__label">Share workflow</span>
               </Link>
-              <Link to="/new" className="feed-tab">
-                New workflow
+              <Link to="/settings" className="feed-tab">
+                Edit profile
               </Link>
             </>
           ) : (
@@ -159,14 +171,41 @@ function ProfilePage() {
       )}
 
       <section className="app-section" aria-labelledby="workflows-h">
-        <h2 className="app-section__title" id="workflows-h">
-          Workflows
-        </h2>
-        {user.posts.length === 0 ? (
-          <p className="feed-empty">No workflows published yet.</p>
+        <div className="profile-workflows__head">
+          <h2 className="app-section__title" id="workflows-h">
+            Workflows ({user.posts.length})
+          </h2>
+          {user.posts.length > 0 && (
+            <div className="profile-kind-filter">
+              <button
+                type="button"
+                className={cn('feed-tab', kindFilter === 'all' && 'is-active')}
+                onClick={() => setKindFilter('all')}
+              >
+                All
+              </button>
+              {[...new Set(user.posts.map((p) => p.kind))].map((kind) => (
+                <button
+                  key={kind}
+                  type="button"
+                  className={cn('feed-tab', kindFilter === kind && 'is-active')}
+                  onClick={() => setKindFilter(kind)}
+                >
+                  {kindLabel(kind)}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        {filteredPosts.length === 0 ? (
+          <p className="feed-empty">
+            {user.posts.length === 0
+              ? 'No workflows published yet.'
+              : 'No workflows match this filter.'}
+          </p>
         ) : (
           <ol className="ledger" aria-label="Published workflows">
-            {user.posts.map((post) => (
+            {filteredPosts.map((post) => (
               <PostCard
                 key={post.id}
                 post={post}

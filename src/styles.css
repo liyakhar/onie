@@ -100,7 +100,7 @@ code {
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: var(--space-sm);
-  margin-block: var(--space-md);
+  margin-block: var(--space-xs);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   letter-spacing: var(--tracking-label);

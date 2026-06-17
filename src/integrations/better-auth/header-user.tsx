@@ -15,21 +15,27 @@ import { useQuery } from '@tanstack/react-query'
 
 export default function BetterAuthHeader() {
   const { data: session, isPending } = authClient.useSession()
-  const { data: profile } = useQuery({
+  const { data: profile, isPending: isProfilePending } = useQuery({
     queryKey: ['my-profile'],
     queryFn: () => getMyProfile(),
     enabled: Boolean(session?.user),
   })
 
-  if (isPending) {
+  if (isPending || (session?.user && isProfilePending)) {
     return <div className="h-8 w-8 animate-pulse rounded-full bg-[var(--code-bg)]" />
   }
 
   if (session?.user) {
+    const username = profile?.username
+
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="rounded-full outline-none ring-offset-2 focus-visible:ring-2 focus-visible:ring-[var(--accent)]">
+          <button
+            type="button"
+            className="rounded-full outline-none ring-offset-2 focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+            aria-label="Account menu"
+          >
             <Avatar className="h-8 w-8 border border-[var(--line)]">
               <AvatarImage src={session.user.image ?? undefined} />
               <AvatarFallback className="bg-[var(--code-bg)] text-xs font-medium">
@@ -38,19 +44,25 @@ export default function BetterAuthHeader() {
             </Avatar>
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48">
-          {profile?.username && (
+        <DropdownMenuContent
+          align="end"
+          className="w-48 border-[var(--line)] bg-[var(--surface-strong)]"
+        >
+          {username ? (
             <DropdownMenuItem asChild>
-              <Link to="/u/$username" params={{ username: profile.username }}>
-                My page
+              <Link to="/u/$username" params={{ username }}>
+                My profile
+              </Link>
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem asChild>
+              <Link to="/welcome" search={{ redirect: '/app/explore' }}>
+                Set up profile
               </Link>
             </DropdownMenuItem>
           )}
           <DropdownMenuItem asChild>
             <Link to="/settings">Settings</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link to="/new">New workflow</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

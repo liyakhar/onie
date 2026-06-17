@@ -21,7 +21,7 @@ export const Route = createFileRoute('/p/$postId/edit/')({
     const pageMeta = buildPageMeta({
       path: `/p/${post.id}/edit`,
       title: `Edit ${post.title}`,
-      description: 'Edit your workflow on Onie.',
+      description: 'Edit your post on Onie.',
       noindex: true,
     })
 
@@ -60,7 +60,7 @@ function EditPostPage() {
     <main id="main" className="app-page">
       <header className="app-page__head">
         <p className="app-page__eyebrow">Edit</p>
-        <h1 className="app-page__title">Update workflow</h1>
+        <h1 className="app-page__title">Edit post</h1>
         <p className="app-page__lede">Change the title, tags, field, or markdown body.</p>
       </header>
       <PostForm

@@ -1,9 +1,14 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import Footer from '#/components/Footer'
 import { OnieMark } from '#/components/OnieMark'
+import { PostCard } from '#/components/PostCard'
 import { authClient } from '#/lib/auth-client'
 import { loginSearch } from '#/lib/auth-nav'
 import { buildPageMeta, jsonLdScript, webSiteJsonLd } from '#/lib/seo'
+import { getTopWorkflowsWeek } from '#/server/posts'
+import { CATEGORIES } from '#/lib/categories'
+import { Search } from 'lucide-react'
+import { useState } from 'react'
 
 const SECTIONS = [
   { id: 'index', num: '00', label: 'Overview' },
@@ -25,11 +30,26 @@ export const Route = createFileRoute('/')({
     links: landingMeta.links,
     scripts: [jsonLdScript(webSiteJsonLd())],
   }),
+  loader: async () => {
+    const topThisWeek = await getTopWorkflowsWeek()
+    return { topThisWeek }
+  },
   component: LandingPage,
 })
 
 function LandingPage() {
+  const navigate = useNavigate()
   const { data: session } = authClient.useSession()
+  const { topThisWeek } = Route.useLoaderData()
+  const [searchQ, setSearchQ] = useState('')
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    void navigate({
+      to: '/app/explore',
+      search: searchQ.trim() ? { q: searchQ.trim() } : {},
+    })
+  }
 
   return (
     <div className="index-page">
@@ -81,6 +101,55 @@ function LandingPage() {
                 the field. Each post documents what they run, how it is wired, and which tools
                 it depends on — tagged by discipline and stack.
               </p>
+
+              <form className="landing-search" onSubmit={handleSearch}>
+                <Search className="landing-search__icon" aria-hidden="true" />
+                <input
+                  className="landing-search__input"
+                  type="search"
+                  value={searchQ}
+                  onChange={(e) => setSearchQ(e.target.value)}
+                  placeholder="Search workflows, tools, or people…"
+                />
+                <button type="submit" className="btn btn--compact">
+                  <span className="btn__label">Explore</span>
+                </button>
+              </form>
+
+              {topThisWeek.length > 0 && (
+                <section className="landing-trending" aria-labelledby="landing-trending-h">
+                  <h2 className="landing-trending__title" id="landing-trending-h">
+                    Popular this week
+                  </h2>
+                  <ol className="ledger" aria-label="Top workflows this week">
+                    {topThisWeek.slice(0, 3).map((post, index) => (
+                      <PostCard
+                        key={post.id}
+                        post={post}
+                        ranked={index + 1}
+                        variant="ledger"
+                      />
+                    ))}
+                  </ol>
+                  <Link to="/app/explore" search={{ view: 'top' }} className="link-arrow">
+                    <span>See all trending</span>
+                  </Link>
+                </section>
+              )}
+
+              <div className="landing-fields" aria-label="Browse by field">
+                {CATEGORIES.slice(0, 8).map((cat) => (
+                  <Link
+                    key={cat.value}
+                    to="/app/explore"
+                    search={{ category: cat.value }}
+                    className="landing-field-chip"
+                  >
+                    {cat.label}
+                  </Link>
+                ))}
+              </div>
+
               <p>
                 UX research synthesis, SaaS shipping loops, literature reviews, code review
                 pipelines — searchable in Explore.
@@ -174,15 +243,6 @@ function LandingPage() {
                     <Link to="/app">Your following feed</Link>
                     <span className="index-links__sub">
                       Sign in to follow practitioners and build your feed.
-                    </span>
-                  </div>
-                </li>
-                <li>
-                  <span className="index-links__label">Guides</span>
-                  <div>
-                    <Link to="/blog">Agent workflow guides</Link>
-                    <span className="index-links__sub">
-                      Skills, harnesses, and documentation patterns.
                     </span>
                   </div>
                 </li>

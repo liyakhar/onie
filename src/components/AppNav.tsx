@@ -2,8 +2,10 @@ import { Link } from '@tanstack/react-router'
 import BetterAuthHeader from '#/integrations/better-auth/header-user'
 import { NotificationBell } from '#/components/NotificationBell'
 import { OnieMark } from '#/components/OnieMark'
+import ThemeToggle from '#/components/ThemeToggle'
 import { authClient } from '#/lib/auth-client'
 import { Plus } from 'lucide-react'
+import { appNavActiveOptions } from '#/lib/nav-active'
 
 export default function AppNav() {
   const { data: session } = authClient.useSession()
@@ -12,7 +14,10 @@ export default function AppNav() {
   return (
     <header className="app-nav" role="banner">
       <div className="app-nav__inner">
-        <Link to="/" className="app-nav__brand">
+        <Link
+          to={isSignedIn ? '/app' : '/'}
+          className="app-nav__brand"
+        >
           <OnieMark variant="nav" />
         </Link>
 
@@ -20,14 +25,15 @@ export default function AppNav() {
           <Link
             to="/app"
             className="app-nav__tab"
-            activeOptions={{ exact: true }}
+            activeOptions={appNavActiveOptions}
             activeProps={{ className: 'app-nav__tab is-active' }}
           >
-            Feed
+            Home
           </Link>
           <Link
             to="/app/explore"
             className="app-nav__tab"
+            activeOptions={appNavActiveOptions}
             activeProps={{ className: 'app-nav__tab is-active' }}
           >
             Explore
@@ -44,6 +50,7 @@ export default function AppNav() {
               <NotificationBell />
             </>
           )}
+          <ThemeToggle />
           <BetterAuthHeader />
         </div>
       </div>

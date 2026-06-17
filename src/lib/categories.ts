@@ -29,3 +29,9 @@ export const CATEGORIES: {
 export function categoryLabel(value: Category) {
   return CATEGORIES.find((c) => c.value === value)?.label ?? value
 }
+
+/** Profile field label, or null when unset / generic (not shown in UI). */
+export function profileFieldLabel(value: Category) {
+  if (value === 'OTHER') return null
+  return categoryLabel(value)
+}

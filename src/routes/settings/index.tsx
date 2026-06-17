@@ -81,7 +81,7 @@ function SettingsPage() {
         <h1 className="app-page__title">Profile settings</h1>
         <p className="app-page__lede">
           Your public page shows your field, workflows, and pinned highlight.{' '}
-          <Link to="/u/$username" params={{ username: profile.username }} className="text-[var(--accent)]">
+          <Link to="/u/$username" params={{ username: profile.username }} className="auth-link">
             View your page
           </Link>
         </p>

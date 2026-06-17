@@ -7,8 +7,9 @@ import { buildPageMeta } from '#/lib/seo'
 
 const newPostMeta = buildPageMeta({
   path: '/new',
-  title: 'Publish workflow',
-  description: 'Publish an agent workflow to Onie.',
+  title: 'Publish',
+  description:
+    'Share prompts, skills, setups, harnesses, and workflows from your practice on Onie.',
   noindex: true,
 })
 
@@ -41,7 +42,7 @@ function NewPostPage() {
     <main id="main" className="app-page">
       <header className="app-page__head">
         <p className="app-page__eyebrow">Publish</p>
-        <h1 className="app-page__title">Share a workflow</h1>
+        <h1 className="app-page__title">Share what works for you</h1>
         <p className="app-page__lede">
           Post the skills, prompts, file structure, or agent setup that works for you.
         </p>

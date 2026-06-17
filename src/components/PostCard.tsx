@@ -60,17 +60,17 @@ export function PostCard({
   const example = isExamplePost({ id: post.id, author: post.author })
 
   if (variant === 'ledger') {
-    const meta = [
+    const metaParts = [
       example ? 'Example' : null,
       kindLabel(post.kind),
       categoryLabel(post.category),
       username ? post.author.name : null,
+      post.tools.length > 0 ? post.tools.slice(0, 3).join(', ') : null,
       `${likeCount} likes · ${commentCount} comments`,
       pinned ? 'Pinned' : null,
       ranked !== undefined ? `#${ranked}` : null,
     ]
-      .filter(Boolean)
-      .join(' · ')
+    const meta = metaParts.filter(Boolean).join(' · ')
 
     return (
       <li className={cn('ledger__row', actions && 'ledger__row--actions', className)}>
