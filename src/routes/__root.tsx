@@ -3,6 +3,7 @@ import {
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
+import { NotFoundPage } from '#/components/NotFoundPage'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
@@ -27,6 +28,7 @@ interface MyRouterContext {
 const rootMeta = buildPageMeta({ path: '/' })
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
+  notFoundComponent: NotFoundPage,
   head: () => ({
     meta: [
       { charSet: 'utf-8' },

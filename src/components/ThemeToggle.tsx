@@ -1,30 +1,31 @@
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 import { Moon, Sun } from 'lucide-react'
 import {
-  applyTheme,
   getStoredTheme,
   getSystemTheme,
   setTheme,
+  subscribeTheme,
   type Theme,
 } from '#/lib/theme'
 
+function getThemeSnapshot(): Theme {
+  return getStoredTheme() ?? getSystemTheme()
+}
+
+function getServerThemeSnapshot(): Theme {
+  return 'dark'
+}
+
 export default function ThemeToggle() {
-  const [theme, setThemeState] = useState<Theme>('dark')
-  const [ready, setReady] = useState(false)
-
-  useEffect(() => {
-    const initial = getStoredTheme() ?? getSystemTheme()
-    setThemeState(initial)
-    applyTheme(initial)
-    setReady(true)
-  }, [])
-
+  const theme = useSyncExternalStore(
+    subscribeTheme,
+    getThemeSnapshot,
+    getServerThemeSnapshot,
+  )
   const isDark = theme === 'dark'
 
   function toggleTheme() {
-    const next: Theme = isDark ? 'light' : 'dark'
-    setThemeState(next)
-    setTheme(next)
+    setTheme(isDark ? 'light' : 'dark')
   }
 
   return (
@@ -36,7 +37,6 @@ export default function ThemeToggle() {
       title={isDark ? 'Light mode' : 'Dark mode'}
       className="theme-toggle"
       onClick={toggleTheme}
-      disabled={!ready}
     >
       <Sun
         className="theme-toggle__icon"

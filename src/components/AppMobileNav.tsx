@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Compass, Home, Plus, User } from 'lucide-react'
 import { authClient } from '#/lib/auth-client'
+import { loginSearch } from '#/lib/auth-nav'
 import { useQuery } from '@tanstack/react-query'
 import { getMyProfile } from '#/server/profiles'
 import { appNavActiveOptions } from '#/lib/nav-active'
@@ -15,7 +16,13 @@ export function AppMobileNav() {
 
   const profileTo = profile?.username
     ? { to: '/u/$username' as const, params: { username: profile.username } }
-    : { to: '/welcome' as const }
+    : session?.user
+      ? { to: '/welcome' as const }
+      : { to: '/login' as const, search: loginSearch({ redirect: '/app', signup: true }) }
+
+  const shareTo = session?.user
+    ? { to: '/new' as const }
+    : { to: '/login' as const, search: loginSearch({ redirect: '/new', signup: true }) }
 
   return (
     <nav className="app-mobile-nav" aria-label="Mobile navigation">
@@ -38,7 +45,7 @@ export function AppMobileNav() {
         <span>Explore</span>
       </Link>
       <Link
-        to="/new"
+        {...shareTo}
         className="app-mobile-nav__item"
         activeProps={{ className: 'app-mobile-nav__item is-active' }}
       >

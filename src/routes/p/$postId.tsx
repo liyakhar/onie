@@ -14,6 +14,7 @@ import { authClient } from '#/lib/auth-client'
 import { loginSearch } from '#/lib/auth-nav'
 import { isExamplePost } from '#/lib/example-content'
 import { GitFork, Copy, Pencil, Check } from 'lucide-react'
+import { BookmarkButton } from '#/components/BookmarkButton'
 import {
   articleJsonLd,
   breadcrumbJsonLd,
@@ -135,7 +136,11 @@ function PostPage() {
     <main id="main" className="app-page app-page--wide">
       <header className="app-page__head">
         <p className="app-page__eyebrow">
-          {example && <span className="post-detail__example-tag">Example · </span>}
+          {example && (
+            <span className="post-detail__example-tag" title="Demo workflow published by Onie">
+              Example ·{' '}
+            </span>
+          )}
           <span className="post-detail__kind-badge">{kindLabel(post.kind)}</span>
           <span className="post-detail__field-badge">{categoryLabel(post.category)}</span>
         </p>
@@ -146,8 +151,14 @@ function PostPage() {
       {post.tools.length > 0 && (
         <ul className="post-detail__tools" aria-label="Tools used">
           {post.tools.map((tool) => (
-            <li key={tool} className="post-detail__tool">
-              {tool}
+            <li key={tool}>
+              <Link
+                to="/app/explore"
+                search={{ tool, view: 'workflows' }}
+                className="post-detail__tool"
+              >
+                {tool}
+              </Link>
             </li>
           ))}
         </ul>
@@ -167,15 +178,8 @@ function PostPage() {
       )}
 
       <div className="post-detail__action-bar">
-        <PostEngagement
-          postId={post.id}
-          likeCount={post._count.likes}
-          commentCount={post._count.comments}
-          likedByMe={post.likedByMe}
-          interactive
-        />
-        <div className="post-detail__action-bar-end">
-          <button type="button" className="feed-tab" onClick={() => void handleCopy()}>
+        <div className="post-detail__action-bar-primary">
+          <button type="button" className="post-action post-action--primary" onClick={() => void handleCopy()}>
             {copied ? (
               <Check className="h-3.5 w-3.5" aria-hidden="true" />
             ) : (
@@ -184,7 +188,7 @@ function PostPage() {
             {copied ? 'Copied' : 'Copy markdown'}
           </button>
           {isOwn ? (
-            <Link to="/p/$postId/edit" params={{ postId: post.id }} className="feed-tab">
+            <Link to="/p/$postId/edit" params={{ postId: post.id }} className="post-action">
               <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
               Edit
             </Link>
@@ -193,13 +197,21 @@ function PostPage() {
               type="button"
               onClick={handleFork}
               disabled={forking}
-              className="btn btn--compact post-detail__fork-btn"
+              className="post-action"
             >
               <GitFork className="h-3.5 w-3.5" aria-hidden="true" />
-              <span className="btn__label">{forking ? 'Forking…' : 'Fork setup'}</span>
+              {forking ? 'Forking…' : session?.user ? 'Fork setup' : 'Sign in to fork'}
             </button>
           )}
+          <BookmarkButton postId={post.id} />
         </div>
+        <PostEngagement
+          postId={post.id}
+          likeCount={post._count.likes}
+          commentCount={post._count.comments}
+          likedByMe={post.likedByMe}
+          interactive
+        />
       </div>
 
       <div className="post-detail__meta">

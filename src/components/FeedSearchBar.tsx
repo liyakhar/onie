@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from '#/components/ui/select'
 import { Search } from 'lucide-react'
+import { useState } from 'react'
 
 type SearchBarProps = {
   q?: string
@@ -18,6 +19,8 @@ type SearchBarProps = {
   tool?: string
   basePath: '/app/explore'
   view?: string
+  onClearFilters?: () => void
+  hasActiveFilters?: boolean
 }
 
 export function FeedSearchBar({
@@ -27,8 +30,11 @@ export function FeedSearchBar({
   tool,
   basePath,
   view,
+  onClearFilters,
+  hasActiveFilters,
 }: SearchBarProps) {
   const navigate = useNavigate()
+  const [query, setQuery] = useState(q)
 
   const update = (next: {
     q?: string
@@ -39,7 +45,7 @@ export function FeedSearchBar({
     void navigate({
       to: basePath,
       search: {
-        q: next.q ?? q,
+        q: next.q ?? query,
         category:
           next.category === 'all' || next.category === undefined
             ? undefined
@@ -59,22 +65,26 @@ export function FeedSearchBar({
     })
   }
 
+  const submitSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    update({ q: query.trim() })
+  }
+
   return (
     <div className="feed-search">
-      <div className="feed-search__field">
+      <form className="feed-search__field" onSubmit={submitSearch}>
         <Search className="feed-search__icon" aria-hidden="true" />
         <input
           className="feed-search__input"
           type="search"
-          defaultValue={q}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder="Search workflows, prompts, skills..."
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              update({ q: e.currentTarget.value })
-            }
-          }}
         />
-      </div>
+        <button type="submit" className="feed-search__submit" aria-label="Search">
+          Search
+        </button>
+      </form>
       <Select
         value={kind ?? 'all'}
         onValueChange={(value) => update({ kind: value as PostKind | 'all' })}
@@ -114,6 +124,11 @@ export function FeedSearchBar({
           onClick={() => update({ tool: null })}
         >
           {tool} ×
+        </button>
+      )}
+      {hasActiveFilters && onClearFilters && (
+        <button type="button" className="feed-search__clear" onClick={onClearFilters}>
+          Clear filters
         </button>
       )}
     </div>

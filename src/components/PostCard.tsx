@@ -60,17 +60,23 @@ export function PostCard({
   const example = isExamplePost({ id: post.id, author: post.author })
 
   if (variant === 'ledger') {
-    const metaParts = [
+    const metaPrimary = [
       example ? 'Example' : null,
       kindLabel(post.kind),
       categoryLabel(post.category),
       username ? post.author.name : null,
-      post.tools.length > 0 ? post.tools.slice(0, 3).join(', ') : null,
-      `${likeCount} likes · ${commentCount} comments`,
       pinned ? 'Pinned' : null,
       ranked !== undefined ? `#${ranked}` : null,
     ]
-    const meta = metaParts.filter(Boolean).join(' · ')
+      .filter(Boolean)
+      .join(' · ')
+
+    const metaSecondary = [
+      post.tools.length > 0 ? post.tools.slice(0, 3).join(', ') : null,
+      `${likeCount} likes · ${commentCount} comments`,
+    ]
+      .filter(Boolean)
+      .join(' · ')
 
     return (
       <li className={cn('ledger__row', actions && 'ledger__row--actions', className)}>
@@ -82,7 +88,12 @@ export function PostCard({
         >
           {post.title}
         </Link>
-        <span className="ledger__kind">{meta}</span>
+        <span className="ledger__kind">
+          <span className="ledger__kind-primary">{metaPrimary}</span>
+          {metaSecondary ? (
+            <span className="ledger__kind-secondary">{metaSecondary}</span>
+          ) : null}
+        </span>
         {actions ? <div className="ledger__actions">{actions}</div> : null}
       </li>
     )

@@ -161,6 +161,9 @@ export const completeOnboarding = createServerFn({ method: 'POST' })
     }
 
     const username = data.username.trim().toLowerCase()
+    if (!username || !/^[a-z0-9-]+$/.test(username)) {
+      throw new Error('Choose a username with letters, numbers, and hyphens only')
+    }
     if (username !== profile.username) {
       const taken = await prisma.profile.findUnique({
         where: { username },
@@ -240,6 +243,7 @@ export const getSuggestedProfiles = createServerFn({ method: 'GET' })
       where: {
         field: data.field,
         ...(user ? { userId: { not: user.id } } : {}),
+        user: { posts: { some: {} } },
       },
       take: 8,
       orderBy: { updatedAt: 'desc' },
@@ -306,6 +310,7 @@ export const searchProfiles = createServerFn({ method: 'GET' })
 
     return prisma.profile.findMany({
       where: {
+        user: { posts: { some: {} } },
         ...(data.category ? { field: data.category } : {}),
         ...(q
           ? {
@@ -344,6 +349,19 @@ export const getMyProfile = createServerFn({ method: 'GET' }).handler(
     })
   },
 )
+
+export const requireSignedIn = createServerFn({ method: 'GET' })
+  .inputValidator((data: { redirect?: string } | undefined) => data ?? {})
+  .handler(async ({ data }) => {
+    const user = await getSessionUser()
+    if (!user) {
+      throw redirect({
+        to: '/login',
+        search: loginSearch({ redirect: data.redirect ?? '/app' }),
+      })
+    }
+    return user
+  })
 
 export const requireOnboarded = createServerFn({ method: 'GET' }).handler(
   async () => {

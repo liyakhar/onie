@@ -8,6 +8,7 @@ import { profileFieldLabel } from '#/lib/categories'
 import { authClient } from '#/lib/auth-client'
 import { loginSearch } from '#/lib/auth-nav'
 import { PeopleCard } from '#/components/PeopleCard'
+import { KindExplainer } from '#/components/KindExplainer'
 import { breadcrumbJsonLd, buildPageMeta, jsonLdScript } from '#/lib/seo'
 import { cn } from '#/lib/utils'
 
@@ -113,6 +114,13 @@ function ExplorePage() {
     })
   }
 
+  const clearFilters = () => {
+    void navigate({
+      to: '/app/explore',
+      search: { view: activeView },
+    })
+  }
+
   return (
     <main id="main" className="app-page">
       <header className="app-page__head">
@@ -131,8 +139,12 @@ function ExplorePage() {
           tool={tool}
           basePath="/app/explore"
           view={activeView}
+          hasActiveFilters={hasFilters}
+          onClearFilters={clearFilters}
         />
       </div>
+
+      <KindExplainer />
 
       {popularTools.length > 0 && !hasFilters && (
         <div className="tool-chips" aria-label="Popular tools">
@@ -150,7 +162,7 @@ function ExplorePage() {
       )}
 
       {!hasFilters && (
-        <div className="feed-tabs" role="tablist" aria-label="Explore views">
+        <div className="feed-tabs feed-tabs--segmented" role="tablist" aria-label="Explore views">
           <button
             type="button"
             role="tab"
@@ -241,26 +253,26 @@ function ExplorePage() {
                   <>
                     <p className="feed-empty__title">Explore is getting started.</p>
                     <p>
-                      No workflows published yet. Read a guide for inspiration, sign in to
-                      follow builders, or share a setup you already run.
+                      No workflows published yet. Sign in to follow builders, or share a
+                      setup you already run.
                     </p>
                     <div className="feed-empty__actions">
-                      <Link to="/blog" className="btn btn--compact">
-                        <span className="btn__label">Read guides</span>
-                      </Link>
                       {isSignedIn ? (
-                        <Link to="/new" className="btn btn--compact">
+                        <Link to="/new" className="btn">
                           <span className="btn__label">Publish</span>
                         </Link>
                       ) : (
                         <Link
                           to="/login"
-                          className="btn btn--compact"
+                          className="btn"
                           search={loginSearch({ redirect: '/app/explore', signup: true })}
                         >
                           <span className="btn__label">Sign in</span>
                         </Link>
                       )}
+                      <Link to="/app/explore" search={{ view: 'top' }} className="btn btn--compact">
+                        <span className="btn__label">See trending</span>
+                      </Link>
                     </div>
                   </>
                 )}

@@ -10,6 +10,7 @@ import {
 } from '#/server/profiles'
 import { buildPageMeta } from '#/lib/seo'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
+import { Plus, Check } from 'lucide-react'
 import { cn } from '#/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 
@@ -71,10 +72,15 @@ function WelcomePage() {
 
   const finish = async (followUsernames: string[]) => {
     setError('')
+    const resolvedUsername = username.trim().toLowerCase() || profile.username
+    if (!resolvedUsername || !/^[a-z0-9-]+$/.test(resolvedUsername)) {
+      setError('Choose a username with letters, numbers, and hyphens only')
+      return
+    }
     setLoading(true)
     try {
       await completeOnboarding({
-        data: { username, field, headline },
+        data: { username: resolvedUsername, field, headline },
       })
       if (followUsernames.length > 0) {
         await followMany({ data: { usernames: followUsernames } })
@@ -222,7 +228,7 @@ function WelcomePage() {
                     </p>
                   </div>
                   <span className="suggested-follows__check" aria-hidden="true">
-                    {selected ? '✓' : '+'}
+                    {selected ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
                   </span>
                 </button>
               </li>

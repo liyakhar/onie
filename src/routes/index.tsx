@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import Footer from '#/components/Footer'
 import { OnieMark } from '#/components/OnieMark'
+import ThemeControls from '#/components/ThemeControls'
 import { PostCard } from '#/components/PostCard'
 import { authClient } from '#/lib/auth-client'
 import { loginSearch } from '#/lib/auth-nav'
@@ -74,6 +75,7 @@ function LandingPage() {
           </nav>
 
           <div className="index-toc__actions">
+            <ThemeControls />
             <Link to="/app/explore" className="btn btn--compact">
               <span className="btn__label">Explore</span>
             </Link>
@@ -148,6 +150,9 @@ function LandingPage() {
                     {cat.label}
                   </Link>
                 ))}
+                <Link to="/app/explore" className="landing-field-chip landing-field-chip--more">
+                  All fields
+                </Link>
               </div>
 
               <p>
@@ -238,11 +243,11 @@ function LandingPage() {
                   </div>
                 </li>
                 <li>
-                  <span className="index-links__label">Feed</span>
+                  <span className="index-links__label">Home</span>
                   <div>
-                    <Link to="/app">Your following feed</Link>
+                    <Link to="/app">Your personalized feed</Link>
                     <span className="index-links__sub">
-                      Sign in to follow practitioners and build your feed.
+                      For you and Following tabs — sign in to follow practitioners.
                     </span>
                   </div>
                 </li>

@@ -179,13 +179,19 @@ export const loadHomeFeed = createServerFn({ method: 'GET' })
       : null
     const field = profile?.field ?? ('OTHER' as Category)
 
-    const [posts, topThisWeek, suggested] = await Promise.all([
+    const [rawPosts, topThisWeek, suggested] = await Promise.all([
       getFeedPosts({ data: { tab: tab === 'following' ? 'following' : 'for-you' } }),
       tab === 'for-you' ? getTopWorkflowsWeek() : Promise.resolve([]),
       tab === 'for-you' && user
         ? getSuggestedProfiles({ data: { field } })
         : Promise.resolve([]),
     ])
+
+    const trendingIds = new Set(topThisWeek.map((post) => post.id))
+    const posts =
+      tab === 'for-you' && trendingIds.size > 0
+        ? rawPosts.filter((post) => !trendingIds.has(post.id))
+        : rawPosts
 
     return { posts, topThisWeek, suggested, tab, field, isGuest: !user }
   })
