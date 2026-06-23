@@ -4,6 +4,20 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
 
 ## Active primaries
 
+### how to build an mcp server
+
+- **Page:** `/blog/build-mcp-server`
+- **Published:** 2026-06-23
+- **Intent:** Informational
+- **Volume / KD:** 480 / 2 (dataforseo:2026-06-16)
+- **Cluster:**
+  - how to build an mcp server ✓
+  - build mcp server ✓
+  - mcp server setup ✓
+  - mcp inspector ✓
+  - fastmcp python ✓
+  - mcp typescript example ✓
+
 ### how to write claude code skills
 
 - **Page:** `/blog/how-to-write-claude-code-skills`

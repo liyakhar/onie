@@ -1,6 +1,6 @@
 Keyword,Volume,KD,Intent,Status,Priority,Cluster,Source,SERP_Notes,Onie_Angle
 install claude code,22200,11,Informational,Queued,P1,Skills,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 22200, KD 11",Review cluster fit before /blog
-how to build an mcp server,480,2,Informational,Queued,P1,MCP,dataforseo:2026-06-16,Official MCP docs + YouTube tutorials; gap Cursor+Claude config; DataForSEO validated 2026-06-16,Minimal server + mcp.json; document shipped workflow on Onie
+how to build an mcp server,480,2,Informational,Published,P1,MCP,dataforseo:2026-06-16,Official MCP docs + YouTube tutorials; gap Cursor+Claude config; DataForSEO validated 2026-06-16,Published /blog/build-mcp-server
 claude code mcp add,110,17,Navigational,Queued,P1,MCP,dataforseo:2026-06-16,Claude Code docs rank for MCP install; DataForSEO validated 2026-06-16,CLI setup + env vars + first tool call
 model context protocol tutorial,50,35,Navigational,Queued,P1,MCP,dataforseo:2026-06-16,Broad head term; official docs dominate; DataForSEO validated 2026-06-16,Hub page linking to MCP setup post
 shared prompt library for teams,,,Informational,Queued,P1,Team libs,serp-2026-06,SaaS blogs rank; gap agent-era (skills+MCP),Governance + versioning; Onie as public practitioner library

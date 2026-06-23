@@ -3,12 +3,14 @@ import { claudeCodeSkillsPost } from '#/content/blog/how-to-write-claude-code-sk
 import { cursorRulesVsSkillsPost } from '#/content/blog/cursor-rules-vs-skills'
 import { documentWorkflowsPost } from '#/content/blog/document-ai-agent-workflows'
 import { claudeCodeWorkflowExamplesPost } from '#/content/blog/claude-code-workflow-examples'
+import { buildMcpServerPost } from '#/content/blog/build-mcp-server'
 
 const posts: BlogPost[] = [
   claudeCodeSkillsPost,
   cursorRulesVsSkillsPost,
   documentWorkflowsPost,
   claudeCodeWorkflowExamplesPost,
+  buildMcpServerPost,
 ]
 
 export function getAllBlogPosts(): BlogPost[] {
