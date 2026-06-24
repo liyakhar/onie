@@ -3,7 +3,7 @@ install claude code,22200,11,Informational,Queued,P1,Skills,dataforseo:2026-06-1
 how to build an mcp server,480,2,Informational,Published,P1,MCP,dataforseo:2026-06-16,Official MCP docs + YouTube tutorials; gap Cursor+Claude config; DataForSEO validated 2026-06-16,Published /blog/build-mcp-server
 claude code mcp add,110,17,Navigational,Queued,P1,MCP,dataforseo:2026-06-16,Claude Code docs rank for MCP install; DataForSEO validated 2026-06-16,CLI setup + env vars + first tool call
 model context protocol tutorial,50,35,Navigational,Queued,P1,MCP,dataforseo:2026-06-16,Broad head term; official docs dominate; DataForSEO validated 2026-06-16,Hub page linking to MCP setup post
-shared prompt library for teams,,,Informational,Queued,P1,Team libs,serp-2026-06,SaaS blogs rank; gap agent-era (skills+MCP),Governance + versioning; Onie as public practitioner library
+shared prompt library for teams,,,Informational,Published,P1,Team libs,serp-2026-06,SaaS blogs rank; gap agent-era (skills+MCP),Published /blog/shared-prompt-library-for-teams
 claude code skills vs rules,,,Informational,Queued,P1,Skills,serp-2026-06,Related to published skills post; comparison intent,Link from how-to-write-claude-code-skills
 mcp server cursor setup,,,Informational,Queued,P1,MCP,serp-2026-06,mcp.json config questions common in tutorials,Step-by-step Cursor MCP.json + verify tools
 agent skills best practices,,,Informational,Queued,P1,Skills,serp-2026-06,Listicles + Anthropic repo SEO,Checklist format with practitioner examples

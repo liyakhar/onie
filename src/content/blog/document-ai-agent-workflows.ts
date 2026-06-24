@@ -23,7 +23,7 @@ export const documentWorkflowsPost: BlogPost = {
   },
   tldr:
     'Document agent workflows like small services: purpose, inputs, tool boundaries, numbered steps, verification, and known failure modes. Keep instructions self-contained, version the harness, and publish the whole setup — not just the prompt paragraph.',
-  relatedSlugs: ['how-to-write-claude-code-skills', 'claude-code-workflow-examples'],
+  relatedSlugs: ['how-to-write-claude-code-skills', 'claude-code-workflow-examples', 'shared-prompt-library-for-teams'],
   body: `
 ## Why most agent docs fail
 

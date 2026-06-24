@@ -4,8 +4,10 @@ import { cursorRulesVsSkillsPost } from '#/content/blog/cursor-rules-vs-skills'
 import { documentWorkflowsPost } from '#/content/blog/document-ai-agent-workflows'
 import { claudeCodeWorkflowExamplesPost } from '#/content/blog/claude-code-workflow-examples'
 import { buildMcpServerPost } from '#/content/blog/build-mcp-server'
+import { sharedPromptLibraryPost } from '#/content/blog/shared-prompt-library-for-teams'
 
 const posts: BlogPost[] = [
+  sharedPromptLibraryPost,
   claudeCodeSkillsPost,
   cursorRulesVsSkillsPost,
   documentWorkflowsPost,

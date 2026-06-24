@@ -70,3 +70,17 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - cursor agent skills (invented)
   - migrate rules to skills (invented)
   - cursor .mdc vs SKILL.md (invented)
+
+### shared prompt library for teams
+
+- **Page:** `/blog/shared-prompt-library-for-teams`
+- **Published:** 2026-06-24
+- **Intent:** Informational
+- **Volume / KD:** pending SEMrush/Ahrefs validation (serp-2026-06 initial research)
+- **Cluster:**
+  - shared prompt library for teams ✓
+  - team prompt management ✓
+  - prompt governance ✓
+  - prompt versioning ✓
+  - prompt approval workflow ✓
+  - ai prompt organization ✓
