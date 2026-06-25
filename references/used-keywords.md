@@ -4,6 +4,20 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
 
 ## Active primaries
 
+### mcp server cursor setup
+
+- **Page:** `/blog/mcp-server-cursor-setup`
+- **Published:** 2026-06-25
+- **Intent:** Informational
+- **Volume / KD:** pending SEMrush/Ahrefs validation (serp-2026-06 initial research)
+- **Cluster:**
+  - mcp server cursor setup ✓
+  - cursor mcp config ✓
+  - mcp.json cursor ✓
+  - cursor mcp servers ✓
+  - cursor mcp project setup ✓
+  - cursor mcp global config ✓
+
 ### how to build an mcp server
 
 - **Page:** `/blog/build-mcp-server`
@@ -76,7 +90,7 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
 - **Page:** `/blog/shared-prompt-library-for-teams`
 - **Published:** 2026-06-24
 - **Intent:** Informational
-- **Volume / KD:** pending SEMrush/Ahrefs validation (serp-2026-06 initial research)
+- **Volume / KD:** pending SEMresh/Ahrefs validation (serp-2026-06 initial research)
 - **Cluster:**
   - shared prompt library for teams ✓
   - team prompt management ✓

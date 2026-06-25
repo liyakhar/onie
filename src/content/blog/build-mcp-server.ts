@@ -23,7 +23,7 @@ export const buildMcpServerPost: BlogPost = {
   },
   tldr:
     'An MCP server is a subprocess that exposes tools, resources, or prompts to AI hosts via JSON-RPC. Create a folder, install the official SDK, define tools using decorators (Python) or Zod schemas (TypeScript), test with MCP Inspector, then add the server to your Claude Desktop or Cursor config. Start with a single tool; scale from there.',
-  relatedSlugs: ['claude-code-workflow-examples', 'how-to-write-claude-code-skills'],
+  relatedSlugs: ['mcp-server-cursor-setup', 'claude-code-workflow-examples', 'how-to-write-claude-code-skills'],
   body: `
 ## Why build your own MCP server
 
