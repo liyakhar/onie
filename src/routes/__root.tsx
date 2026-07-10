@@ -20,6 +20,7 @@ import {
   organizationJsonLd,
 } from '#/lib/seo'
 import { themeInitScript } from '#/lib/theme'
+import { OnieLoader } from '#/components/OnieLoader'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -57,6 +58,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <a className="skip-link" href="#main">
           Skip to content
         </a>
+        <OnieLoader />
         {children}
         {import.meta.env.DEV ? (
           <TanStackDevtools
