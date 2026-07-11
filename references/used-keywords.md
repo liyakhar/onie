@@ -4,6 +4,19 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
 
 ## Active primaries
 
+### claude code skills vs rules
+
+- **Page:** `/blog/claude-code-skills-vs-rules`
+- **Published:** 2026-07-11
+- **Intent:** Informational
+- **Volume / KD:** pending SEMrush/Ahrefs validation (serp-2026-07 initial research)
+- **Cluster:**
+  - claude code skills vs rules ✓
+  - skills vs rules comparison ✓
+  - when to use skills vs rules ✓
+  - claude code skill structure ✓
+  - claude code loading behavior ✓
+
 ### mcp server cursor setup
 
 - **Page:** `/blog/mcp-server-cursor-setup`

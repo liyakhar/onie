@@ -23,6 +23,7 @@ export const cursorRulesVsSkillsPost: BlogPost = {
   tldr:
     'Cursor rules are always-on (or glob-scoped) policy in .mdc files — coding standards, safety rails, and repo conventions. Skills are on-demand playbooks in SKILL.md that load only when the task matches the description. Use rules for what must apply every time; use skills for multi-step workflows you run occasionally. They complement each other; neither replaces the other.',
   relatedSlugs: [
+    'claude-code-skills-vs-rules',
     'how-to-write-claude-code-skills',
     'claude-code-workflow-examples',
     'document-ai-agent-workflows',
