@@ -22,7 +22,7 @@ export const claudeCodeSkillsPost: BlogPost = {
   },
   tldr:
     'A Claude Code skill is a folder with a SKILL.md file: YAML frontmatter (name + description) plus markdown instructions. The description is the trigger — write when to use it, not just what it does. Keep SKILL.md under 500 lines and split reference material into linked files.',
-  relatedSlugs: ['claude-code-skills-vs-rules', 'cursor-rules-vs-skills', 'document-ai-agent-workflows'],
+  relatedSlugs: ['claude-code-skills-vs-rules', 'cursor-rules-vs-skills', 'install-claude-code'],
   body: `
 ## What a Claude Code skill is (and is not)
 

@@ -4,6 +4,19 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
 
 ## Active primaries
 
+### install claude code
+
+- **Page:** `/blog/install-claude-code`
+- **Published:** 2026-07-12
+- **Intent:** Informational
+- **Volume / KD:** 22200 / 11 (dataforseo:2026-06-16)
+- **Cluster:**
+  - install claude code ✓
+  - claude code download ✓
+  - claude code setup ✓
+  - claude code installation guide ✓
+  - how to install claude code ✓
+
 ### claude code skills vs rules
 
 - **Page:** `/blog/claude-code-skills-vs-rules`
