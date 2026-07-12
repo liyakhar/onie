@@ -6,6 +6,12 @@
       "sourceType": "github",
       "skillPath": "skills/hallmark/SKILL.md",
       "computedHash": "8a8ecafd613f09e701330b5aa4a591ac539abb2605596df4a2394f03628d1d76"
+    },
+    "pmf-survey": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "skillPath": "skills/pmf-survey/SKILL.md",
+      "computedHash": "fce0643f1ea7d9e807bf6c65f9d76d25c728a15aa573d3bcb05871e82d68c9c4"
     }
   }
 }

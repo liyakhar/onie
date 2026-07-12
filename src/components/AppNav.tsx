@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router'
 import BetterAuthHeader from '#/integrations/better-auth/header-user'
 import { NotificationBell } from '#/components/NotificationBell'
 import { OnieMark } from '#/components/OnieMark'
-import ThemeToggle from '#/components/ThemeToggle'
 import { authClient } from '#/lib/auth-client'
 import { Plus } from 'lucide-react'
 import { appNavActiveOptions } from '#/lib/nav-active'
@@ -50,7 +49,6 @@ export default function AppNav() {
               <NotificationBell />
             </>
           )}
-          <ThemeToggle />
           <BetterAuthHeader />
         </div>
       </div>

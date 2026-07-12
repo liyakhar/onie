@@ -3,16 +3,12 @@ import { createFileRoute, Link, notFound, useRouter } from '@tanstack/react-rout
 import { getPost, forkPost } from '#/server/posts'
 import { getComments } from '#/server/comments'
 import { toggleFollow } from '#/server/profiles'
-import { categoryLabel } from '#/lib/categories'
-import { kindLabel } from '#/lib/kinds'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
 import { MarkdownContent } from '#/components/MarkdownContent'
 import { PostEngagement } from '#/components/PostEngagement'
 import { CommentsSection } from '#/components/CommentsSection'
-import { ContentTableOfContents } from '#/components/ContentTableOfContents'
 import { authClient } from '#/lib/auth-client'
 import { loginSearch } from '#/lib/auth-nav'
-import { isExamplePost } from '#/lib/example-content'
 import { GitFork, Copy, Pencil, Check } from 'lucide-react'
 import { BookmarkButton } from '#/components/BookmarkButton'
 import {
@@ -86,7 +82,6 @@ function PostPage() {
 
   const username = post.author.profile?.username
   const isOwn = session?.user?.id === post.author.id
-  const example = isExamplePost({ id: post.id, author: post.author })
   const date = new Date(post.createdAt).toLocaleDateString(undefined, {
     month: 'long',
     day: 'numeric',
@@ -133,19 +128,32 @@ function PostPage() {
   }
 
   return (
-    <main id="main" className="app-page app-page--wide">
-      <header className="app-page__head">
-        <p className="app-page__eyebrow">
-          {example && (
-            <span className="post-detail__example-tag" title="Demo workflow published by Onie">
-              Example ·{' '}
-            </span>
-          )}
-          <span className="post-detail__kind-badge">{kindLabel(post.kind)}</span>
-          <span className="post-detail__field-badge">{categoryLabel(post.category)}</span>
-        </p>
+    <main id="main" className="app-page post-detail-page">
+      <header className="post-detail__header">
         <h1 className="app-page__title">{post.title}</h1>
         {post.description && <p className="app-page__lede">{post.description}</p>}
+
+        <div className="post-detail__byline">
+          {username ? (
+            <Link to="/u/$username" params={{ username }} className="post-detail__author">
+              <Avatar className="h-9 w-9 border border-[var(--line)]">
+                <AvatarImage src={post.author.image ?? undefined} />
+                <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <span>
+                <strong>{post.author.name}</strong>
+                <small>@{username} · <time dateTime={new Date(post.createdAt).toISOString()}>{date}</time></small>
+              </span>
+            </Link>
+          ) : (
+            <time className="post-detail__author-handle" dateTime={new Date(post.createdAt).toISOString()}>{date}</time>
+          )}
+          {username && !isOwn && session?.user && (
+            <button type="button" className="post-detail__follow" onClick={() => void handleFollow()}>
+              Follow
+            </button>
+          )}
+        </div>
       </header>
 
       {post.tools.length > 0 && (
@@ -177,7 +185,7 @@ function PostPage() {
         </p>
       )}
 
-      <div className="post-detail__action-bar">
+      <div className="post-detail__action-bar" aria-label="Workflow actions">
         <div className="post-detail__action-bar-primary">
           <button type="button" className="post-action post-action--primary" onClick={() => void handleCopy()}>
             {copied ? (
@@ -214,46 +222,11 @@ function PostPage() {
         />
       </div>
 
-      <div className="post-detail__meta">
-        {username ? (
-          <Link to="/u/$username" params={{ username }} className="post-detail__author">
-            <Avatar className="h-10 w-10 border border-[var(--line)]">
-              <AvatarImage src={post.author.image ?? undefined} />
-              <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="post-detail__author-name">{post.author.name}</p>
-              <p className="post-detail__author-handle">
-                @{username}
-                {post.author.profile?.headline && (
-                  <> · {post.author.profile.headline}</>
-                )}
-              </p>
-              <p className="post-detail__author-date">
-                <time dateTime={new Date(post.createdAt).toISOString()}>{date}</time>
-              </p>
-            </div>
-          </Link>
-        ) : (
-          <p className="post-detail__author-handle">
-            <time dateTime={new Date(post.createdAt).toISOString()}>{date}</time>
-          </p>
-        )}
-        {username && !isOwn && session?.user && (
-          <button type="button" className="btn btn--compact" onClick={() => void handleFollow()}>
-            <span className="btn__label">Follow</span>
-          </button>
-        )}
-      </div>
-
       {forkError && <p className="post-detail__error">{forkError}</p>}
 
-      <div className="post-detail__layout">
-        <ContentTableOfContents content={post.content} className="post-detail__toc" />
-        <article className="post-detail__body">
-          <MarkdownContent content={post.content} />
-        </article>
-      </div>
+      <article className="post-detail__body">
+        <MarkdownContent content={post.content} />
+      </article>
 
       <CommentsSection postId={post.id} initialComments={comments} />
     </main>

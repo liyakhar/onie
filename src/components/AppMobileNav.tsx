@@ -33,7 +33,7 @@ export function AppMobileNav() {
         activeProps={{ className: 'app-mobile-nav__item is-active' }}
       >
         <Home className="h-5 w-5" aria-hidden="true" />
-        <span>Home</span>
+        <span>Feed</span>
       </Link>
       <Link
         to="/app/explore"

@@ -19,7 +19,6 @@ import {
   jsonLdScript,
   organizationJsonLd,
 } from '#/lib/seo'
-import { themeInitScript } from '#/lib/theme'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -33,7 +32,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { name: 'theme-color', content: '#1a1a18' },
+      { name: 'theme-color', content: '#e7e1d8' },
       ...googleSiteVerificationMeta(),
       ...rootMeta.meta,
     ],
@@ -48,9 +47,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="press" suppressHydrationWarning>
+    <html lang="en" className="light" data-theme="light" data-accent="rosin">
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <HeadContent />
       </head>
       <body className="antialiased [overflow-wrap:anywhere]">

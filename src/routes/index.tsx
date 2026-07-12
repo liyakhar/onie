@@ -1,28 +1,20 @@
+import { useState } from 'react'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { ArrowRight, Search } from 'lucide-react'
 import Footer from '#/components/Footer'
 import { OnieMark } from '#/components/OnieMark'
-import ThemeControls from '#/components/ThemeControls'
 import { PostCard } from '#/components/PostCard'
 import { authClient } from '#/lib/auth-client'
 import { loginSearch } from '#/lib/auth-nav'
-import { buildPageMeta, jsonLdScript, webSiteJsonLd } from '#/lib/seo'
-import { getTopWorkflowsWeek } from '#/server/posts'
 import { CATEGORIES } from '#/lib/categories'
-import { Search } from 'lucide-react'
-import { useState } from 'react'
-
-const SECTIONS = [
-  { id: 'index', num: '00', label: 'Overview' },
-  { id: 'what', num: '01', label: "Who it's for" },
-  { id: 'how', num: '02', label: 'How it works' },
-  { id: 'start', num: '03', label: 'Get started' },
-] as const
+import { buildPageMeta, jsonLdScript, webSiteJsonLd } from '#/lib/seo'
+import { getFeedPosts } from '#/server/posts'
 
 const landingMeta = buildPageMeta({
   path: '/',
-  title: 'Agent workflows from people doing the work',
+  title: 'Find agent workflows that work',
   description:
-    'Browse agent workflows from practitioners in the field — prompts, skills, and setups tagged by discipline and stack.',
+    'Search practical agent workflows from people doing the work — prompts, tools, and setups organized by field.',
 })
 
 export const Route = createFileRoute('/')({
@@ -32,8 +24,14 @@ export const Route = createFileRoute('/')({
     scripts: [jsonLdScript(webSiteJsonLd())],
   }),
   loader: async () => {
-    const topThisWeek = await getTopWorkflowsWeek()
-    return { topThisWeek }
+    try {
+      const popularWorkflows = (
+        await getFeedPosts({ data: { tab: 'discover' } })
+      ).slice(0, 8)
+      return { popularWorkflows }
+    } catch {
+      return { popularWorkflows: [] }
+    }
   },
   component: LandingPage,
 })
@@ -41,11 +39,11 @@ export const Route = createFileRoute('/')({
 function LandingPage() {
   const navigate = useNavigate()
   const { data: session } = authClient.useSession()
-  const { topThisWeek } = Route.useLoaderData()
+  const { popularWorkflows } = Route.useLoaderData()
   const [searchQ, setSearchQ] = useState('')
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSearch = (event: React.FormEvent) => {
+    event.preventDefault()
     void navigate({
       to: '/app/explore',
       search: searchQ.trim() ? { q: searchQ.trim() } : {},
@@ -53,223 +51,114 @@ function LandingPage() {
   }
 
   return (
-    <div className="index-page">
-      <main className="index-page__grid" id="main">
-        <aside className="index-toc" aria-label="Table of contents">
-          <a href="#index" className="index-toc__wordmark">
-            <OnieMark variant="display" as="p" />
-          </a>
-          <span className="index-toc__role">Agent workflows · by field</span>
-
-          <nav>
-            <ul className="index-toc__list">
-              {SECTIONS.map((section) => (
-                <li key={section.id}>
-                  <a href={`#${section.id}`}>
-                    <span className="index-toc__num">{section.num}</span>
-                    <span>{section.label}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div className="index-toc__actions">
-            <ThemeControls />
-            <Link to="/app/explore" className="btn btn--compact">
-              <span className="btn__label">Explore</span>
+    <div className="discovery-page">
+      <header className="discovery-nav">
+        <Link to="/" aria-label="Onie home" className="discovery-nav__brand">
+          <OnieMark variant="display" as="span" />
+        </Link>
+        <nav className="discovery-nav__links" aria-label="Main navigation">
+          <Link to="/app/explore">Explore</Link>
+          <Link to="/app">Feed</Link>
+          {session?.user ? (
+            <Link to="/new" className="discovery-nav__action">Publish</Link>
+          ) : (
+            <Link to="/login" search={loginSearch({ signup: false })}>
+              Sign in
             </Link>
-            {session?.user ? (
-              <Link to="/app" className="index-toc__link">
-                Open app
+          )}
+        </nav>
+      </header>
+
+      <main id="main" className="discovery-main">
+        <section className="discovery-hero" aria-labelledby="discovery-title">
+          <p className="discovery-kicker">The agent workflow directory</p>
+          <h1 id="discovery-title">Find a workflow for the work in front of you.</h1>
+          <p className="discovery-intro">
+            Search the prompts, tools, and working setups shared by people who use them.
+          </p>
+
+          <form className="discovery-search" onSubmit={handleSearch} role="search">
+            <Search aria-hidden="true" />
+            <label className="sr-only" htmlFor="workflow-search">Search workflows</label>
+            <input
+              id="workflow-search"
+              type="search"
+              autoComplete="off"
+              value={searchQ}
+              onChange={(event) => setSearchQ(event.target.value)}
+              placeholder="Try ‘research synthesis’ or ‘code review’"
+            />
+            <button type="submit" aria-label="Search workflows">
+              <span>Search</span>
+              <ArrowRight aria-hidden="true" />
+            </button>
+          </form>
+
+          <div className="discovery-fields" aria-label="Browse workflows by field">
+            <span>Browse:</span>
+            {CATEGORIES.slice(0, 8).map((category) => (
+              <Link
+                key={category.value}
+                to="/app/explore"
+                search={{ category: category.value }}
+              >
+                {category.label}
               </Link>
-            ) : (
-              <Link to="/login" className="index-toc__link">
-                Sign in
-              </Link>
-            )}
+            ))}
+            <Link to="/app/explore">All fields</Link>
           </div>
-        </aside>
+        </section>
 
-        <article className="index-main">
-          <section className="index-section" id="index">
-            <p className="index-section__num">00 · Overview</p>
-            <h1 className="index-section__head index-section__head--lede">
-              AI agents work. The setups that make them useful rarely get shared.
-            </h1>
-            <div className="index-section__body">
-              <p>
-                <strong>Onie</strong> is a public feed of agent workflows from practitioners in
-                the field. Each post documents what they run, how it is wired, and which tools
-                it depends on — tagged by discipline and stack.
-              </p>
-
-              <form className="landing-search" onSubmit={handleSearch}>
-                <Search className="landing-search__icon" aria-hidden="true" />
-                <input
-                  className="landing-search__input"
-                  type="search"
-                  value={searchQ}
-                  onChange={(e) => setSearchQ(e.target.value)}
-                  placeholder="Search workflows, tools, or people…"
-                />
-                <button type="submit" className="btn btn--compact">
-                  <span className="btn__label">Explore</span>
-                </button>
-              </form>
-
-              {topThisWeek.length > 0 && (
-                <section className="landing-trending" aria-labelledby="landing-trending-h">
-                  <h2 className="landing-trending__title" id="landing-trending-h">
-                    Popular this week
-                  </h2>
-                  <ol className="ledger" aria-label="Top workflows this week">
-                    {topThisWeek.slice(0, 3).map((post, index) => (
-                      <PostCard
-                        key={post.id}
-                        post={post}
-                        ranked={index + 1}
-                        variant="ledger"
-                      />
-                    ))}
-                  </ol>
-                  <Link to="/app/explore" search={{ view: 'top' }} className="link-arrow">
-                    <span>See all trending</span>
-                  </Link>
-                </section>
-              )}
-
-              <div className="landing-fields" aria-label="Browse by field">
-                {CATEGORIES.slice(0, 8).map((cat) => (
-                  <Link
-                    key={cat.value}
-                    to="/app/explore"
-                    search={{ category: cat.value }}
-                    className="landing-field-chip"
-                  >
-                    {cat.label}
-                  </Link>
-                ))}
-                <Link to="/app/explore" className="landing-field-chip landing-field-chip--more">
-                  All fields
-                </Link>
-              </div>
-
-              <p>
-                UX research synthesis, SaaS shipping loops, literature reviews, code review
-                pipelines — searchable in Explore.
-              </p>
-              <p>
-                Follow peers in your discipline. Publish the setups you run in your own work.
-              </p>
+        <section className="discovery-results" aria-labelledby="popular-workflows-title">
+          <div className="discovery-section-head">
+            <div>
+              <p>Start here</p>
+              <h2 id="popular-workflows-title">Popular workflows</h2>
             </div>
-          </section>
+            <Link to="/app/explore" className="discovery-section-link">
+              Explore all <ArrowRight aria-hidden="true" />
+            </Link>
+          </div>
 
-          <section className="index-section" id="what">
-            <p className="index-section__num">01 · Who it&apos;s for</p>
-            <h2 className="index-section__head">Workflows by field and tool.</h2>
-            <div className="index-section__body">
-              <p>
-                Workflows are tagged by discipline and tool so you can filter to your practice:
-              </p>
-              <ul>
-                <li>
-                  <strong>UX / design</strong> — research synthesis, prototyping, design QA
-                </li>
-                <li>
-                  <strong>SaaS / product</strong> — PRDs, scaffolding, launch checklists
-                </li>
-                <li>
-                  <strong>Science / research</strong> — paper triage, replication notes, lab drafts
-                </li>
-                <li>
-                  <strong>Engineering / DevOps</strong> — code review, CI, infra scaffolding
-                </li>
-              </ul>
-              <p>
-                Your feed tracks who you follow. Explore is the public catalog — search by field,
-                tool, or keyword.
-              </p>
+          {popularWorkflows.length > 0 ? (
+            <ol className="ledger discovery-ledger" aria-label="Popular workflows">
+              {popularWorkflows.map((post, index) => (
+                <PostCard key={post.id} post={post} ranked={index + 1} variant="ledger" />
+              ))}
+            </ol>
+          ) : (
+            <div className="discovery-empty">
+              <p>The workflow index is being prepared.</p>
+              <Link to="/app/explore">Open Explore</Link>
             </div>
-          </section>
+          )}
+        </section>
 
-          <section className="index-section" id="how">
-            <p className="index-section__num">02 · How it works</p>
-            <h2 className="index-section__head">Browse, follow, share.</h2>
-            <div className="index-section__body">
-              <div className="index-table-wrap">
-                <table className="index-table" aria-label="How Onie works">
-                  <thead>
-                    <tr>
-                      <th>Step</th>
-                      <th>Action</th>
-                      <th>Outcome</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>01</td>
-                      <td>Browse Explore</td>
-                      <td>Browse workflows by field or tool in Explore</td>
-                    </tr>
-                    <tr>
-                      <td>02</td>
-                      <td>Follow practitioners</td>
-                      <td>Your feed collects workflows from people in your field</td>
-                    </tr>
-                    <tr>
-                      <td>03</td>
-                      <td>Publish a workflow</td>
-                      <td>Post prompts, skills, and file layouts with full context</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </section>
-
-          <section className="index-section" id="start">
-            <p className="index-section__num">03 · Get started</p>
-            <h2 className="index-section__head">Open Explore or sign in.</h2>
-            <div className="index-section__body">
-              <ul className="index-links">
-                <li>
-                  <span className="index-links__label">Explore</span>
-                  <div>
-                    <Link to="/app/explore">Browse workflows and people</Link>
-                    <span className="index-links__sub">
-                      Search by field, tool, or keyword.
-                    </span>
-                  </div>
-                </li>
-                <li>
-                  <span className="index-links__label">Home</span>
-                  <div>
-                    <Link to="/app">Your personalized feed</Link>
-                    <span className="index-links__sub">
-                      For you and Following tabs — sign in to follow practitioners.
-                    </span>
-                  </div>
-                </li>
-                <li>
-                  <span className="index-links__label">Account</span>
-                  <div>
-                    <Link
-                      to="/login"
-                      search={session?.user ? undefined : loginSearch({ signup: true })}
-                    >
-                      {session?.user ? 'You are signed in' : 'Create an account'}
-                    </Link>
-                    <span className="index-links__sub">
-                      Publish workflows from your own practice.
-                    </span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </section>
-        </article>
+        <section className="discovery-paths" aria-label="More ways to use Onie">
+          <Link to="/app/explore">
+            <span>01</span>
+            <strong>Explore every workflow</strong>
+            <small>Search by field, tool, person, or keyword.</small>
+            <ArrowRight aria-hidden="true" />
+          </Link>
+          <Link to="/app">
+            <span>02</span>
+            <strong>Follow your field</strong>
+            <small>Build a feed from practitioners you trust.</small>
+            <ArrowRight aria-hidden="true" />
+          </Link>
+          <Link
+            to={session?.user ? '/new' : '/login'}
+            search={session?.user ? undefined : loginSearch({ signup: true })}
+          >
+            <span>03</span>
+            <strong>Share what works</strong>
+            <small>Publish the setup behind your result.</small>
+            <ArrowRight aria-hidden="true" />
+          </Link>
+        </section>
       </main>
+
       <Footer variant="landing" />
     </div>
   )

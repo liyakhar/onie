@@ -2,13 +2,12 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import type { Category, PostKind } from '#/generated/prisma/client'
 import { FeedSearchBar } from '#/components/FeedSearchBar'
 import { PostCard } from '#/components/PostCard'
-import { getFeedPosts, getPopularTools, getTopWorkflowsWeek } from '#/server/posts'
+import { getFeedPosts } from '#/server/posts'
 import { searchProfiles } from '#/server/profiles'
 import { profileFieldLabel } from '#/lib/categories'
 import { authClient } from '#/lib/auth-client'
 import { loginSearch } from '#/lib/auth-nav'
 import { PeopleCard } from '#/components/PeopleCard'
-import { KindExplainer } from '#/components/KindExplainer'
 import { breadcrumbJsonLd, buildPageMeta, jsonLdScript } from '#/lib/seo'
 import { cn } from '#/lib/utils'
 
@@ -24,7 +23,16 @@ type ExploreSearch = {
   category?: Category
   kind?: PostKind
   tool?: string
-  view?: 'workflows' | 'people' | 'top'
+  view?: 'workflows' | 'people'
+}
+
+function peopleMeta(person: {
+  field: Category
+  user: { _count: { posts: number; followers: number } }
+}) {
+  const fieldLabel = profileFieldLabel(person.field)
+  const stats = `${person.user._count.followers} followers · ${person.user._count.posts} workflows`
+  return fieldLabel ? `${fieldLabel} · ${stats}` : stats
 }
 
 export const Route = createFileRoute('/app/explore')({
@@ -51,10 +59,7 @@ export const Route = createFileRoute('/app/explore')({
       kind:
         typeof search.kind === 'string' ? (search.kind as PostKind) : undefined,
       tool: typeof search.tool === 'string' ? search.tool : undefined,
-      view:
-        view === 'people' || view === 'top' || view === 'workflows'
-          ? view
-          : 'workflows',
+      view: view === 'people' || view === 'workflows' ? view : 'workflows',
     }
   },
   loaderDeps: ({ search }) => search,
@@ -62,7 +67,7 @@ export const Route = createFileRoute('/app/explore')({
     const hasFilters = Boolean(deps.q || deps.category || deps.kind || deps.tool)
     const view = deps.view ?? 'workflows'
 
-    const [posts, people, topThisWeek, popularTools] = await Promise.all([
+    const [posts, people] = await Promise.all([
       view === 'workflows' || hasFilters
         ? getFeedPosts({
             data: {
@@ -75,12 +80,16 @@ export const Route = createFileRoute('/app/explore')({
           })
         : Promise.resolve([]),
       view === 'people' || (hasFilters && deps.q)
-        ? searchProfiles({ data: { category: deps.category, q: deps.q } })
+        ? searchProfiles({
+            data: {
+              category: deps.category,
+              q: deps.q,
+              sort: 'popular',
+            },
+          })
         : Promise.resolve([]),
-      view === 'top' && !hasFilters ? getTopWorkflowsWeek() : Promise.resolve([]),
-      !hasFilters ? getPopularTools() : Promise.resolve([]),
     ])
-    return { posts, people, topThisWeek, popularTools, hasFilters }
+    return { posts, people, hasFilters }
   },
   component: ExplorePage,
 })
@@ -88,8 +97,7 @@ export const Route = createFileRoute('/app/explore')({
 function ExplorePage() {
   const navigate = useNavigate()
   const { q, category, kind, tool, view } = Route.useSearch()
-  const { posts, people, topThisWeek, popularTools, hasFilters } =
-    Route.useLoaderData()
+  const { posts, people, hasFilters } = Route.useLoaderData()
   const { data: session } = authClient.useSession()
   const isSignedIn = Boolean(session?.user)
   const activeView = hasFilters ? 'workflows' : (view ?? 'workflows')
@@ -98,19 +106,6 @@ function ExplorePage() {
     void navigate({
       to: '/app/explore',
       search: { q, category, kind, tool, view: next },
-    })
-  }
-
-  const setTool = (nextTool: string | undefined) => {
-    void navigate({
-      to: '/app/explore',
-      search: {
-        q,
-        category,
-        kind,
-        tool: tool === nextTool ? undefined : nextTool,
-        view: 'workflows',
-      },
     })
   }
 
@@ -124,7 +119,6 @@ function ExplorePage() {
   return (
     <main id="main" className="app-page">
       <header className="app-page__head">
-        <p className="app-page__eyebrow">Discover</p>
         <h1 className="app-page__title">Explore</h1>
         <p className="app-page__lede">
           Find workflows and people by type, field, tool, or keyword.
@@ -143,23 +137,6 @@ function ExplorePage() {
           onClearFilters={clearFilters}
         />
       </div>
-
-      <KindExplainer />
-
-      {popularTools.length > 0 && !hasFilters && (
-        <div className="tool-chips" aria-label="Popular tools">
-          {popularTools.slice(0, 12).map((t) => (
-            <button
-              key={t}
-              type="button"
-              className={cn('tool-chip', tool === t && 'is-active')}
-              onClick={() => setTool(t)}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
-      )}
 
       {!hasFilters && (
         <div className="feed-tabs feed-tabs--segmented" role="tablist" aria-label="Explore views">
@@ -181,35 +158,7 @@ function ExplorePage() {
           >
             People
           </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeView === 'top'}
-            className={cn('feed-tab', activeView === 'top' && 'is-active')}
-            onClick={() => setView('top')}
-          >
-            Top week
-          </button>
         </div>
-      )}
-
-      {activeView === 'top' && !hasFilters && (
-        <section className="app-section" aria-labelledby="trending-h">
-          <h2 className="app-section__title" id="trending-h">
-            Top this week
-          </h2>
-          <ol className="ledger" aria-label="Top workflows this week">
-            {topThisWeek.length === 0 ? (
-              <li className="feed-empty">
-                <p>No trending workflows yet this week.</p>
-              </li>
-            ) : (
-              topThisWeek.map((post, index) => (
-                <PostCard key={post.id} post={post} ranked={index + 1} variant="ledger" />
-              ))
-            )}
-          </ol>
-        </section>
       )}
 
       {activeView === 'people' && !hasFilters && (
@@ -221,19 +170,15 @@ function ExplorePage() {
             <p className="feed-empty">No people to show yet.</p>
           ) : (
             <ul className="people-grid">
-              {people.map((person) => {
-                const fieldLabel = profileFieldLabel(person.field)
-                return (
-                  <PeopleCard
-                    key={person.id}
-                    username={person.username}
-                    name={person.user.name}
-                    image={person.user.image}
-                    userId={person.user.id}
-                    meta={`${fieldLabel ? `${fieldLabel} · ` : ''}${person.user._count.posts} workflows`}
-                  />
-                )
-              })}
+              {people.map((person) => (
+                <PeopleCard
+                  key={person.id}
+                  username={person.username}
+                  name={person.user.name}
+                  image={person.user.image}
+                  meta={peopleMeta(person)}
+                />
+              ))}
             </ul>
           )}
         </section>
@@ -270,15 +215,22 @@ function ExplorePage() {
                           <span className="btn__label">Sign in</span>
                         </Link>
                       )}
-                      <Link to="/app/explore" search={{ view: 'top' }} className="btn btn--compact">
-                        <span className="btn__label">See trending</span>
+                      <Link to="/app/explore" search={{ view: 'people' }} className="btn btn--compact">
+                        <span className="btn__label">Browse people</span>
                       </Link>
                     </div>
                   </>
                 )}
               </li>
             ) : (
-              posts.map((post) => <PostCard key={post.id} post={post} variant="ledger" />)
+              posts.map((post, index) => (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  ranked={!hasFilters ? index + 1 : undefined}
+                  variant="ledger"
+                />
+              ))
             )}
           </ol>
         </section>
@@ -290,19 +242,15 @@ function ExplorePage() {
             People
           </h2>
           <ul className="people-grid">
-            {people.map((person) => {
-              const fieldLabel = profileFieldLabel(person.field)
-              return (
-                <PeopleCard
-                  key={person.id}
-                  username={person.username}
-                  name={person.user.name}
-                  image={person.user.image}
-                  userId={person.user.id}
-                  meta={`${fieldLabel ? `${fieldLabel} · ` : ''}${person.user._count.posts} workflows`}
-                />
-              )
-            })}
+            {people.map((person) => (
+              <PeopleCard
+                key={person.id}
+                username={person.username}
+                name={person.user.name}
+                image={person.user.image}
+                meta={peopleMeta(person)}
+              />
+            ))}
           </ul>
         </section>
       )}

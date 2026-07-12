@@ -1,14 +1,11 @@
 import type { ReactNode } from 'react'
 import { Link } from '@tanstack/react-router'
 import type { Category, PostKind } from '#/generated/prisma/client'
-import { categoryLabel } from '#/lib/categories'
-import { kindLabel } from '#/lib/kinds'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
 import { Badge } from '#/components/ui/badge'
 import { Card, CardContent, CardHeader } from '#/components/ui/card'
 import { PostEngagement } from '#/components/PostEngagement'
 import { cn } from '#/lib/utils'
-import { isExamplePost } from '#/lib/example-content'
 import { Pin, TrendingUp } from 'lucide-react'
 
 export type PostCardData = {
@@ -41,6 +38,7 @@ export function PostCard({
   className,
   variant = 'card',
   actions,
+  showAuthor = true,
 }: {
   post: PostCardData
   pinned?: boolean
@@ -48,6 +46,7 @@ export function PostCard({
   className?: string
   variant?: 'card' | 'ledger'
   actions?: ReactNode
+  showAuthor?: boolean
 }) {
   const username = post.author.profile?.username
   const date = new Date(post.createdAt).toLocaleDateString(undefined, {
@@ -57,14 +56,9 @@ export function PostCard({
   })
   const likeCount = post._count?.likes ?? 0
   const commentCount = post._count?.comments ?? 0
-  const example = isExamplePost({ id: post.id, author: post.author })
-
   if (variant === 'ledger') {
     const metaPrimary = [
-      example ? 'Example' : null,
-      kindLabel(post.kind),
-      categoryLabel(post.category),
-      username ? post.author.name : null,
+      showAuthor && username ? post.author.name : null,
       pinned ? 'Pinned' : null,
       ranked !== undefined ? `#${ranked}` : null,
     ]
@@ -73,7 +67,10 @@ export function PostCard({
 
     const metaSecondary = [
       post.tools.length > 0 ? post.tools.slice(0, 3).join(', ') : null,
-      `${likeCount} likes · ${commentCount} comments`,
+      likeCount > 0 ? `${likeCount} ${likeCount === 1 ? 'like' : 'likes'}` : null,
+      commentCount > 0
+        ? `${commentCount} ${commentCount === 1 ? 'comment' : 'comments'}`
+        : null,
     ]
       .filter(Boolean)
       .join(' · ')
@@ -89,7 +86,7 @@ export function PostCard({
           {post.title}
         </Link>
         <span className="ledger__kind">
-          <span className="ledger__kind-primary">{metaPrimary}</span>
+          {metaPrimary ? <span className="ledger__kind-primary">{metaPrimary}</span> : null}
           {metaSecondary ? (
             <span className="ledger__kind-secondary">{metaSecondary}</span>
           ) : null}
@@ -141,11 +138,6 @@ export function PostCard({
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-1.5">
-            {example && (
-              <Badge variant="outline" className="border-[var(--color-rule-2)] text-[var(--ink-muted)]">
-                Example
-              </Badge>
-            )}
             {ranked !== undefined && (
               <Badge variant="outline" className="gap-1 border-[var(--accent)]/30 text-[var(--accent)]">
                 <TrendingUp className="h-3 w-3" />
@@ -158,12 +150,6 @@ export function PostCard({
                 Pinned
               </Badge>
             )}
-            <Badge variant="secondary" className="bg-[var(--code-bg)] text-[var(--ink-soft)]">
-              {kindLabel(post.kind)}
-            </Badge>
-            <Badge variant="secondary" className="bg-[var(--code-bg)] text-[var(--ink-soft)]">
-              {categoryLabel(post.category)}
-            </Badge>
           </div>
         </div>
         <Link to="/p/$postId" params={{ postId: post.id }} className="no-underline">

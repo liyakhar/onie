@@ -49,11 +49,15 @@ Open http://localhost:3000
 
 **Demo accounts** (after seed):
 
-| Email | Password |
-|-------|----------|
-| maya@weavel.demo | demo12345 |
-| alex@weavel.demo | demo12345 |
-| sam@weavel.demo | demo12345 |
+| Handle | Email | Password |
+|--------|-------|----------|
+| liya_k | liya@onie.dev | onie-demo-2026 |
+| sasha_zelts | sasha.zelts@onie.dev | onie-demo-2026 |
+| mathiew_builds | mathiew@onie.dev | onie-demo-2026 |
+| matios_apps | matios@onie.dev | onie-demo-2026 |
+| rayan_roberts | rayan@onie.dev | onie-demo-2026 |
+
+On `/login`, use the **Demo accounts** buttons for one-click sign-in.
 
 ## Deploy to Railway
 

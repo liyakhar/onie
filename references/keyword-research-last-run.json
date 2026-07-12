@@ -1,0 +1,22 @@
+{
+  "runAt": "2026-06-16T21:15:01.659Z",
+  "filters": {
+    "minVolume": 100,
+    "maxKd": 30,
+    "intent": "informational"
+  },
+  "seeds": [
+    "claude code skills",
+    "mcp server setup",
+    "cursor rules vs skills",
+    "shared prompt library",
+    "document ai agent workflows",
+    "agent workflow template"
+  ],
+  "apiCostUsd": 0.038599999999999995,
+  "ideasReturned": 80,
+  "overviewRefreshed": 6,
+  "rowsAdded": 80,
+  "rowsUpdated": 5,
+  "totalRows": 108
+}

@@ -1,8 +1,8 @@
 /* Hallmark · tokens — gen-13
  * route: custom (tuned) · vibe: "ink-black press, off-register, broken-grid, kinetic"
- * paper: oklch(13% 0.014 25) · accent: oklch(72% 0.16 330) rosin pink
+ * paper: oklch(90% 0.011 58) · accent: oklch(72% 0.16 330) rosin pink
  * display: Bricolage Grotesque (variable) · body: Fraunces (variable) · outlier: JetBrains Mono
- * axes: dark / display-heavy / warm
+ * axes: light / display-heavy / warm
  *
  * One palette, two surfaces: the page runs on an ink-black press ground;
  * the "proof sheet" sections invert to a warm bone paper so the specimens
@@ -10,16 +10,16 @@
  */
 
 :root {
-  /* ── Press ground — the dark default surface ──────────────── */
-  --color-paper:      oklch(13%  0.014 25);   /* ink-black, warm-red tilt — never #000 */
-  --color-paper-2:    oklch(17%  0.018 25);   /* elevated panel */
-  --color-paper-3:    oklch(22%  0.022 24);   /* deeper hover / plate */
-  --color-rule:       oklch(32%  0.020 24);   /* hairline divider */
-  --color-rule-2:     oklch(44%  0.024 22);   /* heavier rule */
-  --color-muted:      oklch(64%  0.020 26);   /* de-emphasised text */
-  --color-neutral:    oklch(74%  0.016 28);   /* mid text */
-  --color-ink-2:      oklch(86%  0.012 30);   /* secondary headings/body */
-  --color-ink:        oklch(95%  0.010 32);   /* primary text — warm bone */
+  /* ── Light paper ground — the fixed Onie surface ──────────── */
+  --color-paper:      oklch(90%  0.011 58);   /* warm paper */
+  --color-paper-2:    oklch(86%  0.010 55);   /* elevated panel */
+  --color-paper-3:    oklch(81%  0.009 52);   /* deeper hover / plate */
+  --color-rule:       oklch(72%  0.012 50);   /* hairline divider */
+  --color-rule-2:     oklch(58%  0.012 48);   /* heavier rule */
+  --color-muted:      oklch(48%  0.012 42);   /* de-emphasised text */
+  --color-neutral:    oklch(40%  0.010 40);   /* mid text */
+  --color-ink-2:      oklch(30%  0.014 38);   /* secondary headings/body */
+  --color-ink:        oklch(22%  0.016 36);   /* primary text */
   --color-accent:     oklch(72%  0.16 330);   /* rosin pink — the one chromatic note */
   --color-accent-2:   oklch(72%  0.17 322);   /* off-register magenta ghost (misprint only) */
   --color-accent-ink: oklch(17%  0.024 32);   /* dark ink on accent fill — APCA-checked */

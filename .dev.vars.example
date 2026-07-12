@@ -1,0 +1,9 @@
+# Cloudflare Pages / Workers local preview (wrangler pages dev)
+# Copy to .dev.vars and fill in production values for a full preview.
+
+DATABASE_URL=
+BETTER_AUTH_SECRET=
+BETTER_AUTH_URL=https://onie.pages.dev
+SITE_URL=https://onie.pages.dev
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=

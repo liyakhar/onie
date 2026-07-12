@@ -3,7 +3,6 @@ import type { Category, PostKind } from '#/generated/prisma/client'
 import { getDb } from '#/server/db-access.server'
 import { getSessionUser } from '#/server/session.server'
 import { emitNotification } from '#/server/notifications.server'
-import { getSuggestedProfiles } from '#/server/profiles'
 
 export type PostSummary = {
   id: string
@@ -153,53 +152,26 @@ async function getForYouFeed(prisma: Awaited<ReturnType<typeof getDb>>, userId?:
   return merged
 }
 
-export const loadHomeFeed = createServerFn({ method: 'GET' })
-  .inputValidator((data: { tab?: 'for-you' | 'following' }) => data)
-  .handler(async ({ data }) => {
-    const user = await getSessionUser()
-    const tab = data.tab ?? 'for-you'
+export const loadHomeFeed = createServerFn({ method: 'GET' }).handler(async () => {
+  const user = await getSessionUser()
 
-    if (tab === 'following' && !user) {
-      return {
-        posts: [] as PostSummary[],
-        topThisWeek: [] as PostSummary[],
-        suggested: [],
-        tab,
-        field: 'OTHER' as Category,
-        isGuest: true,
-      }
+  if (!user) {
+    return {
+      posts: [] as PostSummary[],
+      isGuest: true,
     }
+  }
 
-    const prisma = await getDb()
-    const profile = user
-      ? await prisma.profile.findUnique({
-          where: { userId: user.id },
-          select: { field: true },
-        })
-      : null
-    const field = profile?.field ?? ('OTHER' as Category)
+  const posts = await getFeedPosts({ data: { tab: 'following' } })
 
-    const [rawPosts, topThisWeek, suggested] = await Promise.all([
-      getFeedPosts({ data: { tab: tab === 'following' ? 'following' : 'for-you' } }),
-      tab === 'for-you' ? getTopWorkflowsWeek() : Promise.resolve([]),
-      tab === 'for-you' && user
-        ? getSuggestedProfiles({ data: { field } })
-        : Promise.resolve([]),
-    ])
-
-    const trendingIds = new Set(topThisWeek.map((post) => post.id))
-    const posts =
-      tab === 'for-you' && trendingIds.size > 0
-        ? rawPosts.filter((post) => !trendingIds.has(post.id))
-        : rawPosts
-
-    return { posts, topThisWeek, suggested, tab, field, isGuest: !user }
-  })
+  return { posts, isGuest: false }
+})
 
 export const getFeedPosts = createServerFn({ method: 'GET' })
   .inputValidator(
     (data: {
       tab?: 'following' | 'discover' | 'for-you'
+      sort?: 'likes' | 'recent'
       category?: Category
       kind?: PostKind
       tool?: string
@@ -211,6 +183,7 @@ export const getFeedPosts = createServerFn({ method: 'GET' })
     const user = await getSessionUser()
     const tab = data.tab ?? 'discover'
     const q = data.q?.trim()
+    const sortByLikes = data.sort === 'likes' || (tab === 'discover' && data.sort !== 'recent')
 
     if (tab === 'for-you') {
       return getForYouFeed(prisma, user?.id)
@@ -240,7 +213,9 @@ export const getFeedPosts = createServerFn({ method: 'GET' })
         q,
         authorIds,
       }),
-      orderBy: { createdAt: 'desc' },
+      orderBy: sortByLikes
+        ? [{ likes: { _count: 'desc' } }, { createdAt: 'desc' }]
+        : { createdAt: 'desc' },
       take: 50,
       include: postInclude,
     })

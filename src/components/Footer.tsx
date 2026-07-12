@@ -29,10 +29,9 @@ export default function Footer({ variant = 'landing' }: { variant?: 'landing' | 
     <footer className="foot" role="contentinfo">
       <OnieMark variant="display" as="p" />
       <p className="foot__tag">
-        Share the skills, prompts, and harnesses that actually work in your field.
+        Share or find the skills, prompts, and harnesses that actually work in your field.
       </p>
       <p className="foot__set">
-        Set in Bricolage Grotesque &amp; Fraunces, with JetBrains Mono for the margins.
         Built for builders working with AI agents.
       </p>
       <p className="foot__links">

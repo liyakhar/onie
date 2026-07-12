@@ -60,7 +60,7 @@ export function FeedSearchBar({
             : next.tool === undefined
               ? tool
               : next.tool,
-        view: view as 'workflows' | 'people' | 'top' | undefined,
+        view: view as 'workflows' | 'people' | undefined,
       },
     })
   }

@@ -1,7 +1,7 @@
 import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { tanstackStartCookies } from 'better-auth/tanstack-start'
-import { prisma } from '#/db.server'
+import { getPrisma } from '#/db.server'
 
 function slugify(value: string) {
   return value
@@ -12,6 +12,7 @@ function slugify(value: string) {
 }
 
 async function uniqueUsername(base: string) {
+  const prisma = getPrisma()
   let username = slugify(base) || 'agent'
   let attempt = 0
 
@@ -25,48 +26,83 @@ async function uniqueUsername(base: string) {
   }
 }
 
-export const auth = betterAuth({
-  baseURL: process.env.BETTER_AUTH_URL,
-  secret: process.env.BETTER_AUTH_SECRET,
-  database: prismaAdapter(prisma, {
-    provider: 'postgresql',
-  }),
-  emailAndPassword: {
-    enabled: true,
-    sendResetPassword: async ({ user, url }) => {
-      if (process.env.NODE_ENV === 'development') {
-        console.info(`[onie] Password reset for ${user.email}: ${url}`)
-      }
-      // Production: plug in your email provider here (Resend, Postmark, etc.)
-    },
-  },
-  socialProviders: {
-    ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
-      ? {
-          google: {
-            clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          },
+type Auth = ReturnType<typeof betterAuth>
+
+let authInstance: Auth | undefined
+
+function createAuth() {
+  const secret = process.env.BETTER_AUTH_SECRET
+  if (!secret) {
+    throw new Error('BETTER_AUTH_SECRET is not set')
+  }
+
+  const trustedOrigins =
+    process.env.NODE_ENV === 'development'
+      ? [
+          'http://localhost:3000',
+          'http://127.0.0.1:3000',
+          'http://localhost:3001',
+          'http://127.0.0.1:3001',
+        ]
+      : undefined
+
+  return betterAuth({
+    baseURL: process.env.BETTER_AUTH_URL,
+    trustedOrigins,
+    secret,
+    database: prismaAdapter(getPrisma(), {
+      provider: 'postgresql',
+    }),
+    emailAndPassword: {
+      enabled: true,
+      sendResetPassword: async ({ user, url }) => {
+        if (process.env.NODE_ENV === 'development') {
+          console.info(`[onie] Password reset for ${user.email}: ${url}`)
         }
-      : {}),
-  },
-  databaseHooks: {
-    user: {
-      create: {
-        after: async (user) => {
-          const base = user.name || user.email.split('@')[0]
-          const username = await uniqueUsername(base)
-          await prisma.profile.create({
-            data: {
-              userId: user.id,
-              username,
-              field: 'OTHER',
-              onboarded: false,
+      },
+    },
+    socialProviders: {
+      ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+        ? {
+            google: {
+              clientId: process.env.GOOGLE_CLIENT_ID,
+              clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             },
-          })
+          }
+        : {}),
+    },
+    databaseHooks: {
+      user: {
+        create: {
+          after: async (user) => {
+            const prisma = getPrisma()
+            const base = user.name || user.email.split('@')[0]
+            const username = await uniqueUsername(base)
+            await prisma.profile.create({
+              data: {
+                userId: user.id,
+                username,
+                field: 'OTHER',
+                onboarded: false,
+              },
+            })
+          },
         },
       },
     },
+    plugins: [tanstackStartCookies()],
+  })
+}
+
+export function getAuth() {
+  if (!authInstance) {
+    authInstance = createAuth()
+  }
+  return authInstance
+}
+
+export const auth: Auth = new Proxy({} as Auth, {
+  get(_target, prop, receiver) {
+    return Reflect.get(getAuth(), prop, receiver)
   },
-  plugins: [tanstackStartCookies()],
 })

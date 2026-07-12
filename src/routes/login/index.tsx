@@ -2,6 +2,7 @@ import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { authClient } from '#/lib/auth-client'
 import { loginSearch, type LoginSearch } from '#/lib/auth-nav'
+import { DEMO_ACCOUNTS, DEMO_PASSWORD } from '#/lib/demo-accounts'
 import { getMyProfile } from '#/server/profiles'
 import { buildPageMeta } from '#/lib/seo'
 
@@ -71,6 +72,7 @@ function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
+  const [demoLoading, setDemoLoading] = useState<string | null>(null)
 
   useEffect(() => {
     if (!isPending && session?.user) {
@@ -154,6 +156,27 @@ function LoginPage() {
     } catch {
       setError('Something went wrong. Try again.')
       setGoogleLoading(false)
+    }
+  }
+
+  const handleDemoLogin = async (account: (typeof DEMO_ACCOUNTS)[number]) => {
+    setError('')
+    setDemoLoading(account.id)
+
+    try {
+      const result = await authClient.signIn.email({
+        email: account.email,
+        password: DEMO_PASSWORD,
+      })
+      if (result.error) {
+        setError(result.error.message || `Could not sign in as ${account.loginLabel}`)
+      } else {
+        await goAfterAuth(router, redirectTo, false)
+      }
+    } catch {
+      setError('Something went wrong. Try again.')
+    } finally {
+      setDemoLoading(null)
     }
   }
 
@@ -337,6 +360,30 @@ function LoginPage() {
               ? 'Already have an account? Sign in'
               : "Don't have an account? Join"}
           </button>
+
+          {!isSignUp && (
+            <div className="login-demo">
+              <p className="login-demo__label">Demo accounts</p>
+              <p className="login-demo__hint">
+                One-click sign-in · password <code>{DEMO_PASSWORD}</code> for all
+              </p>
+              <ul className="login-demo__list">
+                {DEMO_ACCOUNTS.map((account) => (
+                  <li key={account.id}>
+                    <button
+                      type="button"
+                      className="login-demo__btn"
+                      disabled={Boolean(demoLoading) || loading || googleLoading}
+                      onClick={() => void handleDemoLogin(account)}
+                    >
+                      {demoLoading === account.id ? 'Signing in…' : account.loginLabel}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <p className="login-footnote">
             By continuing you agree to share workflows responsibly.
           </p>

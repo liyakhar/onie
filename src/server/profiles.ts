@@ -302,11 +302,12 @@ export const followMany = createServerFn({ method: 'POST' })
 
 export const searchProfiles = createServerFn({ method: 'GET' })
   .inputValidator(
-    (data: { q?: string; category?: Category }) => data,
+    (data: { q?: string; category?: Category; sort?: 'popular' | 'recent' }) => data,
   )
   .handler(async ({ data }) => {
     const prisma = await getDb()
     const q = data.q?.trim()
+    const sortPopular = data.sort !== 'recent'
 
     return prisma.profile.findMany({
       where: {
@@ -334,7 +335,9 @@ export const searchProfiles = createServerFn({ method: 'GET' })
           },
         },
       },
-      orderBy: { updatedAt: 'desc' },
+      orderBy: sortPopular
+        ? [{ user: { followers: { _count: 'desc' } } }, { updatedAt: 'desc' }]
+        : { updatedAt: 'desc' },
     })
   })
 
