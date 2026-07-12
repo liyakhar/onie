@@ -1,10 +1,7 @@
 import { PrismaClient } from '../prisma/generated/node/client.js'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { hashPassword } from 'better-auth/crypto'
-import {
-  DEMO_ACCOUNTS,
-  DEMO_PASSWORD,
-} from '../src/lib/demo-accounts.ts'
+import { DEMO_ACCOUNTS } from '../src/lib/demo-accounts.ts'
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
@@ -479,7 +476,7 @@ const userIdMap = new Map<string, string>()
 
 async function upsertDemoUser(
   demo: (typeof DEMO_ACCOUNTS)[number],
-  passwordHash: string,
+  passwordHash: string | null,
 ) {
   let userId = demo.id
 
@@ -519,24 +516,30 @@ async function upsertDemoUser(
 
   userIdMap.set(demo.id, userId)
 
-  const existingAccount = await prisma.account.findFirst({
-    where: { userId, providerId: 'credential' },
-  })
-
-  if (existingAccount) {
-    await prisma.account.update({
-      where: { id: existingAccount.id },
-      data: { password: passwordHash },
+  if (passwordHash) {
+    const existingAccount = await prisma.account.findFirst({
+      where: { userId, providerId: 'credential' },
     })
+
+    if (existingAccount) {
+      await prisma.account.update({
+        where: { id: existingAccount.id },
+        data: { password: passwordHash },
+      })
+    } else {
+      await prisma.account.create({
+        data: {
+          id: `${demo.id}-cred`,
+          accountId: userId,
+          providerId: 'credential',
+          userId,
+          password: passwordHash,
+        },
+      })
+    }
   } else {
-    await prisma.account.create({
-      data: {
-        id: `${demo.id}-cred`,
-        accountId: userId,
-        providerId: 'credential',
-        userId,
-        password: passwordHash,
-      },
+    await prisma.account.deleteMany({
+      where: { userId, providerId: 'credential' },
     })
   }
 
@@ -583,7 +586,10 @@ async function main() {
 
   await removeLegacyDemo()
 
-  const passwordHash = await hashPassword(DEMO_PASSWORD)
+  const seedDemoLogins = process.env.SEED_DEMO_LOGINS === 'true'
+  const passwordHash = seedDemoLogins
+    ? await hashPassword(process.env.SEED_DEMO_PASSWORD ?? 'onie-local-demo')
+    : null
 
   for (const demo of DEMO_ACCOUNTS) {
     await upsertDemoUser(demo, passwordHash)
@@ -687,8 +693,11 @@ async function main() {
     skipDuplicates: true,
   })
 
-  console.log(`Done. Password for all demo accounts: ${DEMO_PASSWORD}`)
-  console.log('Primary login: liya@onie.dev')
+  console.log(
+    seedDemoLogins
+      ? 'Done. Seed demo credential logins were enabled for this run.'
+      : 'Done. Seed demo credential logins are disabled; public personas only.',
+  )
   for (const demo of DEMO_ACCOUNTS) {
     console.log(`  @${demo.username} — ${demo.email}`)
   }

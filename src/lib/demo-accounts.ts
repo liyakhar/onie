@@ -1,5 +1,4 @@
-/** Demo builders seeded in `prisma/seed.ts` — shared by seed + login quick-switch. */
-export const DEMO_PASSWORD = 'onie-demo-2026'
+/** Seed builders used for cold-start content and non-production demos. */
 
 export type DemoAccount = {
   id: string

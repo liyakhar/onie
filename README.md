@@ -47,17 +47,18 @@ Open http://localhost:3000
 3. Add `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` to `.env.local`
 4. Restart the dev server — the login page shows **Continue with Google**
 
-**Demo accounts** (after seed):
+**Seed personas** (after seed):
 
-| Handle | Email | Password |
-|--------|-------|----------|
-| liya_k | liya@onie.dev | onie-demo-2026 |
-| sasha_zelts | sasha.zelts@onie.dev | onie-demo-2026 |
-| mathiew_builds | mathiew@onie.dev | onie-demo-2026 |
-| matios_apps | matios@onie.dev | onie-demo-2026 |
-| rayan_roberts | rayan@onie.dev | onie-demo-2026 |
+| Handle | Email |
+|--------|-------|
+| liya_k | liya@onie.dev |
+| sasha_zelts | sasha.zelts@onie.dev |
+| mathiew_builds | mathiew@onie.dev |
+| matios_apps | matios@onie.dev |
+| rayan_roberts | rayan@onie.dev |
 
-On `/login`, use the **Demo accounts** buttons for one-click sign-in.
+Seeded personas are public content authors by default, not shared login accounts.
+For a local throwaway demo database only, run the seed with `SEED_DEMO_LOGINS=true`.
 
 ## Deploy to Railway
 
