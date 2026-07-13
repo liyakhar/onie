@@ -5,7 +5,6 @@ import { OnieMark } from '#/components/OnieMark'
 import { authClient } from '#/lib/auth-client'
 import { loginSearch } from '#/lib/auth-nav'
 import { buildPageMeta, jsonLdScript, webSiteJsonLd } from '#/lib/seo'
-import { formatMoney, getDemoFinanceSummary } from '#/lib/finance-demo'
 
 const landingMeta = buildPageMeta({
   path: '/',
@@ -25,7 +24,6 @@ export const Route = createFileRoute('/')({
 
 function LandingPage() {
   const { data: session } = authClient.useSession()
-  const summary = getDemoFinanceSummary()
 
   return (
     <div className="discovery-page finance-landing">
@@ -68,18 +66,18 @@ function LandingPage() {
             </Link>
           </div>
 
-          <div className="finance-snapshot" aria-label="Demo budget snapshot">
+          <div className="finance-snapshot" aria-label="How Wollie starts">
             <div>
-              <span>Can spend</span>
-              <strong>{formatMoney(summary.safeToSpend)}</strong>
+              <span>First</span>
+              <strong>Connect bank</strong>
             </div>
             <div>
-              <span>Cash position</span>
-              <strong>{formatMoney(summary.cash)}</strong>
+              <span>Then</span>
+              <strong>Wollie sorts</strong>
             </div>
             <div>
-              <span>Needs review</span>
-              <strong>{summary.reviewCount}</strong>
+              <span>Only if needed</span>
+              <strong>You review</strong>
             </div>
           </div>
         </section>

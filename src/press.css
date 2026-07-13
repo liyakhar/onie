@@ -5014,9 +5014,10 @@ body {
 
 .finance-snapshot strong {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
   font-weight: 800;
-  letter-spacing: -0.04em;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
   overflow-wrap: anywhere;
 }
 
