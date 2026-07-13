@@ -4909,30 +4909,30 @@ body {
 
 .discovery-main,
 .discovery-page .foot {
-  width: min(100% - (2 * var(--page-gutter)), 72rem);
+  width: min(100% - (2 * var(--page-gutter)), 66rem);
 }
 
 .discovery-hero {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 0.82fr) minmax(20rem, 0.68fr);
-  gap: clamp(var(--space-xl), 6vw, var(--space-3xl));
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 24rem);
+  gap: clamp(var(--space-xl), 5vw, var(--space-2xl));
   align-items: center;
   max-width: none;
-  min-height: calc(100svh - 8rem);
+  min-height: auto;
   margin-inline: auto;
-  padding-block: clamp(3rem, 7vw, 6rem);
+  padding-block: clamp(4rem, 9vw, 7rem) clamp(2.5rem, 6vw, 4.5rem);
   text-align: start;
 }
 
 .finance-landing .discovery-hero h1,
 .discovery-hero h1 {
-  max-width: 8.5ch;
+  max-width: 9ch;
   margin: 0 0 var(--space-md);
-  font-size: clamp(4.8rem, 12vw, 10.75rem);
+  font-size: clamp(4rem, 9vw, 7.5rem);
   font-weight: 800;
-  line-height: 0.82;
-  letter-spacing: -0.085em;
+  line-height: 0.86;
+  letter-spacing: -0.045em;
 }
 
 .discovery-kicker,
@@ -4946,9 +4946,9 @@ body {
 }
 
 .discovery-intro {
-  max-width: 16rem;
+  max-width: 18rem;
   margin: 0;
-  font-size: var(--text-lg);
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
   line-height: 1.35;
   color: var(--color-neutral);
 }
@@ -4977,27 +4977,25 @@ body {
   grid-column: 2;
   grid-row: 1 / span 3;
   grid-template-columns: 1fr;
-  max-width: 24rem;
+  max-width: 23rem;
   width: 100%;
   justify-self: end;
   margin: 0;
   padding: var(--space-sm);
   border: 1px solid color-mix(in oklch, var(--color-rule) 70%, transparent);
-  border-radius: 2.25rem;
+  border-radius: 1.25rem;
   background:
     linear-gradient(160deg, color-mix(in oklch, white 70%, transparent), color-mix(in oklch, var(--color-paper-2) 84%, transparent)),
     color-mix(in oklch, white 52%, transparent);
-  box-shadow:
-    0 30px 90px color-mix(in oklch, var(--color-ink) 10%, transparent),
-    inset 0 1px 0 color-mix(in oklch, white 80%, transparent);
+  box-shadow: none;
 }
 
 .finance-snapshot div {
-  gap: var(--space-sm);
-  padding: var(--space-lg);
+  gap: var(--space-xs);
+  padding: var(--space-md);
   border-inline-end: 0;
   border-block-end: 1px solid color-mix(in oklch, var(--color-rule) 72%, transparent);
-  border-radius: 1.5rem;
+  border-radius: 0.85rem;
 }
 
 .finance-snapshot div:first-child {
@@ -5016,18 +5014,19 @@ body {
 
 .finance-snapshot strong {
   font-family: var(--font-display);
-  font-size: clamp(2.4rem, 5vw, 4.4rem);
+  font-size: clamp(2rem, 4vw, 3.4rem);
   font-weight: 800;
-  letter-spacing: -0.07em;
+  letter-spacing: -0.04em;
+  overflow-wrap: anywhere;
 }
 
 .finance-principles,
 .discovery-paths {
   overflow: hidden;
   border: 1px solid color-mix(in oklch, var(--color-rule) 72%, transparent);
-  border-radius: 2rem;
+  border-radius: 1.25rem;
   background: color-mix(in oklch, white 54%, transparent);
-  box-shadow: 0 24px 90px color-mix(in oklch, var(--color-ink) 6%, transparent);
+  box-shadow: none;
 }
 
 .finance-principles article,
@@ -5035,10 +5034,26 @@ body {
   border-color: color-mix(in oklch, var(--color-rule) 72%, transparent);
 }
 
+.finance-principles {
+  margin-block: 0 clamp(2rem, 5vw, 4rem);
+}
+
+.finance-principles article {
+  min-height: 0;
+  gap: var(--space-sm);
+  padding: clamp(var(--space-md), 3vw, var(--space-lg));
+}
+
 .finance-principles h2 {
-  font-size: clamp(2.8rem, 7vw, 6rem);
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
   font-weight: 800;
-  letter-spacing: -0.08em;
+  letter-spacing: -0.035em;
+}
+
+.finance-principles p {
+  max-width: 14rem;
+  font-size: var(--text-sm);
+  line-height: 1.4;
 }
 
 .discovery-paths {
@@ -5054,39 +5069,61 @@ body {
 
 .finance-copy-band {
   display: grid;
-  gap: var(--space-md);
-  max-width: 44rem;
-  margin: var(--space-xl) 0;
-  padding: clamp(var(--space-xl), 5vw, var(--space-2xl));
+  grid-template-columns: minmax(0, 0.75fr) minmax(18rem, 1fr) auto;
+  gap: clamp(var(--space-md), 3vw, var(--space-xl));
+  align-items: center;
+  max-width: none;
+  margin: 0 0 clamp(2rem, 5vw, 4rem);
+  padding: clamp(var(--space-md), 3vw, var(--space-lg));
   border: 1px solid color-mix(in oklch, var(--color-rule) 72%, transparent);
-  border-radius: 2rem;
+  border-radius: 1.25rem;
   background: color-mix(in oklch, white 44%, transparent);
-  box-shadow: 0 24px 90px color-mix(in oklch, var(--color-ink) 5%, transparent);
+  box-shadow: none;
 }
 
 .finance-copy-band h2 {
-  max-width: 12ch;
+  max-width: 18ch;
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
   font-weight: 800;
-  line-height: 0.9;
-  letter-spacing: -0.075em;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
 }
 
 .finance-copy-band p:not(.discovery-kicker) {
-  max-width: 28rem;
+  max-width: 36rem;
   margin: 0;
   color: var(--color-neutral);
-  font-size: var(--text-md);
+  font-size: var(--text-sm);
   line-height: 1.45;
 }
 
 .finance-copy-band--small {
-  margin-inline-start: auto;
-  background:
-    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--color-accent) 24%, transparent), transparent 16rem),
-    color-mix(in oklch, white 44%, transparent);
+  margin-inline-start: 0;
+  background: color-mix(in oklch, white 44%, transparent);
+}
+
+.finance-copy-band a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 2.75rem;
+  padding-inline: var(--space-md);
+  border-radius: var(--radius-pill);
+  background: var(--color-ink);
+  color: white;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.finance-copy-band a svg {
+  width: 1rem;
+  height: 1rem;
 }
 
 .discovery-paths strong {
@@ -5284,6 +5321,14 @@ body {
     justify-self: start;
     max-width: none;
   }
+
+  .finance-copy-band {
+    grid-template-columns: 1fr;
+  }
+
+  .finance-copy-band a {
+    justify-self: start;
+  }
 }
 
 @media (max-width: 48rem) {
@@ -5296,7 +5341,8 @@ body {
   .finance-landing .discovery-hero h1,
   .discovery-hero h1,
   .finance-page-head .app-page__title {
-    font-size: clamp(4rem, 21vw, 6.75rem);
+    font-size: clamp(3.5rem, 18vw, 5.5rem);
+    letter-spacing: -0.04em;
   }
 
   .finance-card,

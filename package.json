@@ -18,7 +18,7 @@
     "preview:cf": "pnpm build:cf && npx wrangler pages dev dist",
     "preflight:prod": "node scripts/preflight-prod.mjs",
     "deploy:check": "pnpm preflight:prod && pnpm build:cf",
-    "deploy": "pnpm build:cf && npx wrangler pages deploy dist --project-name=onie",
+    "deploy": "pnpm build:cf && npx wrangler pages deploy dist --project-name=wollie",
     "test": "vitest run",
     "post-cta-init": "npx -y create-db@latest --user-agent tanstack/tsrouter",
     "db:generate": "dotenv -e .env.local -- prisma generate",

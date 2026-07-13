@@ -77,7 +77,7 @@ pnpm run build:cf
 
 ## 4. Deploy
 
-The current Cloudflare Pages project is still named `onie`, so the deploy command keeps that project name until the Cloudflare project is renamed on purpose.
+The current Cloudflare Pages project should be `wollie`.
 
 ```bash
 pnpm deploy

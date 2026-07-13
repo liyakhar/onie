@@ -6,27 +6,27 @@ product
 
 ## Users
 
-People using AI agents in practical design, product, research, engineering, and creative work. They come to Onie to find a useful workflow, understand how it works, and adapt it without digging through scattered posts and repositories.
+People who want a budget without maintaining a budget spreadsheet. They come to Wollie to connect accounts, review only unclear transactions, and quickly understand what they can spend.
 
 ## Product Purpose
 
-Onie is a searchable library and social feed for complete agent workflows. It keeps the prompt, tools, setup, context, and practitioner together so users can discover working methods and share their own. The MVP succeeds when users can quickly evaluate whether a workflow is relevant and understand how to run it.
+Wollie is a calm budgeting app built around bank sync. It turns transactions into a simple monthly picture: cash position, what needs review, and what can be spent. The MVP succeeds when users can understand their money status in one scan and trust the next action.
 
 ## Brand Personality
 
-Useful, productive, clear. Editorial in voice, but task-first in structure.
+Calm, useful, clear. Minimal in voice, task-first in structure.
 
 ## Anti-references
 
-Crowded pages where metadata, controls, navigation, and content compete at the same visual weight. Generic dashboard card grids, decorative AI-tool styling, excessive controls, and layouts that delay the useful content.
+Crowded finance dashboards, generic SaaS card grids, decorative fintech noise, scary budget language, vague labels, and layouts that make simple money questions feel complicated.
 
 ## Design Principles
 
-- Put the user’s next useful action first.
-- Make workflows easy to scan before asking users to read deeply.
+- Put the user’s current money status first.
+- Make the next action obvious before asking users to read deeply.
 - Use hierarchy and whitespace to separate context, actions, and content.
 - Keep supporting metadata quiet and close to what it describes.
-- Preserve Onie’s editorial character without sacrificing product clarity.
+- Keep language plain: connect, review, spend.
 
 ## Accessibility & Inclusion
 

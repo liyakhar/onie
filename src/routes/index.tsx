@@ -86,59 +86,35 @@ function LandingPage() {
 
         <section className="finance-principles finance-principles--minimal" aria-label="Product principles">
           <article>
-            <span>01</span>
+            <span>Connect</span>
             <h2>Connect</h2>
-            <p>Link your accounts once.</p>
+            <p>Link accounts once.</p>
           </article>
           <article>
-            <span>02</span>
-            <h2>Sort</h2>
-            <p>Spending lands in the right place.</p>
+            <span>Review</span>
+            <h2>Review</h2>
+            <p>Only unclear charges.</p>
           </article>
           <article>
-            <span>03</span>
+            <span>Spend</span>
             <h2>Spend</h2>
             <p>Know what you can spend.</p>
           </article>
         </section>
 
-        <section className="finance-copy-band" aria-labelledby="wollie-for-title">
-          <p className="discovery-kicker">Built for</p>
-          <h2 id="wollie-for-title">People who do not want to “do budgeting.”</h2>
-          <p>
-            Wollie keeps the budget moving from your real transactions. You only review what looks
-            unclear.
-          </p>
-        </section>
-
-        <section className="discovery-paths finance-paths" aria-label="Budgeting flow">
-          <Link to="/app/accounts">
-            <span>01</span>
-            <strong>Connect</strong>
-            <small>Accounts and cards.</small>
-            <ArrowRight aria-hidden="true" />
-          </Link>
-          <Link to="/app/transactions">
-            <span>02</span>
-            <strong>Review</strong>
-            <small>Unclear charges.</small>
-            <ArrowRight aria-hidden="true" />
-          </Link>
-          <Link to="/app/budgets">
-            <span>03</span>
-            <strong>Spend</strong>
-            <small>What you can spend.</small>
-            <ArrowRight aria-hidden="true" />
-          </Link>
-        </section>
-
         <section className="finance-copy-band finance-copy-band--small" aria-labelledby="sync-note-title">
-          <p className="discovery-kicker">Bank sync</p>
-          <h2 id="sync-note-title">Paid sync. No hidden cost.</h2>
+          <div>
+            <p className="discovery-kicker">Bank sync</p>
+            <h2 id="sync-note-title">Demo now. Live sync next.</h2>
+          </div>
           <p>
-            Demo mode is free. Real bank connections require a paid plan or a user-paid sync
-            provider.
+            The current app shows sample data. Real bank connections will turn on after SimpleFIN
+            credentials and auth are stable.
           </p>
+          <Link to={session?.user ? '/app/accounts' : '/login'} search={session?.user ? undefined : loginSearch({ redirect: '/app/accounts', signup: true })}>
+            Open Wollie
+            <ArrowRight aria-hidden="true" />
+          </Link>
         </section>
       </main>
 

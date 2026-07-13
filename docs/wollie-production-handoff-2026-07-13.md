@@ -6,7 +6,7 @@ This document is the honest state of the Wollie pivot after the production push 
 
 Wollie is deployed to production at:
 
-- https://onie.pages.dev/
+- https://wollie.pages.dev/
 
 The app is now a budgeting MVP called **Wollie**, not the old Onie workflow-sharing product.
 
@@ -26,7 +26,7 @@ But this is **not launch-ready yet** because:
 - Pivoted the project from Onie, a workflow/content platform, into Wollie, a simple budgeting app.
 - Reworked the main product narrative around synced accounts, reviewed spending, budgets, recurring bills, and insights.
 - Renamed visible product copy and metadata to Wollie.
-- Kept the Cloudflare project name as `onie` for now, so the live URL is still `onie.pages.dev`.
+- Moved the Cloudflare Pages project target to `wollie`, so the live URL should be `wollie.pages.dev`.
 
 ### Frontend / product UI
 
@@ -84,9 +84,9 @@ SimpleFIN/live-bank-sync secrets are **not** configured yet.
 - Branch pushed:
   - `liya/bank-sync-budgeting-app`
 - Main production site deployed to Cloudflare Pages:
-  - https://onie.pages.dev/
+  - https://wollie.pages.dev/
 - The latest successful production deploy checked during this work was:
-  - `https://37e737e7.onie.pages.dev`
+  - `https://eed24433.onie.pages.dev` before the URL rename; new deploys should use the `wollie` project.
 
 ### Verification done
 
@@ -113,7 +113,7 @@ Production HTTP smoke checks passed:
 Production browser QA passed with:
 
 ```bash
-node scripts/browser-qa-prod.mjs https://onie.pages.dev
+node scripts/browser-qa-prod.mjs https://wollie.pages.dev
 ```
 
 The QA script checks:
@@ -234,13 +234,12 @@ Needed next:
 Current state:
 
 - Live URL is still:
+  - `https://wollie.pages.dev/`
+- Old legacy URL was:
   - `https://onie.pages.dev/`
-- Cloudflare Pages project is still named:
-  - `onie`
 
 Needed next:
 
-- Decide whether to rename the Cloudflare project.
 - Add a real Wollie domain.
 - Update:
   - `SITE_URL`;
@@ -279,21 +278,21 @@ pnpm run build:cf
 ### Production browser smoke QA
 
 ```bash
-node scripts/browser-qa-prod.mjs https://onie.pages.dev
+node scripts/browser-qa-prod.mjs https://wollie.pages.dev
 ```
 
 ### Deploy to Cloudflare production
 
-The Cloudflare project is still named `onie`.
+The Cloudflare project should be named `wollie`.
 
 ```bash
-npx wrangler pages deploy dist --project-name=onie --branch=main
+npx wrangler pages deploy dist --project-name=wollie --branch=main
 ```
 
 ### Check production secrets
 
 ```bash
-npx wrangler pages secret list --project-name=onie
+npx wrangler pages secret list --project-name=wollie
 ```
 
 ### Railway migration check

@@ -1,6 +1,6 @@
 import { spawnSync } from 'node:child_process'
 
-const baseUrl = process.argv[2] ?? 'https://onie.pages.dev'
+const baseUrl = process.argv[2] ?? 'https://wollie.pages.dev'
 const routes = ['/', '/login', '/app', '/app/accounts', '/app/transactions', '/app/budgets', '/app/recurring', '/app/insights', '/app/settings']
 const badStrings = [
   'Server function info not found',
@@ -20,6 +20,10 @@ const ignoredBrowserNoise = [
   'policy_logger',
   'SharedImageManager::ProduceMemory',
   'installwebapp?usp=chrome_default',
+  'DEPRECATED_ENDPOINT',
+  'os_integration_manager',
+  'externally_managed_app_manager',
+  'cr_install.html',
   'blink.mojom.FrameWidgetHost',
   'blink.mojom.WidgetHost',
 ]
