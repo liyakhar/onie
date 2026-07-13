@@ -4909,7 +4909,7 @@ body {
 
 .discovery-main,
 .discovery-page .foot {
-  width: min(100% - (2 * var(--page-gutter)), 66rem);
+  width: min(100% - (2 * var(--page-gutter)), 72rem);
 }
 
 .discovery-hero {
@@ -5138,7 +5138,7 @@ body {
 }
 
 .app-shell__main {
-  width: min(92rem, calc(100% - 2 * var(--page-gutter)));
+  width: min(var(--page-max), calc(100% - 2 * var(--page-gutter)));
   padding-block: var(--space-xl) var(--space-3xl);
 }
 
