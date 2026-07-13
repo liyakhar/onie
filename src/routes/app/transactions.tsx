@@ -1,11 +1,20 @@
 import { useMemo, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { formatMoney, type FinanceTransaction } from '#/lib/finance-demo'
+import {
+  filterFinanceTransactions,
+  formatMoney,
+  getDemoFinanceDashboard,
+  type FinanceTransaction,
+} from '#/lib/finance-demo'
 import { buildPageMeta } from '#/lib/seo'
-import { getFinanceTransactions } from '#/server/finance'
 
 export const Route = createFileRoute('/app/transactions')({
-  loader: async () => getFinanceTransactions({ data: { status: 'all', category: 'all' } }),
+  loader: () => ({
+    transactions: filterFinanceTransactions(getDemoFinanceDashboard().transactions, {
+      status: 'all',
+      category: 'all',
+    }),
+  }),
   head: () => ({
     meta: buildPageMeta({
       path: '/app/transactions',

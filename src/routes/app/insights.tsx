@@ -1,9 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { getDemoFinanceDashboard } from '#/lib/finance-demo'
 import { buildPageMeta } from '#/lib/seo'
-import { getFinanceInsights } from '#/server/finance'
 
 export const Route = createFileRoute('/app/insights')({
-  loader: async () => getFinanceInsights(),
+  loader: () => ({
+    insights: getDemoFinanceDashboard().insights,
+  }),
   head: () => ({
     meta: buildPageMeta({
       path: '/app/insights',

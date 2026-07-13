@@ -1,11 +1,18 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { BudgetMeter } from '#/components/finance/BudgetMeter'
-import { formatMoney } from '#/lib/finance-demo'
+import { formatMoney, getDemoFinanceDashboard } from '#/lib/finance-demo'
 import { buildPageMeta } from '#/lib/seo'
-import { getFinanceBudget } from '#/server/finance'
 
 export const Route = createFileRoute('/app/budgets')({
-  loader: async () => getFinanceBudget(),
+  loader: () => {
+    const dashboard = getDemoFinanceDashboard()
+    return {
+      month: dashboard.month,
+      budget: dashboard.budget,
+      budgetPlan: dashboard.budgetPlan,
+      summary: dashboard.summary,
+    }
+  },
   head: () => ({
     meta: buildPageMeta({
       path: '/app/budgets',

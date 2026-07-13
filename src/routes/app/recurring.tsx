@@ -1,10 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { formatMoney } from '#/lib/finance-demo'
+import { formatMoney, getDemoFinanceDashboard } from '#/lib/finance-demo'
 import { buildPageMeta } from '#/lib/seo'
-import { getFinanceRecurringPayments } from '#/server/finance'
 
 export const Route = createFileRoute('/app/recurring')({
-  loader: async () => getFinanceRecurringPayments(),
+  loader: () => ({
+    recurringPayments: getDemoFinanceDashboard().recurringPayments,
+  }),
   head: () => ({
     meta: buildPageMeta({
       path: '/app/recurring',

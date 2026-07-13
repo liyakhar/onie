@@ -2,9 +2,8 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
 import { BudgetMeter } from '#/components/finance/BudgetMeter'
 import { FinanceCard } from '#/components/finance/FinanceCard'
-import { formatMoney } from '#/lib/finance-demo'
+import { formatMoney, getDemoFinanceDashboard } from '#/lib/finance-demo'
 import { buildPageMeta } from '#/lib/seo'
-import { getFinanceDashboard } from '#/server/finance'
 
 const dashboardMeta = buildPageMeta({
   path: '/app',
@@ -14,7 +13,7 @@ const dashboardMeta = buildPageMeta({
 })
 
 export const Route = createFileRoute('/app/')({
-  loader: async () => getFinanceDashboard(),
+  loader: () => getDemoFinanceDashboard(),
   head: () => ({
     meta: dashboardMeta.meta,
     links: dashboardMeta.links,
