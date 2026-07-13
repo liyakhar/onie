@@ -61,9 +61,6 @@ function LandingPage() {
               <span className="btn__label">Open demo</span>
               <ArrowRight aria-hidden="true" />
             </Link>
-            <Link to="/app/accounts" className="finance-hero__secondary">
-              Bank sync
-            </Link>
           </div>
 
           <div className="finance-snapshot" aria-label="How Wollie starts">
