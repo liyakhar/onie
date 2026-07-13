@@ -20,6 +20,8 @@ const ignoredBrowserNoise = [
   'policy_logger',
   'SharedImageManager::ProduceMemory',
   'installwebapp?usp=chrome_default',
+  'blink.mojom.FrameWidgetHost',
+  'blink.mojom.WidgetHost',
 ]
 
 const results = []
