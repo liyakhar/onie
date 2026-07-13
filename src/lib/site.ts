@@ -1,11 +1,11 @@
 export const site = {
-  name: 'Onie',
-  tagline: 'Agent workflows from people doing the work',
+  name: 'Wollie',
+  tagline: 'Calm money',
   description:
-    'A public feed of agent workflows from practitioners in the field — prompts, skills, and setups tagged by discipline and stack.',
+    'A clean budget that syncs accounts, sorts spending, and shows what you can spend.',
   locale: 'en_US',
-  twitterHandle: '@onie',
-  email: 'hello@onie.app',
+  twitterHandle: '@wollie',
+  email: 'hello@wollie.app',
 } as const
 
 export function getSiteUrl(): string {

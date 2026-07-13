@@ -101,7 +101,7 @@ export function organizationJsonLd() {
     '@type': 'Organization',
     name: site.name,
     url: base,
-    logo: absoluteUrl('/onie-logo.svg'),
+    logo: absoluteUrl('/wollie-logo.svg'),
     description: site.description,
     email: site.email,
   }
@@ -178,7 +178,7 @@ export function articleJsonLd({
       url: getSiteUrl(),
       logo: {
         '@type': 'ImageObject',
-        url: absoluteUrl('/onie-logo.svg'),
+        url: absoluteUrl('/wollie-logo.svg'),
       },
     },
     datePublished: publishedAt,
@@ -234,7 +234,7 @@ export function googleSiteVerificationMeta(): MetaTag[] {
 }
 
 export const defaultHeadLinks = (): HeadLink[] => [
-  { rel: 'icon', href: '/onie-logo.svg', type: 'image/svg+xml' },
+  { rel: 'icon', href: '/wollie-logo.svg', type: 'image/svg+xml' },
   { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', type: 'image/png', sizes: '180x180' },
   { rel: 'manifest', href: '/manifest.json' },
 ]

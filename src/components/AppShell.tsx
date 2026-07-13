@@ -1,7 +1,6 @@
 import { Outlet } from '@tanstack/react-router'
 import AppNav from '#/components/AppNav'
 import { AppMobileNav } from '#/components/AppMobileNav'
-import { NotificationToast } from '#/components/NotificationToast'
 
 export function AppShell() {
   return (
@@ -11,7 +10,6 @@ export function AppShell() {
         <Outlet />
       </div>
       <AppMobileNav />
-      <NotificationToast />
     </div>
   )
 }

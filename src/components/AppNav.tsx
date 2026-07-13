@@ -1,10 +1,15 @@
 import { Link } from '@tanstack/react-router'
 import BetterAuthHeader from '#/integrations/better-auth/header-user'
-import { NotificationBell } from '#/components/NotificationBell'
 import { OnieMark } from '#/components/OnieMark'
 import { authClient } from '#/lib/auth-client'
-import { Plus } from 'lucide-react'
 import { appNavActiveOptions } from '#/lib/nav-active'
+
+const financeNav = [
+  { to: '/app' as const, label: 'Dashboard' },
+  { to: '/app/transactions' as const, label: 'Activity' },
+  { to: '/app/budgets' as const, label: 'Budgets' },
+  { to: '/app/accounts' as const, label: 'Accounts' },
+]
 
 export default function AppNav() {
   const { data: session } = authClient.useSession()
@@ -21,33 +26,24 @@ export default function AppNav() {
         </Link>
 
         <nav className="app-nav__tabs" aria-label="App sections">
-          <Link
-            to="/app"
-            className="app-nav__tab"
-            activeOptions={appNavActiveOptions}
-            activeProps={{ className: 'app-nav__tab is-active' }}
-          >
-            Home
-          </Link>
-          <Link
-            to="/app/explore"
-            className="app-nav__tab"
-            activeOptions={appNavActiveOptions}
-            activeProps={{ className: 'app-nav__tab is-active' }}
-          >
-            Explore
-          </Link>
+          {financeNav.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              className="app-nav__tab"
+              activeOptions={appNavActiveOptions}
+              activeProps={{ className: 'app-nav__tab is-active' }}
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="app-nav__actions">
           {isSignedIn && (
-            <>
-              <Link to="/new" className="app-nav__share">
-                <Plus className="h-4 w-4" aria-hidden="true" />
-                <span>Share</span>
-              </Link>
-              <NotificationBell />
-            </>
+            <Link to="/app/accounts" className="app-nav__share">
+              <span>Sync</span>
+            </Link>
           )}
           <BetterAuthHeader />
         </div>

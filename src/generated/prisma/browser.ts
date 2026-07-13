@@ -23,6 +23,66 @@ export * from './enums.ts';
  */
 export type User = Prisma.UserModel
 /**
+ * Model BudgetWorkspace
+ * 
+ */
+export type BudgetWorkspace = Prisma.BudgetWorkspaceModel
+/**
+ * Model BankConnection
+ * 
+ */
+export type BankConnection = Prisma.BankConnectionModel
+/**
+ * Model FinancialAccount
+ * 
+ */
+export type FinancialAccount = Prisma.FinancialAccountModel
+/**
+ * Model TransactionCategory
+ * 
+ */
+export type TransactionCategory = Prisma.TransactionCategoryModel
+/**
+ * Model Merchant
+ * 
+ */
+export type Merchant = Prisma.MerchantModel
+/**
+ * Model FinanceTransaction
+ * 
+ */
+export type FinanceTransaction = Prisma.FinanceTransactionModel
+/**
+ * Model BudgetMonth
+ * 
+ */
+export type BudgetMonth = Prisma.BudgetMonthModel
+/**
+ * Model BudgetAllocation
+ * 
+ */
+export type BudgetAllocation = Prisma.BudgetAllocationModel
+/**
+ * Model RecurringPayment
+ * 
+ */
+export type RecurringPayment = Prisma.RecurringPaymentModel
+/**
+ * Model SyncRun
+ * 
+ */
+export type SyncRun = Prisma.SyncRunModel
+/**
+ * Model MoneyInsight
+ * 
+ */
+export type MoneyInsight = Prisma.MoneyInsightModel
+/**
+ * Model CategoryRule
+ * 
+ */
+export type CategoryRule = Prisma.CategoryRuleModel
+/**
  * Model Session
  * 
  */

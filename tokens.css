@@ -1,29 +1,18 @@
-/* Hallmark · tokens — gen-13
- * route: custom (tuned) · vibe: "ink-black press, off-register, broken-grid, kinetic"
- * paper: oklch(90% 0.011 58) · accent: oklch(72% 0.16 330) rosin pink
- * display: Bricolage Grotesque (variable) · body: Fraunces (variable) · outlier: JetBrains Mono
- * axes: light / display-heavy / warm
- *
- * One palette, two surfaces: the page runs on an ink-black press ground;
- * the "proof sheet" sections invert to a warm bone paper so the specimens
- * read like a printed proof pulled off the press. Both carry the warm-red tilt.
- */
-
 :root {
-  /* ── Light paper ground — the fixed Onie surface ──────────── */
-  --color-paper:      oklch(90%  0.011 58);   /* warm paper */
-  --color-paper-2:    oklch(86%  0.010 55);   /* elevated panel */
-  --color-paper-3:    oklch(81%  0.009 52);   /* deeper hover / plate */
-  --color-rule:       oklch(72%  0.012 50);   /* hairline divider */
-  --color-rule-2:     oklch(58%  0.012 48);   /* heavier rule */
-  --color-muted:      oklch(48%  0.012 42);   /* de-emphasised text */
-  --color-neutral:    oklch(40%  0.010 40);   /* mid text */
-  --color-ink-2:      oklch(30%  0.014 38);   /* secondary headings/body */
-  --color-ink:        oklch(22%  0.016 36);   /* primary text */
-  --color-accent:     oklch(72%  0.16 330);   /* rosin pink — the one chromatic note */
-  --color-accent-2:   oklch(72%  0.17 322);   /* off-register magenta ghost (misprint only) */
-  --color-accent-ink: oklch(17%  0.024 32);   /* dark ink on accent fill — APCA-checked */
-  --color-focus:      oklch(78%  0.15 330);   /* brighter rosin, ≥3:1 on ground + on fill */
+  /* Wollie v2 — cool, quiet finance surface */
+  --color-paper:      oklch(98%  0.006 235);
+  --color-paper-2:    oklch(95%  0.012 235);
+  --color-paper-3:    oklch(91%  0.020 232);
+  --color-rule:       oklch(88%  0.018 232);
+  --color-rule-2:     oklch(78%  0.030 232);
+  --color-muted:      oklch(55%  0.035 238);
+  --color-neutral:    oklch(43%  0.040 238);
+  --color-ink-2:      oklch(28%  0.050 238);
+  --color-ink:        oklch(18%  0.060 240);
+  --color-accent:     oklch(74%  0.150 176);
+  --color-accent-2:   oklch(72%  0.125 220);
+  --color-accent-ink: oklch(15%  0.055 188);
+  --color-focus:      oklch(79%  0.145 176);
 
   /* Off-register misprint ghosts — translucent, decorative only */
   --ghost-cyan:  oklch(70% 0.16 220 / 0.42);
@@ -39,10 +28,9 @@
   --proof-ink:      oklch(17%  0.024 32);     /* near-black warm ink */
   --proof-accent:   oklch(48%  0.14 330);     /* rosin reads darker on bone for contrast */
 
-  /* ── Type stack — 2+1: display + body + mono outlier ──────── */
-  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  --font-body:    "Fraunces", ui-serif, Georgia, serif;
-  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-display: "Onest", ui-sans-serif, system-ui, sans-serif;
+  --font-body:    "Onest", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   /* ── Type scale — major third (1.25), clamped display ─────── */
   --text-xs:   0.75rem;
@@ -66,7 +54,7 @@
   --tracking-display: -0.03em;
   --tracking-tight:   -0.015em;
   --tracking-normal:  0;
-  --tracking-label:   0.16em;   /* mono specimen tags */
+  --tracking-label:   0.08em;
   --tracking-micro:   0.26em;   /* rotated rail wordmark */
 
   /* ── 4pt spacing scale ────────────────────────────────────── */
@@ -94,10 +82,9 @@
   --rule-fine:    2px;
   --rule-heavy:   4px;
 
-  /* Square edges — this is a press, not a soft app */
-  --radius-card:  0;
-  --radius-pill:  0;
-  --radius-input: 0;
+  --radius-card:  1.75rem;
+  --radius-pill:  999px;
+  --radius-input: 1rem;
 
   /* ── Motion ───────────────────────────────────────────────── */
   --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);

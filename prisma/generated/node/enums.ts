@@ -49,6 +49,68 @@ export const PostKind = {
 export type PostKind = (typeof PostKind)[keyof typeof PostKind]
 
 
+export const FinanceAccountType = {
+  CHECKING: 'CHECKING',
+  SAVINGS: 'SAVINGS',
+  CREDIT_CARD: 'CREDIT_CARD',
+  CASH: 'CASH',
+  LOAN: 'LOAN',
+  INVESTMENT: 'INVESTMENT',
+  OTHER: 'OTHER'
+} as const
+
+export type FinanceAccountType = (typeof FinanceAccountType)[keyof typeof FinanceAccountType]
+
+
+export const FinanceConnectionProvider = {
+  DEMO: 'DEMO',
+  SIMPLEFIN: 'SIMPLEFIN',
+  GOCARDLESS: 'GOCARDLESS',
+  PLAID: 'PLAID'
+} as const
+
+export type FinanceConnectionProvider = (typeof FinanceConnectionProvider)[keyof typeof FinanceConnectionProvider]
+
+
+export const FinanceConnectionStatus = {
+  NOT_CONNECTED: 'NOT_CONNECTED',
+  CONNECTED: 'CONNECTED',
+  SYNCING: 'SYNCING',
+  NEEDS_RECONNECT: 'NEEDS_RECONNECT',
+  FAILED: 'FAILED',
+  DISABLED: 'DISABLED'
+} as const
+
+export type FinanceConnectionStatus = (typeof FinanceConnectionStatus)[keyof typeof FinanceConnectionStatus]
+
+
+export const FinanceTransactionStatus = {
+  CLEARED: 'CLEARED',
+  PENDING: 'PENDING',
+  NEEDS_REVIEW: 'NEEDS_REVIEW'
+} as const
+
+export type FinanceTransactionStatus = (typeof FinanceTransactionStatus)[keyof typeof FinanceTransactionStatus]
+
+
+export const FinanceRecurringCadence = {
+  WEEKLY: 'WEEKLY',
+  MONTHLY: 'MONTHLY',
+  YEARLY: 'YEARLY'
+} as const
+
+export type FinanceRecurringCadence = (typeof FinanceRecurringCadence)[keyof typeof FinanceRecurringCadence]
+
+
+export const FinanceSyncStatus = {
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+  RUNNING: 'RUNNING'
+} as const
+
+export type FinanceSyncStatus = (typeof FinanceSyncStatus)[keyof typeof FinanceSyncStatus]
+
+
 export const NotificationType = {
   LIKE: 'LIKE',
   COMMENT: 'COMMENT',

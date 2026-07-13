@@ -1,29 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import { Compass, Home, Plus, User } from 'lucide-react'
-import { authClient } from '#/lib/auth-client'
-import { loginSearch } from '#/lib/auth-nav'
-import { useQuery } from '@tanstack/react-query'
-import { getMyProfile } from '#/server/profiles'
+import { Landmark, LayoutDashboard, ReceiptText, WalletCards } from 'lucide-react'
 import { appNavActiveOptions } from '#/lib/nav-active'
 
 export function AppMobileNav() {
-  const { data: session } = authClient.useSession()
-  const { data: profile } = useQuery({
-    queryKey: ['my-profile'],
-    queryFn: () => getMyProfile(),
-    enabled: Boolean(session?.user),
-  })
-
-  const profileTo = profile?.username
-    ? { to: '/u/$username' as const, params: { username: profile.username } }
-    : session?.user
-      ? { to: '/welcome' as const }
-      : { to: '/login' as const, search: loginSearch({ redirect: '/app', signup: true }) }
-
-  const shareTo = session?.user
-    ? { to: '/new' as const }
-    : { to: '/login' as const, search: loginSearch({ redirect: '/new', signup: true }) }
-
   return (
     <nav className="app-mobile-nav" aria-label="Mobile navigation">
       <Link
@@ -32,33 +11,35 @@ export function AppMobileNav() {
         activeOptions={appNavActiveOptions}
         activeProps={{ className: 'app-mobile-nav__item is-active' }}
       >
-        <Home className="h-5 w-5" aria-hidden="true" />
-        <span>Feed</span>
+        <LayoutDashboard className="h-5 w-5" aria-hidden="true" />
+        <span>Home</span>
       </Link>
       <Link
-        to="/app/explore"
+        to="/app/transactions"
         className="app-mobile-nav__item"
         activeOptions={appNavActiveOptions}
         activeProps={{ className: 'app-mobile-nav__item is-active' }}
       >
-        <Compass className="h-5 w-5" aria-hidden="true" />
-        <span>Explore</span>
+        <ReceiptText className="h-5 w-5" aria-hidden="true" />
+        <span>Activity</span>
       </Link>
       <Link
-        {...shareTo}
+        to="/app/budgets"
         className="app-mobile-nav__item"
+        activeOptions={appNavActiveOptions}
         activeProps={{ className: 'app-mobile-nav__item is-active' }}
       >
-        <Plus className="h-5 w-5" aria-hidden="true" />
-        <span>Share</span>
+        <WalletCards className="h-5 w-5" aria-hidden="true" />
+        <span>Budget</span>
       </Link>
       <Link
-        {...profileTo}
+        to="/app/accounts"
         className="app-mobile-nav__item"
+        activeOptions={appNavActiveOptions}
         activeProps={{ className: 'app-mobile-nav__item is-active' }}
       >
-        <User className="h-5 w-5" aria-hidden="true" />
-        <span>Profile</span>
+        <Landmark className="h-5 w-5" aria-hidden="true" />
+        <span>Bank</span>
       </Link>
     </nav>
   )

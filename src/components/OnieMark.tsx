@@ -20,7 +20,7 @@ export function OnieMark({
 }: OnieMarkProps) {
   return (
     <Tag className={cn('onie-mark', VARIANTS[variant], className)}>
-      Onie
+      Wollie
     </Tag>
   )
 }

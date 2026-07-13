@@ -5,6 +5,6 @@
   },
   "deploy": {
     "startCommand": "pnpm run start",
-    "releaseCommand": "pnpm exec prisma db push"
+    "releaseCommand": "pnpm exec prisma migrate deploy"
   }
 }

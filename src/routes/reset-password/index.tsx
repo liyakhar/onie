@@ -6,7 +6,7 @@ import { buildPageMeta } from '#/lib/seo'
 const resetMeta = buildPageMeta({
   path: '/reset-password',
   title: 'Reset password',
-  description: 'Choose a new password for your Onie account.',
+  description: 'Choose a new password for your Wollie account.',
   noindex: true,
 })
 

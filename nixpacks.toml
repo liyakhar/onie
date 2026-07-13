@@ -13,4 +13,4 @@ cmds = [
 ]
 
 [start]
-cmd = "pnpm exec prisma db push && pnpm run start"
+cmd = "pnpm run start"

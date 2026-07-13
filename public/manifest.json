@@ -1,10 +1,10 @@
 {
-  "short_name": "Onie",
-  "name": "Onie — Agent workflows from people doing the work",
-  "description": "A public feed of agent workflows from practitioners in the field.",
+  "short_name": "Wollie",
+  "name": "Wollie — Calm money",
+  "description": "A clean budget that syncs accounts, sorts spending, and shows what you can spend.",
   "icons": [
     {
-      "src": "/onie-logo.svg",
+      "src": "/wollie-logo.svg",
       "type": "image/svg+xml",
       "sizes": "any",
       "purpose": "any"
@@ -24,6 +24,6 @@
   ],
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#1a1a18",
-  "background_color": "#f6f1e8"
+  "theme_color": "#181715",
+  "background_color": "#f2efe8"
 }

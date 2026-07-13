@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Onest:wght@400;500;600;700;800&display=swap');
 @import '../tokens.css';
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
@@ -40,14 +40,14 @@
   --border: var(--color-rule);
   --input: var(--color-rule-2);
   --ring: var(--color-focus);
-  --radius: 0;
+  --radius: 1.25rem;
 }
 
 html[data-accent='rosin'],
 html:not([data-accent]) {
-  --color-accent:   oklch(72%  0.16 330);
-  --color-accent-2: oklch(72%  0.17 322);
-  --color-focus:    oklch(78%  0.15 330);
+  --color-accent:   oklch(74%  0.150 176);
+  --color-accent-2: oklch(72%  0.125 220);
+  --color-focus:    oklch(79%  0.145 176);
 }
 
 @theme inline {

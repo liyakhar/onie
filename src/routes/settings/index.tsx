@@ -1,7 +1,6 @@
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import type { Category } from '#/generated/prisma/client'
-import { CATEGORIES, categoryLabel } from '#/lib/categories'
 import { getMyProfile, updateProfile } from '#/server/profiles'
 import { authClient } from '#/lib/auth-client'
 import { loginSearch } from '#/lib/auth-nav'
@@ -10,7 +9,7 @@ import { buildPageMeta } from '#/lib/seo'
 const settingsMeta = buildPageMeta({
   path: '/settings',
   title: 'Settings',
-  description: 'Manage your Onie profile and account settings.',
+  description: 'Manage your Wollie account.',
   noindex: true,
 })
 
@@ -30,7 +29,7 @@ function SettingsPage() {
   const [username, setUsername] = useState(profile?.username ?? '')
   const [headline, setHeadline] = useState(profile?.headline ?? '')
   const [bio, setBio] = useState(profile?.bio ?? '')
-  const [field, setField] = useState<Category>(profile?.field ?? 'OTHER')
+  const [field] = useState<Category>(profile?.field ?? 'FINANCE')
   const [error, setError] = useState('')
   const [saved, setSaved] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -58,15 +57,9 @@ function SettingsPage() {
       const updated = await updateProfile({
         data: { username, headline, bio, field },
       })
+      setUsername(updated.username)
       setSaved(true)
-      if (updated.username !== profile.username) {
-        void router.navigate({
-          to: '/u/$username',
-          params: { username: updated.username },
-        })
-      } else {
-        void router.invalidate()
-      }
+      void router.invalidate()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save')
     } finally {
@@ -77,91 +70,101 @@ function SettingsPage() {
   return (
     <main id="main" className="app-page">
       <header className="app-page__head">
-        <p className="app-page__eyebrow">Account</p>
-        <h1 className="app-page__title">Profile settings</h1>
+        <p className="app-page__eyebrow">Wollie</p>
+        <h1 className="app-page__title">Settings.</h1>
         <p className="app-page__lede">
-          Your public page shows your field, workflows, and pinned highlight.{' '}
-          <Link to="/u/$username" params={{ username: profile.username }} className="auth-link">
-            View your page
-          </Link>
+          Keep this boring on purpose: account, sync, privacy.
         </p>
       </header>
 
-      <form onSubmit={handleSubmit} className="app-form">
-        <div className="app-form__field">
-          <label className="app-form__label" htmlFor="username">
-            Username
-          </label>
-          <input
-            id="username"
-            className="app-form__input app-form__textarea--mono"
-            value={username}
-            onChange={(e) => setUsername(e.target.value.toLowerCase())}
-            pattern="[a-z0-9-]+"
-            required
-          />
-          <p className="app-form__hint">onie.app/u/{username || 'your-name'}</p>
-        </div>
+      <div className="settings-layout">
+        <form onSubmit={handleSubmit} className="app-form settings-panel">
+          <div>
+            <p className="settings-panel__kicker">Account</p>
+            <h2 className="settings-panel__title">Your budget</h2>
+          </div>
 
-        <div className="app-form__field">
-          <label className="app-form__label" htmlFor="headline">
-            Headline
-          </label>
-          <input
-            id="headline"
-            className="app-form__input"
-            value={headline}
-            onChange={(e) => setHeadline(e.target.value)}
-            placeholder="e.g. Product designer shipping with agents"
-          />
-        </div>
+          <div className="app-form__field">
+            <label className="app-form__label" htmlFor="username">
+              Handle
+            </label>
+            <input
+              id="username"
+              className="app-form__input app-form__textarea--mono"
+              value={username}
+              onChange={(e) => setUsername(e.target.value.toLowerCase())}
+              pattern="[a-z0-9-]+"
+              required
+            />
+            <p className="app-form__hint">Private account handle. Not a public profile.</p>
+          </div>
 
-        <div className="app-form__field">
-          <label className="app-form__label" htmlFor="field">
-            Primary field
-          </label>
-          <select
-            id="field"
-            className="app-form__select"
-            value={field}
-            onChange={(e) => setField(e.target.value as Category)}
-          >
-            {CATEGORIES.map((cat) => (
-              <option key={cat.value} value={cat.value}>
-                {cat.label}
-              </option>
-            ))}
-          </select>
-          <p className="app-form__hint">
-            {CATEGORIES.find((c) => c.value === field)?.description ?? categoryLabel(field)}
-          </p>
-        </div>
+          <div className="app-form__field">
+            <label className="app-form__label" htmlFor="headline">
+              Budget name
+            </label>
+            <input
+              id="headline"
+              className="app-form__input"
+              value={headline}
+              onChange={(e) => setHeadline(e.target.value)}
+              placeholder="Personal budget"
+            />
+          </div>
 
-        <div className="app-form__field">
-          <label className="app-form__label" htmlFor="bio">
-            Bio
-          </label>
-          <textarea
-            id="bio"
-            className="app-form__textarea"
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            rows={5}
-          />
-        </div>
+          <div className="app-form__field">
+            <label className="app-form__label" htmlFor="bio">
+              Note
+            </label>
+            <textarea
+              id="bio"
+              className="app-form__textarea"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              rows={4}
+              placeholder="Optional"
+            />
+          </div>
 
-        {error && <p className="post-detail__error">{error}</p>}
-        {saved && <p className="app-form__hint" data-tone="success">Profile saved.</p>}
+          {error && <p className="post-detail__error">{error}</p>}
+          {saved && <p className="app-form__hint" data-tone="success">Saved.</p>}
 
-        <div className="app-form__actions">
-          <button type="submit" className="btn" disabled={loading}>
-            <span className="btn__label">{loading ? 'Saving…' : 'Save profile'}</span>
-          </button>
-          <Link to="/u/$username" params={{ username: profile.username }} className="feed-tab">
-            View page
-          </Link>
-        </div>
-      </form>
+          <div className="app-form__actions">
+            <button type="submit" className="btn" disabled={loading}>
+              <span className="btn__label">{loading ? 'Saving…' : 'Save'}</span>
+            </button>
+          </div>
+        </form>
+
+        <section className="settings-panel" aria-labelledby="sync-title">
+          <p className="settings-panel__kicker">Sync</p>
+          <h2 id="sync-title" className="settings-panel__title">Bank sync</h2>
+          <dl className="settings-list">
+            <div>
+              <dt>Current mode</dt>
+              <dd>Demo data</dd>
+            </div>
+            <div>
+              <dt>Live banks</dt>
+              <dd>Requires a paid bank-data provider before launch.</dd>
+            </div>
+            <div>
+              <dt>Safety</dt>
+              <dd>Bank credentials never belong in the browser.</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section className="settings-panel" aria-labelledby="privacy-title">
+          <p className="settings-panel__kicker">Privacy</p>
+          <h2 id="privacy-title" className="settings-panel__title">Your data</h2>
+          <ul className="settings-checklist">
+            <li>Private by default.</li>
+            <li>No public profiles.</li>
+            <li>No demo accounts in production sign-in.</li>
+          </ul>
+        </section>
+      </div>
     </main>
   )
 }

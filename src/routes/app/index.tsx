@@ -1,64 +1,147 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { PostCard } from '#/components/PostCard'
-import { loadHomeFeed } from '#/server/posts'
-import { loginSearch } from '#/lib/auth-nav'
+import { ArrowRight } from 'lucide-react'
+import { BudgetMeter } from '#/components/finance/BudgetMeter'
+import { FinanceCard } from '#/components/finance/FinanceCard'
+import { formatMoney } from '#/lib/finance-demo'
 import { buildPageMeta } from '#/lib/seo'
+import { getFinanceDashboard } from '#/server/finance'
 
-const feedMeta = buildPageMeta({
+const dashboardMeta = buildPageMeta({
   path: '/app',
-  title: 'Feed',
-  description: 'Workflows from builders you follow on Onie.',
+  title: 'Money dashboard',
+  description: 'Your bank-sync budget dashboard.',
   noindex: true,
 })
 
 export const Route = createFileRoute('/app/')({
+  loader: async () => getFinanceDashboard(),
   head: () => ({
-    meta: feedMeta.meta,
-    links: feedMeta.links,
+    meta: dashboardMeta.meta,
+    links: dashboardMeta.links,
   }),
-  loader: async () => loadHomeFeed(),
-  component: FeedPage,
+  component: MoneyDashboardPage,
 })
 
-function FeedPage() {
-  const { posts, isGuest } = Route.useLoaderData()
+function MoneyDashboardPage() {
+  const { budgetPlan, insights, month, recurringPayments, summary, syncStatus, transactions } =
+    Route.useLoaderData()
+  const recentTransactions = transactions.slice(0, 5)
 
   return (
-    <main id="main" className="app-page">
-      <header className="app-page__head">
-        <h1 className="app-page__title">People you follow</h1>
+    <main id="main" className="app-page finance-app-page">
+      <header className="app-page__head finance-page-head">
+        <p className="app-page__eyebrow">{syncStatus.label}</p>
+        <h1 className="app-page__title">{month}.</h1>
       </header>
 
-      {isGuest && (
-        <div className="app-banner">
-          <p>Sign in to follow builders and see their workflows here.</p>
-          <Link
-            to="/login"
-            className="btn btn--compact"
-            search={loginSearch({ redirect: '/app', signup: true })}
-          >
-            <span className="btn__label">Sign in</span>
-          </Link>
-        </div>
-      )}
+      <section className="finance-grid finance-grid--summary" aria-label="Money summary">
+        <FinanceCard
+          eyebrow="Can spend"
+          title="Left"
+          value={formatMoney(summary.safeToSpend)}
+          note="Flexible money this month"
+        />
+        <FinanceCard
+          eyebrow="Cash"
+          title="Now"
+          value={formatMoney(summary.cash)}
+        />
+        <FinanceCard
+          eyebrow="Review"
+          title="Items"
+          value={String(summary.reviewCount)}
+        />
+      </section>
 
-      <section className="app-section" aria-label="Following feed">
-        <ol className="ledger">
-          {posts.length === 0 ? (
-            isGuest ? null : (
-              <li className="feed-empty">
-                <p>Follow builders on Explore to fill this feed.</p>
-                <div className="feed-empty__actions">
-                  <Link to="/app/explore" className="btn">
-                    <span className="btn__label">Explore builders</span>
-                  </Link>
+      <section className="finance-layout">
+        <div className="finance-panel">
+          <div className="finance-panel__head">
+            <div>
+          <p>Budget</p>
+              <h2>Plan</h2>
+            </div>
+            <Link to="/app/budgets">Open <ArrowRight aria-hidden="true" /></Link>
+          </div>
+          <div className="finance-stack">
+            {budgetPlan.groups.map((group) => (
+              <section key={group.name} className="budget-group-card">
+                <div className="budget-group-card__head">
+                  <strong>{group.name}</strong>
+                  <span>{formatMoney(group.available)} left</span>
                 </div>
+                <div className="finance-stack">
+                  {group.categories.slice(0, 3).map((category) => (
+                    <BudgetMeter key={category.name} category={category} />
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        </div>
+
+        <div className="finance-panel">
+          <div className="finance-panel__head">
+            <div>
+              <p>Activity</p>
+              <h2>Recent</h2>
+            </div>
+            <Link to="/app/transactions">Open <ArrowRight aria-hidden="true" /></Link>
+          </div>
+          <ul className="transaction-list">
+            {recentTransactions.map((transaction) => (
+              <li key={transaction.id}>
+                <div>
+                  <strong>{transaction.merchant}</strong>
+                  <span>{transaction.date} · {transaction.category}</span>
+                </div>
+                <em className={transaction.amount > 0 ? 'is-positive' : undefined}>
+                  {formatMoney(transaction.amount)}
+                </em>
               </li>
-            )
-          ) : (
-            posts.map((post) => <PostCard key={post.id} post={post} variant="ledger" />)
-          )}
-        </ol>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="finance-layout finance-layout--secondary">
+        <div className="finance-panel">
+          <div className="finance-panel__head">
+            <div>
+              <p>Bills</p>
+              <h2>Upcoming</h2>
+            </div>
+            <Link to="/app/recurring">Open <ArrowRight aria-hidden="true" /></Link>
+          </div>
+          <ul className="transaction-list">
+            {recurringPayments.map((payment) => (
+              <li key={payment.id}>
+                <div>
+                  <strong>{payment.merchant}</strong>
+                  <span>{payment.nextDate} · {payment.cadence}</span>
+                </div>
+                <em>{formatMoney(-payment.amount)}</em>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="finance-panel finance-panel--accent">
+          <div className="finance-panel__head">
+            <div>
+              <p>Insights</p>
+              <h2>Notes</h2>
+            </div>
+            <Link to="/app/insights">Open <ArrowRight aria-hidden="true" /></Link>
+          </div>
+          <ul className="finance-insight-list">
+            {insights.map((insight) => (
+              <li key={insight.id}>
+                <strong>{insight.title}</strong>
+                <span>{insight.body}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
     </main>
   )

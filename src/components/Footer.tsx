@@ -11,11 +11,7 @@ export default function Footer({ variant = 'landing' }: { variant?: 'landing' | 
           <span className="foot__sep" aria-hidden="true">
             ·
           </span>
-          <Link to="/app">Feed</Link>
-          <span className="foot__sep" aria-hidden="true">
-            ·
-          </span>
-          <Link to="/app/explore">Explore</Link>
+          <Link to="/app">Dashboard</Link>
           <span className="foot__sep" aria-hidden="true">
             ·
           </span>
@@ -28,32 +24,19 @@ export default function Footer({ variant = 'landing' }: { variant?: 'landing' | 
   return (
     <footer className="foot" role="contentinfo">
       <OnieMark variant="display" as="p" />
-      <p className="foot__tag">
-        Share or find the skills, prompts, and harnesses that actually work in your field.
-      </p>
-      <p className="foot__set">
-        Built for builders working with AI agents.
-      </p>
+      <p className="foot__tag">Money, made quiet.</p>
       <p className="foot__links">
-        <Link to="/app/explore">Explore</Link>
+        <Link to="/app">Dashboard</Link>
         <span className="foot__sep" aria-hidden="true">
           ·
         </span>
-        <Link to="/blog">Blog</Link>
-        <span className="foot__sep" aria-hidden="true">
-          ·
-        </span>
-        <Link to="/about">About</Link>
+        <Link to="/app/accounts">Bank sync</Link>
         <span className="foot__sep" aria-hidden="true">
           ·
         </span>
         <Link to="/login" search={loginSearch({ signup: true })}>
-          Get started
+          Start
         </Link>
-        <span className="foot__sep" aria-hidden="true">
-          ·
-        </span>
-        <a href="#index">Top</a>
       </p>
     </footer>
   )

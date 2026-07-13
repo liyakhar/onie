@@ -52,6 +52,18 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  BudgetWorkspace: 'BudgetWorkspace',
+  BankConnection: 'BankConnection',
+  FinancialAccount: 'FinancialAccount',
+  TransactionCategory: 'TransactionCategory',
+  Merchant: 'Merchant',
+  FinanceTransaction: 'FinanceTransaction',
+  BudgetMonth: 'BudgetMonth',
+  BudgetAllocation: 'BudgetAllocation',
+  RecurringPayment: 'RecurringPayment',
+  SyncRun: 'SyncRun',
+  MoneyInsight: 'MoneyInsight',
+  CategoryRule: 'CategoryRule',
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
@@ -91,6 +103,183 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const BudgetWorkspaceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  currency: 'currency',
+  demo: 'demo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BudgetWorkspaceScalarFieldEnum = (typeof BudgetWorkspaceScalarFieldEnum)[keyof typeof BudgetWorkspaceScalarFieldEnum]
+
+
+export const BankConnectionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  workspaceId: 'workspaceId',
+  provider: 'provider',
+  providerItemId: 'providerItemId',
+  tokenRef: 'tokenRef',
+  status: 'status',
+  lastSyncedAt: 'lastSyncedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BankConnectionScalarFieldEnum = (typeof BankConnectionScalarFieldEnum)[keyof typeof BankConnectionScalarFieldEnum]
+
+
+export const FinancialAccountScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  bankConnectionId: 'bankConnectionId',
+  providerAccountId: 'providerAccountId',
+  name: 'name',
+  institution: 'institution',
+  type: 'type',
+  currency: 'currency',
+  balanceMinor: 'balanceMinor',
+  lastSyncedAt: 'lastSyncedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinancialAccountScalarFieldEnum = (typeof FinancialAccountScalarFieldEnum)[keyof typeof FinancialAccountScalarFieldEnum]
+
+
+export const TransactionCategoryScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  name: 'name',
+  system: 'system',
+  color: 'color',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TransactionCategoryScalarFieldEnum = (typeof TransactionCategoryScalarFieldEnum)[keyof typeof TransactionCategoryScalarFieldEnum]
+
+
+export const MerchantScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  name: 'name',
+  normalizedName: 'normalizedName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MerchantScalarFieldEnum = (typeof MerchantScalarFieldEnum)[keyof typeof MerchantScalarFieldEnum]
+
+
+export const FinanceTransactionScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  accountId: 'accountId',
+  categoryId: 'categoryId',
+  merchantId: 'merchantId',
+  providerTransactionId: 'providerTransactionId',
+  postedAt: 'postedAt',
+  description: 'description',
+  amountMinor: 'amountMinor',
+  currency: 'currency',
+  status: 'status',
+  recurring: 'recurring',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinanceTransactionScalarFieldEnum = (typeof FinanceTransactionScalarFieldEnum)[keyof typeof FinanceTransactionScalarFieldEnum]
+
+
+export const BudgetMonthScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  month: 'month',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BudgetMonthScalarFieldEnum = (typeof BudgetMonthScalarFieldEnum)[keyof typeof BudgetMonthScalarFieldEnum]
+
+
+export const BudgetAllocationScalarFieldEnum = {
+  id: 'id',
+  budgetMonthId: 'budgetMonthId',
+  categoryId: 'categoryId',
+  allocatedMinor: 'allocatedMinor',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BudgetAllocationScalarFieldEnum = (typeof BudgetAllocationScalarFieldEnum)[keyof typeof BudgetAllocationScalarFieldEnum]
+
+
+export const RecurringPaymentScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  merchantId: 'merchantId',
+  categoryId: 'categoryId',
+  name: 'name',
+  amountMinor: 'amountMinor',
+  currency: 'currency',
+  cadence: 'cadence',
+  nextDate: 'nextDate',
+  confirmed: 'confirmed',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RecurringPaymentScalarFieldEnum = (typeof RecurringPaymentScalarFieldEnum)[keyof typeof RecurringPaymentScalarFieldEnum]
+
+
+export const SyncRunScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  bankConnectionId: 'bankConnectionId',
+  provider: 'provider',
+  status: 'status',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
+  transactionsSeen: 'transactionsSeen',
+  transactionsAdded: 'transactionsAdded',
+  errorCode: 'errorCode',
+  errorMessage: 'errorMessage'
+} as const
+
+export type SyncRunScalarFieldEnum = (typeof SyncRunScalarFieldEnum)[keyof typeof SyncRunScalarFieldEnum]
+
+
+export const MoneyInsightScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  title: 'title',
+  body: 'body',
+  severity: 'severity',
+  createdAt: 'createdAt',
+  dismissedAt: 'dismissedAt'
+} as const
+
+export type MoneyInsightScalarFieldEnum = (typeof MoneyInsightScalarFieldEnum)[keyof typeof MoneyInsightScalarFieldEnum]
+
+
+export const CategoryRuleScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  merchantId: 'merchantId',
+  matchText: 'matchText',
+  categoryId: 'categoryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CategoryRuleScalarFieldEnum = (typeof CategoryRuleScalarFieldEnum)[keyof typeof CategoryRuleScalarFieldEnum]
 
 
 export const SessionScalarFieldEnum = {

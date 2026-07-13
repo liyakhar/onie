@@ -25,7 +25,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as WelcomeIndexRouteImport } from './routes/welcome/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as ResetPasswordIndexRouteImport } from './routes/reset-password/index'
-import { Route as NewIndexRouteImport } from './routes/new/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
@@ -36,7 +35,12 @@ import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-qu
 import { Route as DemoPrismaRouteImport } from './routes/demo/prisma'
 import { Route as DemoBetterAuthRouteImport } from './routes/demo/better-auth'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as AppTransactionsRouteImport } from './routes/app/transactions'
+import { Route as AppRecurringRouteImport } from './routes/app/recurring'
+import { Route as AppInsightsRouteImport } from './routes/app/insights'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
+import { Route as AppBudgetsRouteImport } from './routes/app/budgets'
+import { Route as AppAccountsRouteImport } from './routes/app/accounts'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as PPostIdEditRouteRouteImport } from './routes/p/$postId/edit/route'
 import { Route as PPostIdEditIndexRouteImport } from './routes/p/$postId/edit/index'
@@ -121,11 +125,6 @@ const ResetPasswordIndexRoute = ResetPasswordIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ResetPasswordRouteRoute,
 } as any)
-const NewIndexRoute = NewIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => NewRouteRoute,
-} as any)
 const LoginIndexRoute = LoginIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -176,9 +175,34 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppTransactionsRoute = AppTransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppRecurringRoute = AppRecurringRouteImport.update({
+  id: '/recurring',
+  path: '/recurring',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppInsightsRoute = AppInsightsRouteImport.update({
+  id: '/insights',
+  path: '/insights',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppExploreRoute = AppExploreRouteImport.update({
   id: '/explore',
   path: '/explore',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppBudgetsRoute = AppBudgetsRouteImport.update({
+  id: '/budgets',
+  path: '/budgets',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppAccountsRoute = AppAccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
@@ -202,7 +226,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRouteRouteWithChildren
   '/app': typeof AppRouteRouteWithChildren
   '/login': typeof LoginRouteRouteWithChildren
-  '/new': typeof NewRouteRouteWithChildren
+  '/new': typeof NewRouteRoute
   '/p': typeof PRouteRouteWithChildren
   '/reset-password': typeof ResetPasswordRouteRouteWithChildren
   '/settings': typeof SettingsRouteRouteWithChildren
@@ -211,7 +235,12 @@ export interface FileRoutesByFullPath {
   '/explore': typeof ExploreRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/app/accounts': typeof AppAccountsRoute
+  '/app/budgets': typeof AppBudgetsRoute
   '/app/explore': typeof AppExploreRoute
+  '/app/insights': typeof AppInsightsRoute
+  '/app/recurring': typeof AppRecurringRoute
+  '/app/transactions': typeof AppTransactionsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/prisma': typeof DemoPrismaRoute
@@ -222,7 +251,6 @@ export interface FileRoutesByFullPath {
   '/app/': typeof AppIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/login/': typeof LoginIndexRoute
-  '/new/': typeof NewIndexRoute
   '/reset-password/': typeof ResetPasswordIndexRoute
   '/settings/': typeof SettingsIndexRoute
   '/welcome/': typeof WelcomeIndexRoute
@@ -232,12 +260,18 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/new': typeof NewRouteRoute
   '/p': typeof PRouteRouteWithChildren
   '/u': typeof URouteRouteWithChildren
   '/explore': typeof ExploreRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/app/accounts': typeof AppAccountsRoute
+  '/app/budgets': typeof AppBudgetsRoute
   '/app/explore': typeof AppExploreRoute
+  '/app/insights': typeof AppInsightsRoute
+  '/app/recurring': typeof AppRecurringRoute
+  '/app/transactions': typeof AppTransactionsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/prisma': typeof DemoPrismaRoute
@@ -248,7 +282,6 @@ export interface FileRoutesByTo {
   '/app': typeof AppIndexRoute
   '/blog': typeof BlogIndexRoute
   '/login': typeof LoginIndexRoute
-  '/new': typeof NewIndexRoute
   '/reset-password': typeof ResetPasswordIndexRoute
   '/settings': typeof SettingsIndexRoute
   '/welcome': typeof WelcomeIndexRoute
@@ -261,7 +294,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRouteRouteWithChildren
   '/app': typeof AppRouteRouteWithChildren
   '/login': typeof LoginRouteRouteWithChildren
-  '/new': typeof NewRouteRouteWithChildren
+  '/new': typeof NewRouteRoute
   '/p': typeof PRouteRouteWithChildren
   '/reset-password': typeof ResetPasswordRouteRouteWithChildren
   '/settings': typeof SettingsRouteRouteWithChildren
@@ -270,7 +303,12 @@ export interface FileRoutesById {
   '/explore': typeof ExploreRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/app/accounts': typeof AppAccountsRoute
+  '/app/budgets': typeof AppBudgetsRoute
   '/app/explore': typeof AppExploreRoute
+  '/app/insights': typeof AppInsightsRoute
+  '/app/recurring': typeof AppRecurringRoute
+  '/app/transactions': typeof AppTransactionsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/prisma': typeof DemoPrismaRoute
@@ -281,7 +319,6 @@ export interface FileRoutesById {
   '/app/': typeof AppIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/login/': typeof LoginIndexRoute
-  '/new/': typeof NewIndexRoute
   '/reset-password/': typeof ResetPasswordIndexRoute
   '/settings/': typeof SettingsIndexRoute
   '/welcome/': typeof WelcomeIndexRoute
@@ -305,7 +342,12 @@ export interface FileRouteTypes {
     | '/explore'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/app/accounts'
+    | '/app/budgets'
     | '/app/explore'
+    | '/app/insights'
+    | '/app/recurring'
+    | '/app/transactions'
     | '/blog/$slug'
     | '/demo/better-auth'
     | '/demo/prisma'
@@ -316,7 +358,6 @@ export interface FileRouteTypes {
     | '/app/'
     | '/blog/'
     | '/login/'
-    | '/new/'
     | '/reset-password/'
     | '/settings/'
     | '/welcome/'
@@ -326,12 +367,18 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/new'
     | '/p'
     | '/u'
     | '/explore'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/app/accounts'
+    | '/app/budgets'
     | '/app/explore'
+    | '/app/insights'
+    | '/app/recurring'
+    | '/app/transactions'
     | '/blog/$slug'
     | '/demo/better-auth'
     | '/demo/prisma'
@@ -342,7 +389,6 @@ export interface FileRouteTypes {
     | '/app'
     | '/blog'
     | '/login'
-    | '/new'
     | '/reset-password'
     | '/settings'
     | '/welcome'
@@ -363,7 +409,12 @@ export interface FileRouteTypes {
     | '/explore'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/app/accounts'
+    | '/app/budgets'
     | '/app/explore'
+    | '/app/insights'
+    | '/app/recurring'
+    | '/app/transactions'
     | '/blog/$slug'
     | '/demo/better-auth'
     | '/demo/prisma'
@@ -374,7 +425,6 @@ export interface FileRouteTypes {
     | '/app/'
     | '/blog/'
     | '/login/'
-    | '/new/'
     | '/reset-password/'
     | '/settings/'
     | '/welcome/'
@@ -388,7 +438,7 @@ export interface RootRouteChildren {
   AboutRouteRoute: typeof AboutRouteRouteWithChildren
   AppRouteRoute: typeof AppRouteRouteWithChildren
   LoginRouteRoute: typeof LoginRouteRouteWithChildren
-  NewRouteRoute: typeof NewRouteRouteWithChildren
+  NewRouteRoute: typeof NewRouteRoute
   PRouteRoute: typeof PRouteRouteWithChildren
   ResetPasswordRouteRoute: typeof ResetPasswordRouteRouteWithChildren
   SettingsRouteRoute: typeof SettingsRouteRouteWithChildren
@@ -519,13 +569,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordIndexRouteImport
       parentRoute: typeof ResetPasswordRouteRoute
     }
-    '/new/': {
-      id: '/new/'
-      path: '/'
-      fullPath: '/new/'
-      preLoaderRoute: typeof NewIndexRouteImport
-      parentRoute: typeof NewRouteRoute
-    }
     '/login/': {
       id: '/login/'
       path: '/'
@@ -596,11 +639,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/transactions': {
+      id: '/app/transactions'
+      path: '/transactions'
+      fullPath: '/app/transactions'
+      preLoaderRoute: typeof AppTransactionsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/recurring': {
+      id: '/app/recurring'
+      path: '/recurring'
+      fullPath: '/app/recurring'
+      preLoaderRoute: typeof AppRecurringRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/insights': {
+      id: '/app/insights'
+      path: '/insights'
+      fullPath: '/app/insights'
+      preLoaderRoute: typeof AppInsightsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/explore': {
       id: '/app/explore'
       path: '/explore'
       fullPath: '/app/explore'
       preLoaderRoute: typeof AppExploreRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/budgets': {
+      id: '/app/budgets'
+      path: '/budgets'
+      fullPath: '/app/budgets'
+      preLoaderRoute: typeof AppBudgetsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/accounts': {
+      id: '/app/accounts'
+      path: '/accounts'
+      fullPath: '/app/accounts'
+      preLoaderRoute: typeof AppAccountsRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/api/auth/$': {
@@ -640,12 +718,22 @@ const AboutRouteRouteWithChildren = AboutRouteRoute._addFileChildren(
 )
 
 interface AppRouteRouteChildren {
+  AppAccountsRoute: typeof AppAccountsRoute
+  AppBudgetsRoute: typeof AppBudgetsRoute
   AppExploreRoute: typeof AppExploreRoute
+  AppInsightsRoute: typeof AppInsightsRoute
+  AppRecurringRoute: typeof AppRecurringRoute
+  AppTransactionsRoute: typeof AppTransactionsRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppAccountsRoute: AppAccountsRoute,
+  AppBudgetsRoute: AppBudgetsRoute,
   AppExploreRoute: AppExploreRoute,
+  AppInsightsRoute: AppInsightsRoute,
+  AppRecurringRoute: AppRecurringRoute,
+  AppTransactionsRoute: AppTransactionsRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
@@ -663,18 +751,6 @@ const LoginRouteRouteChildren: LoginRouteRouteChildren = {
 
 const LoginRouteRouteWithChildren = LoginRouteRoute._addFileChildren(
   LoginRouteRouteChildren,
-)
-
-interface NewRouteRouteChildren {
-  NewIndexRoute: typeof NewIndexRoute
-}
-
-const NewRouteRouteChildren: NewRouteRouteChildren = {
-  NewIndexRoute: NewIndexRoute,
-}
-
-const NewRouteRouteWithChildren = NewRouteRoute._addFileChildren(
-  NewRouteRouteChildren,
 )
 
 interface PPostIdEditRouteRouteChildren {
@@ -761,7 +837,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRouteRoute: AboutRouteRouteWithChildren,
   AppRouteRoute: AppRouteRouteWithChildren,
   LoginRouteRoute: LoginRouteRouteWithChildren,
-  NewRouteRoute: NewRouteRouteWithChildren,
+  NewRouteRoute: NewRouteRoute,
   PRouteRoute: PRouteRouteWithChildren,
   ResetPasswordRouteRoute: ResetPasswordRouteRouteWithChildren,
   SettingsRouteRoute: SettingsRouteRouteWithChildren,

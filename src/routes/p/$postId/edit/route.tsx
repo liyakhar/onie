@@ -1,10 +1,7 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { requireOnboarded } from '#/server/profiles'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/p/$postId/edit')({
   loader: async () => {
-    await requireOnboarded()
-    return null
+    throw redirect({ to: '/app' })
   },
-  component: () => <Outlet />,
 })

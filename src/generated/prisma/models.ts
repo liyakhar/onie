@@ -9,6 +9,18 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User.ts'
+export type * from './models/BudgetWorkspace.ts'
+export type * from './models/BankConnection.ts'
+export type * from './models/FinancialAccount.ts'
+export type * from './models/TransactionCategory.ts'
+export type * from './models/Merchant.ts'
+export type * from './models/FinanceTransaction.ts'
+export type * from './models/BudgetMonth.ts'
+export type * from './models/BudgetAllocation.ts'
+export type * from './models/RecurringPayment.ts'
+export type * from './models/SyncRun.ts'
+export type * from './models/MoneyInsight.ts'
+export type * from './models/CategoryRule.ts'
 export type * from './models/Session.ts'
 export type * from './models/Account.ts'
 export type * from './models/Verification.ts'

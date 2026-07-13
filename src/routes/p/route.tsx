@@ -1,8 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { AppShell } from '#/components/AppShell'
-import { NotFoundPage } from '#/components/NotFoundPage'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/p')({
-  component: AppShell,
-  notFoundComponent: NotFoundPage,
+  loader: async () => {
+    throw redirect({ to: '/app' })
+  },
 })

@@ -581,7 +581,20 @@ function authorId(seedAuthorId: string) {
 }
 
 async function main() {
-  console.log('Seeding Onie demo builders...')
+  if (process.env.SEED_LEGACY_ONIE_CONTENT !== 'true') {
+    console.log(
+      'Skipping legacy Onie demo seed. Set SEED_LEGACY_ONIE_CONTENT=true for local/staging backfill only.',
+    )
+    return
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      'Refusing to seed legacy Onie demo content in production.',
+    )
+  }
+
+  console.log('Seeding legacy Onie demo builders...')
   console.log('Account list: src/lib/demo-accounts.ts')
 
   await removeLegacyDemo()

@@ -1,6 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { AppShell } from '#/components/AppShell'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/u')({
-  component: AppShell,
+  loader: async () => {
+    throw redirect({ to: '/app' })
+  },
 })

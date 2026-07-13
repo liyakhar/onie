@@ -8,7 +8,7 @@ import { buildPageMeta } from '#/lib/seo'
 const loginMeta = buildPageMeta({
   path: '/login',
   title: 'Sign in',
-  description: 'Sign in to Onie to follow practitioners, publish workflows, and build your feed.',
+  description: 'Sign in to Wollie.',
   noindex: true,
 })
 
@@ -223,11 +223,11 @@ function LoginPage() {
     <main id="main" className="app-page auth-page">
       <header className="app-page__head">
         <p className="app-page__eyebrow">{isSignUp ? 'Join' : 'Sign in'}</p>
-        <h1 className="app-page__title">{isSignUp ? 'Create your account' : 'Welcome back'}</h1>
+        <h1 className="app-page__title">{isSignUp ? 'Create account' : 'Welcome back'}</h1>
         <p className="app-page__lede">
           {isSignUp
-            ? 'Share agent workflows, follow builders, and build your feed.'
-            : 'Sign in to follow builders and publish workflows.'}
+            ? 'Start your budget.'
+            : 'Open your budget.'}
         </p>
       </header>
 
@@ -339,7 +339,7 @@ function LoginPage() {
           </button>
 
           <p className="login-footnote">
-            By continuing you agree to share workflows responsibly.
+            Your money data stays private.
           </p>
         </footer>
       </div>

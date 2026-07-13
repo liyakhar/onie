@@ -70,9 +70,282 @@ model User {
   pinnedPostId  String?  @unique
   pinnedPost    Post?    @relation("PinnedPost", fields: [pinnedPostId], references: [id], onDelete: SetNull)
   notifications Notification[]
+  financeWorkspaces BudgetWorkspace[]
+  bankConnections   BankConnection[]
 
   @@unique([email])
   @@map("user")
+}
+
+enum FinanceAccountType {
+  CHECKING
+  SAVINGS
+  CREDIT_CARD
+  CASH
+  LOAN
+  INVESTMENT
+  OTHER
+}
+
+enum FinanceConnectionProvider {
+  DEMO
+  SIMPLEFIN
+  GOCARDLESS
+  PLAID
+}
+
+enum FinanceConnectionStatus {
+  NOT_CONNECTED
+  CONNECTED
+  SYNCING
+  NEEDS_RECONNECT
+  FAILED
+  DISABLED
+}
+
+enum FinanceTransactionStatus {
+  CLEARED
+  PENDING
+  NEEDS_REVIEW
+}
+
+enum FinanceRecurringCadence {
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum FinanceSyncStatus {
+  SUCCESS
+  FAILED
+  RUNNING
+}
+
+model BudgetWorkspace {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String   @default("Personal budget")
+  currency    String   @default("USD")
+  demo        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  accounts    FinancialAccount[]
+  categories  TransactionCategory[]
+  merchants   Merchant[]
+  budgetMonths BudgetMonth[]
+  transactions FinanceTransaction[]
+  recurringPayments RecurringPayment[]
+  insights    MoneyInsight[]
+  rules       CategoryRule[]
+  syncRuns    SyncRun[]
+
+  @@index([userId])
+}
+
+model BankConnection {
+  id              String                    @id @default(cuid())
+  userId          String
+  user            User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspaceId     String
+  provider        FinanceConnectionProvider
+  providerItemId  String?
+  tokenRef        String?
+  status          FinanceConnectionStatus   @default(NOT_CONNECTED)
+  lastSyncedAt    DateTime?
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+
+  accounts        FinancialAccount[]
+  syncRuns        SyncRun[]
+
+  @@index([userId])
+  @@index([workspaceId])
+  @@unique([provider, providerItemId])
+}
+
+model FinancialAccount {
+  id                String             @id @default(cuid())
+  workspaceId        String
+  workspace          BudgetWorkspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  bankConnectionId   String?
+  bankConnection     BankConnection?    @relation(fields: [bankConnectionId], references: [id], onDelete: SetNull)
+  providerAccountId  String?
+  name              String
+  institution       String?
+  type              FinanceAccountType
+  currency          String              @default("USD")
+  balanceMinor      Int
+  lastSyncedAt      DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  transactions      FinanceTransaction[]
+
+  @@index([workspaceId])
+  @@index([bankConnectionId])
+  @@unique([bankConnectionId, providerAccountId])
+}
+
+model TransactionCategory {
+  id           String           @id @default(cuid())
+  workspaceId  String
+  workspace    BudgetWorkspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name         String
+  system       Boolean          @default(false)
+  color        String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  transactions FinanceTransaction[]
+  allocations  BudgetAllocation[]
+  recurringPayments RecurringPayment[]
+  rules        CategoryRule[]
+
+  @@unique([workspaceId, name])
+  @@index([workspaceId])
+}
+
+model Merchant {
+  id           String           @id @default(cuid())
+  workspaceId  String
+  workspace    BudgetWorkspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name         String
+  normalizedName String
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  transactions FinanceTransaction[]
+  recurringPayments RecurringPayment[]
+  rules        CategoryRule[]
+
+  @@unique([workspaceId, normalizedName])
+  @@index([workspaceId])
+}
+
+model FinanceTransaction {
+  id                    String                   @id @default(cuid())
+  workspaceId            String
+  workspace              BudgetWorkspace          @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  accountId              String
+  account                FinancialAccount         @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  categoryId             String?
+  category               TransactionCategory?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  merchantId             String?
+  merchant               Merchant?                @relation(fields: [merchantId], references: [id], onDelete: SetNull)
+  providerTransactionId  String?
+  postedAt               DateTime
+  description            String
+  amountMinor            Int
+  currency               String                   @default("USD")
+  status                 FinanceTransactionStatus @default(CLEARED)
+  recurring              Boolean                  @default(false)
+  notes                  String?
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+
+  @@index([workspaceId, postedAt])
+  @@index([accountId])
+  @@index([categoryId])
+  @@unique([accountId, providerTransactionId])
+}
+
+model BudgetMonth {
+  id            String           @id @default(cuid())
+  workspaceId   String
+  workspace     BudgetWorkspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  month         String
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  allocations   BudgetAllocation[]
+
+  @@unique([workspaceId, month])
+  @@index([workspaceId])
+}
+
+model BudgetAllocation {
+  id            String              @id @default(cuid())
+  budgetMonthId String
+  budgetMonth   BudgetMonth         @relation(fields: [budgetMonthId], references: [id], onDelete: Cascade)
+  categoryId    String
+  category      TransactionCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  allocatedMinor Int
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  @@unique([budgetMonthId, categoryId])
+  @@index([categoryId])
+}
+
+model RecurringPayment {
+  id             String                  @id @default(cuid())
+  workspaceId    String
+  workspace      BudgetWorkspace         @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  merchantId     String?
+  merchant       Merchant?               @relation(fields: [merchantId], references: [id], onDelete: SetNull)
+  categoryId     String?
+  category       TransactionCategory?    @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  name           String
+  amountMinor    Int
+  currency       String                  @default("USD")
+  cadence        FinanceRecurringCadence
+  nextDate       DateTime
+  confirmed      Boolean                 @default(false)
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+
+  @@index([workspaceId])
+  @@index([nextDate])
+}
+
+model SyncRun {
+  id              String             @id @default(cuid())
+  workspaceId      String
+  workspace        BudgetWorkspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  bankConnectionId String?
+  bankConnection   BankConnection?    @relation(fields: [bankConnectionId], references: [id], onDelete: SetNull)
+  provider         FinanceConnectionProvider
+  status           FinanceSyncStatus
+  startedAt        DateTime           @default(now())
+  finishedAt       DateTime?
+  transactionsSeen Int                @default(0)
+  transactionsAdded Int               @default(0)
+  errorCode        String?
+  errorMessage     String?
+
+  @@index([workspaceId, startedAt])
+  @@index([bankConnectionId])
+}
+
+model MoneyInsight {
+  id           String          @id @default(cuid())
+  workspaceId  String
+  workspace    BudgetWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  title        String
+  body         String
+  severity     String          @default("info")
+  createdAt    DateTime        @default(now())
+  dismissedAt  DateTime?
+
+  @@index([workspaceId, createdAt])
+}
+
+model CategoryRule {
+  id          String               @id @default(cuid())
+  workspaceId String
+  workspace   BudgetWorkspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  merchantId  String?
+  merchant    Merchant?            @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  matchText   String?
+  categoryId  String
+  category    TransactionCategory  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  @@index([workspaceId])
+  @@index([categoryId])
 }
 
 model Session {

@@ -57,7 +57,7 @@ function createAuth() {
       enabled: true,
       sendResetPassword: async ({ user, url }) => {
         if (process.env.NODE_ENV === 'development') {
-          console.info(`[onie] Password reset for ${user.email}: ${url}`)
+          console.info(`[wollie] Password reset for ${user.email}: ${url}`)
         }
       },
     },

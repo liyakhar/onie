@@ -4,9 +4,8 @@ import { site } from '#/lib/site'
 
 const aboutMeta = buildPageMeta({
   path: '/about',
-  title: 'About Onie',
-  description:
-    'Onie is a public feed of agent workflows from practitioners — prompts, skills, and setups tagged by discipline and stack.',
+  title: 'About Wollie',
+  description: 'Wollie is a calm budget that shows what you can spend.',
 })
 
 export const Route = createFileRoute('/about/')({
@@ -31,24 +30,12 @@ function AboutPage() {
       <header className="app-page__head">
         <p className="app-page__eyebrow">About</p>
         <h1 className="app-page__title">{site.name}</h1>
-        <p className="app-page__lede">{site.description}</p>
+        <p className="app-page__lede">Budgeting without the chore.</p>
       </header>
 
       <article className="post-detail__body">
-        <p>
-          We built Onie because the setups that make AI agents useful in real practice
-          rarely travel beyond private chats and local folders.
-        </p>
-        <p>
-          Each workflow documents what practitioners run, how it is wired, and which
-          tools it depends on — tagged by discipline and stack so you can filter to
-          your field in{' '}
-          <Link to="/app/explore">Explore</Link>.
-        </p>
-        <p>
-          Follow peers in your discipline, publish the harnesses you rely on, and fork
-          workflows to adapt them to your own stack.
-        </p>
+        <p>Connect accounts. Review less. Spend with a number.</p>
+        <p><Link to="/app">Open the demo</Link>.</p>
       </article>
     </main>
   )
