@@ -49,7 +49,7 @@ function LandingPage() {
           <p className="discovery-kicker">Wollie</p>
           <h1 id="landing-title">Money, made quiet.</h1>
           <p className="discovery-intro">
-            A budget that updates itself.
+            See your money without spreadsheet work.
           </p>
 
           <div className="finance-hero__actions">
