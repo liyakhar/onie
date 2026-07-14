@@ -378,7 +378,7 @@ export const requireOnboarded = createServerFn({ method: 'GET' }).handler(
     })
 
     if (profile && !profile.onboarded) {
-      throw redirect({ to: '/welcome' })
+      throw redirect({ to: '/welcome', search: { redirect: '/app' } })
     }
   },
 )

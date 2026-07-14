@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { authClient } from '#/lib/auth-client'
 import { buildPageMeta } from '#/lib/seo'
@@ -23,7 +23,6 @@ export const Route = createFileRoute('/reset-password/')({
 })
 
 function ResetPasswordPage() {
-  const router = useRouter()
   const { token, error: tokenError } = Route.useSearch()
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')

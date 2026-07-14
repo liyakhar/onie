@@ -1,6 +1,20 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import type { Category } from '#/generated/prisma/client'
+import { Badge } from '#/components/ui/badge'
+import { Button } from '#/components/ui/button'
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '#/components/ui/card'
+import { Input } from '#/components/ui/input'
+import { Label } from '#/components/ui/label'
+import { Textarea } from '#/components/ui/textarea'
 import { getMyProfile, updateProfile } from '#/server/profiles'
 import { authClient } from '#/lib/auth-client'
 import { loginSearch } from '#/lib/auth-nav'
@@ -68,102 +82,114 @@ function SettingsPage() {
   }
 
   return (
-    <main id="main" className="app-page">
-      <header className="app-page__head">
-        <p className="app-page__eyebrow">Wollie</p>
-        <h1 className="app-page__title">Settings.</h1>
-        <p className="app-page__lede">
-          Keep this boring on purpose: account, sync, privacy.
-        </p>
+    <main id="main" className="mx-auto grid w-full max-w-7xl gap-5 bg-white px-4 py-5 text-zinc-950 sm:px-6 lg:px-8">
+      <header className="flex flex-col gap-4 border-b border-zinc-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <Badge variant="outline" className="mb-1.5 rounded-md border-zinc-200 bg-white font-normal text-zinc-700">
+            Account
+          </Badge>
+          <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
+          <p className="mt-1 text-sm text-zinc-500">Profile and preferences</p>
+        </div>
+        <Button asChild variant="outline" className="border-zinc-200 bg-white text-zinc-950 hover:bg-zinc-100">
+          <Link to="/app">
+            <ArrowLeft aria-hidden="true" />
+            Overview
+          </Link>
+        </Button>
       </header>
 
-      <div className="settings-layout">
-        <form onSubmit={handleSubmit} className="app-form settings-panel">
-          <div>
-            <p className="settings-panel__kicker">Account</p>
-            <h2 className="settings-panel__title">Your budget</h2>
-          </div>
+      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1.35fr)_minmax(18rem,0.65fr)]">
+        <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
+          <CardHeader className="border-b border-zinc-200 pb-4">
+            <CardTitle>Account details</CardTitle>
+            <CardDescription>Used only inside your Wollie account</CardDescription>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <form onSubmit={handleSubmit} className="grid gap-5">
+              <div className="grid gap-2">
+                <Label htmlFor="username">Handle</Label>
+                <Input
+                  id="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value.toLowerCase())}
+                  pattern="[a-z0-9-]+"
+                  required
+                  className="border-zinc-200 bg-white text-zinc-950 focus-visible:border-zinc-950 focus-visible:ring-zinc-950/15"
+                />
+                <p className="text-xs text-zinc-500">Lowercase letters, numbers, and hyphens.</p>
+              </div>
 
-          <div className="app-form__field">
-            <label className="app-form__label" htmlFor="username">
-              Handle
-            </label>
-            <input
-              id="username"
-              className="app-form__input app-form__textarea--mono"
-              value={username}
-              onChange={(e) => setUsername(e.target.value.toLowerCase())}
-              pattern="[a-z0-9-]+"
-              required
-            />
-            <p className="app-form__hint">Private account handle. Not a public profile.</p>
-          </div>
+              <div className="grid gap-2">
+                <Label htmlFor="headline">Budget name</Label>
+                <Input
+                  id="headline"
+                  value={headline}
+                  onChange={(e) => setHeadline(e.target.value)}
+                  placeholder="Personal budget"
+                  className="border-zinc-200 bg-white text-zinc-950 placeholder:text-zinc-400 focus-visible:border-zinc-950 focus-visible:ring-zinc-950/15"
+                />
+              </div>
 
-          <div className="app-form__field">
-            <label className="app-form__label" htmlFor="headline">
-              Budget name
-            </label>
-            <input
-              id="headline"
-              className="app-form__input"
-              value={headline}
-              onChange={(e) => setHeadline(e.target.value)}
-              placeholder="Personal budget"
-            />
-          </div>
+              <div className="grid gap-2">
+                <Label htmlFor="bio">Note</Label>
+                <Textarea
+                  id="bio"
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                  rows={4}
+                  placeholder="Optional"
+                  className="min-h-28 resize-none border-zinc-200 bg-white text-zinc-950 placeholder:text-zinc-400 focus-visible:border-zinc-950 focus-visible:ring-zinc-950/15"
+                />
+              </div>
 
-          <div className="app-form__field">
-            <label className="app-form__label" htmlFor="bio">
-              Note
-            </label>
-            <textarea
-              id="bio"
-              className="app-form__textarea"
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-              rows={4}
-              placeholder="Optional"
-            />
-          </div>
+              {error && <p className="text-sm font-medium text-zinc-950" role="alert">{error}</p>}
+              {saved && <p className="text-sm text-zinc-700" role="status">Saved.</p>}
 
-          {error && <p className="post-detail__error">{error}</p>}
-          {saved && <p className="app-form__hint" data-tone="success">Saved.</p>}
+              <div>
+                <Button type="submit" disabled={loading} className="bg-zinc-950 text-white hover:bg-zinc-800">
+                  {loading ? 'Saving…' : 'Save changes'}
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
 
-          <div className="app-form__actions">
-            <button type="submit" className="btn" disabled={loading}>
-              <span className="btn__label">{loading ? 'Saving…' : 'Save'}</span>
-            </button>
-          </div>
-        </form>
+        <div className="grid gap-4">
+          <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
+            <CardHeader className="border-b border-zinc-200 pb-4">
+              <CardTitle>Bank connections</CardTitle>
+              <CardDescription>SimpleFIN accounts</CardDescription>
+              <CardAction>
+                <Badge variant="outline" className="rounded-md border-zinc-200 bg-white text-zinc-700">
+                  Sync
+                </Badge>
+              </CardAction>
+            </CardHeader>
+            <CardContent className="pt-5">
+              <Button asChild variant="outline" className="w-full justify-between border-zinc-200 bg-white text-zinc-950 hover:bg-zinc-100">
+                <Link to="/app/accounts">
+                  Manage accounts
+                  <ArrowRight aria-hidden="true" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
 
-        <section className="settings-panel" aria-labelledby="sync-title">
-          <p className="settings-panel__kicker">Sync</p>
-          <h2 id="sync-title" className="settings-panel__title">Bank sync</h2>
-          <dl className="settings-list">
-            <div>
-              <dt>Current mode</dt>
-              <dd>Demo data</dd>
-            </div>
-            <div>
-              <dt>Live banks</dt>
-              <dd>Requires a paid bank-data provider before launch.</dd>
-            </div>
-            <div>
-              <dt>Safety</dt>
-              <dd>Bank credentials never belong in the browser.</dd>
-            </div>
-          </dl>
-        </section>
-
-        <section className="settings-panel" aria-labelledby="privacy-title">
-          <p className="settings-panel__kicker">Privacy</p>
-          <h2 id="privacy-title" className="settings-panel__title">Your data</h2>
-          <ul className="settings-checklist">
-            <li>Private by default.</li>
-            <li>No public profiles.</li>
-            <li>No demo accounts in production sign-in.</li>
-          </ul>
-        </section>
+          <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
+            <CardHeader className="border-b border-zinc-200 pb-4">
+              <CardTitle>Privacy</CardTitle>
+              <CardDescription>Your financial data stays private</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-5">
+              <ul className="grid gap-3 text-sm text-zinc-600">
+                <li className="border-b border-zinc-200 pb-3">Private by default</li>
+                <li className="border-b border-zinc-200 pb-3">No public financial profile</li>
+                <li>Credentials stay server-side</li>
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </main>
   )

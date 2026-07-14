@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { AppShell } from '#/components/AppShell'
+import { PublicShell } from '#/components/PublicShell'
 import { requireNeedsOnboarding } from '#/server/profiles'
 
 export const Route = createFileRoute('/welcome')({
@@ -7,5 +7,5 @@ export const Route = createFileRoute('/welcome')({
     await requireNeedsOnboarding()
     return null
   },
-  component: AppShell,
+  component: PublicShell,
 })

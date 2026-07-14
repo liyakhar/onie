@@ -417,6 +417,12 @@ img, svg { display: block; max-width: 100%; }
   padding-block: var(--space-lg) var(--space-2xl);
 }
 
+.app-page {
+  width: min(64rem, calc(100% - 2 * var(--page-gutter)));
+  margin-inline: auto;
+  padding-block: clamp(3rem, 8vw, 6rem);
+}
+
 .app-loading {
   display: grid;
   place-items: center;
@@ -465,6 +471,20 @@ img, svg { display: block; max-width: 100%; }
   border-radius: var(--radius-pill);
   background: color-mix(in oklch, white 56%, transparent);
   box-shadow: 0 16px 50px color-mix(in oklch, var(--color-ink) 5%, transparent);
+}
+
+.app-nav__single {
+  margin: 0;
+  color: color-mix(in oklch, var(--color-ink) 58%, white);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--dur-short) var(--ease-out);
+}
+
+.app-nav__single:hover,
+.app-nav__single:focus-visible {
+  color: var(--color-ink);
 }
 
 .app-nav__tab {
@@ -537,33 +557,34 @@ img, svg { display: block; max-width: 100%; }
 
 .app-page__head {
   display: grid;
-  gap: var(--space-xs);
-  margin-block-end: var(--space-lg);
-  max-width: 42ch;
+  gap: 0.75rem;
+  margin-block-end: 2.5rem;
+  max-width: 44rem;
 }
 
 .app-page__eyebrow {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--color-accent);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #047857;
 }
 
 .app-page__title {
   font-family: var(--font-display);
   font-variation-settings: 'wght' 580, 'opsz' 48;
-  font-size: var(--text-2xl);
-  line-height: var(--lh-snug);
-  letter-spacing: var(--tracking-tight);
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.05em;
   color: var(--color-ink);
 }
 
 .app-page__lede {
-  font-size: var(--text-base);
-  line-height: var(--lh-relaxed);
-  color: var(--color-neutral);
-  max-width: var(--measure);
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  line-height: 1.45;
+  color: color-mix(in oklch, var(--color-ink) 58%, white);
+  max-width: 36rem;
 }
 
 .app-section {
@@ -1589,21 +1610,27 @@ img, svg { display: block; max-width: 100%; }
   justify-content: center;
   gap: var(--space-xs);
   padding-inline: var(--space-lg);
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
   line-height: 1;
-  color: var(--color-accent-ink);
-  background: var(--color-accent);
-  border: 1px solid var(--color-accent);
+  color: white;
+  background: var(--color-ink);
+  border: 1px solid var(--color-ink);
+  border-radius: 0.5rem;
   cursor: pointer;
   white-space: nowrap;
   transition: transform var(--dur-micro) var(--ease-out),
-              background-color var(--dur-short) var(--ease-out);
+              background-color var(--dur-short) var(--ease-out),
+              border-color var(--dur-short) var(--ease-out);
 }
 @media (hover: hover) {
-  .btn:hover { background: var(--color-focus); border-color: var(--color-focus); }
+  .btn:hover {
+    background: color-mix(in oklch, var(--color-ink) 82%, white);
+    border-color: color-mix(in oklch, var(--color-ink) 82%, white);
+  }
 }
 .btn:active { transform: translateY(1px); }
 /* the CTA fill is red, so its focus ring is bone-ink (≥APCA Lc 90 on the red
@@ -1617,9 +1644,9 @@ img, svg { display: block; max-width: 100%; }
 .btn[data-state="loading"] { cursor: progress; }
 .btn[data-state="loading"] .btn__label { opacity: 0.6; }
 .btn[data-state="success"] {
-  background: transparent;
+  background: white;
   color: var(--color-ink);
-  border-color: var(--color-rule-2);
+  border-color: color-mix(in oklch, var(--color-ink) 14%, white);
 }
 
 .enquire__help {
@@ -2422,9 +2449,10 @@ img, svg { display: block; max-width: 100%; }
 .settings-panel {
   display: grid;
   gap: var(--space-md);
-  padding: var(--space-lg);
-  background: var(--color-paper-2);
-  border: 1px solid var(--color-rule-2);
+  padding: 1.5rem;
+  background: white;
+  border: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+  border-radius: 1rem;
 }
 
 .settings-panel__kicker {
@@ -2501,17 +2529,23 @@ img, svg { display: block; max-width: 100%; }
 }
 
 .app-form--narrow {
-  max-width: 22rem;
+  max-width: 28rem;
 }
 
 .auth-page {
   width: 100%;
-  max-width: 22rem;
+  max-width: 30rem;
   margin-inline: auto;
 }
 
 .auth-page .app-page__head {
-  margin-block-end: var(--space-md);
+  margin-block-end: 2rem;
+}
+
+.auth-page .app-page__title {
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  line-height: 0.94;
+  letter-spacing: -0.045em;
 }
 
 .auth-stack {
@@ -2522,6 +2556,10 @@ img, svg { display: block; max-width: 100%; }
 .auth-form {
   display: grid;
   gap: var(--space-md);
+  padding: 1.5rem;
+  border: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+  border-radius: 1rem;
+  background: white;
 }
 
 .auth-form .btn,
@@ -2529,18 +2567,23 @@ img, svg { display: block; max-width: 100%; }
   width: 100%;
 }
 
+.auth-form .btn {
+  font-size: 0.9rem;
+  border-radius: 0;
+}
+
 .auth-footer {
   display: grid;
   gap: var(--space-sm);
-  padding-block-start: var(--space-md);
-  border-top: var(--rule-hair) solid var(--color-rule);
+  padding-block-start: 1.25rem;
+  border-top: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
 }
 
 .auth-link {
   padding: 0;
   font-family: var(--font-body);
   font-size: var(--text-sm);
-  color: var(--color-muted);
+  color: color-mix(in oklch, var(--color-ink) 55%, white);
   background: none;
   border: none;
   cursor: pointer;
@@ -2554,7 +2597,7 @@ a.auth-link {
 
 @media (hover: hover) {
   .auth-link:hover {
-    color: var(--color-accent);
+    color: var(--color-ink);
   }
 }
 
@@ -2574,14 +2617,15 @@ a.auth-link {
   justify-content: center;
   gap: var(--space-sm);
   width: 100%;
-  min-height: 2.75rem;
+  min-height: 3rem;
   padding-inline: var(--space-md);
   font-family: var(--font-body);
-  font-size: var(--text-sm);
+  font-size: 1rem;
   font-weight: 500;
   color: var(--color-ink);
-  background: var(--color-paper-2);
-  border: 1px solid var(--color-rule-2);
+  background: white;
+  border: 1px solid color-mix(in oklch, var(--color-ink) 14%, white);
+  border-radius: 0.5rem;
   cursor: pointer;
   transition: background-color var(--dur-short) var(--ease-out),
     border-color var(--dur-short) var(--ease-out);
@@ -2589,8 +2633,8 @@ a.auth-link {
 
 @media (hover: hover) {
   .login-google:hover:not(:disabled) {
-    background: var(--color-paper-3);
-    border-color: var(--color-rule);
+    background: color-mix(in oklch, white 92%, var(--color-ink));
+    border-color: color-mix(in oklch, var(--color-ink) 18%, white);
   }
 }
 
@@ -2603,7 +2647,7 @@ a.auth-link {
   padding: 0;
   font-family: var(--font-body);
   font-size: var(--text-sm);
-  color: var(--color-muted);
+  color: color-mix(in oklch, var(--color-ink) 55%, white);
   background: none;
   border: none;
   cursor: pointer;
@@ -2612,7 +2656,7 @@ a.auth-link {
 
 @media (hover: hover) {
   .login-switch:hover {
-    color: var(--color-accent);
+    color: var(--color-ink);
   }
 }
 
@@ -2708,14 +2752,15 @@ a.auth-link {
 .app-form__select,
 .app-form__textarea {
   width: 100%;
-  min-height: 2.75rem;
-  padding: 0.625rem var(--space-sm);
+  min-height: 3rem;
+  padding: 0.75rem 0.9rem;
   font-family: var(--font-body);
   font-size: var(--text-base);
   line-height: var(--lh-normal);
   color: var(--color-ink);
-  background: var(--color-paper-2);
-  border: 1px solid var(--color-rule-2);
+  background: white;
+  border: 1px solid color-mix(in oklch, var(--color-ink) 14%, white);
+  border-radius: 0.5rem;
   outline: 2px solid transparent;
   outline-offset: 1px;
   transition: border-color var(--dur-short) var(--ease-out),
@@ -5308,12 +5353,620 @@ body {
   padding: var(--space-xl);
 }
 
+.finance-dashboard-page {
+  max-width: 72rem;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding-block-start: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.finance-dashboard-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-xl);
+  padding-block-end: var(--space-lg);
+  border-block-end: 1px solid color-mix(in oklch, var(--color-ink) 11%, white);
+}
+
+.finance-dashboard-head h1 {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: clamp(3.25rem, 9vw, 6.5rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.065em;
+}
+
+.finance-dashboard-head p {
+  margin: 0;
+}
+
+.finance-dashboard-head div > p:last-child {
+  max-width: 34rem;
+  margin-block-start: var(--space-sm);
+  color: color-mix(in oklch, var(--color-ink) 58%, white);
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  line-height: 1.5;
+}
+
+.finance-dashboard-kicker,
+.finance-dashboard-metric span,
+.finance-dashboard-panel-head p {
+  color: color-mix(in oklch, var(--color-ink) 54%, white);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.finance-dashboard-kicker {
+  margin-block-end: var(--space-sm);
+}
+
+.finance-dashboard-sync,
+.finance-dashboard-panel-head a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.finance-dashboard-sync {
+  min-height: 2.75rem;
+  padding-inline: var(--space-md);
+  border: 1px solid color-mix(in oklch, var(--color-ink) 12%, white);
+  background: white;
+}
+
+.finance-dashboard-sync:hover,
+.finance-dashboard-sync:focus-visible,
+.finance-dashboard-panel-head a:hover,
+.finance-dashboard-panel-head a:focus-visible {
+  color: #047857;
+}
+
+.finance-dashboard-sync svg,
+.finance-dashboard-panel-head svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.finance-dashboard-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(11rem, 0.62fr);
+  border: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+  background: white;
+}
+
+.finance-dashboard-metric {
+  display: grid;
+  align-content: space-between;
+  min-height: 13rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-inline-start: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+}
+
+.finance-dashboard-metric:first-child {
+  border-inline-start: 0;
+}
+
+.finance-dashboard-metric strong {
+  display: block;
+  margin-block: var(--space-md) var(--space-sm);
+  color: var(--color-ink);
+  font-size: clamp(2.9rem, 7vw, 5.2rem);
+  font-weight: 800;
+  line-height: 0.88;
+  letter-spacing: -0.07em;
+}
+
+.finance-dashboard-metric--primary {
+  color: white;
+  background: var(--color-ink);
+}
+
+.finance-dashboard-metric--primary span,
+.finance-dashboard-metric--primary p,
+.finance-dashboard-metric--primary strong {
+  color: white;
+}
+
+.finance-dashboard-metric p {
+  margin: 0;
+  color: color-mix(in oklch, var(--color-ink) 52%, white);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.finance-dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.28fr) minmax(20rem, 0.82fr);
+  gap: var(--space-lg);
+}
+
+.finance-dashboard-grid--secondary {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.finance-dashboard-panel {
+  display: grid;
+  gap: var(--space-lg);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+  background: white;
+}
+
+.finance-dashboard-panel-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.finance-dashboard-panel-head h2 {
+  margin: var(--space-2xs) 0 0;
+  color: var(--color-ink);
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.finance-dashboard-budget-list,
+.finance-dashboard-budget-group,
+.finance-dashboard-insights {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.finance-dashboard-budget-group {
+  padding-block-start: var(--space-md);
+  border-block-start: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+}
+
+.finance-dashboard-budget-group:first-child {
+  padding-block-start: 0;
+  border-block-start: 0;
+}
+
+.finance-dashboard-list,
+.finance-dashboard-insights {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.finance-dashboard-list li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-block: var(--space-md);
+  border-block-start: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+}
+
+.finance-dashboard-list li:first-child {
+  padding-block-start: 0;
+  border-block-start: 0;
+}
+
+.finance-dashboard-list strong,
+.finance-dashboard-insights strong {
+  color: var(--color-ink);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.finance-dashboard-list span,
+.finance-dashboard-insights span {
+  display: block;
+  margin-block-start: var(--space-2xs);
+  color: color-mix(in oklch, var(--color-ink) 52%, white);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+}
+
+.finance-dashboard-list em {
+  flex: 0 0 auto;
+  color: var(--color-ink);
+  font-style: normal;
+  font-weight: 700;
+}
+
+.finance-dashboard-list em.is-positive {
+  color: #047857;
+}
+
+.finance-dashboard-insights li {
+  padding-block-start: var(--space-md);
+  border-block-start: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+}
+
+.finance-dashboard-insights li:first-child {
+  padding-block-start: 0;
+  border-block-start: 0;
+}
+
+.finance-dashboard-facts {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.finance-dashboard-facts div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-block: var(--space-md);
+  border-block-start: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+}
+
+.finance-dashboard-facts div:first-child {
+  padding-block-start: 0;
+  border-block-start: 0;
+}
+
+.finance-dashboard-facts dt {
+  color: color-mix(in oklch, var(--color-ink) 52%, white);
+  font-size: var(--text-sm);
+}
+
+.finance-dashboard-facts dd {
+  margin: 0;
+  color: var(--color-ink);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.finance-empty-state {
+  display: grid;
+  gap: var(--space-sm);
+  align-content: center;
+  min-height: 12rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+  background: color-mix(in oklch, var(--color-paper-2) 52%, white);
+}
+
+.finance-empty-state svg {
+  width: 1.35rem;
+  height: 1.35rem;
+  color: color-mix(in oklch, var(--color-accent) 70%, var(--color-ink));
+}
+
+.finance-empty-state strong {
+  color: var(--color-ink);
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.finance-empty-state span {
+  max-width: 30rem;
+  color: color-mix(in oklch, var(--color-ink) 54%, white);
+  line-height: 1.5;
+}
+
+.finance-connect-panel {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.finance-connect-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(22rem, 1fr);
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.finance-connect-copy {
+  display: grid;
+  gap: var(--space-xs);
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.finance-connect-copy strong {
+  color: var(--color-ink);
+  font-size: var(--text-lg);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.finance-connect-form,
+.finance-connect-form label {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.finance-connect-form label > span {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.finance-connect-form textarea {
+  min-height: 8.5rem;
+  width: 100%;
+  resize: vertical;
+  border: 1px solid color-mix(in oklch, var(--color-rule) 80%, transparent);
+  border-radius: 1rem;
+  background: color-mix(in oklch, white 62%, transparent);
+  color: var(--color-ink);
+  font: 500 var(--text-sm) / 1.5 var(--font-mono);
+  padding: var(--space-md);
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.finance-connect-form textarea:focus {
+  border-color: var(--color-focus);
+  background: white;
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-focus) 18%, transparent);
+}
+
+.finance-connect-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.finance-secondary-button {
+  min-height: 2.75rem;
+  border: 1px solid color-mix(in oklch, var(--color-rule) 85%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklch, white 54%, transparent);
+  color: var(--color-ink);
+  cursor: pointer;
+  font-weight: 700;
+  padding-inline: var(--space-md);
+  transition:
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.finance-secondary-button:hover,
+.finance-secondary-button:focus-visible {
+  border-color: var(--color-focus);
+  background: white;
+}
+
+.finance-secondary-button:disabled,
+.finance-connect-form .btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.finance-form-note {
+  margin: 0;
+  border-radius: 1rem;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  padding: var(--space-sm) var(--space-md);
+}
+
+.finance-form-note.is-success {
+  background: color-mix(in oklch, var(--color-accent) 16%, transparent);
+  color: var(--color-ink);
+}
+
+.finance-form-note.is-error {
+  background: color-mix(in oklch, #f97373 16%, white);
+  color: #8a1426;
+}
+
+/* ════════════════════════════════════════════════════════════
+   WOLLIE DESIGN SYSTEM · unified with the current landing page
+   White/black base, one emerald accent, square functional chrome.
+   This intentionally comes last so older exploratory styles cannot drift
+   public/auth/app pages away from the homepage.
+   ════════════════════════════════════════════════════════════ */
+
+body {
+  background: white;
+  color: var(--color-ink);
+}
+
+.app-shell,
+.discovery-page {
+  background: white;
+}
+
+.app-nav {
+  border-bottom: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+  background: color-mix(in oklch, white 94%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+.app-nav__inner {
+  min-height: 4rem;
+  padding-block: 0;
+}
+
+.app-nav__tabs {
+  border-radius: 0;
+  background: white;
+  box-shadow: none;
+}
+
+.app-nav__tab,
+.app-nav__share,
+.btn,
+.finance-hero__primary,
+.finance-copy-band a,
+.finance-secondary-button,
+.discovery-search button {
+  border-radius: 0;
+}
+
+.app-nav__tab.is-active {
+  background: var(--color-ink);
+  color: white;
+  box-shadow: none;
+}
+
+.app-nav [data-slot='button'][data-variant='brand'] {
+  background: var(--color-ink);
+  color: white;
+}
+
+.app-nav [data-slot='button'][data-variant='brand']:hover {
+  background: color-mix(in oklch, var(--color-ink) 84%, white);
+}
+
+.app-nav__share,
+.btn,
+.finance-hero__primary,
+.discovery-search button {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: white;
+  box-shadow: none;
+}
+
+.app-page,
+.finance-app-page {
+  padding-block: clamp(3rem, 8vw, 6rem);
+}
+
+.app-page__head,
+.finance-page-head {
+  gap: 1.5rem;
+  max-width: 56rem;
+  margin-block-end: 0;
+  padding-block-end: 0;
+}
+
+.app-page__eyebrow,
+.finance-card__eyebrow,
+.finance-panel__head p,
+.finance-pill {
+  width: fit-content;
+  border: 1px solid color-mix(in oklch, var(--color-accent) 35%, white);
+  background: color-mix(in oklch, var(--color-accent) 9%, white);
+  color: color-mix(in oklch, var(--color-accent) 70%, var(--color-ink));
+  padding: 0.45rem 0.8rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.app-page__title,
+.finance-page-head .app-page__title {
+  max-width: 10ch;
+  font-size: clamp(3.5rem, 9vw, 7rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+
+.auth-page .app-page__title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  line-height: 0.96;
+}
+
+.app-page__lede {
+  max-width: 38rem;
+  color: color-mix(in oklch, var(--color-ink) 58%, white);
+}
+
+.settings-panel,
+.auth-form,
+.finance-card,
+.finance-panel,
+.finance-sync-callout,
+.budget-group-card,
+.finance-copy-band,
+.finance-principles,
+.discovery-paths,
+.finance-snapshot,
+.finance-connect-form textarea,
+.finance-form-note {
+  border-radius: 0;
+  background: white;
+  box-shadow: none;
+}
+
+.finance-card,
+.finance-panel,
+.finance-sync-callout,
+.settings-panel,
+.auth-form {
+  border-color: color-mix(in oklch, var(--color-ink) 12%, white);
+}
+
+.finance-card:first-child {
+  background: var(--color-ink);
+}
+
+.app-form__input,
+.enquire__input,
+.feed-search__input,
+.post-comments__input,
+.tag-picker__input,
+.finance-search input {
+  border-radius: 0;
+  background: white;
+}
+
+.auth-form .btn {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 48rem) {
+  .finance-card,
+  .finance-panel,
+  .finance-sync-callout,
+  .app-mobile-nav__item.is-active {
+    border-radius: 0;
+  }
+
+  .finance-page-head .app-page__title,
+  .app-page__title {
+    font-size: clamp(3rem, 15vw, 5.25rem);
+    letter-spacing: -0.04em;
+  }
+}
+
 @media (max-width: 64rem) {
   .discovery-hero,
   .finance-grid--summary,
   .finance-layout,
-  .finance-layout--secondary {
+  .finance-layout--secondary,
+  .finance-dashboard-summary,
+  .finance-dashboard-grid,
+  .finance-dashboard-grid--secondary,
+  .finance-connect-grid {
     grid-template-columns: 1fr;
+  }
+
+  .finance-dashboard-metric {
+    min-height: auto;
+    border-block-start: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+    border-inline-start: 0;
+  }
+
+  .finance-dashboard-metric:first-child {
+    border-block-start: 0;
   }
 
   .finance-snapshot {
@@ -5350,5 +6003,32 @@ body {
   .finance-panel,
   .finance-sync-callout {
     border-radius: 1.35rem;
+  }
+
+  .finance-dashboard-head {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .finance-dashboard-head h1 {
+    font-size: clamp(3.2rem, 18vw, 5.5rem);
+    letter-spacing: -0.05em;
+  }
+}
+
+/* Final mobile consistency guard for the square Wollie system. */
+@media (max-width: 48rem) {
+  .finance-card,
+  .finance-panel,
+  .finance-sync-callout,
+  .settings-panel,
+  .auth-form,
+  .app-mobile-nav__item.is-active {
+    border-radius: 0;
+  }
+
+  .finance-page-head .app-page__title,
+  .app-page__title {
+    font-size: clamp(3rem, 15vw, 5.25rem);
   }
 }

@@ -1,16 +1,14 @@
-import { formatMoney, type BudgetCategory } from '#/lib/finance-demo'
+import { formatMoney } from '#/lib/finance-demo'
+import type { BudgetEnvelope } from '#/lib/budget-engine'
 
 type BudgetMeterProps = {
-  category: BudgetCategory
+  category: BudgetEnvelope
 }
 
 export function BudgetMeter({ category }: BudgetMeterProps) {
-  const percent =
-    'percentUsed' in category
-      ? Math.min(category.percentUsed, 100)
-      : Math.min(Math.round((category.spent / category.allocated) * 100), 100)
-  const remaining = 'available' in category ? category.available : category.allocated - category.spent
-  const state = 'state' in category ? category.state : remaining < 0 ? 'over' : percent >= 85 ? 'watch' : 'good'
+  const percent = Math.min(category.percentUsed, 100)
+  const remaining = category.available
+  const state = category.state
 
   return (
     <div className={`budget-meter budget-meter--${state}`}>

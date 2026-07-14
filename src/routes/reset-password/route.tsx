@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { AppShell } from '#/components/AppShell'
+import { PublicShell } from '#/components/PublicShell'
 
 export const Route = createFileRoute('/reset-password')({
-  component: AppShell,
+  component: PublicShell,
 })

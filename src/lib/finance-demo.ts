@@ -275,6 +275,7 @@ export function getFinanceSummary({
     .reduce((sum, transaction) => sum + Math.abs(transaction.amount), 0)
 
   return {
+    budgetPlan,
     cash,
     monthlyIncome,
     spent,
