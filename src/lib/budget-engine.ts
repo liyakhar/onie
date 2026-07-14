@@ -49,6 +49,7 @@ const CATEGORY_GROUPS: Record<FinanceCategory, BudgetGroupName | 'Hidden'> = {
   Shopping: 'Flexible',
   Savings: 'Future',
   Health: 'Flexible',
+  Transfer: 'Hidden',
 }
 
 export const demoBudgetRules: BudgetRule[] = [

@@ -91,6 +91,8 @@ enum FinanceConnectionProvider {
   DEMO
   SIMPLEFIN
   GOCARDLESS
+  ENABLE_BANKING
+  OPEN_BANKING_IO
   PLAID
 }
 

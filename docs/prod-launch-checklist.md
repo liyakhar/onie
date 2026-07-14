@@ -14,9 +14,13 @@ Required:
 
 Live bank sync:
 
-- Keep `ENABLE_LIVE_BANK_SYNC=false` until real credentials are ready.
-- Set `ENABLE_LIVE_BANK_SYNC=true` only with a valid server-side `SIMPLEFIN_ACCESS_URL`.
-- Never expose `SIMPLEFIN_ACCESS_URL` with a `VITE_` prefix.
+- Keep `ENABLE_LIVE_BANK_SYNC=false` until the production encryption secret is installed.
+- Set `BANK_SYNC_ENCRYPTION_KEY` to a unique random secret of at least 32 characters.
+- Set `ENABLE_LIVE_BANK_SYNC=true` only after Enable Banking has activated the application for the intended scope.
+- Set `ENABLE_BANKING_APPLICATION_ID`, `ENABLE_BANKING_PRIVATE_KEY`, and the exact registered `ENABLE_BANKING_REDIRECT_URL`.
+- Restricted production mode may access only the founder's whitelisted accounts. Do not expose bank connection to other users until a contract and KYB are complete.
+- Do not set `SIMPLEFIN_ACCESS_URL` in production; shared bank credentials are rejected.
+- Never expose bank-sync secrets with a `VITE_` prefix.
 
 ## 2. Database
 

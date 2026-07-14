@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
 import { Badge } from '#/components/ui/badge'
@@ -11,18 +11,40 @@ import {
   CardHeader,
   CardTitle,
 } from '#/components/ui/card'
-import { Label } from '#/components/ui/label'
-import { Textarea } from '#/components/ui/textarea'
 import { formatMoney } from '#/lib/finance-demo'
 import { buildPageMeta } from '#/lib/seo'
-import {
-  claimSimpleFinConnection,
-  disconnectSimpleFinConnection,
-} from '#/server/bank-sync'
 import { getFinanceAccounts } from '#/server/finance'
+import {
+  completeEnableBankingConnection,
+  disconnectEnableBanking,
+  getEnableBankingInstitutions,
+  getEnableBankingStatus,
+  startEnableBankingConnection,
+  syncEnableBanking,
+} from '#/server/enable-banking-sync'
+
+type AccountsSearch = {
+  code?: string
+  state?: string
+  error?: string
+  error_description?: string
+}
+type Institution = { name: string; country: string; beta: boolean }
 
 export const Route = createFileRoute('/app/accounts')({
-  loader: () => getFinanceAccounts(),
+  validateSearch: (search: Record<string, unknown>): AccountsSearch => ({
+    code: typeof search.code === 'string' ? search.code : undefined,
+    state: typeof search.state === 'string' ? search.state : undefined,
+    error: typeof search.error === 'string' ? search.error : undefined,
+    error_description: typeof search.error_description === 'string' ? search.error_description : undefined,
+  }),
+  loader: async () => {
+    const [finance, enableBanking] = await Promise.all([
+      getFinanceAccounts(),
+      getEnableBankingStatus(),
+    ])
+    return { ...finance, enableBanking }
+  },
   head: () => ({
     meta: buildPageMeta({
       path: '/app/accounts',
@@ -35,49 +57,79 @@ export const Route = createFileRoute('/app/accounts')({
 })
 
 function AccountsPage() {
-  const { accounts, syncStatus } = Route.useLoaderData()
+  const { accounts, enableBanking } = Route.useLoaderData()
+  const search = Route.useSearch()
   const router = useRouter()
-  const [token, setToken] = useState('')
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState('')
+  const callbackStarted = useRef(false)
+  const [country, setCountry] = useState('BE')
+  const [bankName, setBankName] = useState('')
+  const [institutions, setInstitutions] = useState<Institution[]>([])
+  const [loadingBanks, setLoadingBanks] = useState(false)
   const [loading, setLoading] = useState(false)
-  const connected = syncStatus.mode === 'live-connected'
+  const [message, setMessage] = useState('')
+  const [error, setError] = useState(search.error_description || search.error || '')
 
-  function refreshAccounts() {
-    return router.invalidate()
-  }
+  useEffect(() => {
+    if (!enableBanking.configured) return
+    setLoadingBanks(true)
+    setBankName('')
+    void getEnableBankingInstitutions({ data: { country } })
+      .then((banks) => setInstitutions(banks))
+      .catch((reason) => setError(errorMessage(reason, 'Could not load available banks.')))
+      .finally(() => setLoadingBanks(false))
+  }, [country, enableBanking.configured])
 
-  function handleConnect(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+  useEffect(() => {
+    if (!search.code || !search.state || callbackStarted.current) return
+    callbackStarted.current = true
+    setLoading(true)
+    setError('')
+    void completeEnableBankingConnection({ data: { code: search.code, state: search.state } })
+      .then(async ({ accounts: connectedAccounts }) => {
+        setMessage(`Connected ${connectedAccounts} account${connectedAccounts === 1 ? '' : 's'}.`)
+        await router.navigate({ to: '/app/accounts', search: {}, replace: true })
+        await router.invalidate()
+      })
+      .catch((reason) => setError(errorMessage(reason, 'Could not finish the bank connection.')))
+      .finally(() => setLoading(false))
+  }, [router, search.code, search.state])
+
+  function connectBank() {
+    if (!bankName) return
     setMessage('')
     setError('')
-
     setLoading(true)
-    void claimSimpleFinConnection({ data: { token } })
-      .then(async () => {
-        setToken('')
-        setMessage('Connected. Wollie loaded your latest accounts.')
-        await refreshAccounts()
+    void startEnableBankingConnection({ data: { country, bankName } })
+      .then(({ url }) => window.location.assign(url))
+      .catch((reason) => {
+        setError(errorMessage(reason, 'Could not start the bank connection.'))
+        setLoading(false)
       })
-      .catch((err) => {
-        setError(err instanceof Error ? err.message : 'Could not connect SimpleFIN.')
+  }
+
+  function syncBank() {
+    setMessage('')
+    setError('')
+    setLoading(true)
+    void syncEnableBanking()
+      .then(async ({ accounts: syncedAccounts }) => {
+        setMessage(`Synced ${syncedAccounts} account${syncedAccounts === 1 ? '' : 's'}.`)
+        await router.invalidate()
       })
+      .catch((reason) => setError(errorMessage(reason, 'Could not sync the bank.')))
       .finally(() => setLoading(false))
   }
 
-  function handleDisconnect() {
+  function disconnectBank() {
     setMessage('')
     setError('')
-
     setLoading(true)
-    void disconnectSimpleFinConnection()
+    void disconnectEnableBanking()
       .then(async () => {
-        setMessage('Disconnected. Live bank sync is off for this account.')
-        await refreshAccounts()
+        setMessage('Bank access revoked and local bank data removed.')
+        await router.invalidate()
       })
-      .catch((err) => {
-        setError(err instanceof Error ? err.message : 'Could not disconnect SimpleFIN.')
-      })
+      .catch((reason) => setError(errorMessage(reason, 'Could not disconnect the bank.')))
       .finally(() => setLoading(false))
   }
 
@@ -89,7 +141,7 @@ function AccountsPage() {
             Bank sync
           </Badge>
           <h1 className="text-2xl font-semibold tracking-tight">Accounts</h1>
-          <p className="mt-1 text-sm text-zinc-500">SimpleFIN</p>
+          <p className="mt-1 text-sm text-zinc-500">Read-only connections through Enable Banking</p>
         </div>
         <Button asChild variant="outline" className="border-zinc-200 bg-white text-zinc-950 hover:bg-zinc-100">
           <Link to="/app">
@@ -101,74 +153,83 @@ function AccountsPage() {
 
       <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
         <CardHeader className="border-b border-zinc-200 pb-4">
-          <CardTitle>Connect account</CardTitle>
-          <CardDescription>Bank or credit card via SimpleFIN</CardDescription>
+          <CardTitle>European banks</CardTitle>
+          <CardDescription>Banks are loaded directly from the regulated provider</CardDescription>
           <CardAction>
             <Badge variant="outline" className="rounded-md border-zinc-200 bg-white text-zinc-700">
-              {connected ? `Synced ${syncStatus.lastSynced}` : 'Not connected'}
+              {enableBanking.connected
+                ? enableBanking.needsReconnect
+                  ? 'Reconnect'
+                  : `Synced ${enableBanking.lastSynced}`
+                : enableBanking.configured
+                  ? enableBanking.environment
+                  : 'Setup required'}
             </Badge>
           </CardAction>
         </CardHeader>
-
-        <CardContent className="grid gap-8 pt-6 lg:grid-cols-[minmax(16rem,0.7fr)_minmax(0,1.3fr)]">
-          <div className="space-y-4">
-            <div>
-              <h2 className="text-base font-semibold">
-                {connected ? 'Connection active' : 'Get a SimpleFIN token'}
-              </h2>
-              <p className="mt-1.5 max-w-sm text-sm leading-6 text-zinc-500">
-                {connected
-                  ? 'Reconnect with a new token or disconnect this provider.'
-                  : 'Create a token, then paste it here. Your balances and transactions will sync automatically.'}
-              </p>
-            </div>
-            <Button asChild variant="outline" className="border-zinc-200 bg-white text-zinc-950 hover:bg-zinc-100">
-              <a
-                href="https://bridge.simplefin.org/simplefin/create"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Create token
-                <ExternalLink aria-hidden="true" />
-              </a>
-            </Button>
-          </div>
-
-          <form className="grid gap-4" onSubmit={handleConnect}>
-            <div className="grid gap-2">
-              <Label htmlFor="simplefin-token">Access token</Label>
-              <Textarea
-                id="simplefin-token"
-                value={token}
-                onChange={(event) => setToken(event.currentTarget.value)}
-                placeholder="Paste your SimpleFIN token"
-                rows={4}
-                className="min-h-28 resize-none border-zinc-200 bg-white text-zinc-950 placeholder:text-zinc-400 focus-visible:border-zinc-950 focus-visible:ring-zinc-950/15"
-              />
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                type="submit"
-                disabled={loading || !token.trim()}
-                className="bg-zinc-950 text-white hover:bg-zinc-800"
-              >
-                {loading ? 'Connecting…' : connected ? 'Reconnect' : 'Connect'}
+        <CardContent className="grid gap-6 pt-6">
+          {!enableBanking.configured ? (
+            <div className="flex flex-col items-start gap-3 text-sm text-zinc-600">
+              <p>Add the Enable Banking application ID and private key to the Wollie server, then reload this page.</p>
+              <Button asChild variant="outline" className="border-zinc-200 bg-white text-zinc-950 hover:bg-zinc-100">
+                <a href="https://enablebanking.com/cp" target="_blank" rel="noreferrer">
+                  Open Enable Banking <ExternalLink aria-hidden="true" />
+                </a>
               </Button>
-              {connected && (
-                <Button
-                  variant="outline"
-                  type="button"
-                  disabled={loading}
-                  onClick={handleDisconnect}
-                  className="border-zinc-200 bg-white text-zinc-950 hover:bg-zinc-100"
-                >
-                  Disconnect
-                </Button>
-              )}
             </div>
-            {message && <p className="text-sm text-zinc-700" role="status">{message}</p>}
-            {error && <p className="text-sm font-medium text-zinc-950" role="alert">{error}</p>}
-          </form>
+          ) : enableBanking.connected ? (
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" disabled={loading} onClick={syncBank} className="wollie-primary-action">
+                {loading ? 'Working…' : 'Sync now'}
+              </Button>
+              <Button type="button" variant="ghost" disabled={loading} onClick={disconnectBank} className="text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950">
+                Disconnect
+              </Button>
+            </div>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[14rem_minmax(16rem,1fr)_auto] lg:items-end">
+              <label className="grid gap-2 text-sm font-medium">
+                Country
+                <select
+                  value={country}
+                  onChange={(event) => setCountry(event.currentTarget.value)}
+                  disabled={loading || loadingBanks}
+                  className="h-9 rounded-md border border-zinc-200 bg-white px-3 text-sm font-normal outline-none focus-visible:ring-2 focus-visible:ring-zinc-950"
+                >
+                  <option value="BE">Belgium</option>
+                  <option value="LT">Lithuania</option>
+                  <option value="FR">France</option>
+                  <option value="NL">Netherlands</option>
+                  <option value="DE">Germany</option>
+                </select>
+              </label>
+              <label className="grid gap-2 text-sm font-medium">
+                Bank
+                <select
+                  value={bankName}
+                  onChange={(event) => setBankName(event.currentTarget.value)}
+                  disabled={loading || loadingBanks}
+                  className="h-9 rounded-md border border-zinc-200 bg-white px-3 text-sm font-normal outline-none focus-visible:ring-2 focus-visible:ring-zinc-950"
+                >
+                  <option value="">{loadingBanks ? 'Loading banks…' : 'Choose a bank'}</option>
+                  {institutions.map((bank) => (
+                    <option key={`${bank.country}:${bank.name}`} value={bank.name}>
+                      {bank.name}{bank.beta ? ' (beta)' : ''}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <Button type="button" disabled={loading || loadingBanks || !bankName} onClick={connectBank} className="wollie-primary-action">
+                {loading ? 'Connecting…' : 'Connect bank'}
+              </Button>
+            </div>
+          )}
+
+          <p className="text-xs leading-5 text-zinc-500">
+            Bank Hapoalim is not covered by this European PSD2 connection. Wollie never asks for or stores your bank password.
+          </p>
+          {error && <p className="text-sm font-medium text-zinc-950" role="alert">{error}</p>}
+          {message && <p className="text-sm text-zinc-700" role="status">{message}</p>}
         </CardContent>
       </Card>
 
@@ -188,7 +249,9 @@ function AccountsPage() {
                       {account.institution} · {account.type} · {account.lastSynced}
                     </p>
                   </div>
-                  <p className="shrink-0 text-sm font-medium tabular-nums">{formatMoney(account.balance)}</p>
+                  <p className="shrink-0 text-sm font-medium tabular-nums">
+                    {formatMoney(account.balance, account.currency)}
+                  </p>
                 </li>
               ))}
             </ul>
@@ -197,4 +260,8 @@ function AccountsPage() {
       )}
     </main>
   )
+}
+
+function errorMessage(value: unknown, fallback: string) {
+  return value instanceof Error ? value.message : fallback
 }

@@ -54,7 +54,7 @@ const config = defineConfig({
               deployConfig: true,
               nodeCompat: true,
               wrangler: {
-                name: 'onie',
+                name: 'wollie',
                 hyperdrive: [
                   {
                     binding: 'HYPERDRIVE',

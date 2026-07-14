@@ -14,7 +14,11 @@ const optionalEnv = [
   'GOOGLE_CLIENT_ID',
   'GOOGLE_CLIENT_SECRET',
   'ENABLE_LIVE_BANK_SYNC',
+  'BANK_SYNC_ENCRYPTION_KEY',
   'SIMPLEFIN_ACCESS_URL',
+  'ENABLE_BANKING_APPLICATION_ID',
+  'ENABLE_BANKING_PRIVATE_KEY',
+  'ENABLE_BANKING_REDIRECT_URL',
 ]
 
 const failures = []
@@ -70,7 +74,11 @@ if (value('BETTER_AUTH_SECRET') && value('BETTER_AUTH_SECRET').length < 32) {
 const hasGoogleClientId = Boolean(value('GOOGLE_CLIENT_ID'))
 const hasGoogleClientSecret = Boolean(value('GOOGLE_CLIENT_SECRET'))
 const liveBankSyncEnabled = value('ENABLE_LIVE_BANK_SYNC') === 'true'
+const bankSyncEncryptionKey = value('BANK_SYNC_ENCRYPTION_KEY')
 const hasSimpleFinAccessUrl = Boolean(value('SIMPLEFIN_ACCESS_URL'))
+const enableBankingApplicationId = value('ENABLE_BANKING_APPLICATION_ID')
+const enableBankingPrivateKey = value('ENABLE_BANKING_PRIVATE_KEY')
+const enableBankingRedirectUrl = value('ENABLE_BANKING_REDIRECT_URL')
 
 if (hasGoogleClientId !== hasGoogleClientSecret) {
   warnings.push('Google OAuth is partially configured; set both GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET or neither')
@@ -80,31 +88,32 @@ if (value('ENABLE_LIVE_BANK_SYNC') && !['true', 'false'].includes(value('ENABLE_
   failures.push('ENABLE_LIVE_BANK_SYNC must be either true or false')
 }
 
-if (liveBankSyncEnabled && !hasSimpleFinAccessUrl) {
-  failures.push('ENABLE_LIVE_BANK_SYNC=true requires SIMPLEFIN_ACCESS_URL')
+if (liveBankSyncEnabled && !bankSyncEncryptionKey) {
+  failures.push('ENABLE_LIVE_BANK_SYNC=true requires BANK_SYNC_ENCRYPTION_KEY')
+}
+
+if (liveBankSyncEnabled && (!enableBankingApplicationId || !enableBankingPrivateKey || !enableBankingRedirectUrl)) {
+  failures.push('ENABLE_LIVE_BANK_SYNC=true requires the Enable Banking application ID, private key, and redirect URL')
+}
+
+if (enableBankingRedirectUrl) {
+  assertHttpsUrl('ENABLE_BANKING_REDIRECT_URL')
+}
+
+if (enableBankingPrivateKey && !enableBankingPrivateKey.includes('BEGIN PRIVATE KEY')) {
+  failures.push('ENABLE_BANKING_PRIVATE_KEY must be a PKCS#8 PEM private key')
+}
+
+if (bankSyncEncryptionKey && bankSyncEncryptionKey.length < 32) {
+  failures.push('BANK_SYNC_ENCRYPTION_KEY must be at least 32 characters')
 }
 
 if (!liveBankSyncEnabled) {
   warnings.push('ENABLE_LIVE_BANK_SYNC is not true; production will not connect real bank accounts')
 }
 
-if (!hasSimpleFinAccessUrl) {
-  warnings.push('SIMPLEFIN_ACCESS_URL is not set; bank sync cannot go live yet')
-} else {
-  try {
-    const simplefin = new URL(value('SIMPLEFIN_ACCESS_URL'))
-    if (simplefin.protocol !== 'https:') {
-      failures.push('SIMPLEFIN_ACCESS_URL must use https')
-    }
-    if (!simplefin.username || !simplefin.password) {
-      warnings.push('SIMPLEFIN_ACCESS_URL has no embedded credentials; confirm auth is handled upstream')
-    }
-    if (!liveBankSyncEnabled) {
-      warnings.push('SIMPLEFIN_ACCESS_URL is set, but ENABLE_LIVE_BANK_SYNC is not true; credentials will not be used')
-    }
-  } catch {
-    failures.push('SIMPLEFIN_ACCESS_URL is not a valid URL')
-  }
+if (hasSimpleFinAccessUrl) {
+  failures.push('SIMPLEFIN_ACCESS_URL must not be set in production; use per-user tokens entered in the app')
 }
 
 if (process.env.SEED_LEGACY_ONIE_CONTENT === 'true') {

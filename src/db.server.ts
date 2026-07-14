@@ -40,7 +40,12 @@ function getConnectionString() {
 }
 
 function createPrisma() {
-  const adapter = new PrismaPg({ connectionString: getConnectionString() })
+  const adapter = new PrismaPg({
+    connectionString: getConnectionString(),
+    max: 1,
+    idleTimeoutMillis: 1_000,
+    connectionTimeoutMillis: 10_000,
+  })
   return new PrismaClient({ adapter })
 }
 

@@ -5,21 +5,23 @@ import {
   type FinanceTransaction,
   type FinancialAccount,
 } from '#/lib/finance-demo'
+import {
+  decryptCredential,
+  encryptCredential,
+  isEncryptedCredential,
+} from '#/server/credential-crypto'
+import { loadEnableBankingData } from '#/server/enable-banking-sync'
 
-export type BankSyncProviderId = 'demo' | 'simplefin' | 'gocardless' | 'plaid'
+export type BankSyncProviderId = 'demo' | 'simplefin' | 'enable-banking' | 'plaid'
+
+const SIMPLEFIN_REQUEST_TIMEOUT_MS = 15_000
+const MAX_SIMPLEFIN_TOKEN_LENGTH = 8_192
 
 export type NormalizedBankConnection = {
   provider: BankSyncProviderId
   status: BankSyncStatus
   accounts: FinancialAccount[]
   transactions: FinanceTransaction[]
-}
-
-export type BankSyncProvider = {
-  id: BankSyncProviderId
-  name: string
-  isConfigured(): boolean
-  getConnection(): Promise<NormalizedBankConnection>
 }
 
 type SimpleFinResponse = {
@@ -77,85 +79,13 @@ export type SimpleFinPersistenceSnapshot = {
       categoryName: FinanceCategory
       amountMinor: number
       currency: string
-      status: 'PENDING' | 'CLEARED'
+      status: 'PENDING' | 'CLEARED' | 'NEEDS_REVIEW'
     }>
   }>
 }
 
-export const simpleFinProvider: BankSyncProvider = {
-  id: 'simplefin',
-  name: 'SimpleFIN',
-  isConfigured: () => isLiveBankSyncEnabled() && Boolean(getSimpleFinAccessUrl()),
-  async getConnection() {
-    if (!isLiveBankSyncEnabled()) {
-      return {
-        provider: 'simplefin',
-        status: {
-          mode: 'live-disabled',
-          label: 'Live sync off',
-          description:
-            'Live bank sync is disabled. Turn it on only when production credentials are ready.',
-          lastSynced: 'Not connected',
-          canConnectLive: false,
-        },
-        accounts: [],
-        transactions: [],
-      }
-    }
-
-    if (!this.isConfigured()) {
-      return {
-        provider: 'simplefin',
-        status: {
-          mode: 'live-disabled',
-          label: 'Live sync off',
-          description: 'Add SimpleFIN credentials before connecting real accounts.',
-          lastSynced: 'Not connected',
-          canConnectLive: false,
-        },
-        accounts: [],
-        transactions: [],
-      }
-    }
-
-    try {
-      const payload = await fetchSimpleFinAccounts()
-      const normalized = normalizeSimpleFinPayload(payload)
-
-      return {
-        provider: 'simplefin',
-        status: {
-          mode: 'live-connected',
-          label: 'Live sync',
-          description:
-            normalized.accounts.length > 0
-              ? 'Real accounts are connected through SimpleFIN.'
-              : 'SimpleFIN responded, but no accounts were returned.',
-          lastSynced: 'Just now',
-          canConnectLive: true,
-        },
-        ...normalized,
-      }
-    } catch (error) {
-      console.error('SimpleFIN sync failed:', error)
-      return {
-        provider: 'simplefin',
-        status: {
-          mode: 'live-disabled',
-          label: 'Sync needs attention',
-          description:
-            'SimpleFIN is configured, but Wollie could not load accounts. Check the access URL before launch.',
-          lastSynced: 'Sync failed',
-          canConnectLive: true,
-        },
-        accounts: [],
-        transactions: [],
-      }
-    }
-  },
-}
-
 export const getBankSyncState = createServerFn({ method: 'GET' }).handler(async () => {
+  await requireBankSyncUser()
   return loadBankSyncState()
 })
 
@@ -164,15 +94,26 @@ export const claimSimpleFinConnection = createServerFn({ method: 'POST' })
     token: String(data?.token ?? ''),
   }))
   .handler(async ({ data }) => {
+    if (process.env.NODE_ENV === 'production' && !isLiveBankSyncEnabled()) {
+      throw new Error('Live bank sync is not enabled in production.')
+    }
+
     const user = await requireBankSyncUser()
     const token = data.token.trim()
 
     if (!token) {
       throw new Error('Paste the SimpleFIN token to connect your accounts.')
     }
+    if (token.length > MAX_SIMPLEFIN_TOKEN_LENGTH) {
+      throw new Error('That SimpleFIN token is too long.')
+    }
 
     const claimUrl = decodeSimpleFinToken(token)
-    const response = await fetch(claimUrl, { method: 'POST' })
+    const response = await fetch(claimUrl, {
+      method: 'POST',
+      signal: AbortSignal.timeout(SIMPLEFIN_REQUEST_TIMEOUT_MS),
+      redirect: 'error',
+    })
 
     if (response.status === 403) {
       throw new Error(
@@ -185,7 +126,7 @@ export const claimSimpleFinConnection = createServerFn({ method: 'POST' })
     }
 
     const accessUrl = (await response.text()).trim()
-    assertHttpsUrl(accessUrl, 'SimpleFIN Access URL')
+    assertSimpleFinUrl(accessUrl, 'SimpleFIN Access URL')
 
     await saveUserSimpleFinAccessUrl(user.id, accessUrl)
 
@@ -203,42 +144,53 @@ export const disconnectSimpleFinConnection = createServerFn({ method: 'POST' }).
 
 export const loadBankSyncState = createServerOnlyFn(
   async (): Promise<NormalizedBankConnection> => {
-    const userConnection = await getUserSimpleFinConnection()
+    const { getSessionUser } = await import('#/server/session.server')
+    const user = await getSessionUser()
+    const european = user
+      ? await loadEnableBankingData(user.id)
+      : { accounts: [], transactions: [], lastSynced: 'Not connected' }
 
-    if (userConnection) {
-      return getSimpleFinConnection(
-        userConnection.accessUrl,
-        { disconnectedDescription: 'Connect a bank or card to start live sync.' },
-        userConnection,
-      )
-    }
-
-    if (isLiveBankSyncEnabled() || getSimpleFinAccessUrl()) {
-      return getSimpleFinConnection(getSimpleFinAccessUrl(), {
-        disconnectedDescription: 'Add SimpleFIN credentials before connecting real accounts.',
+    let synced: NormalizedBankConnection
+    if (!isLiveBankSyncEnabled()) {
+      synced = await getSimpleFinConnection('', {
+        disconnectedDescription: 'Live bank sync is currently disabled.',
       })
+    } else {
+      const userConnection = await getUserSimpleFinConnection()
+      synced = userConnection
+        ? await getSimpleFinConnection(
+            userConnection.accessUrl,
+            { disconnectedDescription: 'Connect a bank or card to start live sync.' },
+            userConnection,
+          )
+        : await getSimpleFinConnection('', {
+            disconnectedDescription: 'Connect a bank or card to start live sync.',
+          })
     }
 
-    return getSimpleFinConnection('', {
-      disconnectedDescription: 'Connect a bank or card to start live sync.',
-    })
+    if (!european.accounts.length) return synced
+
+    return {
+      ...synced,
+      status: {
+        mode: 'live-connected',
+        label: 'Connected',
+        description: synced.status.mode === 'live-connected'
+          ? 'North American and European accounts are connected.'
+          : 'European bank accounts are connected through Enable Banking.',
+        lastSynced: synced.status.mode === 'live-connected'
+          ? synced.status.lastSynced
+          : european.lastSynced,
+        canConnectLive: true,
+      },
+      accounts: [...synced.accounts, ...european.accounts],
+      transactions: [...synced.transactions, ...european.transactions],
+    }
   },
 )
 
 export function isLiveBankSyncEnabled() {
   return process.env.ENABLE_LIVE_BANK_SYNC === 'true'
-}
-
-function getSimpleFinAccessUrl() {
-  return (
-    process.env.SIMPLEFIN_ACCESS_URL?.trim() ||
-    process.env.SIMPLEFIN_BRIDGE_URL?.trim() ||
-    ''
-  )
-}
-
-async function fetchSimpleFinAccounts(): Promise<SimpleFinResponse> {
-  return fetchSimpleFinAccountsFromUrl(getSimpleFinAccessUrl())
 }
 
 async function fetchSimpleFinAccountsFromUrl(accessUrl: string): Promise<SimpleFinResponse> {
@@ -247,6 +199,8 @@ async function fetchSimpleFinAccountsFromUrl(accessUrl: string): Promise<SimpleF
     headers: request.authorization
       ? { Authorization: request.authorization }
       : undefined,
+    signal: AbortSignal.timeout(SIMPLEFIN_REQUEST_TIMEOUT_MS),
+    redirect: 'error',
   })
 
   if (!response.ok) {
@@ -267,6 +221,7 @@ export function buildSimpleFinAccountsRequest(accessUrl: string) {
     throw new Error('SIMPLEFIN_ACCESS_URL is not set')
   }
 
+  assertSimpleFinUrl(accessUrl, 'SimpleFIN Access URL')
   const url = new URL(accessUrl)
   const username = decodeURIComponent(url.username)
   const password = decodeURIComponent(url.password)
@@ -278,8 +233,11 @@ export function buildSimpleFinAccountsRequest(accessUrl: string) {
   }
 
   const nowSeconds = Math.floor(Date.now() / 1000)
-  const lookbackDays = Number(process.env.SIMPLEFIN_LOOKBACK_DAYS || 90)
-  const startSeconds = nowSeconds - Math.max(1, lookbackDays) * 24 * 60 * 60
+  const requestedLookbackDays = Number(process.env.SIMPLEFIN_LOOKBACK_DAYS || 90)
+  const lookbackDays = Number.isFinite(requestedLookbackDays)
+    ? Math.min(730, Math.max(1, Math.floor(requestedLookbackDays)))
+    : 90
+  const startSeconds = nowSeconds - lookbackDays * 24 * 60 * 60
 
   if (!url.searchParams.has('start-date')) {
     url.searchParams.set('start-date', String(startSeconds))
@@ -354,7 +312,11 @@ export function buildSimpleFinPersistenceSnapshot(
             categoryName: inferCategory(merchantName, amount),
             amountMinor: Math.round(amount * 100),
             currency: account.currency?.trim().toUpperCase() || 'USD',
-            status: transaction.pending ? 'PENDING' : 'CLEARED',
+            status: transaction.pending
+              ? 'PENDING'
+              : shouldReviewCategory(merchantName, amount)
+                ? 'NEEDS_REVIEW'
+                : 'CLEARED',
           }
         }),
       }
@@ -370,6 +332,7 @@ function normalizeSimpleFinAccount(account: SimpleFinAccount): FinancialAccount 
     name: account.name || 'Bank account',
     type: inferAccountType(account),
     balance: toAmount(account.balance),
+    currency: account.currency?.trim().toUpperCase() || 'USD',
     institution: account.org?.name || 'Connected bank',
     lastSynced: balanceDate || 'Just now',
   }
@@ -385,12 +348,19 @@ function normalizeSimpleFinTransaction(
 
   return {
     id: transaction.id || `${account.id || 'simplefin'}-${transaction.posted || index}`,
-    date: formatSimpleFinDate(transaction.posted) || 'Pending',
+    date: transaction.posted
+      ? new Date(transaction.posted * 1000).toISOString()
+      : 'Pending',
     merchant,
     account: account.name || 'Bank account',
     category: inferCategory(merchant, amount),
     amount,
-    status: transaction.pending ? 'pending' : 'cleared',
+    currency: account.currency?.trim().toUpperCase() || 'USD',
+    status: transaction.pending
+      ? 'pending'
+      : shouldReviewCategory(merchant, amount)
+        ? 'needs-review'
+        : 'cleared',
   }
 }
 
@@ -403,6 +373,9 @@ function inferAccountType(account: SimpleFinAccount): FinancialAccount['type'] {
 
 function inferCategory(merchant: string, amount: number): FinanceCategory {
   const text = merchant.toLowerCase()
+  if (/\b(transfer|card payment|credit card payment|payment thank you|internal transfer)\b/.test(text)) {
+    return 'Transfer'
+  }
   if (amount > 0) return 'Income'
   if (text.includes('rent') || text.includes('mortgage')) return 'Housing'
   if (text.includes('whole foods') || text.includes('market') || text.includes('grocery')) {
@@ -418,6 +391,12 @@ function inferCategory(merchant: string, amount: number): FinanceCategory {
     return 'Dining'
   }
   return 'Shopping'
+}
+
+function shouldReviewCategory(merchant: string, amount: number) {
+  if (amount >= 0) return false
+  if (inferCategory(merchant, amount) !== 'Shopping') return false
+  return !/\b(amazon|shop|store|retail|mall)\b/.test(merchant.toLowerCase())
 }
 
 function normalizeMerchant(transaction: SimpleFinTransaction) {
@@ -566,11 +545,36 @@ const getUserSimpleFinConnection = createServerOnlyFn(async () => {
 
   if (!connection?.tokenRef) return null
 
+  const encryptionSecret = getBankSyncEncryptionSecret()
+  let accessUrl: string
+
+  if (isEncryptedCredential(connection.tokenRef)) {
+    try {
+      accessUrl = await decryptCredential(connection.tokenRef, encryptionSecret)
+    } catch (error) {
+      console.error('Could not decrypt SimpleFIN credential:', error)
+      await prisma.bankConnection.update({
+        where: { id: connection.id },
+        data: { status: 'NEEDS_RECONNECT' },
+      })
+      return null
+    }
+  } else {
+    // Transparently migrate credentials written by pre-encryption builds.
+    accessUrl = connection.tokenRef
+    await prisma.bankConnection.update({
+      where: { id: connection.id },
+      data: {
+        tokenRef: await encryptCredential(accessUrl, encryptionSecret),
+      },
+    })
+  }
+
   return {
     id: connection.id,
     userId: connection.userId,
     workspaceId: connection.workspaceId,
-    accessUrl: connection.tokenRef,
+    accessUrl,
   } satisfies SimpleFinConnectionRecord
 })
 
@@ -580,10 +584,15 @@ const persistSimpleFinSnapshot = createServerOnlyFn(
     const prisma = await getDb()
     const syncedAt = new Date()
     const snapshot = buildSimpleFinPersistenceSnapshot(payload, syncedAt)
-    let transactionsAdded = 0
+    return prisma.$transaction(async (tx) => {
+      await tx.bankConnection.update({
+        where: { id: connection.id },
+        data: { status: 'SYNCING' },
+      })
+      let transactionsAdded = 0
 
-    for (const account of snapshot.accounts) {
-      const savedAccount = await prisma.financialAccount.upsert({
+      for (const account of snapshot.accounts) {
+        const savedAccount = await tx.financialAccount.upsert({
         where: {
           bankConnectionId_providerAccountId: {
             bankConnectionId: connection.id,
@@ -611,10 +620,10 @@ const persistSimpleFinSnapshot = createServerOnlyFn(
         },
       })
 
-      for (const transaction of account.transactions) {
+        for (const transaction of account.transactions) {
         const normalizedMerchantName = normalizeMerchantName(transaction.merchantName)
         const [category, merchant, existingTransaction] = await Promise.all([
-          prisma.transactionCategory.upsert({
+          tx.transactionCategory.upsert({
             where: {
               workspaceId_name: {
                 workspaceId: connection.workspaceId,
@@ -628,7 +637,7 @@ const persistSimpleFinSnapshot = createServerOnlyFn(
             },
             update: {},
           }),
-          prisma.merchant.upsert({
+          tx.merchant.upsert({
             where: {
               workspaceId_normalizedName: {
                 workspaceId: connection.workspaceId,
@@ -642,7 +651,7 @@ const persistSimpleFinSnapshot = createServerOnlyFn(
             },
             update: { name: transaction.merchantName },
           }),
-          prisma.financeTransaction.findUnique({
+          tx.financeTransaction.findUnique({
             where: {
               accountId_providerTransactionId: {
                 accountId: savedAccount.id,
@@ -655,7 +664,21 @@ const persistSimpleFinSnapshot = createServerOnlyFn(
 
         if (!existingTransaction) transactionsAdded += 1
 
-        await prisma.financeTransaction.upsert({
+          const savedRule = await tx.categoryRule.findFirst({
+          where: {
+            workspaceId: connection.workspaceId,
+            merchantId: merchant.id,
+          },
+          select: { categoryId: true },
+        })
+        const categoryId = savedRule?.categoryId ?? category.id
+        const status = transaction.status === 'PENDING'
+          ? 'PENDING'
+          : savedRule
+            ? 'CLEARED'
+            : transaction.status
+
+          await tx.financeTransaction.upsert({
           where: {
             accountId_providerTransactionId: {
               accountId: savedAccount.id,
@@ -665,27 +688,27 @@ const persistSimpleFinSnapshot = createServerOnlyFn(
           create: {
             workspaceId: connection.workspaceId,
             accountId: savedAccount.id,
-            categoryId: category.id,
+            categoryId,
             merchantId: merchant.id,
             providerTransactionId: transaction.providerTransactionId,
             postedAt: transaction.postedAt,
             description: transaction.description,
             amountMinor: transaction.amountMinor,
             currency: transaction.currency,
-            status: transaction.status,
+            status,
           },
           update: {
-            categoryId: category.id,
+            categoryId,
             merchantId: merchant.id,
             postedAt: transaction.postedAt,
             description: transaction.description,
             amountMinor: transaction.amountMinor,
             currency: transaction.currency,
-            status: transaction.status,
+            status,
           },
         })
+        }
       }
-    }
 
     const transactionsSeen = snapshot.accounts.reduce(
       (total, account) => total + account.transactions.length,
@@ -693,11 +716,11 @@ const persistSimpleFinSnapshot = createServerOnlyFn(
     )
 
     await Promise.all([
-      prisma.bankConnection.update({
+      tx.bankConnection.update({
         where: { id: connection.id },
         data: { status: 'CONNECTED', lastSyncedAt: syncedAt },
       }),
-      prisma.syncRun.create({
+      tx.syncRun.create({
         data: {
           workspaceId: connection.workspaceId,
           bankConnectionId: connection.id,
@@ -709,7 +732,8 @@ const persistSimpleFinSnapshot = createServerOnlyFn(
           transactionsAdded,
         },
       }),
-    ])
+      ])
+    }, { maxWait: 5_000, timeout: 60_000 })
   },
 )
 
@@ -738,6 +762,7 @@ const loadPersistedSimpleFinSnapshot = createServerOnlyFn(
             ? 'Savings'
             : 'Checking',
       balance: account.balanceMinor / 100,
+      currency: account.currency,
       institution: account.institution || 'Connected bank',
       lastSynced: formatSavedDate(account.lastSyncedAt),
     }))
@@ -745,12 +770,13 @@ const loadPersistedSimpleFinSnapshot = createServerOnlyFn(
     const transactions: FinanceTransaction[] = savedAccounts
       .flatMap((account) =>
         account.transactions.map((transaction) => ({
-          id: transaction.providerTransactionId || transaction.id,
-          date: formatSavedDate(transaction.postedAt),
+          id: transaction.id,
+          date: transaction.postedAt.toISOString(),
           merchant: transaction.merchant?.name || transaction.description,
           account: account.name,
           category: toFinanceCategory(transaction.category?.name),
           amount: transaction.amountMinor / 100,
+          currency: transaction.currency,
           status:
             transaction.status === 'PENDING'
               ? ('pending' as const)
@@ -815,6 +841,7 @@ function toFinanceCategory(value?: string | null): FinanceCategory {
     'Shopping',
     'Savings',
     'Health',
+    'Transfer',
   ]
   return categories.includes(value as FinanceCategory)
     ? (value as FinanceCategory)
@@ -826,6 +853,10 @@ const saveUserSimpleFinAccessUrl = createServerOnlyFn(
     const { getDb } = await import('#/server/db-access.server')
     const prisma = await getDb()
     const workspace = await getOrCreateFinanceWorkspace(userId)
+    const encryptedAccessUrl = await encryptCredential(
+      accessUrl,
+      getBankSyncEncryptionSecret(),
+    )
     const providerItemId = `${userId}:simplefin`
     const existing = await prisma.bankConnection.findFirst({
       where: {
@@ -840,7 +871,7 @@ const saveUserSimpleFinAccessUrl = createServerOnlyFn(
         data: {
           workspaceId: workspace.id,
           providerItemId,
-          tokenRef: accessUrl,
+          tokenRef: encryptedAccessUrl,
           status: 'CONNECTED',
           lastSyncedAt: new Date(),
         },
@@ -854,7 +885,7 @@ const saveUserSimpleFinAccessUrl = createServerOnlyFn(
         workspaceId: workspace.id,
         provider: 'SIMPLEFIN',
         providerItemId,
-        tokenRef: accessUrl,
+        tokenRef: encryptedAccessUrl,
         status: 'CONNECTED',
         lastSyncedAt: new Date(),
       },
@@ -862,43 +893,66 @@ const saveUserSimpleFinAccessUrl = createServerOnlyFn(
   },
 )
 
+function getBankSyncEncryptionSecret() {
+  const explicitSecret = process.env.BANK_SYNC_ENCRYPTION_KEY?.trim()
+  if (explicitSecret) return explicitSecret
+
+  if (process.env.NODE_ENV !== 'production') {
+    const developmentFallback = process.env.BETTER_AUTH_SECRET?.trim()
+    if (developmentFallback) return developmentFallback
+  }
+
+  throw new Error('BANK_SYNC_ENCRYPTION_KEY is required for bank sync.')
+}
+
 const deleteUserSimpleFinConnection = createServerOnlyFn(async (userId: string) => {
   const { getDb } = await import('#/server/db-access.server')
   const prisma = await getDb()
+  await prisma.$transaction(async (tx) => {
+    const lockedConnections = await tx.$queryRaw<Array<{ id: string }>>`
+      SELECT id
+      FROM "BankConnection"
+      WHERE "userId" = ${userId}
+        AND provider = 'SIMPLEFIN'::"FinanceConnectionProvider"
+      FOR UPDATE
+    `
+    const lockedConnectionIds = lockedConnections.map((connection) => connection.id)
 
-  const connections = await prisma.bankConnection.findMany({
-    where: { userId, provider: 'SIMPLEFIN' },
-    select: {
-      id: true,
-      accounts: { select: { id: true } },
-    },
-  })
-  const connectionIds = connections.map((connection) => connection.id)
-  const accountIds = connections.flatMap((connection) =>
-    connection.accounts.map((account) => account.id),
-  )
-
-  if (accountIds.length) {
-    await prisma.financeTransaction.deleteMany({
-      where: { accountId: { in: accountIds } },
+    const connections = await tx.bankConnection.findMany({
+      where: { id: { in: lockedConnectionIds } },
+      select: {
+        id: true,
+        accounts: { select: { id: true } },
+      },
     })
-    await prisma.financialAccount.deleteMany({
-      where: { id: { in: accountIds } },
-    })
-  }
+    const connectionIds = connections.map((connection) => connection.id)
+    const accountIds = connections.flatMap((connection) =>
+      connection.accounts.map((account) => account.id),
+    )
 
-  if (connectionIds.length) {
-    await prisma.syncRun.deleteMany({
-      where: { bankConnectionId: { in: connectionIds } },
+    if (connectionIds.length) {
+      await tx.bankConnection.updateMany({
+        where: { id: { in: connectionIds } },
+        data: { status: 'DISABLED' },
+      })
+    }
+    if (accountIds.length) {
+      await tx.financeTransaction.deleteMany({
+        where: { accountId: { in: accountIds } },
+      })
+      await tx.financialAccount.deleteMany({
+        where: { id: { in: accountIds } },
+      })
+    }
+    if (connectionIds.length) {
+      await tx.syncRun.deleteMany({
+        where: { bankConnectionId: { in: connectionIds } },
+      })
+    }
+    await tx.bankConnection.deleteMany({
+      where: { userId, provider: 'SIMPLEFIN' },
     })
-  }
-
-  await prisma.bankConnection.deleteMany({
-    where: {
-      userId,
-      provider: 'SIMPLEFIN',
-    },
-  })
+  }, { maxWait: 5_000, timeout: 30_000 })
 })
 
 const getOrCreateFinanceWorkspace = createServerOnlyFn(async (userId: string) => {
@@ -933,18 +987,39 @@ function decodeSimpleFinToken(token: string) {
     throw new Error('That SimpleFIN token is not valid.')
   }
 
-  assertHttpsUrl(decoded, 'SimpleFIN claim URL')
+  assertSimpleFinUrl(decoded, 'SimpleFIN claim URL')
   return decoded
 }
 
-function assertHttpsUrl(value: string, label: string) {
+export function assertSimpleFinUrl(value: string, label: string) {
   try {
     const url = new URL(value)
     if (url.protocol !== 'https:') {
       throw new Error(`${label} must use HTTPS.`)
     }
+    if (url.username && label.includes('claim')) {
+      throw new Error(`${label} must not contain embedded credentials.`)
+    }
+    const allowedHosts = new Set(
+      (process.env.SIMPLEFIN_ALLOWED_HOSTS || 'bridge.simplefin.org')
+        .split(',')
+        .map((host) => host.trim().toLowerCase())
+        .filter(Boolean),
+    )
+    if (!allowedHosts.has(url.hostname.toLowerCase())) {
+      throw new Error(`${label} host is not allowed.`)
+    }
+    if (url.port && url.port !== '443') {
+      throw new Error(`${label} must use the standard HTTPS port.`)
+    }
   } catch (error) {
-    if (error instanceof Error && error.message.includes('HTTPS')) {
+    if (
+      error instanceof Error &&
+      (error.message.includes('HTTPS') ||
+        error.message.includes('embedded credentials') ||
+        error.message.includes('host is not allowed') ||
+        error.message.includes('standard HTTPS port'))
+    ) {
       throw error
     }
     throw new Error(`${label} is not a valid URL.`)

@@ -66,6 +66,7 @@ export const FinanceConnectionProvider = {
   DEMO: 'DEMO',
   SIMPLEFIN: 'SIMPLEFIN',
   GOCARDLESS: 'GOCARDLESS',
+  ENABLE_BANKING: 'ENABLE_BANKING',
   PLAID: 'PLAID'
 } as const
 

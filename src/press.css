@@ -726,6 +726,491 @@ img, svg { display: block; max-width: 100%; }
   }
 }
 
+/* ════════════════════════════════════════════════════════════
+   WOLLIE APP SHELL · finance workspace navigation
+   Mobile header + bottom navigation, persistent desktop sidebar.
+   ════════════════════════════════════════════════════════════ */
+
+.app-shell {
+  min-height: 100vh;
+  background: white;
+}
+
+.app-shell__main {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding-block: 0 5.75rem;
+}
+
+.app-nav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky-nav);
+  border: 0;
+  border-bottom: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+  background: color-mix(in oklch, white 96%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+.app-nav__inner {
+  display: flex;
+  min-height: 4rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+}
+
+.app-nav__brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: var(--color-ink);
+}
+
+.app-nav__tabs,
+.app-nav__account-link {
+  display: none;
+}
+
+.app-nav__actions {
+  display: flex;
+  width: auto;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.app-mobile-nav {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: var(--z-sticky-nav);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  padding: 0.35rem 0.25rem calc(0.35rem + env(safe-area-inset-bottom));
+  border-top: 1px solid color-mix(in oklch, var(--color-ink) 11%, white);
+  background: color-mix(in oklch, white 96%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+.app-mobile-nav__item {
+  display: flex;
+  min-width: 0;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.3rem 0.1rem;
+  border: 0;
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-decoration: none;
+  text-transform: none;
+}
+
+.app-mobile-nav__item svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  stroke-width: 1.75;
+}
+
+.app-mobile-nav__item.is-active {
+  background: transparent;
+  color: var(--color-ink);
+}
+
+.app-mobile-nav__item.is-active svg {
+  color: color-mix(in oklch, var(--color-accent) 75%, var(--color-ink));
+}
+
+@media (min-width: 40rem) {
+  .app-nav__inner {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .app-shell {
+    display: grid;
+    grid-template-columns: 14.5rem minmax(0, 1fr);
+  }
+
+  .app-shell__main {
+    grid-column: 2;
+    padding-block-end: 0;
+  }
+
+  .app-nav {
+    grid-column: 1;
+    grid-row: 1;
+    height: 100vh;
+    border-right: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+    border-bottom: 0;
+    background: white;
+    backdrop-filter: none;
+  }
+
+  .app-nav__inner {
+    display: flex;
+    min-height: 100%;
+    align-items: stretch;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding: 1.35rem 1rem 1rem;
+  }
+
+  .app-nav__brand {
+    width: fit-content;
+    margin-inline: 0.65rem;
+    margin-block-end: 2.25rem;
+  }
+
+  .app-nav__tabs {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .app-nav__section-label {
+    margin: 0 0.75rem 0.55rem;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .app-nav__tab,
+  .app-nav__account-link {
+    display: flex;
+    min-height: 2.85rem;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0.75rem;
+    border: 0;
+    color: var(--color-neutral);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-decoration: none;
+    text-transform: none;
+    transition: background-color 150ms ease-out, color 150ms ease-out;
+  }
+
+  .app-nav__tab svg,
+  .app-nav__account-link svg {
+    width: 1.05rem;
+    height: 1.05rem;
+    flex: 0 0 auto;
+    stroke-width: 1.8;
+  }
+
+  .app-nav__tab:hover,
+  .app-nav__tab:focus-visible,
+  .app-nav__account-link:hover,
+  .app-nav__account-link:focus-visible {
+    background: var(--color-paper-3);
+    color: var(--color-ink);
+  }
+
+  .app-nav__tab.is-active,
+  .app-nav__account-link.is-active {
+    background: var(--color-ink);
+    color: white;
+  }
+
+  .app-nav__tab.is-active::after {
+    content: none;
+  }
+
+  .app-nav__actions {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-block-start: auto;
+    padding-block-start: 1rem;
+    border-top: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+  }
+
+  .app-nav__account-link {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .app-nav__account-link span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .app-mobile-nav {
+    display: none;
+  }
+}
+
+/* Auth split screen ------------------------------------------------------- */
+.min-h-screen:has(> .auth-page--split) > header {
+  display: none;
+}
+
+.auth-page.auth-page--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(30rem, 1fr);
+  width: 100%;
+  max-width: none;
+  min-height: 100svh;
+  margin: 0;
+  padding: 0;
+  background: white;
+}
+
+.auth-page__panel {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-width: 0;
+  padding: clamp(2rem, 6vw, 6rem);
+}
+
+.auth-page__content {
+  width: 100%;
+  max-width: 25rem;
+}
+
+.auth-page.auth-page--split .auth-page__head {
+  display: grid;
+  gap: 0.9rem;
+  margin-block-end: 2.25rem;
+}
+
+.auth-page--split .auth-page__head .app-page__title {
+  max-width: none;
+  font-size: clamp(2.75rem, 5vw, 4.75rem);
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+}
+
+.auth-page__intro {
+  max-width: 24rem;
+  margin: 0;
+  color: color-mix(in oklch, var(--color-ink) 58%, white);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.auth-page--split .auth-form {
+  gap: 1rem;
+  padding: 0;
+  border: 0;
+}
+
+.auth-page--split .app-form__input {
+  min-height: 3.25rem;
+  padding-inline: 1rem;
+  border-color: color-mix(in oklch, var(--color-ink) 14%, white);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.auth-page--split .app-form__input:focus {
+  border-color: var(--color-wollie-accent);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-wollie-accent) 20%, transparent);
+}
+
+.auth-page--split .auth-form .btn {
+  min-height: 3.25rem;
+  background: var(--color-wollie-accent);
+  border-color: var(--color-wollie-accent);
+  color: var(--color-wollie-accent-contrast);
+  transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 180ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .auth-page--split .auth-form .btn:hover:not(:disabled) {
+    background: var(--color-wollie-accent-hover);
+    border-color: var(--color-wollie-accent-hover);
+  }
+}
+
+.auth-page--split .auth-form .btn:active:not(:disabled) {
+  transform: scale(0.985);
+}
+
+.auth-page--split .auth-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding-block-start: 1rem;
+  border: 0;
+}
+
+.auth-visual {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  color: #dffbf3;
+  background: #061712;
+  isolation: isolate;
+}
+
+.auth-visual::before,
+.auth-visual::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  pointer-events: none;
+}
+
+.auth-visual::before {
+  z-index: -2;
+  background:
+    radial-gradient(circle at 78% 20%, rgb(125 255 219 / 0.1), transparent 28%),
+    radial-gradient(circle at 18% 82%, rgb(45 171 144 / 0.12), transparent 34%);
+}
+
+.auth-visual::after {
+  z-index: 2;
+  background: linear-gradient(90deg, rgb(0 0 0 / 0.1), transparent 16%, transparent 82%, rgb(0 0 0 / 0.16));
+}
+
+.auth-visual__flow {
+  position: absolute;
+  inset: -12% -30%;
+  z-index: -1;
+  overflow: hidden;
+  transform: rotate(-8deg);
+}
+
+.auth-visual__ribbon {
+  position: absolute;
+  display: block;
+  width: 145%;
+  aspect-ratio: 1.7;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 208deg,
+    transparent 0 12%,
+    rgb(34 117 99 / 0.18) 22%,
+    rgb(124 255 219 / 0.8) 35%,
+    rgb(36 129 109 / 0.32) 49%,
+    rgb(182 255 235 / 0.54) 61%,
+    rgb(27 91 78 / 0.12) 74%,
+    transparent 86% 100%
+  );
+  filter: blur(1px);
+  -webkit-mask-image: radial-gradient(ellipse, transparent 0 36%, #000 40% 55%, transparent 61%);
+  mask-image: radial-gradient(ellipse, transparent 0 36%, #000 40% 55%, transparent 61%);
+  transform-origin: 50% 50%;
+}
+
+.auth-visual__ribbon--back {
+  top: -15%;
+  left: -46%;
+  opacity: 0.38;
+  animation: auth-flow-back 22s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+}
+
+.auth-visual__ribbon--middle {
+  top: 21%;
+  left: -22%;
+  width: 132%;
+  opacity: 0.64;
+  animation: auth-flow-middle 17s cubic-bezier(0.37, 0, 0.63, 1) -5s infinite alternate;
+}
+
+.auth-visual__ribbon--front {
+  top: 53%;
+  left: -40%;
+  width: 152%;
+  opacity: 0.52;
+  animation: auth-flow-front 20s cubic-bezier(0.37, 0, 0.63, 1) -9s infinite alternate;
+}
+
+.auth-visual__wordmark {
+  position: absolute;
+  top: clamp(2rem, 5vw, 4.5rem);
+  left: clamp(2rem, 5vw, 5rem);
+  z-index: 3;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+@keyframes auth-flow-back {
+  from { transform: translate3d(-2%, -3%, 0) rotate(-15deg) scale(0.96); }
+  to { transform: translate3d(8%, 7%, 0) rotate(-6deg) scale(1.05); }
+}
+
+@keyframes auth-flow-middle {
+  from { transform: translate3d(-6%, 3%, 0) rotate(8deg) scale(1.03); }
+  to { transform: translate3d(5%, -5%, 0) rotate(16deg) scale(0.96); }
+}
+
+@keyframes auth-flow-front {
+  from { transform: translate3d(4%, 3%, 0) rotate(-10deg) scale(0.97); }
+  to { transform: translate3d(-5%, -6%, 0) rotate(-2deg) scale(1.04); }
+}
+
+@media (max-width: 64rem) {
+  .auth-page--split {
+    grid-template-columns: minmax(0, 1.08fr) minmax(20rem, 0.92fr);
+  }
+
+  .auth-page__panel {
+    padding-inline: clamp(1.5rem, 5vw, 4rem);
+  }
+}
+
+@media (max-width: 48rem) {
+  .auth-page.auth-page--split {
+    display: block;
+  }
+
+  .auth-page__panel {
+    min-height: 100svh;
+    padding: 3rem 1.25rem;
+  }
+
+  .auth-page__content {
+    width: 100%;
+    max-width: 29rem;
+  }
+
+  .auth-page--split .auth-page__head .app-page__title {
+    font-size: clamp(3rem, 16vw, 4.5rem);
+  }
+
+  .auth-visual {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-visual__ribbon {
+    animation: none;
+  }
+
+  .auth-page--split .auth-form .btn {
+    transition: background-color 180ms ease;
+  }
+}
+
 .app-banner {
   display: flex;
   flex-wrap: wrap;
@@ -5797,12 +6282,29 @@ body {
 
 .app-nav__inner {
   min-height: 4rem;
+  padding-inline: 1rem;
   padding-block: 0;
 }
 
+@media (min-width: 40rem) {
+  .app-nav__inner {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .app-nav__inner {
+    padding-inline: 2rem;
+  }
+}
+
 .app-nav__tabs {
+  gap: clamp(1.25rem, 3vw, 3rem);
+  margin-inline-start: clamp(1.5rem, 4vw, 4.5rem);
+  padding: 0;
+  border: 0;
   border-radius: 0;
-  background: white;
+  background: transparent;
   box-shadow: none;
 }
 
@@ -5817,9 +6319,42 @@ body {
 }
 
 .app-nav__tab.is-active {
-  background: var(--color-ink);
-  color: white;
+  position: relative;
+  background: transparent;
+  color: var(--color-ink);
   box-shadow: none;
+}
+
+.app-nav__tab.is-active::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0.25rem;
+  bottom: -1.05rem;
+  height: 2px;
+  background: var(--color-ink);
+}
+
+.app-nav__tab--mobile-only {
+  display: none;
+}
+
+.app-nav__account-link {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  padding-inline: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-neutral);
+  text-decoration: none;
+}
+
+.app-nav__account-link:hover,
+.app-nav__account-link:focus-visible,
+.app-nav__account-link.is-active {
+  color: var(--color-ink);
 }
 
 .app-nav [data-slot='button'][data-variant='brand'] {
@@ -6018,6 +6553,54 @@ body {
 
 /* Final mobile consistency guard for the square Wollie system. */
 @media (max-width: 48rem) {
+  .app-nav__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.5rem;
+    padding-block: 0.5rem;
+  }
+
+  .app-nav__tabs {
+    display: flex;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    min-width: 0;
+    margin-inline-start: 0;
+    gap: 0.25rem;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+
+  .app-nav__tab {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 2.75rem;
+    padding-inline: 0.125rem;
+  }
+
+  .app-nav__tab--mobile-only {
+    display: inline-flex;
+  }
+
+  .app-nav__tab.is-active::after {
+    bottom: -0.5rem;
+  }
+
+  .app-nav__actions {
+    display: flex;
+    grid-column: 2;
+    grid-row: 1;
+    width: auto;
+    margin-inline-start: 0;
+  }
+
+  .app-nav__share,
+  .app-nav__account-link {
+    display: none;
+  }
+
   .finance-card,
   .finance-panel,
   .finance-sync-callout,
@@ -6031,4 +6614,238 @@ body {
   .app-page__title {
     font-size: clamp(3rem, 15vw, 5.25rem);
   }
+}
+
+/* App-shell authority: keep this final so legacy experiments cannot override it. */
+.app-shell {
+  display: block;
+  min-height: 100vh;
+  background: white;
+  --color-accent: var(--color-wollie-accent);
+  --color-focus: var(--color-wollie-accent);
+  --accent: var(--color-wollie-accent);
+  --accent-hover: var(--color-wollie-accent-hover);
+  --primary: var(--color-wollie-accent);
+  --primary-foreground: var(--color-wollie-accent-contrast);
+  --ring: var(--color-wollie-accent);
+}
+
+.app-shell__main {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding-block: 0 5.75rem;
+}
+
+.app-shell > .app-nav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky-nav);
+  height: auto;
+  border: 0;
+  border-bottom: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+  background: color-mix(in oklch, white 96%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+.app-shell .app-nav__inner {
+  display: flex;
+  width: 100%;
+  min-height: 4rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.5rem 1rem;
+}
+
+.app-shell .app-nav__brand {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 2.75rem;
+  align-items: center;
+  margin: 0;
+}
+
+.app-shell .app-nav__tabs,
+.app-shell .app-nav__account-link {
+  display: none;
+}
+
+.app-shell .app-nav__actions {
+  display: flex;
+  grid-column: auto;
+  grid-row: auto;
+  width: auto;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.app-shell .app-nav__sign-out {
+  display: none;
+}
+
+.app-shell .app-mobile-nav {
+  display: grid;
+}
+
+@media (min-width: 40rem) {
+  .app-shell .app-nav__inner {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .app-shell {
+    display: grid;
+    grid-template-columns: 14.5rem minmax(0, 1fr);
+  }
+
+  .app-shell__main {
+    grid-column: 2;
+    padding-block-end: 0;
+  }
+
+  .app-shell > .app-nav {
+    grid-column: 1;
+    grid-row: 1;
+    height: 100vh;
+    border-right: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+    border-bottom: 0;
+    background: white;
+    backdrop-filter: none;
+  }
+
+  .app-shell .app-nav__inner {
+    min-height: 100%;
+    align-items: stretch;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding: 1.35rem 1rem 1rem;
+  }
+
+  .app-shell .app-nav__brand {
+    margin: 0 0.65rem 2.25rem;
+  }
+
+  .app-shell .app-nav__tabs {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .app-shell .app-nav__tab,
+  .app-shell .app-nav__account-link,
+  .app-shell .app-nav__sign-out {
+    display: flex;
+    min-height: 2.85rem;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0.75rem;
+    border: 0;
+    background: transparent;
+    color: var(--color-neutral);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-decoration: none;
+    text-transform: none;
+  }
+
+  .app-shell .app-nav__sign-out {
+    width: 100%;
+    cursor: pointer;
+    text-align: start;
+    transition: background-color 150ms ease-out, color 150ms ease-out;
+  }
+
+  .app-shell .app-nav__sign-out svg {
+    width: 1.05rem;
+    height: 1.05rem;
+    flex: 0 0 auto;
+    stroke-width: 1.8;
+  }
+
+  .app-shell .app-nav__profile-menu {
+    display: none;
+  }
+
+  .app-shell .app-nav__sign-out:hover,
+  .app-shell .app-nav__sign-out:focus-visible {
+    background: var(--color-paper-3);
+    color: var(--color-ink);
+  }
+
+  .app-shell .app-nav__tab.is-active,
+  .app-shell .app-nav__account-link.is-active {
+    background: var(--color-wollie-accent);
+    color: var(--color-wollie-accent-contrast);
+  }
+
+  .app-shell .app-nav__tab.is-active::after {
+    content: none;
+  }
+
+  .app-shell .app-nav__actions {
+    width: 100%;
+    align-items: stretch;
+    justify-content: flex-start;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin-block-start: auto;
+    padding-block-start: 1rem;
+    border-top: 1px solid color-mix(in oklch, var(--color-ink) 10%, white);
+  }
+
+  .app-shell .app-nav__account-link {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .app-shell .app-nav__account-link span {
+    display: inline;
+  }
+
+  .app-shell .app-nav__actions > button {
+    align-self: flex-start;
+  }
+
+  .app-shell .app-mobile-nav {
+    display: none;
+  }
+}
+
+/* Wollie accent authority: shared by landing, auth, and finance actions. */
+.wollie-landing {
+  --primary: var(--color-wollie-accent);
+  --primary-foreground: var(--color-wollie-accent-contrast);
+  --ring: var(--color-wollie-accent);
+}
+
+.wollie-primary-action {
+  background: var(--color-wollie-accent);
+  color: var(--color-wollie-accent-contrast);
+}
+
+.wollie-primary-action:hover {
+  background: var(--color-wollie-accent-hover);
+  color: var(--color-wollie-accent-contrast);
+}
+
+.wollie-accent-badge {
+  border-color: color-mix(in oklch, var(--color-wollie-accent) 28%, white);
+  background: color-mix(in oklch, var(--color-wollie-accent) 9%, white);
+  color: var(--color-wollie-accent-deep);
+}
+
+.wollie-accent-badge:hover {
+  background: color-mix(in oklch, var(--color-wollie-accent) 12%, white);
 }

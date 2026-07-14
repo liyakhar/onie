@@ -1,6 +1,7 @@
 import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { tanstackStartCookies } from 'better-auth/tanstack-start'
+import { getRequest } from '@tanstack/react-start/server'
 import { getPrisma } from '#/db.server'
 
 function slugify(value: string) {
@@ -28,7 +29,8 @@ async function uniqueUsername(base: string) {
 
 type Auth = ReturnType<typeof createAuth>
 
-let authInstance: Auth | undefined
+const requestAuth = new WeakMap<Request, Auth>()
+let fallbackAuth: Auth | undefined
 
 function createAuth() {
   const secret = process.env.BETTER_AUTH_SECRET
@@ -80,8 +82,8 @@ function createAuth() {
               data: {
                 userId: user.id,
                 username,
-                field: 'OTHER',
-                onboarded: false,
+                field: 'FINANCE',
+                onboarded: true,
               },
             })
           },
@@ -93,10 +95,20 @@ function createAuth() {
 }
 
 export function getAuth() {
-  if (!authInstance) {
-    authInstance = createAuth()
+  try {
+    const request = getRequest()
+    const cached = requestAuth.get(request)
+    if (cached) return cached
+
+    const instance = createAuth()
+    requestAuth.set(request, instance)
+    return instance
+  } catch {
+    if (!fallbackAuth) {
+      fallbackAuth = createAuth()
+    }
+    return fallbackAuth
   }
-  return authInstance
 }
 
 export const auth: Auth = new Proxy({} as Auth, {

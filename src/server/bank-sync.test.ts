@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  assertSimpleFinUrl,
   buildSimpleFinAccountsRequest,
   buildSimpleFinPersistenceSnapshot,
   isLiveBankSyncEnabled,
@@ -35,6 +36,24 @@ describe('SimpleFIN bank sync helpers', () => {
     expect(request.url).toContain('end-date=')
     expect(request.url).not.toContain('user:secret')
     expect(request.authorization).toBe('Basic dXNlcjpzZWNyZXQ=')
+  })
+
+  it('rejects non-SimpleFIN hosts and nonstandard ports', () => {
+    expect(() =>
+      assertSimpleFinUrl('https://example.com/claim', 'SimpleFIN claim URL'),
+    ).toThrow('host is not allowed')
+    expect(() =>
+      assertSimpleFinUrl(
+        'https://bridge.simplefin.org:8443/claim',
+        'SimpleFIN claim URL',
+      ),
+    ).toThrow('standard HTTPS port')
+    expect(() =>
+      assertSimpleFinUrl(
+        'https://bridge.simplefin.org/simplefin/claim/example',
+        'SimpleFIN claim URL',
+      ),
+    ).not.toThrow()
   })
 
   it('normalizes SimpleFIN accounts and transactions into Wollie data', () => {
@@ -150,6 +169,27 @@ describe('SimpleFIN bank sync helpers', () => {
     ])
     expect(result.accounts[0]?.transactions[0]?.providerTransactionId).not.toBe(
       result.accounts[1]?.transactions[0]?.providerTransactionId,
+    )
+  })
+
+  it('flags uncertain merchants for review and recognizes transfers', () => {
+    const result = buildSimpleFinPersistenceSnapshot({
+      accounts: [
+        {
+          id: 'checking',
+          transactions: [
+            { id: 'unknown', amount: '-20', payee: 'ACME 49382' },
+            { id: 'transfer', amount: '-500', payee: 'Internal transfer' },
+          ],
+        },
+      ],
+    })
+
+    expect(result.accounts[0]?.transactions[0]).toEqual(
+      expect.objectContaining({ categoryName: 'Shopping', status: 'NEEDS_REVIEW' }),
+    )
+    expect(result.accounts[0]?.transactions[1]).toEqual(
+      expect.objectContaining({ categoryName: 'Transfer', status: 'CLEARED' }),
     )
   })
 })

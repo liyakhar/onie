@@ -2,7 +2,6 @@ import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { authClient } from '#/lib/auth-client'
 import type { LoginSearch } from '#/lib/auth-nav'
-import { completeOnboarding, getMyProfile } from '#/server/profiles'
 import { buildPageMeta } from '#/lib/seo'
 
 const loginMeta = buildPageMeta({
@@ -14,6 +13,11 @@ const loginMeta = buildPageMeta({
 
 export type { LoginSearch }
 
+function safeAppRedirect(value: unknown) {
+  if (typeof value !== 'string') return '/app'
+  return value === '/app' || value.startsWith('/app/') ? value : '/app'
+}
+
 const DEV_LOGIN = {
   email: 'dev@wollie.local',
   password: 'wollie-dev-password',
@@ -23,25 +27,7 @@ const DEV_LOGIN = {
 async function goAfterAuth(
   router: ReturnType<typeof useRouter>,
   redirectTo: string,
-  isSignUp: boolean,
 ) {
-  if (isSignUp) {
-    void router.navigate({
-      to: '/welcome',
-      search: { redirect: redirectTo },
-    })
-    return
-  }
-
-  const profile = await getMyProfile()
-  if (profile && !profile.onboarded) {
-    void router.navigate({
-      to: '/welcome',
-      search: { redirect: redirectTo },
-    })
-    return
-  }
-
   void router.navigate({ href: redirectTo })
 }
 
@@ -54,13 +40,37 @@ export const Route = createFileRoute('/login/')({
     isDev: process.env.NODE_ENV === 'development',
   }),
   validateSearch: (search: Record<string, unknown>): LoginSearch => ({
-    redirect: typeof search.redirect === 'string' ? search.redirect : '/app',
+    redirect: safeAppRedirect(search.redirect),
     signup: search.signup === '1' || search.signup === true ? '1' : undefined,
   }),
   component: LoginPage,
 })
 
 type AuthMode = 'signin' | 'signup' | 'forgot' | 'forgot-sent'
+
+function AuthVisual() {
+  return (
+    <aside className="auth-visual" aria-label="Wollie">
+      <div className="auth-visual__flow" aria-hidden="true">
+        <span className="auth-visual__ribbon auth-visual__ribbon--back" />
+        <span className="auth-visual__ribbon auth-visual__ribbon--middle" />
+        <span className="auth-visual__ribbon auth-visual__ribbon--front" />
+      </div>
+      <p className="auth-visual__wordmark">Wollie</p>
+    </aside>
+  )
+}
+
+function AuthFrame({ children }: { children: React.ReactNode }) {
+  return (
+    <main id="main" className="auth-page auth-page--split">
+      <section className="auth-page__panel">
+        <div className="auth-page__content">{children}</div>
+      </section>
+      <AuthVisual />
+    </main>
+  )
+}
 
 function LoginPage() {
   const router = useRouter()
@@ -78,7 +88,7 @@ function LoginPage() {
 
   useEffect(() => {
     if (!isPending && session?.user) {
-      void goAfterAuth(router, redirectTo, false)
+      void goAfterAuth(router, redirectTo)
     }
   }, [isPending, session?.user, router, redirectTo])
 
@@ -103,14 +113,14 @@ function LoginPage() {
         if (result.error) {
           setError(result.error.message || 'Sign up failed')
         } else {
-          await goAfterAuth(router, redirectTo, true)
+          await goAfterAuth(router, redirectTo)
         }
       } else {
         const result = await authClient.signIn.email({ email, password })
         if (result.error) {
           setError(result.error.message || 'Sign in failed')
         } else {
-          await goAfterAuth(router, redirectTo, false)
+          await goAfterAuth(router, redirectTo)
         }
       }
     } catch {
@@ -177,17 +187,6 @@ function LoginPage() {
         return
       }
 
-      const profile = await getMyProfile()
-      if (profile && !profile.onboarded) {
-        await completeOnboarding({
-          data: {
-            username: profile.username,
-            field: 'FINANCE',
-            headline: 'Dev budget',
-          },
-        })
-      }
-
       void router.navigate({ to: '/app' })
     } catch {
       setError('Dev sign in failed. Try again.')
@@ -198,8 +197,8 @@ function LoginPage() {
 
   if (mode === 'forgot' || mode === 'forgot-sent') {
     return (
-      <main id="main" className="app-page auth-page">
-        <header className="app-page__head">
+      <AuthFrame>
+        <header className="app-page__head auth-page__head">
           <p className="app-page__eyebrow">Account</p>
           <h1 className="app-page__title">
             {mode === 'forgot-sent' ? 'Check your email' : 'Reset password'}
@@ -249,15 +248,19 @@ function LoginPage() {
             </button>
           </footer>
         </div>
-      </main>
+      </AuthFrame>
     )
   }
 
   return (
-    <main id="main" className="app-page auth-page">
-      <header className="app-page__head">
-        <p className="app-page__eyebrow">Wollie</p>
+    <AuthFrame>
+      <header className="app-page__head auth-page__head">
         <h1 className="app-page__title">{isSignUp ? 'Create account' : 'Sign in'}</h1>
+        <p className="auth-page__intro">
+          {isSignUp
+            ? 'Start with one clear view of your money.'
+            : 'Your accounts, bills, and spending in one calm place.'}
+        </p>
       </header>
 
       <div className="auth-stack">
@@ -355,6 +358,6 @@ function LoginPage() {
           )}
         </footer>
       </div>
-    </main>
+    </AuthFrame>
   )
 }

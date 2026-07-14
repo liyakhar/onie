@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { AppShell } from '#/components/AppShell'
-import { requireOnboarded } from '#/server/profiles'
+import { requireSignedIn } from '#/server/profiles'
 
 export const Route = createFileRoute('/app')({
   loader: async () => {
-    await requireOnboarded()
+    await requireSignedIn({ data: { redirect: '/app' } })
     return null
   },
   component: AppShell,

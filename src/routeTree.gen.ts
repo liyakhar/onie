@@ -14,8 +14,10 @@ import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as WelcomeRouteRouteImport } from './routes/welcome/route'
 import { Route as URouteRouteImport } from './routes/u/route'
+import { Route as TermsRouteRouteImport } from './routes/terms/route'
 import { Route as SettingsRouteRouteImport } from './routes/settings/route'
 import { Route as ResetPasswordRouteRouteImport } from './routes/reset-password/route'
+import { Route as PrivacyRouteRouteImport } from './routes/privacy/route'
 import { Route as PRouteRouteImport } from './routes/p/route'
 import { Route as NewRouteRouteImport } from './routes/new/route'
 import { Route as LoginRouteRouteImport } from './routes/login/route'
@@ -23,8 +25,10 @@ import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as AboutRouteRouteImport } from './routes/about/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WelcomeIndexRouteImport } from './routes/welcome/index'
+import { Route as TermsIndexRouteImport } from './routes/terms/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as ResetPasswordIndexRouteImport } from './routes/reset-password/index'
+import { Route as PrivacyIndexRouteImport } from './routes/privacy/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
@@ -70,6 +74,11 @@ const URouteRoute = URouteRouteImport.update({
   path: '/u',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TermsRouteRoute = TermsRouteRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRouteRoute = SettingsRouteRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -78,6 +87,11 @@ const SettingsRouteRoute = SettingsRouteRouteImport.update({
 const ResetPasswordRouteRoute = ResetPasswordRouteRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRouteRoute = PrivacyRouteRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PRouteRoute = PRouteRouteImport.update({
@@ -115,6 +129,11 @@ const WelcomeIndexRoute = WelcomeIndexRouteImport.update({
   path: '/',
   getParentRoute: () => WelcomeRouteRoute,
 } as any)
+const TermsIndexRoute = TermsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TermsRouteRoute,
+} as any)
 const SettingsIndexRoute = SettingsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -124,6 +143,11 @@ const ResetPasswordIndexRoute = ResetPasswordIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ResetPasswordRouteRoute,
+} as any)
+const PrivacyIndexRoute = PrivacyIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PrivacyRouteRoute,
 } as any)
 const LoginIndexRoute = LoginIndexRouteImport.update({
   id: '/',
@@ -228,8 +252,10 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRouteRouteWithChildren
   '/new': typeof NewRouteRoute
   '/p': typeof PRouteRouteWithChildren
+  '/privacy': typeof PrivacyRouteRouteWithChildren
   '/reset-password': typeof ResetPasswordRouteRouteWithChildren
   '/settings': typeof SettingsRouteRouteWithChildren
+  '/terms': typeof TermsRouteRouteWithChildren
   '/u': typeof URouteRouteWithChildren
   '/welcome': typeof WelcomeRouteRouteWithChildren
   '/explore': typeof ExploreRoute
@@ -251,8 +277,10 @@ export interface FileRoutesByFullPath {
   '/app/': typeof AppIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/login/': typeof LoginIndexRoute
+  '/privacy/': typeof PrivacyIndexRoute
   '/reset-password/': typeof ResetPasswordIndexRoute
   '/settings/': typeof SettingsIndexRoute
+  '/terms/': typeof TermsIndexRoute
   '/welcome/': typeof WelcomeIndexRoute
   '/p/$postId/edit': typeof PPostIdEditRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -282,8 +310,10 @@ export interface FileRoutesByTo {
   '/app': typeof AppIndexRoute
   '/blog': typeof BlogIndexRoute
   '/login': typeof LoginIndexRoute
+  '/privacy': typeof PrivacyIndexRoute
   '/reset-password': typeof ResetPasswordIndexRoute
   '/settings': typeof SettingsIndexRoute
+  '/terms': typeof TermsIndexRoute
   '/welcome': typeof WelcomeIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/p/$postId/edit': typeof PPostIdEditIndexRoute
@@ -296,8 +326,10 @@ export interface FileRoutesById {
   '/login': typeof LoginRouteRouteWithChildren
   '/new': typeof NewRouteRoute
   '/p': typeof PRouteRouteWithChildren
+  '/privacy': typeof PrivacyRouteRouteWithChildren
   '/reset-password': typeof ResetPasswordRouteRouteWithChildren
   '/settings': typeof SettingsRouteRouteWithChildren
+  '/terms': typeof TermsRouteRouteWithChildren
   '/u': typeof URouteRouteWithChildren
   '/welcome': typeof WelcomeRouteRouteWithChildren
   '/explore': typeof ExploreRoute
@@ -319,8 +351,10 @@ export interface FileRoutesById {
   '/app/': typeof AppIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/login/': typeof LoginIndexRoute
+  '/privacy/': typeof PrivacyIndexRoute
   '/reset-password/': typeof ResetPasswordIndexRoute
   '/settings/': typeof SettingsIndexRoute
+  '/terms/': typeof TermsIndexRoute
   '/welcome/': typeof WelcomeIndexRoute
   '/p/$postId/edit': typeof PPostIdEditRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -335,8 +369,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/new'
     | '/p'
+    | '/privacy'
     | '/reset-password'
     | '/settings'
+    | '/terms'
     | '/u'
     | '/welcome'
     | '/explore'
@@ -358,8 +394,10 @@ export interface FileRouteTypes {
     | '/app/'
     | '/blog/'
     | '/login/'
+    | '/privacy/'
     | '/reset-password/'
     | '/settings/'
+    | '/terms/'
     | '/welcome/'
     | '/p/$postId/edit'
     | '/api/auth/$'
@@ -389,8 +427,10 @@ export interface FileRouteTypes {
     | '/app'
     | '/blog'
     | '/login'
+    | '/privacy'
     | '/reset-password'
     | '/settings'
+    | '/terms'
     | '/welcome'
     | '/api/auth/$'
     | '/p/$postId/edit'
@@ -402,8 +442,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/new'
     | '/p'
+    | '/privacy'
     | '/reset-password'
     | '/settings'
+    | '/terms'
     | '/u'
     | '/welcome'
     | '/explore'
@@ -425,8 +467,10 @@ export interface FileRouteTypes {
     | '/app/'
     | '/blog/'
     | '/login/'
+    | '/privacy/'
     | '/reset-password/'
     | '/settings/'
+    | '/terms/'
     | '/welcome/'
     | '/p/$postId/edit'
     | '/api/auth/$'
@@ -440,8 +484,10 @@ export interface RootRouteChildren {
   LoginRouteRoute: typeof LoginRouteRouteWithChildren
   NewRouteRoute: typeof NewRouteRoute
   PRouteRoute: typeof PRouteRouteWithChildren
+  PrivacyRouteRoute: typeof PrivacyRouteRouteWithChildren
   ResetPasswordRouteRoute: typeof ResetPasswordRouteRouteWithChildren
   SettingsRouteRoute: typeof SettingsRouteRouteWithChildren
+  TermsRouteRoute: typeof TermsRouteRouteWithChildren
   URouteRoute: typeof URouteRouteWithChildren
   WelcomeRouteRoute: typeof WelcomeRouteRouteWithChildren
   ExploreRoute: typeof ExploreRoute
@@ -492,6 +538,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof URouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -504,6 +557,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/p': {
@@ -555,6 +615,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WelcomeIndexRouteImport
       parentRoute: typeof WelcomeRouteRoute
     }
+    '/terms/': {
+      id: '/terms/'
+      path: '/'
+      fullPath: '/terms/'
+      preLoaderRoute: typeof TermsIndexRouteImport
+      parentRoute: typeof TermsRouteRoute
+    }
     '/settings/': {
       id: '/settings/'
       path: '/'
@@ -568,6 +635,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/reset-password/'
       preLoaderRoute: typeof ResetPasswordIndexRouteImport
       parentRoute: typeof ResetPasswordRouteRoute
+    }
+    '/privacy/': {
+      id: '/privacy/'
+      path: '/'
+      fullPath: '/privacy/'
+      preLoaderRoute: typeof PrivacyIndexRouteImport
+      parentRoute: typeof PrivacyRouteRoute
     }
     '/login/': {
       id: '/login/'
@@ -786,6 +860,18 @@ const PRouteRouteChildren: PRouteRouteChildren = {
 const PRouteRouteWithChildren =
   PRouteRoute._addFileChildren(PRouteRouteChildren)
 
+interface PrivacyRouteRouteChildren {
+  PrivacyIndexRoute: typeof PrivacyIndexRoute
+}
+
+const PrivacyRouteRouteChildren: PrivacyRouteRouteChildren = {
+  PrivacyIndexRoute: PrivacyIndexRoute,
+}
+
+const PrivacyRouteRouteWithChildren = PrivacyRouteRoute._addFileChildren(
+  PrivacyRouteRouteChildren,
+)
+
 interface ResetPasswordRouteRouteChildren {
   ResetPasswordIndexRoute: typeof ResetPasswordIndexRoute
 }
@@ -807,6 +893,18 @@ const SettingsRouteRouteChildren: SettingsRouteRouteChildren = {
 
 const SettingsRouteRouteWithChildren = SettingsRouteRoute._addFileChildren(
   SettingsRouteRouteChildren,
+)
+
+interface TermsRouteRouteChildren {
+  TermsIndexRoute: typeof TermsIndexRoute
+}
+
+const TermsRouteRouteChildren: TermsRouteRouteChildren = {
+  TermsIndexRoute: TermsIndexRoute,
+}
+
+const TermsRouteRouteWithChildren = TermsRouteRoute._addFileChildren(
+  TermsRouteRouteChildren,
 )
 
 interface URouteRouteChildren {
@@ -839,8 +937,10 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRouteRoute: LoginRouteRouteWithChildren,
   NewRouteRoute: NewRouteRoute,
   PRouteRoute: PRouteRouteWithChildren,
+  PrivacyRouteRoute: PrivacyRouteRouteWithChildren,
   ResetPasswordRouteRoute: ResetPasswordRouteRouteWithChildren,
   SettingsRouteRoute: SettingsRouteRouteWithChildren,
+  TermsRouteRoute: TermsRouteRouteWithChildren,
   URouteRoute: URouteRouteWithChildren,
   WelcomeRouteRoute: WelcomeRouteRouteWithChildren,
   ExploreRoute: ExploreRoute,

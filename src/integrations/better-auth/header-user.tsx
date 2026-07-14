@@ -1,4 +1,5 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useRouter } from '@tanstack/react-router'
+import { LogOut } from 'lucide-react'
 import { authClient } from '#/lib/auth-client'
 import { loginSearch } from '#/lib/auth-nav'
 import { Button } from '#/components/ui/button'
@@ -10,70 +11,63 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '#/components/ui/dropdown-menu'
-import { getMyProfile } from '#/server/profiles'
-import { useQuery } from '@tanstack/react-query'
 
 export default function BetterAuthHeader() {
+  const router = useRouter()
   const { data: session, isPending } = authClient.useSession()
-  const { data: profile, isPending: isProfilePending } = useQuery({
-    queryKey: ['my-profile'],
-    queryFn: () => getMyProfile(),
-    enabled: Boolean(session?.user),
-  })
 
-  if (isPending || (session?.user && isProfilePending)) {
+  const handleSignOut = async () => {
+    await authClient.signOut()
+    void router.navigate({ to: '/login' })
+  }
+
+  if (isPending) {
     return <div className="h-8 w-8 animate-pulse rounded-full bg-[var(--code-bg)]" />
   }
 
   if (session?.user) {
-    const username = profile?.username
-
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button
-            type="button"
-            className="rounded-full outline-none ring-offset-2 focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-            aria-label="Account menu"
-          >
-            <Avatar className="h-8 w-8 border border-[var(--line)]">
-              <AvatarImage src={session.user.image ?? undefined} />
-              <AvatarFallback className="bg-[var(--code-bg)] text-xs font-medium">
-                {session.user.name?.charAt(0).toUpperCase() || 'U'}
-              </AvatarFallback>
-            </Avatar>
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="end"
-          className="w-48 border-[var(--line)] bg-[var(--surface-strong)]"
+      <>
+        <button
+          type="button"
+          className="app-nav__sign-out"
+          onClick={() => void handleSignOut()}
         >
-          {username ? (
-            <DropdownMenuItem asChild>
-              <Link to="/u/$username" params={{ username }}>
-                My profile
-              </Link>
-            </DropdownMenuItem>
-          ) : (
-            <DropdownMenuItem asChild>
-              <Link to="/welcome" search={{ redirect: '/app/explore' }}>
-                Set up profile
-              </Link>
-            </DropdownMenuItem>
-          )}
-          <DropdownMenuItem asChild>
-            <Link to="/settings">Settings</Link>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => {
-              void authClient.signOut()
-            }}
-          >
-            Sign out
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          <LogOut aria-hidden="true" />
+          <span>Sign out</span>
+        </button>
+
+        <div className="app-nav__profile-menu">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                className="inline-grid min-h-11 min-w-11 place-items-center rounded-full outline-none ring-offset-2 focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                aria-label="Open profile and settings"
+              >
+                <Avatar className="h-8 w-8 border border-[var(--line)]">
+                  <AvatarImage src={session.user.image ?? undefined} />
+                  <AvatarFallback className="bg-[var(--code-bg)] text-xs font-medium">
+                    {session.user.name?.charAt(0).toUpperCase() || 'U'}
+                  </AvatarFallback>
+                </Avatar>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className="w-48 border-[var(--line)] bg-[var(--surface-strong)]"
+            >
+              <DropdownMenuItem asChild>
+                <Link to="/settings">Profile &amp; settings</Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => void handleSignOut()}>
+                Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </>
     )
   }
 

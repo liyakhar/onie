@@ -14,6 +14,13 @@
   --color-accent-ink: oklch(15%  0.055 188);
   --color-focus:      oklch(79%  0.145 176);
 
+  /* Wollie brand emerald — the single product accent across auth and app UI */
+  --color-wollie-accent:          #008b68;
+  --color-wollie-accent-hover:    #007457;
+  --color-wollie-accent-deep:     #00664d;
+  --color-wollie-accent-light:    #83d8bf;
+  --color-wollie-accent-contrast: #ffffff;
+
   /* Off-register misprint ghosts — translucent, decorative only */
   --ghost-cyan:  oklch(70% 0.16 220 / 0.42);
   --ghost-red:   oklch(62% 0.22 25  / 0.40);
