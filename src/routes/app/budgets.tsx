@@ -2,7 +2,7 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useState } from 'react'
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
-import { FINANCE_CATEGORIES, formatMoney, type FinanceCategory } from '#/lib/finance-demo'
+import { FINANCE_CATEGORIES, formatMoney } from '#/lib/finance-demo'
 import { getFinanceBudget, updateFinanceBudgetAllocation } from '#/server/finance'
 
 const PLANNABLE = FINANCE_CATEGORIES.filter((category) => !['Income', 'Transfer'].includes(category))
@@ -20,13 +20,22 @@ function BudgetPage() {
   const [saving, setSaving] = useState<string | null>(null)
   const [message, setMessage] = useState('')
 
-  async function save(category: FinanceCategory) {
-    setSaving(category)
+  const hasPlan = data.budget.some((item) => item.allocated > 0)
+
+  async function savePlan() {
+    const categories = PLANNABLE.filter((category) => Number(values[category] || 0) > 0 || data.budget.some((item) => item.name === category))
+    if (categories.length === 0) {
+      setMessage('Add at least one monthly limit.')
+      return
+    }
+    setSaving('plan')
     setMessage('')
     try {
-      await updateFinanceBudgetAllocation({ data: { category, allocated: Number(values[category] || 0) } })
+      for (const category of categories) {
+        await updateFinanceBudgetAllocation({ data: { category, allocated: Number(values[category] || 0) } })
+      }
       await router.invalidate()
-      setMessage(`${category} updated.`)
+      setMessage('Monthly plan saved.')
     } catch (caught) {
       setMessage(caught instanceof Error ? caught.message : 'Could not update the plan.')
     } finally {
@@ -39,14 +48,14 @@ function BudgetPage() {
       <header className="border-b border-zinc-200 pb-5">
         <p className="text-sm text-zinc-500">{data.month}</p>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight">Monthly plan</h1>
-        <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-500">Set category limits. Wollie uses the remaining flexible amount as a ceiling for what is safe to spend.</p>
+        <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-500">Set limits only for the categories you want to control.</p>
       </header>
 
-      <section aria-label="Plan totals" className="grid overflow-hidden rounded-lg border border-zinc-200 sm:grid-cols-3">
+      {hasPlan && <section aria-label="Plan totals" className="grid overflow-hidden rounded-lg border border-zinc-200 sm:grid-cols-3">
         <Total label="Planned" value={formatMoney(data.budgetPlan.allocated, currency)} />
         <Total label="Used" value={formatMoney(data.budgetPlan.spent, currency)} />
         <Total label="Flexible left" value={formatMoney(data.budgetPlan.flexibleAvailable, currency)} dark />
-      </section>
+      </section>}
 
       <section aria-labelledby="category-plan-heading" className="overflow-hidden rounded-lg border border-zinc-200">
         <div className="border-b border-zinc-200 px-4 py-4 sm:px-5"><h2 id="category-plan-heading" className="font-semibold">Category limits</h2></div>
@@ -55,18 +64,20 @@ function BudgetPage() {
             const item = data.budget.find((candidate) => candidate.name === category)
             const spent = item?.spent ?? 0
             return (
-              <li key={category} className="grid gap-3 px-4 py-4 sm:grid-cols-[minmax(0,1fr)_10rem_auto] sm:items-end sm:px-5">
+              <li key={category} className="grid gap-3 px-4 py-4 sm:grid-cols-[minmax(0,1fr)_10rem] sm:items-end sm:px-5">
                 <div>
                   <div className="flex items-center justify-between gap-3"><h3 className="text-sm font-medium">{category}</h3><span className="text-xs text-zinc-500">{formatMoney(spent, currency)} used</span></div>
                   <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-zinc-100"><div className="h-full rounded-full bg-zinc-950" style={{ width: `${Math.min(100, spent / Math.max(Number(values[category]) || 1, 1) * 100)}%` }} /></div>
                 </div>
                 <label className="grid gap-1 text-xs text-zinc-500">Monthly limit<Input name={`budget-${category}`} inputMode="decimal" value={values[category]} onChange={(event) => setValues((current) => ({ ...current, [category]: event.target.value }))} className="min-h-11 border-zinc-200 bg-white text-sm text-zinc-950" /></label>
-                <Button className="wollie-primary-action min-h-11" disabled={saving === category} onClick={() => void save(category)}>{saving === category ? 'Saving…' : 'Save'}</Button>
               </li>
             )
           })}
         </ul>
       </section>
+      <div className="flex justify-end">
+        <Button className="wollie-primary-action min-h-11" disabled={saving === 'plan'} onClick={() => void savePlan()}>{saving === 'plan' ? 'Saving…' : 'Save monthly plan'}</Button>
+      </div>
       <p className="min-h-5 text-sm text-zinc-600" aria-live="polite">{message}</p>
     </main>
   )

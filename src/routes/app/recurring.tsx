@@ -19,6 +19,7 @@ export function RecurringPage() {
   const router = useRouter()
   const [drafts, setDrafts] = useState<Record<string, Draft>>(() => Object.fromEntries(recurringPayments.map((item) => [item.id, { ...item, nextDate: toDateInput(item.nextDate) }])))
   const [newBill, setNewBill] = useState<Draft>({ id: '', merchant: '', amount: 0, nextDate: toDateInput(new Date().toISOString()), cadence: 'monthly', category: 'Subscriptions', confirmed: true })
+  const [showAddBill, setShowAddBill] = useState(false)
   const [saving, setSaving] = useState<string | null>(null)
   const [message, setMessage] = useState('')
 
@@ -42,17 +43,23 @@ export function RecurringPage() {
     <main id="main" className="mx-auto grid w-full max-w-7xl gap-5 bg-white px-4 py-5 text-zinc-950 sm:px-6 lg:px-8">
       <header className="border-b border-zinc-200 pb-5">
         <h1 className="text-2xl font-semibold tracking-tight">Bills</h1>
-        <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-500">Only confirmed bills reduce “Available to spend.” Check detected charges before Wollie includes them.</p>
+        <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-500">Recurring payments that reduce your available-to-spend amount.</p>
       </header>
 
-      <section aria-labelledby="add-bill-heading" className="rounded-lg border border-zinc-200 p-4 sm:p-5">
-        <h2 id="add-bill-heading" className="font-semibold">Add a bill</h2>
+      {showAddBill && <section aria-labelledby="add-bill-heading" className="rounded-lg border border-zinc-200 p-4 sm:p-5">
+        <div className="flex items-center justify-between gap-4">
+          <h2 id="add-bill-heading" className="font-semibold">Add a bill</h2>
+          <Button type="button" variant="ghost" onClick={() => setShowAddBill(false)}>Cancel</Button>
+        </div>
         <div className="mt-4"><BillFields draft={newBill} onChange={setNewBill} /></div>
         <Button className="wollie-primary-action mt-3 min-h-11" disabled={saving === 'new'} onClick={() => void persist(newBill, 'save')}>{saving === 'new' ? 'Adding…' : 'Add bill'}</Button>
-      </section>
+      </section>}
 
       <section aria-labelledby="bill-list-heading" className="overflow-hidden rounded-lg border border-zinc-200">
-        <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-4 sm:px-5"><h2 id="bill-list-heading" className="font-semibold">Recurring payments</h2><span className="text-sm text-zinc-500">{recurringPayments.length}</span></div>
+        <div className="flex items-center justify-between gap-4 border-b border-zinc-200 px-4 py-4 sm:px-5">
+          <div className="flex items-center gap-2"><h2 id="bill-list-heading" className="font-semibold">Recurring payments</h2>{recurringPayments.length > 0 && <span className="text-sm text-zinc-500">{recurringPayments.length}</span>}</div>
+          {!showAddBill && <Button type="button" size="sm" className="wollie-primary-action" onClick={() => setShowAddBill(true)}>Add bill</Button>}
+        </div>
         {recurringPayments.length > 0 ? (
           <ul className="divide-y divide-zinc-200">
             {recurringPayments.map((item) => {
@@ -71,7 +78,7 @@ export function RecurringPage() {
               )
             })}
           </ul>
-        ) : <p className="px-5 py-16 text-center text-sm text-zinc-500">No bills yet.</p>}
+        ) : <p className="px-5 py-12 text-center text-sm text-zinc-500">No recurring payments yet.</p>}
       </section>
       <p className="min-h-5 text-sm text-zinc-600" aria-live="polite">{message}</p>
     </main>

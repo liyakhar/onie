@@ -6786,8 +6786,9 @@ body {
 
   .app-shell .app-nav__tab.is-active,
   .app-shell .app-nav__account-link.is-active {
-    background: var(--color-wollie-accent);
-    color: var(--color-wollie-accent-contrast);
+    background: color-mix(in oklch, var(--color-wollie-accent) 10%, white);
+    box-shadow: inset 3px 0 0 var(--color-wollie-accent);
+    color: var(--color-ink);
   }
 
   .app-shell .app-nav__tab.is-active::after {

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import { ArrowLeft, ExternalLink } from 'lucide-react'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { ExternalLink } from 'lucide-react'
 import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
 import {
@@ -135,20 +135,11 @@ function AccountsPage() {
 
   return (
     <main id="main" className="mx-auto grid w-full max-w-7xl gap-5 bg-white px-4 py-5 text-zinc-950 sm:px-6 lg:px-8">
-      <header className="flex flex-col gap-4 border-b border-zinc-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
+      <header className="border-b border-zinc-200 pb-5">
         <div>
-          <Badge variant="outline" className="mb-1.5 rounded-md border-zinc-200 bg-white font-normal text-zinc-700">
-            Bank sync
-          </Badge>
           <h1 className="text-2xl font-semibold tracking-tight">Accounts</h1>
-          <p className="mt-1 text-sm text-zinc-500">Read-only connections through Enable Banking</p>
+          <p className="mt-1 text-sm text-zinc-500">Connected banks and balances.</p>
         </div>
-        <Button asChild variant="outline" className="border-zinc-200 bg-white text-zinc-950 hover:bg-zinc-100">
-          <Link to="/app">
-            <ArrowLeft aria-hidden="true" />
-            Overview
-          </Link>
-        </Button>
       </header>
 
       <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
@@ -225,9 +216,7 @@ function AccountsPage() {
             </div>
           )}
 
-          <p className="text-xs leading-5 text-zinc-500">
-            Bank Hapoalim is not covered by this European PSD2 connection. Wollie never asks for or stores your bank password.
-          </p>
+          {!enableBanking.connected && <p className="text-xs leading-5 text-zinc-500">Coverage varies by country and bank. Wollie never asks for or stores your bank password.</p>}
           {error && <p className="text-sm font-medium text-zinc-950" role="alert">{error}</p>}
           {message && <p className="text-sm text-zinc-700" role="status">{message}</p>}
         </CardContent>

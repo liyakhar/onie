@@ -13,7 +13,6 @@ import {
   Card,
   CardAction,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '#/components/ui/card'
@@ -80,7 +79,7 @@ function MoneyDashboardPage() {
   const recurringTotal = summary.upcomingRecurring
   const netThisMonth = summary.monthlyIncome - summary.spent - recurringTotal
   const safeToSpend = summary.safeToSpend
-  const hasPlan = budget.length > 0
+  const hasPlan = budget.some((item) => item.allocated > 0)
   const connectedInstitution = visibleAccounts[0]?.institution || 'your bank'
   const today = new Date()
   const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate()
@@ -379,7 +378,7 @@ function SpendingPaceChart({
 
   return (
     <div className="mt-6">
-      <svg viewBox="0 0 100 44" className="h-44 w-full overflow-visible" role="img" aria-labelledby="spending-pace-title spending-pace-description" preserveAspectRatio="none">
+      <svg viewBox="0 0 100 44" className="h-36 w-full overflow-visible" role="img" aria-labelledby="spending-pace-title spending-pace-description" preserveAspectRatio="none">
         <title id="spending-pace-title">Monthly spending pace</title>
         <desc id="spending-pace-description">You have spent {formatMoney(spent, currency)} against {formatMoney(limit, currency)} this month.</desc>
         {[8, 24, 40].map((y) => <line key={y} x1="0" x2="100" y1={y} y2={y} stroke="#e4e4e7" strokeWidth="0.45" vectorEffect="non-scaling-stroke" />)}
@@ -391,8 +390,8 @@ function SpendingPaceChart({
       <div className="mt-1 flex flex-wrap items-center justify-between gap-3 text-xs text-zinc-500">
         <span>Day 1</span>
         <span className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5"><i className="h-0.5 w-4 bg-zinc-950" />Actual</span>
-          <span className="flex items-center gap-1.5"><i className="h-0.5 w-4 bg-[var(--color-wollie-accent)]" />Ideal pace</span>
+          <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-0.5 w-4 bg-zinc-950" />Actual</span>
+          <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-0.5 w-4 bg-[var(--color-wollie-accent)]" />Ideal pace</span>
         </span>
         <span>Day {days}</span>
       </div>
@@ -400,49 +399,17 @@ function SpendingPaceChart({
   )
 }
 
-function Metric({
-  emphasis = false,
-  explanation,
-  label,
-  value,
-}: {
-  emphasis?: boolean
-  explanation: string
-  label: string
-  value: string
-}) {
+function SummaryStat({ label, value }: { label: string; value: string }) {
   return (
-    <div
-      className={emphasis
-        ? 'min-w-0 border-r border-b border-zinc-950 bg-zinc-950 p-4 text-white last:border-r-0 sm:p-5 lg:border-b-0'
-        : 'min-w-0 border-r border-b border-zinc-200 p-4 last:border-r-0 even:border-r-0 sm:p-5 lg:border-b-0 lg:even:border-r lg:last:border-r-0'}
-    >
-      <div className="group/metric relative w-fit">
-        <button
-          type="button"
-          aria-describedby={`metric-help-${label.toLowerCase().replaceAll(' ', '-')}`}
-          className={emphasis
-            ? 'flex min-h-11 items-center gap-1 bg-transparent p-0 text-xs font-medium uppercase tracking-[0.12em] text-zinc-400 focus-visible:text-white'
-            : 'flex min-h-11 items-center gap-1 bg-transparent p-0 text-xs font-medium uppercase tracking-[0.12em] text-zinc-500 focus-visible:text-zinc-950'}
-        >
-          {label}
-          <CircleHelp className="size-3" aria-hidden="true" />
-        </button>
-        <span
-          id={`metric-help-${label.toLowerCase().replaceAll(' ', '-')}`}
-          role="tooltip"
-          className={emphasis
-            ? 'pointer-events-none absolute right-0 top-full z-20 mt-2 w-56 origin-top-right translate-y-1 scale-[0.97] border border-zinc-200 bg-white px-3 py-2 text-left text-xs font-normal normal-case leading-relaxed tracking-normal text-zinc-700 opacity-0 shadow-sm transition-[opacity,transform] duration-150 group-hover/metric:translate-y-0 group-hover/metric:scale-100 group-hover/metric:opacity-100 group-focus-within/metric:translate-y-0 group-focus-within/metric:scale-100 group-focus-within/metric:opacity-100 motion-reduce:transition-none'
-            : 'pointer-events-none absolute left-0 top-full z-20 mt-2 w-56 origin-top-left translate-y-1 scale-[0.97] bg-zinc-950 px-3 py-2 text-left text-xs font-normal normal-case leading-relaxed tracking-normal text-white opacity-0 shadow-sm transition-[opacity,transform] duration-150 group-hover/metric:translate-y-0 group-hover/metric:scale-100 group-hover/metric:opacity-100 group-focus-within/metric:translate-y-0 group-focus-within/metric:scale-100 group-focus-within/metric:opacity-100 motion-reduce:transition-none'}
-        >
-          {explanation}
-        </span>
-      </div>
-      <p className="mt-2 whitespace-nowrap text-[clamp(1.65rem,3.2vw,2.6rem)] font-semibold leading-none tabular-nums tracking-tight">
-        {value}
-      </p>
+    <div className="min-w-0 border-b border-zinc-200 p-5 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0">
+      <p className="text-xs font-medium uppercase tracking-[0.1em] text-zinc-500">{label}</p>
+      <p className="mt-2 truncate text-2xl font-semibold tabular-nums tracking-tight sm:text-3xl">{value}</p>
     </div>
   )
+}
+
+function SmallStat({ label, value }: { label: string; value: string }) {
+  return <div><dt className="text-[0.68rem] font-medium uppercase tracking-[0.1em] text-zinc-500">{label}</dt><dd className="mt-1 truncate text-sm font-medium tabular-nums">{value}</dd></div>
 }
 
 function BarRow({
