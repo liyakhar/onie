@@ -71,6 +71,11 @@ function createAuth() {
       revokeSessionsOnPasswordReset: true,
     },
     user: {
+      additionalFields: {
+        termsAcceptedAt: { type: 'date', required: true, returned: false },
+        termsVersion: { type: 'string', required: true, returned: false },
+        privacyVersion: { type: 'string', required: true, returned: false },
+      },
       deleteUser: {
         enabled: true,
         sendDeleteAccountVerification: async ({ user, url }) => {

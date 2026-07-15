@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { authClient } from '#/lib/auth-client'
 import type { LoginSearch } from '#/lib/auth-nav'
 import { buildPageMeta } from '#/lib/seo'
+import { PRIVACY_VERSION, TERMS_VERSION } from '#/lib/legal-versions'
 
 const loginMeta = buildPageMeta({
   path: '/login',
@@ -22,6 +23,9 @@ const DEV_LOGIN = {
   email: 'dev@wollie.local',
   password: 'wollie-dev-password',
   name: 'Wollie Dev',
+  termsAcceptedAt: new Date(),
+  termsVersion: TERMS_VERSION,
+  privacyVersion: PRIVACY_VERSION,
 } as const
 
 async function goAfterAuth(
@@ -85,6 +89,7 @@ function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [devLoading, setDevLoading] = useState(false)
+  const [acceptedLegal, setAcceptedLegal] = useState(false)
 
   useEffect(() => {
     if (!isPending && session?.user) {
@@ -109,7 +114,18 @@ function LoginPage() {
 
     try {
       if (isSignUp) {
-        const result = await authClient.signUp.email({ email, password, name })
+        if (!acceptedLegal) {
+          setError('Accept the Terms and acknowledge the Privacy Policy to create an account.')
+          return
+        }
+        const result = await authClient.signUp.email({
+          email,
+          password,
+          name,
+          termsAcceptedAt: new Date(),
+          termsVersion: TERMS_VERSION,
+          privacyVersion: PRIVACY_VERSION,
+        })
         if (result.error) {
           setError(result.error.message || 'Sign up failed')
         } else {
@@ -294,6 +310,20 @@ function LoginPage() {
               autoComplete="email"
             />
           </div>
+          {isSignUp && (
+            <label className="flex items-start gap-3 text-sm leading-6 text-black/65">
+              <input
+                type="checkbox"
+                checked={acceptedLegal}
+                onChange={(event) => setAcceptedLegal(event.currentTarget.checked)}
+                required
+                className="mt-1 size-4"
+              />
+              <span>
+                I accept the <Link to="/terms" className="underline underline-offset-4">Terms</Link> and acknowledge the <Link to="/privacy" className="underline underline-offset-4">Privacy Policy</Link>.
+              </span>
+            </label>
+          )}
           <div className="app-form__field">
             <div className="app-form__label-row">
               <label className="app-form__label" htmlFor="password">

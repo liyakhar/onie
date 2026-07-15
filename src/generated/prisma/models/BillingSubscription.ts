@@ -454,10 +454,6 @@ export type BillingSubscriptionUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BillingSubscriptionUpdateToOneWithWhereWithoutUserInput, Prisma.BillingSubscriptionUpdateWithoutUserInput>, Prisma.BillingSubscriptionUncheckedUpdateWithoutUserInput>
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type BillingSubscriptionCreateWithoutUserInput = {
   id?: string
   stripeCustomerId?: string | null
