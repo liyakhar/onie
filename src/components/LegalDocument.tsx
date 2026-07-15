@@ -34,6 +34,9 @@ export function LegalDocument({
         <Link to="/terms" className="text-black/60 underline decoration-black/20 underline-offset-4 hover:text-black">
           Terms
         </Link>
+        <Link to="/legal-notice" className="text-black/60 underline decoration-black/20 underline-offset-4 hover:text-black">
+          Legal notice
+        </Link>
         <Link to="/" className="text-black/60 underline decoration-black/20 underline-offset-4 hover:text-black">
           Back to Wollie
         </Link>

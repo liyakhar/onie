@@ -8,6 +8,26 @@ const requiredEnv = [
   'BETTER_AUTH_SECRET',
   'BETTER_AUTH_URL',
   'SITE_URL',
+  'STRIPE_SECRET_KEY',
+  'STRIPE_WEBHOOK_SECRET',
+  'STRIPE_MONTHLY_PRICE_ID',
+  'STRIPE_YEARLY_PRICE_ID',
+  'STRIPE_AUTOMATIC_TAX',
+  'RESEND_API_KEY',
+  'EMAIL_FROM',
+  'LEGAL_BUSINESS_NAME',
+  'LEGAL_BUSINESS_FORM',
+  'LEGAL_BUSINESS_ADDRESS',
+  'LEGAL_REGISTRATION_NUMBER',
+  'LEGAL_CONTACT_EMAIL',
+  'LEGAL_PUBLICATION_DIRECTOR',
+  'LEGAL_HOST_NAME',
+  'LEGAL_HOST_ADDRESS',
+  'CONSUMER_MEDIATOR_NAME',
+  'CONSUMER_MEDIATOR_URL',
+  'PUBLIC_DOMAIN_VERIFIED',
+  'LEGAL_LAUNCH_FACTS_CONFIRMED',
+  'TAX_LAUNCH_POSITION_CONFIRMED',
 ]
 
 const optionalEnv = [
@@ -79,10 +99,33 @@ const hasSimpleFinAccessUrl = Boolean(value('SIMPLEFIN_ACCESS_URL'))
 const enableBankingApplicationId = value('ENABLE_BANKING_APPLICATION_ID')
 const enableBankingPrivateKey = value('ENABLE_BANKING_PRIVATE_KEY')
 const enableBankingRedirectUrl = value('ENABLE_BANKING_REDIRECT_URL')
+const stripeAutomaticTax = value('STRIPE_AUTOMATIC_TAX')
 
 if (hasGoogleClientId !== hasGoogleClientSecret) {
   warnings.push('Google OAuth is partially configured; set both GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET or neither')
 }
+
+if (!value('STRIPE_SECRET_KEY').startsWith('sk_live_')) {
+  failures.push('STRIPE_SECRET_KEY must be a live-mode key for paid production launch')
+}
+if (!value('STRIPE_WEBHOOK_SECRET').startsWith('whsec_')) {
+  failures.push('STRIPE_WEBHOOK_SECRET must be a Stripe webhook signing secret')
+}
+for (const key of ['STRIPE_MONTHLY_PRICE_ID', 'STRIPE_YEARLY_PRICE_ID']) {
+  if (value(key) && !value(key).startsWith('price_')) failures.push(`${key} must be a Stripe Price ID`)
+}
+if (!['true', 'false'].includes(stripeAutomaticTax)) {
+  failures.push('STRIPE_AUTOMATIC_TAX must explicitly be true or false')
+}
+for (const key of [
+  'PUBLIC_DOMAIN_VERIFIED',
+  'LEGAL_LAUNCH_FACTS_CONFIRMED',
+  'TAX_LAUNCH_POSITION_CONFIRMED',
+]) {
+  if (value(key) !== 'true') failures.push(`${key} must be true for paid production launch`)
+}
+if (!value('EMAIL_FROM').includes('@')) failures.push('EMAIL_FROM must be a verified sender address')
+if (value('CONSUMER_MEDIATOR_URL')) assertHttpsUrl('CONSUMER_MEDIATOR_URL')
 
 if (value('ENABLE_LIVE_BANK_SYNC') && !['true', 'false'].includes(value('ENABLE_LIVE_BANK_SYNC'))) {
   failures.push('ENABLE_LIVE_BANK_SYNC must be either true or false')
@@ -96,6 +139,16 @@ if (liveBankSyncEnabled && (!enableBankingApplicationId || !enableBankingPrivate
   failures.push('ENABLE_LIVE_BANK_SYNC=true requires the Enable Banking application ID, private key, and redirect URL')
 }
 
+if (!liveBankSyncEnabled) {
+  failures.push('ENABLE_LIVE_BANK_SYNC must be true while paid pricing promises bank connections')
+}
+if (liveBankSyncEnabled && value('ENABLE_BANKING_ENVIRONMENT') !== 'production') {
+  failures.push('ENABLE_BANKING_ENVIRONMENT must be production for paid users')
+}
+if (liveBankSyncEnabled && value('ENABLE_BANKING_PUBLIC_ACCESS_APPROVED') !== 'true') {
+  failures.push('ENABLE_BANKING_PUBLIC_ACCESS_APPROVED must be true after contract, KYB, and unrestricted activation')
+}
+
 if (enableBankingRedirectUrl) {
   assertHttpsUrl('ENABLE_BANKING_REDIRECT_URL')
 }
@@ -106,10 +159,6 @@ if (enableBankingPrivateKey && !enableBankingPrivateKey.includes('BEGIN PRIVATE 
 
 if (bankSyncEncryptionKey && bankSyncEncryptionKey.length < 32) {
   failures.push('BANK_SYNC_ENCRYPTION_KEY must be at least 32 characters')
-}
-
-if (!liveBankSyncEnabled) {
-  warnings.push('ENABLE_LIVE_BANK_SYNC is not true; production will not connect real bank accounts')
 }
 
 if (hasSimpleFinAccessUrl) {

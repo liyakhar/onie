@@ -516,12 +516,8 @@ async function getSimpleFinConnection(
 }
 
 const requireBankSyncUser = createServerOnlyFn(async () => {
-  const { getSessionUser } = await import('#/server/session.server')
-  const user = await getSessionUser()
-  if (!user) {
-    throw new Error('Sign in before connecting a bank.')
-  }
-  return user
+  const { requireBillingUser } = await import('#/server/billing.server')
+  return requireBillingUser()
 })
 
 const getUserSimpleFinConnection = createServerOnlyFn(async () => {

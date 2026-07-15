@@ -9,6 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User.ts'
+export type * from './models/BillingSubscription.ts'
 export type * from './models/BudgetWorkspace.ts'
 export type * from './models/BankConnection.ts'
 export type * from './models/FinancialAccount.ts'

@@ -23,6 +23,11 @@ export * from './enums.ts';
  */
 export type User = Prisma.UserModel
 /**
+ * Model BillingSubscription
+ *
+ */
+export type BillingSubscription = Prisma.BillingSubscriptionModel
+/**
  * Model BudgetWorkspace
  * 
  */

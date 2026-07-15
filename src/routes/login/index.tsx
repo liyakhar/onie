@@ -1,4 +1,4 @@
-import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter, useSearch } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { authClient } from '#/lib/auth-client'
 import type { LoginSearch } from '#/lib/auth-nav'
@@ -334,6 +334,9 @@ function LoginPage() {
         </form>
 
         <footer className="auth-footer">
+          <Link to="/pricing" search={{ checkout: undefined }} className="login-switch">
+            Pricing
+          </Link>
           <button
             type="button"
             onClick={() => {

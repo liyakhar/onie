@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as LegalNoticeRouteImport } from './routes/legal-notice'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as WelcomeRouteRouteImport } from './routes/welcome/route'
 import { Route as URouteRouteImport } from './routes/u/route'
@@ -39,12 +41,14 @@ import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-qu
 import { Route as DemoPrismaRouteImport } from './routes/demo/prisma'
 import { Route as DemoBetterAuthRouteImport } from './routes/demo/better-auth'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as BillingSuccessRouteImport } from './routes/billing/success'
 import { Route as AppTransactionsRouteImport } from './routes/app/transactions'
 import { Route as AppRecurringRouteImport } from './routes/app/recurring'
 import { Route as AppInsightsRouteImport } from './routes/app/insights'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
 import { Route as AppBudgetsRouteImport } from './routes/app/budgets'
 import { Route as AppAccountsRouteImport } from './routes/app/accounts'
+import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe/webhook'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as PPostIdEditRouteRouteImport } from './routes/p/$postId/edit/route'
 import { Route as PPostIdEditIndexRouteImport } from './routes/p/$postId/edit/index'
@@ -57,6 +61,16 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
   id: '/robots.txt',
   path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalNoticeRoute = LegalNoticeRouteImport.update({
+  id: '/legal-notice',
+  path: '/legal-notice',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreRoute = ExploreRouteImport.update({
@@ -199,6 +213,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BillingSuccessRoute = BillingSuccessRouteImport.update({
+  id: '/billing/success',
+  path: '/billing/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppTransactionsRoute = AppTransactionsRouteImport.update({
   id: '/transactions',
   path: '/transactions',
@@ -228,6 +247,11 @@ const AppAccountsRoute = AppAccountsRouteImport.update({
   id: '/accounts',
   path: '/accounts',
   getParentRoute: () => AppRouteRoute,
+} as any)
+const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
+  id: '/api/stripe/webhook',
+  path: '/api/stripe/webhook',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -259,6 +283,8 @@ export interface FileRoutesByFullPath {
   '/u': typeof URouteRouteWithChildren
   '/welcome': typeof WelcomeRouteRouteWithChildren
   '/explore': typeof ExploreRoute
+  '/legal-notice': typeof LegalNoticeRoute
+  '/pricing': typeof PricingRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app/accounts': typeof AppAccountsRoute
@@ -267,6 +293,7 @@ export interface FileRoutesByFullPath {
   '/app/insights': typeof AppInsightsRoute
   '/app/recurring': typeof AppRecurringRoute
   '/app/transactions': typeof AppTransactionsRoute
+  '/billing/success': typeof BillingSuccessRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/prisma': typeof DemoPrismaRoute
@@ -284,6 +311,7 @@ export interface FileRoutesByFullPath {
   '/welcome/': typeof WelcomeIndexRoute
   '/p/$postId/edit': typeof PPostIdEditRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/p/$postId/edit/': typeof PPostIdEditIndexRoute
 }
 export interface FileRoutesByTo {
@@ -292,6 +320,8 @@ export interface FileRoutesByTo {
   '/p': typeof PRouteRouteWithChildren
   '/u': typeof URouteRouteWithChildren
   '/explore': typeof ExploreRoute
+  '/legal-notice': typeof LegalNoticeRoute
+  '/pricing': typeof PricingRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app/accounts': typeof AppAccountsRoute
@@ -300,6 +330,7 @@ export interface FileRoutesByTo {
   '/app/insights': typeof AppInsightsRoute
   '/app/recurring': typeof AppRecurringRoute
   '/app/transactions': typeof AppTransactionsRoute
+  '/billing/success': typeof BillingSuccessRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/prisma': typeof DemoPrismaRoute
@@ -316,6 +347,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsIndexRoute
   '/welcome': typeof WelcomeIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/p/$postId/edit': typeof PPostIdEditIndexRoute
 }
 export interface FileRoutesById {
@@ -333,6 +365,8 @@ export interface FileRoutesById {
   '/u': typeof URouteRouteWithChildren
   '/welcome': typeof WelcomeRouteRouteWithChildren
   '/explore': typeof ExploreRoute
+  '/legal-notice': typeof LegalNoticeRoute
+  '/pricing': typeof PricingRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app/accounts': typeof AppAccountsRoute
@@ -341,6 +375,7 @@ export interface FileRoutesById {
   '/app/insights': typeof AppInsightsRoute
   '/app/recurring': typeof AppRecurringRoute
   '/app/transactions': typeof AppTransactionsRoute
+  '/billing/success': typeof BillingSuccessRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/prisma': typeof DemoPrismaRoute
@@ -358,6 +393,7 @@ export interface FileRoutesById {
   '/welcome/': typeof WelcomeIndexRoute
   '/p/$postId/edit': typeof PPostIdEditRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/p/$postId/edit/': typeof PPostIdEditIndexRoute
 }
 export interface FileRouteTypes {
@@ -376,6 +412,8 @@ export interface FileRouteTypes {
     | '/u'
     | '/welcome'
     | '/explore'
+    | '/legal-notice'
+    | '/pricing'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/app/accounts'
@@ -384,6 +422,7 @@ export interface FileRouteTypes {
     | '/app/insights'
     | '/app/recurring'
     | '/app/transactions'
+    | '/billing/success'
     | '/blog/$slug'
     | '/demo/better-auth'
     | '/demo/prisma'
@@ -401,6 +440,7 @@ export interface FileRouteTypes {
     | '/welcome/'
     | '/p/$postId/edit'
     | '/api/auth/$'
+    | '/api/stripe/webhook'
     | '/p/$postId/edit/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -409,6 +449,8 @@ export interface FileRouteTypes {
     | '/p'
     | '/u'
     | '/explore'
+    | '/legal-notice'
+    | '/pricing'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/app/accounts'
@@ -417,6 +459,7 @@ export interface FileRouteTypes {
     | '/app/insights'
     | '/app/recurring'
     | '/app/transactions'
+    | '/billing/success'
     | '/blog/$slug'
     | '/demo/better-auth'
     | '/demo/prisma'
@@ -433,6 +476,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/welcome'
     | '/api/auth/$'
+    | '/api/stripe/webhook'
     | '/p/$postId/edit'
   id:
     | '__root__'
@@ -449,6 +493,8 @@ export interface FileRouteTypes {
     | '/u'
     | '/welcome'
     | '/explore'
+    | '/legal-notice'
+    | '/pricing'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/app/accounts'
@@ -457,6 +503,7 @@ export interface FileRouteTypes {
     | '/app/insights'
     | '/app/recurring'
     | '/app/transactions'
+    | '/billing/success'
     | '/blog/$slug'
     | '/demo/better-auth'
     | '/demo/prisma'
@@ -474,6 +521,7 @@ export interface FileRouteTypes {
     | '/welcome/'
     | '/p/$postId/edit'
     | '/api/auth/$'
+    | '/api/stripe/webhook'
     | '/p/$postId/edit/'
   fileRoutesById: FileRoutesById
 }
@@ -491,14 +539,18 @@ export interface RootRouteChildren {
   URouteRoute: typeof URouteRouteWithChildren
   WelcomeRouteRoute: typeof WelcomeRouteRouteWithChildren
   ExploreRoute: typeof ExploreRoute
+  LegalNoticeRoute: typeof LegalNoticeRoute
+  PricingRoute: typeof PricingRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  BillingSuccessRoute: typeof BillingSuccessRoute
   BlogSlugRoute: typeof BlogSlugRoute
   DemoBetterAuthRoute: typeof DemoBetterAuthRoute
   DemoPrismaRoute: typeof DemoPrismaRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   BlogIndexRoute: typeof BlogIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -515,6 +567,20 @@ declare module '@tanstack/react-router' {
       path: '/robots.txt'
       fullPath: '/robots.txt'
       preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal-notice': {
+      id: '/legal-notice'
+      path: '/legal-notice'
+      fullPath: '/legal-notice'
+      preLoaderRoute: typeof LegalNoticeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore': {
@@ -713,6 +779,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/billing/success': {
+      id: '/billing/success'
+      path: '/billing/success'
+      fullPath: '/billing/success'
+      preLoaderRoute: typeof BillingSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/transactions': {
       id: '/app/transactions'
       path: '/transactions'
@@ -754,6 +827,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/accounts'
       preLoaderRoute: typeof AppAccountsRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/api/stripe/webhook': {
+      id: '/api/stripe/webhook'
+      path: '/api/stripe/webhook'
+      fullPath: '/api/stripe/webhook'
+      preLoaderRoute: typeof ApiStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -944,14 +1024,18 @@ const rootRouteChildren: RootRouteChildren = {
   URouteRoute: URouteRouteWithChildren,
   WelcomeRouteRoute: WelcomeRouteRouteWithChildren,
   ExploreRoute: ExploreRoute,
+  LegalNoticeRoute: LegalNoticeRoute,
+  PricingRoute: PricingRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  BillingSuccessRoute: BillingSuccessRoute,
   BlogSlugRoute: BlogSlugRoute,
   DemoBetterAuthRoute: DemoBetterAuthRoute,
   DemoPrismaRoute: DemoPrismaRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   BlogIndexRoute: BlogIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiStripeWebhookRoute: ApiStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

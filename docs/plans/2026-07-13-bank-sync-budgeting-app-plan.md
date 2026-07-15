@@ -74,12 +74,12 @@ Financial data should be treated as sensitive even when not regulated as payment
 
 ## Existing Repo Patterns to Reuse
 
-- Auth/server session handling: `/Users/liya/Projects/weavel/src/lib/auth.server.ts`, `/Users/liya/Projects/weavel/src/server/session.server.ts`
-- Prisma schema and generated clients: `/Users/liya/Projects/weavel/prisma/schema.prisma`, `/Users/liya/Projects/weavel/src/generated/prisma`
-- App shell/navigation: `/Users/liya/Projects/weavel/src/components/AppShell.tsx`, `/Users/liya/Projects/weavel/src/components/AppNav.tsx`
-- App routes: `/Users/liya/Projects/weavel/src/routes/app/index.tsx`, `/Users/liya/Projects/weavel/src/routes/app/explore.tsx`
-- UI primitives: `/Users/liya/Projects/weavel/src/components/ui`
-- Styling: `/Users/liya/Projects/weavel/src/styles.css`, `/Users/liya/Projects/weavel/src/press.css`
+- Auth/server session handling: `/Users/liya/Projects/wollie/src/lib/auth.server.ts`, `/Users/liya/Projects/wollie/src/server/session.server.ts`
+- Prisma schema and generated clients: `/Users/liya/Projects/wollie/prisma/schema.prisma`, `/Users/liya/Projects/wollie/src/generated/prisma`
+- App shell/navigation: `/Users/liya/Projects/wollie/src/components/AppShell.tsx`, `/Users/liya/Projects/wollie/src/components/AppNav.tsx`
+- App routes: `/Users/liya/Projects/wollie/src/routes/app/index.tsx`, `/Users/liya/Projects/wollie/src/routes/app/explore.tsx`
+- UI primitives: `/Users/liya/Projects/wollie/src/components/ui`
+- Styling: `/Users/liya/Projects/wollie/src/styles.css`, `/Users/liya/Projects/wollie/src/press.css`
 
 ## Proposed Data Model
 
@@ -130,11 +130,11 @@ Replace or retire workflow-specific models after migration planning. Add the fin
 ### Unit 1: Product Shell Pivot
 
 Files:
-- `/Users/liya/Projects/weavel/src/routes/index.tsx`
-- `/Users/liya/Projects/weavel/src/routes/app/index.tsx`
-- `/Users/liya/Projects/weavel/src/components/AppNav.tsx`
-- `/Users/liya/Projects/weavel/src/components/AppShell.tsx`
-- `/Users/liya/Projects/weavel/src/lib/site.ts`
+- `/Users/liya/Projects/wollie/src/routes/index.tsx`
+- `/Users/liya/Projects/wollie/src/routes/app/index.tsx`
+- `/Users/liya/Projects/wollie/src/components/AppNav.tsx`
+- `/Users/liya/Projects/wollie/src/components/AppShell.tsx`
+- `/Users/liya/Projects/wollie/src/lib/site.ts`
 
 Work:
 - Replace workflow-sharing copy with finance/budgeting copy.
@@ -150,9 +150,9 @@ Test scenarios:
 ### Unit 2: Finance Prisma Schema
 
 Files:
-- `/Users/liya/Projects/weavel/prisma/schema.prisma`
-- `/Users/liya/Projects/weavel/prisma/seed.ts`
-- `/Users/liya/Projects/weavel/src/generated/prisma`
+- `/Users/liya/Projects/wollie/prisma/schema.prisma`
+- `/Users/liya/Projects/wollie/prisma/seed.ts`
+- `/Users/liya/Projects/wollie/src/generated/prisma`
 
 Work:
 - Add finance models and relations.
@@ -168,9 +168,9 @@ Test scenarios:
 ### Unit 3: Finance Server Access Layer
 
 Files:
-- `/Users/liya/Projects/weavel/src/server/finance.server.ts`
-- `/Users/liya/Projects/weavel/src/server/bank-sync.server.ts`
-- `/Users/liya/Projects/weavel/src/server/db-access.server.ts`
+- `/Users/liya/Projects/wollie/src/server/finance.server.ts`
+- `/Users/liya/Projects/wollie/src/server/bank-sync.server.ts`
+- `/Users/liya/Projects/wollie/src/server/db-access.server.ts`
 
 Work:
 - Add server-only functions for reading dashboard data, transactions, budgets, recurring payments, and accounts.
@@ -186,10 +186,10 @@ Test scenarios:
 ### Unit 4: Bank Connection Foundation
 
 Files:
-- `/Users/liya/Projects/weavel/src/routes/app/accounts.tsx`
-- `/Users/liya/Projects/weavel/src/routes/api/bank-sync/$.ts`
-- `/Users/liya/Projects/weavel/src/server/bank-sync.server.ts`
-- `/Users/liya/Projects/weavel/src/server/providers/simplefin.server.ts`
+- `/Users/liya/Projects/wollie/src/routes/app/accounts.tsx`
+- `/Users/liya/Projects/wollie/src/routes/api/bank-sync/$.ts`
+- `/Users/liya/Projects/wollie/src/server/bank-sync.server.ts`
+- `/Users/liya/Projects/wollie/src/server/providers/simplefin.server.ts`
 
 Work:
 - Add provider interface with connect, sync, disconnect, and status concepts.
@@ -205,12 +205,12 @@ Test scenarios:
 ### Unit 5: Budgeting UI
 
 Files:
-- `/Users/liya/Projects/weavel/src/routes/app/index.tsx`
-- `/Users/liya/Projects/weavel/src/routes/app/transactions.tsx`
-- `/Users/liya/Projects/weavel/src/routes/app/budgets.tsx`
-- `/Users/liya/Projects/weavel/src/routes/app/recurring.tsx`
-- `/Users/liya/Projects/weavel/src/routes/app/insights.tsx`
-- `/Users/liya/Projects/weavel/src/components/finance/*`
+- `/Users/liya/Projects/wollie/src/routes/app/index.tsx`
+- `/Users/liya/Projects/wollie/src/routes/app/transactions.tsx`
+- `/Users/liya/Projects/wollie/src/routes/app/budgets.tsx`
+- `/Users/liya/Projects/wollie/src/routes/app/recurring.tsx`
+- `/Users/liya/Projects/wollie/src/routes/app/insights.tsx`
+- `/Users/liya/Projects/wollie/src/components/finance/*`
 
 Work:
 - Build dashboard cards: cash, spending this month, safe-to-spend, upcoming bills.
@@ -229,9 +229,9 @@ Test scenarios:
 ### Unit 6: Product Safety, Privacy, and Pricing Gates
 
 Files:
-- `/Users/liya/Projects/weavel/src/routes/settings/index.tsx`
-- `/Users/liya/Projects/weavel/src/lib/site.ts`
-- `/Users/liya/Projects/weavel/README.md`
+- `/Users/liya/Projects/wollie/src/routes/settings/index.tsx`
+- `/Users/liya/Projects/wollie/src/lib/site.ts`
+- `/Users/liya/Projects/wollie/README.md`
 
 Work:
 - Add privacy/data-handling copy.

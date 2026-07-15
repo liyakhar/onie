@@ -72,9 +72,26 @@ model User {
   notifications Notification[]
   financeWorkspaces BudgetWorkspace[]
   bankConnections   BankConnection[]
+  billingSubscription BillingSubscription?
 
   @@unique([email])
   @@map("user")
+}
+
+model BillingSubscription {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeCustomerId     String?  @unique
+  stripeSubscriptionId String?  @unique
+  stripePriceId        String?
+  status               String   @default("none")
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean  @default(false)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([status])
 }
 
 enum FinanceAccountType {

@@ -2,7 +2,7 @@ export const site = {
   name: 'Wollie',
   tagline: 'Calm money',
   description:
-    'A clean budget that syncs accounts, sorts spending, and shows what you can spend.',
+    'A personal finance dashboard that connects accounts, organizes spending, tracks bills, and shows what you can safely spend each month.',
   locale: 'en_US',
   twitterHandle: '@wollie',
   email: 'hello@wollie.app',

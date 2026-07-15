@@ -7,7 +7,8 @@ import {
   ListFilter,
 } from 'lucide-react'
 
-export function AppMobileNav() {
+export function AppMobileNav({ locked = false }: { locked?: boolean }) {
+  if (locked) return null
   return (
     <nav className="app-mobile-nav" aria-label="Mobile primary">
       <Link to="/app" activeOptions={{ exact: true }} className="app-mobile-nav__item" activeProps={{ className: 'app-mobile-nav__item is-active' }}>

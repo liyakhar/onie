@@ -6744,10 +6744,11 @@ body {
   .app-shell .app-nav__tab,
   .app-shell .app-nav__account-link,
   .app-shell .app-nav__sign-out {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1.25rem minmax(0, 1fr);
     min-height: 2.85rem;
     align-items: center;
-    gap: 0.75rem;
+    column-gap: 0.75rem;
     padding: 0.7rem 0.75rem;
     border: 0;
     background: transparent;
@@ -6770,8 +6771,13 @@ body {
   .app-shell .app-nav__sign-out svg {
     width: 1.05rem;
     height: 1.05rem;
-    flex: 0 0 auto;
+    justify-self: center;
     stroke-width: 1.8;
+  }
+
+  .app-shell .app-nav__tab svg,
+  .app-shell .app-nav__account-link svg {
+    justify-self: center;
   }
 
   .app-shell .app-nav__profile-menu {
@@ -6839,14 +6845,4 @@ body {
 .wollie-primary-action:hover {
   background: var(--color-wollie-accent-hover);
   color: var(--color-wollie-accent-contrast);
-}
-
-.wollie-accent-badge {
-  border-color: color-mix(in oklch, var(--color-wollie-accent) 28%, white);
-  background: color-mix(in oklch, var(--color-wollie-accent) 9%, white);
-  color: var(--color-wollie-accent-deep);
-}
-
-.wollie-accent-badge:hover {
-  background: color-mix(in oklch, var(--color-wollie-accent) 12%, white);
 }

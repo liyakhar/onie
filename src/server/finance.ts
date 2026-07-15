@@ -15,8 +15,10 @@ import {
 import { loadBankSyncState } from '#/server/bank-sync'
 import { getDb } from '#/server/db-access.server'
 import { getSessionUser } from '#/server/session.server'
+import { requireBillingUser } from '#/server/billing.server'
 
 export const getFinanceDashboard = createServerFn({ method: 'GET' }).handler(async () => {
+  await requireBillingUser()
   const devDashboard = await getDevFinanceDashboard()
   if (devDashboard) return devDashboard
 
@@ -57,6 +59,7 @@ export const getFinanceTransactions = createServerFn({ method: 'GET' })
     }) => data ?? {},
   )
   .handler(async ({ data }) => {
+    await requireBillingUser()
     const devDashboard = await getDevFinanceDashboard()
     if (devDashboard) {
       return {
@@ -74,6 +77,7 @@ export const getFinanceTransactions = createServerFn({ method: 'GET' })
   })
 
 export const getFinanceBudget = createServerFn({ method: 'GET' }).handler(async () => {
+  await requireBillingUser()
   const devDashboard = await getDevFinanceDashboard()
   if (devDashboard) {
     return {
@@ -109,6 +113,7 @@ export const getFinanceBudget = createServerFn({ method: 'GET' }).handler(async 
 })
 
 export const getFinanceAccounts = createServerFn({ method: 'GET' }).handler(async () => {
+  await requireBillingUser()
   const devDashboard = await getDevFinanceDashboard()
   if (devDashboard) {
     return {
@@ -125,6 +130,7 @@ export const getFinanceAccounts = createServerFn({ method: 'GET' }).handler(asyn
 })
 
 export const getFinanceRecurringPayments = createServerFn({ method: 'GET' }).handler(async () => {
+  await requireBillingUser()
   const devDashboard = await getDevFinanceDashboard()
   if (devDashboard) {
     return { recurringPayments: devDashboard.recurringPayments, currency: devDashboard.accounts[0]?.currency || 'USD' }
@@ -136,6 +142,7 @@ export const getFinanceRecurringPayments = createServerFn({ method: 'GET' }).han
 })
 
 export const getFinanceInsights = createServerFn({ method: 'GET' }).handler(async () => {
+  await requireBillingUser()
   const devDashboard = await getDevFinanceDashboard()
   if (devDashboard) return { insights: devDashboard.insights }
 
@@ -162,8 +169,7 @@ export const updateFinanceBudgetAllocation = createServerFn({ method: 'POST' })
     allocated: Number(data?.allocated ?? 0),
   }))
   .handler(async ({ data }) => {
-    const user = await getSessionUser()
-    if (!user) throw new Error('Sign in to update your budget.')
+    const user = await requireBillingUser()
     if (!FINANCE_CATEGORIES.includes(data.category) || !Number.isFinite(data.allocated) || data.allocated < 0) {
       throw new Error('Enter a valid monthly amount.')
     }
@@ -216,8 +222,7 @@ export const updateFinanceRecurringPayment = createServerFn({ method: 'POST' })
     category: data?.category,
   }))
   .handler(async ({ data }) => {
-    const user = await getSessionUser()
-    if (!user) throw new Error('Sign in to update bills.')
+    const user = await requireBillingUser()
     if (!data.merchant || !Number.isFinite(data.amount) || data.amount < 0 || !data.nextDate) {
       throw new Error('Enter a merchant, amount, and next date.')
     }
@@ -279,8 +284,7 @@ export const updateFinanceTransactionCategory = createServerFn({ method: 'POST' 
     category: data?.category,
   }))
   .handler(async ({ data }) => {
-    const user = await getSessionUser()
-    if (!user) throw new Error('Sign in to review transactions.')
+    const user = await requireBillingUser()
     if (!data.transactionId || !FINANCE_CATEGORIES.includes(data.category)) {
       throw new Error('Choose a valid category.')
     }

@@ -76,10 +76,16 @@ export function buildPageMeta({
     { name: 'twitter:title', content: resolvedTitle },
     { name: 'twitter:description', content: resolvedDescription },
     { name: 'twitter:image', content: image },
+    { name: 'twitter:image:alt', content: `${site.name} — ${site.tagline}` },
   ]
 
   if (noindex) {
-    meta.push({ name: 'robots', content: 'noindex, nofollow' })
+    meta.push({ name: 'robots', content: 'noindex, nofollow, noarchive' })
+  } else {
+    meta.push({
+      name: 'robots',
+      content: 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
+    })
   }
 
   const links: HeadLink[] = [{ rel: 'canonical', href: canonical }]
@@ -101,7 +107,7 @@ export function organizationJsonLd() {
     '@type': 'Organization',
     name: site.name,
     url: base,
-    logo: absoluteUrl('/wollie-logo.svg'),
+    logo: absoluteUrl('/logo512.png'),
     description: site.description,
     email: site.email,
   }
@@ -120,13 +126,31 @@ export function webSiteJsonLd() {
       name: site.name,
       url: base,
     },
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: `${base}app/explore?q={search_term_string}`,
-      },
-      'query-input': 'required name=search_term_string',
+  }
+}
+
+export function softwareApplicationJsonLd() {
+  const base = absoluteUrl('/')
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: site.name,
+    url: base,
+    description: site.description,
+    applicationCategory: 'FinanceApplication',
+    applicationSubCategory: 'Personal finance and budgeting',
+    operatingSystem: 'Web',
+    browserRequirements: 'Requires JavaScript and a modern web browser',
+    featureList: [
+      'Read-only bank account connections',
+      'Balance and transaction dashboard',
+      'Monthly budget planning',
+      'Bill and recurring payment tracking',
+    ],
+    publisher: {
+      '@type': 'Organization',
+      name: site.name,
+      url: base,
     },
   }
 }

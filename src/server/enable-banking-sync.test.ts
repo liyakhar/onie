@@ -53,6 +53,28 @@ describe('Enable Banking sync helpers', () => {
     }))
   })
 
+  it('turns Wise card descriptions into readable merchant names', () => {
+    const account = { uid: 'wise-eur', currency: 'EUR', details: 'EUR' }
+    const snapshot = buildEnableBankingSnapshot(
+      { bankName: 'Wise', accounts: [account] },
+      new Map([[
+        account.uid,
+        {
+          balances: [],
+          transactions: [{
+            entry_reference: 'card-1',
+            booking_date: '2026-07-10',
+            credit_debit_indicator: 'DBIT',
+            transaction_amount: { amount: '11.20', currency: 'EUR' },
+            remittance_information: ['CARD-4037956791', 'Card transaction of 11.20 EUR issued by Mac Donald Chinon CHINON'],
+          }],
+        },
+      ]]),
+    )
+
+    expect(snapshot.accounts[0]?.transactions[0]?.merchantName).toBe('Mac Donald Chinon')
+  })
+
   it('creates an RS256 JWT that verifies with the matching public key', async () => {
     const pair = await crypto.subtle.generateKey(
       { name: 'RSASSA-PKCS1-v1_5', modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' },

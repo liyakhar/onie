@@ -10,6 +10,15 @@ import { nitro } from 'nitro/vite'
 
 const cloudflarePages = process.env.NITRO_PRESET === 'cloudflare_pages'
 
+const securityHeaders = {
+  'content-security-policy': "default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self' data:; form-action 'self'; frame-ancestors 'none'; img-src 'self' data:; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; upgrade-insecure-requests",
+  'permissions-policy': 'camera=(), geolocation=(), microphone=()',
+  'referrer-policy': 'strict-origin-when-cross-origin',
+  'strict-transport-security': 'max-age=31536000; includeSubDomains',
+  'x-content-type-options': 'nosniff',
+  'x-frame-options': 'DENY',
+} as const
+
 function prismaCloudflareRollupShim() {
   const patch = (code: string) => {
     if (!code.includes('fileURLToPath(import.meta.url)')) return null
@@ -47,6 +56,12 @@ const config = defineConfig({
       esmImport: cloudflarePages,
     }),
     nitro({
+      routeRules: {
+        '/**': { headers: securityHeaders },
+        '/app/**': { headers: { ...securityHeaders, 'cache-control': 'private, no-store' } },
+        '/settings/**': { headers: { ...securityHeaders, 'cache-control': 'private, no-store' } },
+        '/billing/**': { headers: { ...securityHeaders, 'cache-control': 'private, no-store' } },
+      },
       ...(cloudflarePages
         ? {
             preset: 'cloudflare_pages',

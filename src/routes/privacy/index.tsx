@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { LegalDocument, LegalSection } from '#/components/LegalDocument'
 import { buildPageMeta } from '#/lib/seo'
+import { getLegalIdentity } from '#/server/legal'
 
 const meta = buildPageMeta({
   path: '/privacy',
@@ -10,10 +11,12 @@ const meta = buildPageMeta({
 
 export const Route = createFileRoute('/privacy/')({
   head: () => ({ meta: meta.meta, links: meta.links }),
+  loader: () => getLegalIdentity(),
   component: PrivacyPage,
 })
 
 function PrivacyPage() {
+  const legal = Route.useLoaderData()
   return (
     <LegalDocument
       eyebrow="Legal"
@@ -27,6 +30,11 @@ function PrivacyPage() {
         <p>Basic technical information may be processed to keep you signed in, secure the service, diagnose errors, and prevent abuse.</p>
       </LegalSection>
 
+      <LegalSection title="Controller and legal bases">
+        <p>{legal.businessName}, at {legal.businessAddress}, is responsible for Wollie's processing of personal data. Contact: <a className="underline underline-offset-4" href={`mailto:${legal.contactEmail}`}>{legal.contactEmail}</a>.</p>
+        <p>We process registration, authentication, bank, budget, and billing-status data to perform the Wollie contract. We process security, abuse-prevention, and reliability data where necessary for our legitimate interests in protecting the service. We process invoice and transaction records where required by tax, accounting, or other law. Optional marketing or non-essential tracking requires a separate consent.</p>
+      </LegalSection>
+
       <LegalSection title="Bank connections">
         <p>European bank connections are provided through Enable Banking. Authentication happens with your bank or its authorised interface. Wollie does not ask for or receive your bank password.</p>
         <p>Access is read-only. Wollie uses encrypted provider credentials on the server to refresh the account information you authorised.</p>
@@ -38,16 +46,28 @@ function PrivacyPage() {
       </LegalSection>
 
       <LegalSection title="Service providers">
-        <p>We may share only the information needed to operate Wollie with providers that support bank connectivity, authentication, hosting, databases, security, and error monitoring. They process information for those services under their own terms and applicable data-protection obligations.</p>
+        <p>We share only the information needed to operate Wollie with providers supporting bank connectivity (Enable Banking and participating banks), payment and invoices (Stripe), hosting and delivery (Cloudflare), database infrastructure, and transactional email (Resend). Authentication is operated within Wollie using its database and authentication software.</p>
+        <p>Provider roles and locations differ. When personal data is transferred outside the European Economic Area, we use an applicable transfer mechanism such as an adequacy decision or contractual safeguards, as supported by the relevant provider agreement.</p>
         <p>We may also disclose information when required by law or when reasonably necessary to protect users, Wollie, or others.</p>
       </LegalSection>
 
       <LegalSection title="Retention and deletion">
-        <p>We keep information while your account is active and as needed to operate the service or meet legal obligations. Disconnecting a bank removes that connection and its locally stored account and transaction data. You may also request deletion of your Wollie account and associated information.</p>
+        <p>Account, budget, and financial data is kept while your Wollie account is active. Provider session credentials are kept until you disconnect, consent expires, or the account is deleted. Disconnecting a bank revokes provider access where supported and removes that connection and its locally stored account and transaction data.</p>
+        <p>Account deletion removes Wollie profile and locally stored financial data. Limited billing, tax, fraud-prevention, dispute, and security records may be retained when and for as long as required by law or necessary to establish or defend legal claims. Provider backups are removed according to documented backup-retention schedules.</p>
       </LegalSection>
 
       <LegalSection title="Your choices and rights">
-        <p>You can disconnect bank access at any time. Depending on where you live, you may also have rights to access, correct, export, restrict, object to, or delete personal information.</p>
+        <p>You can disconnect bank access, download a structured account-data export, and request account deletion from Settings. Depending on where you live, you may also have rights to access, correct, restrict, object to, or obtain portability of personal information.</p>
+        <p>Requests can be sent to <a className="underline underline-offset-4" href={`mailto:${legal.contactEmail}`}>{legal.contactEmail}</a>. We may verify identity before acting. You may lodge a complaint with the CNIL in France or your local data-protection authority.</p>
+      </LegalSection>
+
+      <LegalSection title="Automated suggestions">
+        <p>Wollie uses transaction descriptions and amounts to suggest categories, recurring payments, and budget summaries. These suggestions do not make legal or similarly significant decisions about you. You can review and correct them in the app.</p>
+      </LegalSection>
+
+      <LegalSection title="Cookies and age">
+        <p>Wollie uses essential authentication and security cookies needed to keep you signed in. We do not currently use advertising cookies. If non-essential analytics or advertising technologies are introduced, this policy and the consent controls will be updated before they are enabled.</p>
+        <p>Wollie is intended for adults aged 18 and over and is not directed to children.</p>
       </LegalSection>
 
       <LegalSection title="Security and changes">
@@ -55,7 +75,7 @@ function PrivacyPage() {
       </LegalSection>
 
       <LegalSection title="Contact">
-        <p>For privacy questions or requests, email <a className="underline underline-offset-4" href="mailto:hello@wollie.app">hello@wollie.app</a>.</p>
+        <p>For privacy questions or requests, email <a className="underline underline-offset-4" href={`mailto:${legal.contactEmail}`}>{legal.contactEmail}</a>.</p>
       </LegalSection>
     </LegalDocument>
   )

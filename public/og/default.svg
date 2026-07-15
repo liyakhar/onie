@@ -1,7 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Wollie — Calm money">
-  <rect width="1200" height="630" fill="#f2efe8"/>
-  <rect x="48" y="48" width="1104" height="534" rx="28" fill="none" stroke="#181715" stroke-width="2"/>
-  <text x="96" y="280" font-family="ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-weight="760" font-size="120" fill="#181715" letter-spacing="-0.06em">Wollie</text>
-  <text x="96" y="380" font-family="Georgia, serif" font-size="42" fill="#4a4840" letter-spacing="-0.02em">A clean budget that shows what you can spend.</text>
-  <text x="96" y="520" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="22" fill="#7a7568" letter-spacing="0.08em">ACCOUNTS · BUDGETS · SPENDING · SYNC</text>
+  <rect width="1200" height="630" fill="#ffffff"/>
+  <rect x="48" y="48" width="1104" height="534" fill="none" stroke="#0a0a0a" stroke-width="2"/>
+  <rect x="48" y="48" width="12" height="534" fill="#059669"/>
+  <text x="104" y="286" font-family="ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-weight="760" font-size="120" fill="#0a0a0a" letter-spacing="-0.06em">Wollie</text>
+  <text x="104" y="382" font-family="ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="42" fill="#525252" letter-spacing="-0.02em">Personal finance, simplified.</text>
+  <text x="104" y="520" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="22" fill="#737373" letter-spacing="0.08em">ACCOUNTS · SPENDING · BUDGETS · BILLS</text>
 </svg>

@@ -502,10 +502,6 @@ export type EnumFinanceConnectionStatusFieldUpdateOperationsInput = {
   set?: $Enums.FinanceConnectionStatus
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type BankConnectionCreateNestedOneWithoutAccountsInput = {
   create?: Prisma.XOR<Prisma.BankConnectionCreateWithoutAccountsInput, Prisma.BankConnectionUncheckedCreateWithoutAccountsInput>
   connectOrCreate?: Prisma.BankConnectionCreateOrConnectWithoutAccountsInput

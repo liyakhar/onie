@@ -473,11 +473,17 @@ function CompactEmpty({ label }: { label: string }) {
 function toMoneyItem(transaction: FinanceTransaction) {
   return {
     id: transaction.id,
-    title: transaction.merchant,
+    title: readableMerchant(transaction.merchant),
     meta: `${formatTransactionDate(transaction.date)} · ${transaction.account} · ${transaction.category}`,
     amount: transaction.amount,
     status: transaction.status,
   }
+}
+
+function readableMerchant(value: string) {
+  const issuedBy = value.match(/\bissued by\s+(.+)$/i)
+  const name = (issuedBy?.[1] || value).replace(/^CARD-\d+\s*[·-]\s*/i, '').trim()
+  return name.replace(/\b([\p{L}'-]+)\s+\1$/iu, '$1').trim() || 'Unknown transaction'
 }
 
 function formatTransactionDate(value: string) {

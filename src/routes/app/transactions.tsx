@@ -69,7 +69,7 @@ function TransactionsPage() {
             {filtered.map((transaction) => (
               <li key={transaction.id} className="grid gap-3 px-4 py-4 sm:grid-cols-[minmax(0,1fr)_12rem_auto] sm:items-center sm:px-5">
                 <div className="min-w-0">
-                  <div className="flex items-center gap-2"><p className="truncate text-sm font-medium">{transaction.merchant}</p>{transaction.status !== 'cleared' && <Badge variant="outline" className="rounded-md font-normal">{labelStatus(transaction.status)}</Badge>}</div>
+                  <div className="flex items-center gap-2"><p className="truncate text-sm font-medium">{readableMerchant(transaction.merchant)}</p>{transaction.status !== 'cleared' && <Badge variant="outline" className="rounded-md font-normal">{labelStatus(transaction.status)}</Badge>}</div>
                   <p className="mt-1 truncate text-xs text-zinc-500">{formatDate(transaction.date)} · {transaction.account}</p>
                 </div>
                 <Select value={transaction.category} disabled={saving === transaction.id} onValueChange={(value) => void updateCategory(transaction, value as FinanceCategory)}>
@@ -91,6 +91,12 @@ function labelStatus(value: string) {
   if (value === 'all') return 'All statuses'
   if (value === 'needs-review') return 'Needs review'
   return value.charAt(0).toUpperCase() + value.slice(1)
+}
+
+function readableMerchant(value: string) {
+  const issuedBy = value.match(/\bissued by\s+(.+)$/i)
+  const name = (issuedBy?.[1] || value).replace(/^CARD-\d+\s*[·-]\s*/i, '').trim()
+  return name.replace(/\b([\p{L}'-]+)\s+\1$/iu, '$1').trim() || 'Unknown transaction'
 }
 
 function formatDate(value: string) {

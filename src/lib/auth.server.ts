@@ -3,6 +3,7 @@ import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { tanstackStartCookies } from 'better-auth/tanstack-start'
 import { getRequest } from '@tanstack/react-start/server'
 import { getPrisma } from '#/db.server'
+import { accountActionEmail, sendAccountEmail } from '#/server/email.server'
 
 function slugify(value: string) {
   return value
@@ -56,9 +57,38 @@ function createAuth() {
     emailAndPassword: {
       enabled: true,
       sendResetPassword: async ({ user, url }) => {
-        if (process.env.NODE_ENV === 'development') {
-          console.info(`[wollie] Password reset for ${user.email}: ${url}`)
-        }
+        const content = accountActionEmail(
+          'Reset your Wollie password',
+          'Use this secure link to choose a new Wollie password.',
+          url,
+        )
+        await sendAccountEmail({
+          to: user.email,
+          subject: 'Reset your Wollie password',
+          ...content,
+        })
+      },
+      revokeSessionsOnPasswordReset: true,
+    },
+    user: {
+      deleteUser: {
+        enabled: true,
+        sendDeleteAccountVerification: async ({ user, url }) => {
+          const content = accountActionEmail(
+            'Confirm Wollie account deletion',
+            'This permanently removes your Wollie account and locally stored financial data. This link expires in 24 hours.',
+            url,
+          )
+          await sendAccountEmail({
+            to: user.email,
+            subject: 'Confirm Wollie account deletion',
+            ...content,
+          })
+        },
+        beforeDelete: async (user) => {
+          const { prepareUserDeletion } = await import('#/server/user-deletion.server')
+          await prepareUserDeletion(user.id)
+        },
       },
     },
     socialProviders: {

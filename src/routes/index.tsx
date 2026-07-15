@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRight, CalendarDays, ReceiptText, WalletCards } from 'lucide-react'
-import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
 import {
   Card,
@@ -11,7 +10,13 @@ import {
 } from '#/components/ui/card'
 import { authClient } from '#/lib/auth-client'
 import { loginSearch } from '#/lib/auth-nav'
-import { buildPageMeta, jsonLdScript, webSiteJsonLd } from '#/lib/seo'
+import {
+  buildPageMeta,
+  faqPageJsonLd,
+  jsonLdScript,
+  softwareApplicationJsonLd,
+  webSiteJsonLd,
+} from '#/lib/seo'
 
 const productImages = {
   dashboard: '/product/wollie-dashboard.png',
@@ -21,10 +26,33 @@ const productImages = {
 
 const landingMeta = buildPageMeta({
   path: '/',
-  title: 'Know what you can spend',
+  title: 'Personal Finance Dashboard & Budget Planner',
   description:
-    'Wollie brings your accounts, activity, budgets, and bills into one clear monthly view.',
+    'Connect accounts, organize spending, track bills, and plan what you can safely spend each month with Wollie’s clear personal finance dashboard.',
 })
+
+const faqs = [
+  {
+    question: 'What is Wollie?',
+    answer:
+      'Wollie is a personal finance dashboard that brings balances, transactions, monthly budgets, and upcoming bills into one clear view.',
+  },
+  {
+    question: 'Can Wollie connect to my bank account?',
+    answer:
+      'Wollie supports read-only connections to participating European banks through regulated open-banking providers. Availability depends on your country and financial institution.',
+  },
+  {
+    question: 'Can Wollie move money or make payments?',
+    answer:
+      'No. Wollie uses read-only account access for balances and transactions. It cannot move money, make payments, or see your bank password.',
+  },
+  {
+    question: 'How does Wollie calculate what I can spend?',
+    answer:
+      'Wollie combines your connected balance with the monthly limits and bills you set, giving you a clearer view of what remains available to spend.',
+  },
+] as const
 
 const features = [
   {
@@ -54,7 +82,11 @@ export const Route = createFileRoute('/')({
   head: () => ({
     meta: landingMeta.meta,
     links: landingMeta.links,
-    scripts: [jsonLdScript(webSiteJsonLd())],
+    scripts: [
+      jsonLdScript(webSiteJsonLd()),
+      jsonLdScript(softwareApplicationJsonLd()),
+      jsonLdScript(faqPageJsonLd([...faqs])),
+    ],
   }),
   component: LandingPage,
 })
@@ -74,6 +106,9 @@ function LandingPage() {
             <Button variant="ghost" asChild className="hidden sm:inline-flex">
               <a href="#features">Features</a>
             </Button>
+            <Button variant="ghost" asChild>
+              <Link to="/pricing" search={{ checkout: undefined }}>Pricing</Link>
+            </Button>
             {session?.user ? (
               <Button asChild className="wollie-primary-action">
                 <Link to="/app">Open app</Link>
@@ -90,15 +125,19 @@ function LandingPage() {
       <main>
         <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
           <div className="mx-auto flex w-full max-w-5xl flex-col items-center text-center">
-            <Badge className="wollie-accent-badge mb-6 rounded-full border px-4 py-1.5 text-sm font-medium">
-              Personal finance, simplified
-            </Badge>
+            <div className="mb-7 flex items-center gap-2.5 text-sm font-medium text-black/55">
+              <span
+                aria-hidden="true"
+                className="size-2 bg-[var(--color-wollie-accent)]"
+              />
+              <span>Personal finance, simplified</span>
+            </div>
             <h1
               className="w-full text-center text-5xl font-semibold leading-[1.04] tracking-normal sm:text-7xl lg:text-8xl"
               style={{ marginBottom: '1.75rem' }}
             >
               <span className="block">Know what</span>
-              <span className="block">you can spend.</span>
+              <span className="block translate-x-[0.035em]">you can spend.</span>
             </h1>
             <p className="max-w-2xl text-center text-lg leading-8 text-black/60 sm:text-xl">
               Wollie brings your accounts, spending, budgets, and bills into one
@@ -117,7 +156,7 @@ function LandingPage() {
             </div>
           </div>
 
-          <div className="mt-14 overflow-hidden rounded-xl border border-black/15 bg-black shadow-2xl shadow-black/10 sm:mt-20 sm:rounded-2xl">
+          <div className="mt-14 overflow-hidden rounded-xl border border-black/10 bg-white sm:mt-20">
             <img
               src={productImages.dashboard}
               alt="Wollie dashboard showing what is available to spend"
@@ -173,6 +212,27 @@ function LandingPage() {
           </div>
         </section>
 
+        <section className="border-t border-black/10 bg-white py-20 sm:py-28" aria-labelledby="faq-title">
+          <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.7fr_1.3fr] lg:px-8">
+            <div>
+              <p className="mb-4 text-sm font-medium uppercase tracking-[0.14em] text-black/50">
+                Questions
+              </p>
+              <h2 id="faq-title" className="text-balance text-3xl font-semibold tracking-[-0.035em] sm:text-5xl">
+                Wollie, clearly explained.
+              </h2>
+            </div>
+            <div className="divide-y divide-black/10 border-y border-black/10">
+              {faqs.map((faq) => (
+                <article key={faq.question} className="py-6 sm:py-8">
+                  <h3 className="text-lg font-semibold tracking-[-0.02em]">{faq.question}</h3>
+                  <p className="mt-3 max-w-2xl leading-7 text-black/60">{faq.answer}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className="border-y border-black/10 bg-black text-white">
           <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-4 py-16 sm:px-6 md:flex-row md:items-center lg:px-8">
             <div>
@@ -198,6 +258,8 @@ function LandingPage() {
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-8 text-sm text-black/50 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <span>© 2026 Wollie</span>
           <nav className="flex gap-5" aria-label="Legal">
+            <Link to="/about" className="hover:text-black">About</Link>
+            <Link to="/pricing" search={{ checkout: undefined }} className="hover:text-black">Pricing</Link>
             <Link to="/privacy" className="hover:text-black">Privacy</Link>
             <Link to="/terms" className="hover:text-black">Terms</Link>
           </nav>

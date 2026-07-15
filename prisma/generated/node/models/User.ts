@@ -218,6 +218,7 @@ export type UserWhereInput = {
   notifications?: Prisma.NotificationListRelationFilter
   financeWorkspaces?: Prisma.BudgetWorkspaceListRelationFilter
   bankConnections?: Prisma.BankConnectionListRelationFilter
+  billingSubscription?: Prisma.XOR<Prisma.BillingSubscriptionNullableScalarRelationFilter, Prisma.BillingSubscriptionWhereInput> | null
 }
 
 export type UserOrderByWithRelationInput = {
@@ -241,6 +242,7 @@ export type UserOrderByWithRelationInput = {
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   financeWorkspaces?: Prisma.BudgetWorkspaceOrderByRelationAggregateInput
   bankConnections?: Prisma.BankConnectionOrderByRelationAggregateInput
+  billingSubscription?: Prisma.BillingSubscriptionOrderByWithRelationInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -267,6 +269,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   notifications?: Prisma.NotificationListRelationFilter
   financeWorkspaces?: Prisma.BudgetWorkspaceListRelationFilter
   bankConnections?: Prisma.BankConnectionListRelationFilter
+  billingSubscription?: Prisma.XOR<Prisma.BillingSubscriptionNullableScalarRelationFilter, Prisma.BillingSubscriptionWhereInput> | null
 }, "id" | "pinnedPostId" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -317,6 +320,7 @@ export type UserCreateInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -339,6 +343,7 @@ export type UserUncheckedCreateInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -361,6 +366,7 @@ export type UserUpdateInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -383,6 +389,7 @@ export type UserUncheckedUpdateInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -474,6 +481,20 @@ export type NullableStringFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type UserCreateNestedOneWithoutBillingSubscriptionInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBillingSubscriptionInput, Prisma.UserUncheckedCreateWithoutBillingSubscriptionInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBillingSubscriptionInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutBillingSubscriptionNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBillingSubscriptionInput, Prisma.UserUncheckedCreateWithoutBillingSubscriptionInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBillingSubscriptionInput
+  upsert?: Prisma.UserUpsertWithoutBillingSubscriptionInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBillingSubscriptionInput, Prisma.UserUpdateWithoutBillingSubscriptionInput>, Prisma.UserUncheckedUpdateWithoutBillingSubscriptionInput>
 }
 
 export type UserCreateNestedOneWithoutFinanceWorkspacesInput = {
@@ -662,6 +683,110 @@ export type UserUpdateOneRequiredWithoutFollowersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFollowersInput, Prisma.UserUpdateWithoutFollowersInput>, Prisma.UserUncheckedUpdateWithoutFollowersInput>
 }
 
+export type UserCreateWithoutBillingSubscriptionInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  pinnedPost?: Prisma.PostCreateNestedOneWithoutPinnedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  financeWorkspaces?: Prisma.BudgetWorkspaceCreateNestedManyWithoutUserInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutBillingSubscriptionInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pinnedPostId?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedCreateNestedManyWithoutUserInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutBillingSubscriptionInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBillingSubscriptionInput, Prisma.UserUncheckedCreateWithoutBillingSubscriptionInput>
+}
+
+export type UserUpsertWithoutBillingSubscriptionInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBillingSubscriptionInput, Prisma.UserUncheckedUpdateWithoutBillingSubscriptionInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBillingSubscriptionInput, Prisma.UserUncheckedCreateWithoutBillingSubscriptionInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBillingSubscriptionInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBillingSubscriptionInput, Prisma.UserUncheckedUpdateWithoutBillingSubscriptionInput>
+}
+
+export type UserUpdateWithoutBillingSubscriptionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  pinnedPost?: Prisma.PostUpdateOneWithoutPinnedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  financeWorkspaces?: Prisma.BudgetWorkspaceUpdateManyWithoutUserNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBillingSubscriptionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pinnedPostId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedUpdateManyWithoutUserNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutFinanceWorkspacesInput = {
   id: string
   name: string
@@ -681,6 +806,7 @@ export type UserCreateWithoutFinanceWorkspacesInput = {
   pinnedPost?: Prisma.PostCreateNestedOneWithoutPinnedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFinanceWorkspacesInput = {
@@ -702,6 +828,7 @@ export type UserUncheckedCreateWithoutFinanceWorkspacesInput = {
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFinanceWorkspacesInput = {
@@ -739,6 +866,7 @@ export type UserUpdateWithoutFinanceWorkspacesInput = {
   pinnedPost?: Prisma.PostUpdateOneWithoutPinnedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFinanceWorkspacesInput = {
@@ -760,6 +888,7 @@ export type UserUncheckedUpdateWithoutFinanceWorkspacesInput = {
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBankConnectionsInput = {
@@ -781,6 +910,7 @@ export type UserCreateWithoutBankConnectionsInput = {
   pinnedPost?: Prisma.PostCreateNestedOneWithoutPinnedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBankConnectionsInput = {
@@ -802,6 +932,7 @@ export type UserUncheckedCreateWithoutBankConnectionsInput = {
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBankConnectionsInput = {
@@ -839,6 +970,7 @@ export type UserUpdateWithoutBankConnectionsInput = {
   pinnedPost?: Prisma.PostUpdateOneWithoutPinnedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBankConnectionsInput = {
@@ -860,6 +992,7 @@ export type UserUncheckedUpdateWithoutBankConnectionsInput = {
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -881,6 +1014,7 @@ export type UserCreateWithoutSessionsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -902,6 +1036,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -939,6 +1074,7 @@ export type UserUpdateWithoutSessionsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -960,6 +1096,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -981,6 +1118,7 @@ export type UserCreateWithoutAccountsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -1002,6 +1140,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -1039,6 +1178,7 @@ export type UserUpdateWithoutAccountsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -1060,6 +1200,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutProfileInput = {
@@ -1081,6 +1222,7 @@ export type UserCreateWithoutProfileInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProfileInput = {
@@ -1102,6 +1244,7 @@ export type UserUncheckedCreateWithoutProfileInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProfileInput = {
@@ -1139,6 +1282,7 @@ export type UserUpdateWithoutProfileInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfileInput = {
@@ -1160,6 +1304,7 @@ export type UserUncheckedUpdateWithoutProfileInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPostsInput = {
@@ -1181,6 +1326,7 @@ export type UserCreateWithoutPostsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPostsInput = {
@@ -1202,6 +1348,7 @@ export type UserUncheckedCreateWithoutPostsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPostsInput = {
@@ -1228,6 +1375,7 @@ export type UserCreateWithoutPinnedPostInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPinnedPostInput = {
@@ -1249,6 +1397,7 @@ export type UserUncheckedCreateWithoutPinnedPostInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPinnedPostInput = {
@@ -1286,6 +1435,7 @@ export type UserUpdateWithoutPostsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPostsInput = {
@@ -1307,6 +1457,7 @@ export type UserUncheckedUpdateWithoutPostsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutPinnedPostInput = {
@@ -1339,6 +1490,7 @@ export type UserUpdateWithoutPinnedPostInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPinnedPostInput = {
@@ -1360,6 +1512,7 @@ export type UserUncheckedUpdateWithoutPinnedPostInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLikesInput = {
@@ -1381,6 +1534,7 @@ export type UserCreateWithoutLikesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLikesInput = {
@@ -1402,6 +1556,7 @@ export type UserUncheckedCreateWithoutLikesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLikesInput = {
@@ -1439,6 +1594,7 @@ export type UserUpdateWithoutLikesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLikesInput = {
@@ -1460,6 +1616,7 @@ export type UserUncheckedUpdateWithoutLikesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommentsInput = {
@@ -1481,6 +1638,7 @@ export type UserCreateWithoutCommentsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommentsInput = {
@@ -1502,6 +1660,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommentsInput = {
@@ -1539,6 +1698,7 @@ export type UserUpdateWithoutCommentsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -1560,6 +1720,7 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -1581,6 +1742,7 @@ export type UserCreateWithoutNotificationsInput = {
   pinnedPost?: Prisma.PostCreateNestedOneWithoutPinnedByInput
   financeWorkspaces?: Prisma.BudgetWorkspaceCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -1602,6 +1764,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -1639,6 +1802,7 @@ export type UserUpdateWithoutNotificationsInput = {
   pinnedPost?: Prisma.PostUpdateOneWithoutPinnedByNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -1660,6 +1824,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutFollowingInput = {
@@ -1681,6 +1846,7 @@ export type UserCreateWithoutFollowingInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFollowingInput = {
@@ -1702,6 +1868,7 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFollowingInput = {
@@ -1728,6 +1895,7 @@ export type UserCreateWithoutFollowersInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFollowersInput = {
@@ -1749,6 +1917,7 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedCreateNestedManyWithoutUserInput
   bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutUserInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFollowersInput = {
@@ -1786,6 +1955,7 @@ export type UserUpdateWithoutFollowingInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFollowingInput = {
@@ -1807,6 +1977,7 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutFollowersInput = {
@@ -1839,6 +2010,7 @@ export type UserUpdateWithoutFollowersInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFollowersInput = {
@@ -1860,6 +2032,7 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   financeWorkspaces?: Prisma.BudgetWorkspaceUncheckedUpdateManyWithoutUserNestedInput
   bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutUserNestedInput
+  billingSubscription?: Prisma.BillingSubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 
@@ -1995,6 +2168,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   financeWorkspaces?: boolean | Prisma.User$financeWorkspacesArgs<ExtArgs>
   bankConnections?: boolean | Prisma.User$bankConnectionsArgs<ExtArgs>
+  billingSubscription?: boolean | Prisma.User$billingSubscriptionArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2047,6 +2221,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   financeWorkspaces?: boolean | Prisma.User$financeWorkspacesArgs<ExtArgs>
   bankConnections?: boolean | Prisma.User$bankConnectionsArgs<ExtArgs>
+  billingSubscription?: boolean | Prisma.User$billingSubscriptionArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2071,6 +2246,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     financeWorkspaces: Prisma.$BudgetWorkspacePayload<ExtArgs>[]
     bankConnections: Prisma.$BankConnectionPayload<ExtArgs>[]
+    billingSubscription: Prisma.$BillingSubscriptionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2487,6 +2663,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   financeWorkspaces<T extends Prisma.User$financeWorkspacesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$financeWorkspacesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetWorkspacePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   bankConnections<T extends Prisma.User$bankConnectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$bankConnectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BankConnectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingSubscription<T extends Prisma.User$billingSubscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$billingSubscriptionArgs<ExtArgs>>): Prisma.Prisma__BillingSubscriptionClient<runtime.Types.Result.GetResult<Prisma.$BillingSubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3200,6 +3377,25 @@ export type User$bankConnectionsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.BankConnectionScalarFieldEnum | Prisma.BankConnectionScalarFieldEnum[]
+}
+
+/**
+ * User.billingSubscription
+ */
+export type User$billingSubscriptionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BillingSubscription
+   */
+  select?: Prisma.BillingSubscriptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BillingSubscription
+   */
+  omit?: Prisma.BillingSubscriptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillingSubscriptionInclude<ExtArgs> | null
+  where?: Prisma.BillingSubscriptionWhereInput
 }
 
 /**

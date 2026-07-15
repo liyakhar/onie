@@ -37,6 +37,12 @@ export default function Footer({ variant = 'landing' }: { variant?: 'landing' | 
         <Link to="/login" search={loginSearch({ signup: true })}>
           Start
         </Link>
+        <span className="foot__sep" aria-hidden="true">·</span>
+        <Link to="/privacy">Privacy</Link>
+        <span className="foot__sep" aria-hidden="true">·</span>
+        <Link to="/terms">Terms</Link>
+        <span className="foot__sep" aria-hidden="true">·</span>
+        <Link to="/legal-notice">Legal</Link>
       </p>
     </footer>
   )

@@ -223,6 +223,21 @@ export const disconnectEnableBanking = createServerFn({ method: 'POST' }).handle
   return { disconnected: true }
 })
 
+export async function revokeEnableBankingBeforeUserDeletion(userId: string) {
+  const connection = await getConnection(userId)
+  if (connection?.credential.kind !== 'session') return
+
+  try {
+    await providerRequest(`/sessions/${encodeURIComponent(connection.credential.sessionId)}`, {
+      method: 'DELETE',
+    })
+  } catch (error) {
+    // A missing or expired provider session is already effectively revoked.
+    const message = error instanceof Error ? error.message : ''
+    if (!/404|EXPIRED_SESSION|WRONG_SESSION_STATUS|NO_SESSION/i.test(message)) throw error
+  }
+}
+
 export const getEnableBankingStatus = createServerFn({ method: 'GET' }).handler(async () => {
   const user = await requireUser()
   const prisma = await getDb()
@@ -277,7 +292,7 @@ export const loadEnableBankingData = createServerOnlyFn(async (userId: string) =
     account.transactions.map((transaction) => ({
       id: transaction.id,
       date: transaction.postedAt.toISOString(),
-      merchant: transaction.merchant?.name || transaction.description,
+      merchant: displayMerchantName(transaction.merchant?.name || transaction.description),
       account: account.name,
       category: toCategory(transaction.category?.name),
       amount: transaction.amountMinor / 100,
@@ -661,10 +676,8 @@ function getEncryptionSecret() {
   throw new Error('BANK_SYNC_ENCRYPTION_KEY is required for bank sync.')
 }
 async function requireUser() {
-  const { getSessionUser } = await import('#/server/session.server')
-  const user = await getSessionUser()
-  if (!user) throw new Error('Sign in before connecting a bank.')
-  return user
+  const { requireBillingUser } = await import('#/server/billing.server')
+  return requireBillingUser()
 }
 async function getDb() {
   const { getDb: loadDb } = await import('#/server/db-access.server')
@@ -691,14 +704,22 @@ function signedAmountMinor(transaction: ProviderTransaction) {
   return /debit|dbit/i.test(transaction.credit_debit_indicator || '') ? -amount : amount
 }
 function transactionMerchant(transaction: ProviderTransaction) {
-  return String(
+  return displayMerchantName(String(
     transaction.creditor?.name
       || transaction.debtor?.name
       || firstRemittance(transaction.remittance_information)
       || transaction.bank_transaction_code?.description
       || transaction.note
       || 'Unknown transaction',
-  ).trim()
+  ).trim())
+}
+function displayMerchantName(value: string) {
+  let name = value.trim()
+  const issuedBy = name.match(/\bissued by\s+(.+)$/i)
+  if (issuedBy?.[1]) name = issuedBy[1].trim()
+  name = name.replace(/^CARD-\d+\s*[·-]\s*/i, '').trim()
+  name = name.replace(/\b([\p{L}'-]+)\s+\1$/iu, '$1').trim()
+  return name || 'Unknown transaction'
 }
 function transactionDescription(transaction: ProviderTransaction, fallback: string) {
   return String(firstRemittance(transaction.remittance_information) || transaction.note || fallback).trim()

@@ -5,13 +5,14 @@ import {
   Landmark,
   LayoutDashboard,
   ListFilter,
+  CreditCard,
   Settings,
 } from 'lucide-react'
 import BetterAuthHeader from '#/integrations/better-auth/header-user'
 import { OnieMark } from '#/components/OnieMark'
 import { authClient } from '#/lib/auth-client'
 
-export default function AppNav() {
+export default function AppNav({ locked = false }: { locked?: boolean }) {
   const { data: session } = authClient.useSession()
   const isSignedIn = Boolean(session?.user)
 
@@ -22,7 +23,7 @@ export default function AppNav() {
           <OnieMark variant="nav" />
         </Link>
 
-        <nav className="app-nav__tabs" aria-label="Primary">
+        {!locked && <nav className="app-nav__tabs" aria-label="Primary">
           <p className="app-nav__section-label">Your money</p>
           <Link to="/app" activeOptions={{ exact: true }} className="app-nav__tab" activeProps={{ className: 'app-nav__tab is-active' }}>
             <LayoutDashboard aria-hidden="true" />
@@ -40,16 +41,25 @@ export default function AppNav() {
             <CalendarDays aria-hidden="true" />
             <span>Bills</span>
           </Link>
-        </nav>
+        </nav>}
 
         <div className="app-nav__actions">
-          <Link
+          {!locked && <Link
             to="/app/accounts"
             className="app-nav__account-link"
             activeProps={{ className: 'app-nav__account-link is-active' }}
           >
             <Landmark aria-hidden="true" />
             <span>Bank accounts</span>
+          </Link>}
+          <Link
+            to="/pricing"
+            search={{ checkout: undefined }}
+            className="app-nav__account-link"
+            activeProps={{ className: 'app-nav__account-link is-active' }}
+          >
+            <CreditCard aria-hidden="true" />
+            <span>Pricing &amp; billing</span>
           </Link>
           {isSignedIn && (
             <Link
