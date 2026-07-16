@@ -59,7 +59,7 @@ export function BillingActions({
           type="button"
           onClick={() => void openPortal()}
           disabled={loading}
-          className="wollie-primary-action min-h-11 rounded-none"
+          className="wollie-primary-action min-h-11 rounded-lg"
         >
           {loading ? 'Opening billing…' : 'Manage subscription'}
         </Button>
@@ -71,7 +71,7 @@ export function BillingActions({
   if (billing && !billingConfigured) {
     return (
       <div className="grid gap-3">
-        <div className={`border px-4 py-3 ${theme === 'dark' ? 'border-white/15 bg-white/5 text-white' : 'border-zinc-200 bg-zinc-50 text-zinc-950'}`}>
+        <div className={`rounded-lg border px-4 py-3 ${theme === 'dark' ? 'border-white/15 bg-white/5 text-white' : 'border-zinc-200 bg-white text-zinc-950'}`}>
           <p className="text-sm font-medium">Paid plans are opening soon.</p>
           <p className={`mt-1 text-sm leading-6 ${theme === 'dark' ? 'text-white/60' : 'text-zinc-600'}`}>
             Your free trial and demo remain available. Checkout will appear here once live billing is connected.
@@ -89,7 +89,7 @@ export function BillingActions({
   return (
     <div className="grid gap-4">
       <div
-        className="grid grid-cols-2 border border-zinc-200 bg-zinc-50 p-1"
+        className="grid grid-cols-2 rounded-lg border border-zinc-200 bg-zinc-100 p-1"
         role="group"
         aria-label="Billing interval"
       >
@@ -97,7 +97,7 @@ export function BillingActions({
           type="button"
           aria-pressed={interval === 'month'}
           onClick={() => setInterval('month')}
-          className={`min-h-10 px-3 text-sm font-medium transition-colors ${interval === 'month' ? 'bg-white text-zinc-950 shadow-sm' : 'text-zinc-500 hover:text-zinc-950'}`}
+          className={`min-h-11 rounded-md px-3 text-sm font-medium transition-colors ${interval === 'month' ? 'bg-white text-zinc-950 shadow-sm' : 'text-zinc-500 hover:text-zinc-950'}`}
         >
           Monthly
         </button>
@@ -105,9 +105,9 @@ export function BillingActions({
           type="button"
           aria-pressed={interval === 'year'}
           onClick={() => setInterval('year')}
-          className={`min-h-10 px-3 text-sm font-medium transition-colors ${interval === 'year' ? 'bg-[var(--color-wollie-accent)] text-white' : 'text-zinc-500 hover:text-zinc-950'}`}
+          className={`min-h-11 rounded-md px-3 text-sm font-medium transition-colors ${interval === 'year' ? 'bg-white text-zinc-950 shadow-sm' : 'text-zinc-500 hover:text-zinc-950'}`}
         >
-          Yearly · save €36.88
+          Yearly · save 38%
         </button>
       </div>
 
@@ -123,12 +123,12 @@ export function BillingActions({
             type="button"
             onClick={() => void openCheckout()}
             disabled={loading}
-            className="wollie-primary-action min-h-11 rounded-none"
+            className="wollie-primary-action min-h-11 rounded-lg"
           >
             {loading ? 'Opening checkout…' : `Choose ${interval === 'year' ? 'yearly' : 'monthly'}`}
           </Button>
         ) : (
-          <Button asChild className="wollie-primary-action min-h-11 rounded-none">
+          <Button asChild className="wollie-primary-action min-h-11 rounded-lg">
             <Link to="/login" search={loginSearch({ signup: true })}>
               Start 14-day free trial
             </Link>
@@ -141,7 +141,7 @@ export function BillingActions({
           variant="outline"
           onClick={() => void openPortal()}
           disabled={loading}
-          className="min-h-11 rounded-none"
+          className="min-h-11 rounded-lg"
         >
           Manage billing history
         </Button>

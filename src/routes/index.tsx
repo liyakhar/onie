@@ -2,13 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRight, CalendarDays, Download, Globe2, Landmark, ReceiptText, ShieldCheck, Users, WalletCards } from 'lucide-react'
 import { Button } from '#/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '#/components/ui/card'
 import { authClient } from '#/lib/auth-client'
 import { loginSearch } from '#/lib/auth-nav'
 import {
@@ -61,25 +54,52 @@ const faqs = [
   },
 ] as const
 
-const features = [
+const toolkitFeatures = [
   {
-    title: 'See your month',
-    description: 'Safe-to-spend, cash, and upcoming bills.',
+    title: 'Accounts',
+    description: 'See every balance and account in one clear view.',
+    icon: Landmark,
+  },
+  {
+    title: 'Transactions',
+    description: 'Review spending and keep categories organized.',
+    icon: ReceiptText,
+  },
+  {
+    title: 'Budgets',
+    description: 'Set monthly limits and track progress as you spend.',
     icon: WalletCards,
+  },
+  {
+    title: 'Bills',
+    description: 'Keep upcoming and recurring payments in view.',
+    icon: CalendarDays,
+  },
+  {
+    title: 'Households',
+    description: 'Manage personal, partner, and shared money together.',
+    icon: Users,
+  },
+  {
+    title: 'Exports',
+    description: 'Download clean transaction and account data anytime.',
+    icon: Download,
+  },
+] as const
+
+const featurePreviews = [
+  {
+    label: 'Overview',
     image: productImages.dashboard,
     alt: 'Wollie dashboard showing available spending, cash, and upcoming bills',
   },
   {
-    title: 'Understand spending',
-    description: 'Review and categorize transactions.',
-    icon: ReceiptText,
+    label: 'Activity',
     image: productImages.activity,
     alt: 'Wollie activity page for reviewing and categorizing transactions',
   },
   {
-    title: 'Plan what is next',
-    description: 'Budgets, bills, and planned expenses.',
-    icon: CalendarDays,
+    label: 'Plan',
     image: productImages.plan,
     alt: 'Wollie monthly plan with category limits and spending progress',
   },
@@ -432,39 +452,53 @@ function LandingPage() {
 
         <section id="features" className="border-t border-black/10 bg-white py-24 sm:py-36">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl">
-              <h2
-                className="text-balance text-4xl font-semibold leading-[1.04] tracking-[-0.045em] sm:text-6xl"
-              >
-                Your month, clearly organized.
-              </h2>
+            <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+              <div className="max-w-3xl">
+                <p className="mb-4 text-sm font-medium uppercase tracking-[0.14em] text-black/50">
+                  Complete toolkit
+                </p>
+                <h2 className="text-balance text-4xl font-semibold leading-[1.04] tracking-[-0.045em] sm:text-6xl">
+                  Everything you need to manage your money.
+                </h2>
+              </div>
+              <p className="max-w-xl text-lg leading-8 text-black/55 lg:justify-self-end">
+                Accounts, spending, planning, and shared finances—all in one place.
+              </p>
             </div>
 
-            <div className="mt-14 grid gap-6 lg:grid-cols-3">
-              {features.map(({ title, description, icon: Icon, image, alt }) => (
-                <Card key={title} className="overflow-hidden border-black/10 bg-white py-0 shadow-none">
-                  <CardHeader className="px-6 pt-6">
-                    <div className="mb-2 flex size-9 items-center justify-center rounded-lg border border-black/10 bg-neutral-50">
-                      <Icon className="size-4" aria-hidden="true" />
-                    </div>
-                    <CardTitle>{title}</CardTitle>
-                    <CardDescription className="text-sm leading-6 text-black/50">
-                      {description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="mt-2 px-0">
-                    <div className="overflow-hidden border-t border-black/10 bg-neutral-100">
-                      <img
-                        src={image}
-                        alt={alt}
-                        width="1440"
-                        height="900"
-                        loading="lazy"
-                        className="block aspect-[4/3] w-full object-cover object-left-top grayscale"
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
+            <div className="mt-14 grid gap-px overflow-hidden border border-black/10 bg-black/10 sm:grid-cols-2 lg:grid-cols-3">
+              {toolkitFeatures.map(({ title, description, icon: Icon }) => (
+                <article key={title} className="bg-white p-6 sm:p-8">
+                  <div className="flex size-10 items-center justify-center rounded-full bg-[color-mix(in_oklch,var(--color-wollie-accent)_10%,white)] text-[var(--color-wollie-accent)]">
+                    <Icon className="size-4" aria-hidden="true" />
+                  </div>
+                  <h3 className="mt-8 text-lg font-semibold tracking-[-0.025em]">{title}</h3>
+                  <p className="mt-2 max-w-xs text-sm leading-6 text-black/55">{description}</p>
+                </article>
+              ))}
+            </div>
+
+            <div className="mt-12 grid gap-4 lg:grid-cols-2">
+              {featurePreviews.map(({ label, image, alt }, index) => (
+                <figure
+                  key={label}
+                  className={`group overflow-hidden border border-black/10 bg-neutral-100 ${index === 0 ? 'lg:col-span-2' : ''}`}
+                >
+                  <figcaption className="flex items-center justify-between border-b border-black/10 bg-white px-4 py-3 sm:px-5">
+                    <span className="text-sm font-medium text-black/70">{label}</span>
+                    <span className="size-2 rounded-full bg-[var(--color-wollie-accent)]" aria-hidden="true" />
+                  </figcaption>
+                  <div className="overflow-hidden">
+                    <img
+                      src={image}
+                      alt={alt}
+                      width={index === 0 ? 1920 : 1440}
+                      height={index === 0 ? 960 : 720}
+                      loading="lazy"
+                      className="block aspect-[2/1] w-full object-cover object-left-top motion-safe:transition-transform motion-safe:duration-500 group-hover:scale-[1.01]"
+                    />
+                  </div>
+                </figure>
               ))}
             </div>
           </div>
