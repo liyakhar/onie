@@ -18,6 +18,7 @@ export function BillingActions({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const subscribed = billing?.state === 'subscribed'
+  const billingConfigured = billing?.billingConfigured ?? false
 
   if (billing?.isHouseholdOwner === false) {
     return (
@@ -63,6 +64,24 @@ export function BillingActions({
           {loading ? 'Opening billing…' : 'Manage subscription'}
         </Button>
         {error && <p className="text-sm text-red-700" role="alert">{error}</p>}
+      </div>
+    )
+  }
+
+  if (billing && !billingConfigured) {
+    return (
+      <div className="grid gap-3">
+        <div className={`border px-4 py-3 ${theme === 'dark' ? 'border-white/15 bg-white/5 text-white' : 'border-zinc-200 bg-zinc-50 text-zinc-950'}`}>
+          <p className="text-sm font-medium">Paid plans are opening soon.</p>
+          <p className={`mt-1 text-sm leading-6 ${theme === 'dark' ? 'text-white/60' : 'text-zinc-600'}`}>
+            Your free trial and demo remain available. Checkout will appear here once live billing is connected.
+          </p>
+        </div>
+        {billing.state === 'trial' && (
+          <p className={`text-xs leading-5 ${theme === 'dark' ? 'text-white/55' : 'text-zinc-500'}`}>
+            Your no-card trial remains available for {billing.daysRemaining} more day{billing.daysRemaining === 1 ? '' : 's'}.
+          </p>
+        )}
       </div>
     )
   }

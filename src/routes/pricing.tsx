@@ -32,6 +32,7 @@ export const Route = createFileRoute('/pricing')({
 function PricingPage() {
   const billing = Route.useLoaderData()
   const { checkout } = Route.useSearch()
+  const billingConfigured = billing?.billingConfigured ?? false
 
   return (
     <div className="wollie-landing min-h-screen bg-white text-zinc-950">
@@ -66,7 +67,9 @@ function PricingPage() {
                 </h1>
               </div>
               <p className="max-w-xl text-lg leading-8 text-zinc-600 lg:pb-2">
-                Try all of Wollie for 14 days without a card. Then keep everything for €7.99 monthly, or save with €59 yearly.
+                {billingConfigured
+                  ? 'Try all of Wollie for 14 days without a card. Then keep everything for €7.99 monthly, or save with €59 yearly.'
+                  : 'Try Wollie with a no-card trial while paid plans are being connected for launch.'}
               </p>
             </div>
           </div>
@@ -80,7 +83,9 @@ function PricingPage() {
                 <span className="text-6xl font-semibold tracking-[-0.06em]">€59</span>
                 <span className="pb-2 text-white/55">per year</span>
               </div>
-              <p className="mt-3 text-sm text-emerald-300">Best value · equivalent to €4.92/month</p>
+              <p className="mt-3 text-sm text-emerald-300">
+                {billingConfigured ? 'Best value · equivalent to €4.92/month' : 'Paid checkout opening soon'}
+              </p>
               <div className="mt-10 border-t border-white/15 pt-8">
                 <BillingActions billing={billing} theme="dark" />
               </div>
@@ -108,7 +113,7 @@ function PricingPage() {
           <div className="mx-auto grid max-w-7xl gap-px overflow-hidden border border-zinc-200 bg-zinc-200 md:grid-cols-3">
             {[
               [ShieldCheck, 'Private by default', 'Financial data stays with you and household members you invite.'],
-              [LockKeyhole, 'Stripe-hosted payment', 'Wollie never stores your card details.'],
+              [LockKeyhole, billingConfigured ? 'Stripe-hosted payment' : 'Checkout opening soon', billingConfigured ? 'Wollie never stores your card details.' : 'Paid plans will use Stripe-hosted checkout once live billing is connected.'],
               [RefreshCcw, 'Change anytime', 'Manage invoices, billing, and cancellation in Stripe.'],
             ].map(([Icon, title, body]) => {
               const ItemIcon = Icon as typeof ShieldCheck

@@ -12,6 +12,7 @@ export type BillingAccess = {
   state: 'development' | 'trial' | 'subscribed' | 'expired'
   status: string
   statusLabel: string
+  billingConfigured: boolean
   trialEndsAt: string
   daysRemaining: number
   currentPeriodEnd: string | null
@@ -69,6 +70,7 @@ export async function loadBillingAccess(userId: string): Promise<BillingAccess> 
     state,
     status,
     statusLabel: billingStatusLabel(status, subscription?.cancelAtPeriodEnd || false),
+    billingConfigured: isStripeBillingConfigured(),
     trialEndsAt: trialEnd.toISOString(),
     daysRemaining,
     currentPeriodEnd: subscription?.currentPeriodEnd?.toISOString() || null,
@@ -76,6 +78,20 @@ export async function loadBillingAccess(userId: string): Promise<BillingAccess> 
     hasCustomer: Boolean(subscription?.stripeCustomerId),
     interval: intervalForPrice(subscription?.stripePriceId),
   }
+}
+
+export function isStripeBillingConfigured(
+  env: {
+    STRIPE_SECRET_KEY?: string
+    STRIPE_MONTHLY_PRICE_ID?: string
+    STRIPE_YEARLY_PRICE_ID?: string
+  } = process.env,
+) {
+  return Boolean(
+    env.STRIPE_SECRET_KEY?.trim()
+      && env.STRIPE_MONTHLY_PRICE_ID?.trim()
+      && env.STRIPE_YEARLY_PRICE_ID?.trim(),
+  )
 }
 
 export async function requireBillingUser() {
