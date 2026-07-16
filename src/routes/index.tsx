@@ -414,7 +414,7 @@ function LandingPage() {
                 Shared households
               </p>
               <h2 className="text-balance text-4xl font-semibold leading-[1.04] tracking-[-0.045em] sm:text-6xl">
-                Mine, yours, and ours.
+                Manage household money together.
               </h2>
             </div>
             <div className="mt-14 grid border-y border-black/10 md:grid-cols-4">
