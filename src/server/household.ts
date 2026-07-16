@@ -144,15 +144,21 @@ export const revokeHouseholdInvitation = createServerFn({ method: 'POST' })
 export const getHouseholdInvitation = createServerFn({ method: 'GET' })
   .validator((data: { token: string }) => ({ token: String(data?.token || '') }))
   .handler(async ({ data }) => {
+    let tokenHash: string
+    try {
+      tokenHash = await hashInvitationToken(data.token)
+    } catch {
+      return invalidInvitation()
+    }
     const prisma = await getDb()
     const invitation = await prisma.householdInvitation.findUnique({
-      where: { tokenHash: await hashInvitationToken(data.token) },
+      where: { tokenHash },
       include: {
         workspace: { select: { name: true } },
         createdBy: { select: { name: true, email: true } },
       },
     })
-    if (!invitation) throw new Error('This invitation link is not valid.')
+    if (!invitation) return invalidInvitation()
     const status = invitation.status === 'PENDING' && invitation.expiresAt <= new Date()
       ? 'EXPIRED'
       : invitation.status
@@ -353,4 +359,14 @@ function maskEmail(email: string) {
   const [local, domain] = email.split('@')
   if (!local || !domain) return 'the invited email'
   return `${local.slice(0, 1)}${'*'.repeat(Math.min(Math.max(local.length - 1, 1), 6))}@${domain}`
+}
+
+function invalidInvitation() {
+  return {
+    householdName: 'Wollie household',
+    invitedBy: 'A household owner',
+    emailHint: 'the invited email',
+    status: 'INVALID' as const,
+    expiresAt: null,
+  }
 }

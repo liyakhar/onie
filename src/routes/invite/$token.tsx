@@ -74,7 +74,9 @@ function HouseholdInvitationPage() {
             </div>
           )}
           {error && <p className="text-sm font-medium" role="alert">{error}</p>}
-          <p className="text-xs text-zinc-500">Invitation expires {new Date(invitation.expiresAt).toLocaleString()}.</p>
+          {invitation.expiresAt && (
+            <p className="text-xs text-zinc-500">Invitation expires {new Date(invitation.expiresAt).toLocaleString()}.</p>
+          )}
         </CardContent>
       </Card>
     </main>
