@@ -58,6 +58,19 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - fastmcp python ✓
   - mcp typescript example ✓
 
+### agent skills best practices
+
+- **Page:** `/blog/agent-skills-best-practices`
+- **Published:** 2026-07-16
+- **Intent:** Informational
+- **Volume / KD:** pending SEMrush/Ahrefs validation (serp-2026-07 initial research)
+- **Cluster:**
+  - agent skills best practices ✓
+  - SKILL.md structure ✓
+  - skill authoring guide ✓
+  - how to write agent skills ✓
+  - progressive disclosure pattern ✓
+
 ### how to write claude code skills
 
 - **Page:** `/blog/how-to-write-claude-code-skills`
