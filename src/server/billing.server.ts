@@ -18,6 +18,8 @@ export type BillingAccess = {
   cancelAtPeriodEnd: boolean
   hasCustomer: boolean
   interval: 'month' | 'year' | null
+  isHouseholdOwner?: boolean
+  householdOwnerName?: string
 }
 
 export function trialEndsAt(createdAt: Date) {

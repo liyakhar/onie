@@ -22,7 +22,7 @@ function PrivacyPage() {
       eyebrow="Legal"
       title="Privacy Policy"
       summary="This policy explains what Wollie collects, why it is used, and the choices you have."
-      updated="July 14, 2026"
+      updated="July 15, 2026"
     >
       <LegalSection title="Information we collect">
         <p>We collect the account information you provide when you register, such as your name and email address.</p>
@@ -45,6 +45,11 @@ function PrivacyPage() {
         <p>We do not sell your personal or financial information.</p>
       </LegalSection>
 
+      <LegalSection title="Shared households">
+        <p>If you join a shared household, its other member can see the financial accounts, balances, transactions, budgets, recurring items, and ownership or cost-share settings in that household. Only accept an invitation from someone you trust.</p>
+        <p>Each person signs in separately and connects their own bank provider credentials. Wollie does not reveal those credentials to the other household member. The household owner manages the shared Wollie subscription.</p>
+      </LegalSection>
+
       <LegalSection title="Service providers">
         <p>We share only the information needed to operate Wollie with providers supporting bank connectivity (Enable Banking and participating banks), payment and invoices (Stripe), hosting and delivery (Cloudflare), database infrastructure, and transactional email (Resend). Authentication is operated within Wollie using its database and authentication software.</p>
         <p>Provider roles and locations differ. When personal data is transferred outside the European Economic Area, we use an applicable transfer mechanism such as an adequacy decision or contractual safeguards, as supported by the relevant provider agreement.</p>
@@ -58,7 +63,7 @@ function PrivacyPage() {
 
       <LegalSection title="Your choices and rights">
         <p>You can disconnect bank access, download a structured account-data export, and request account deletion from Settings. Depending on where you live, you may also have rights to access, correct, restrict, object to, or obtain portability of personal information.</p>
-        <p>Requests can be sent to <a className="underline underline-offset-4" href={`mailto:${legal.contactEmail}`}>{legal.contactEmail}</a>. We may verify identity before acting. You may lodge a complaint with the CNIL in France or your local data-protection authority.</p>
+        <p>Requests can be sent to <a className="underline underline-offset-4" href={`mailto:${legal.contactEmail}`}>{legal.contactEmail}</a>. We may verify identity before acting. You may lodge a complaint with the Belgian Data Protection Authority or your competent local data-protection authority.</p>
       </LegalSection>
 
       <LegalSection title="Automated suggestions">

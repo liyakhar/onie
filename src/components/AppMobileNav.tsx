@@ -5,6 +5,7 @@ import {
   Landmark,
   LayoutDashboard,
   ListFilter,
+  Users,
 } from 'lucide-react'
 
 export function AppMobileNav({ locked = false }: { locked?: boolean }) {
@@ -30,6 +31,10 @@ export function AppMobileNav({ locked = false }: { locked?: boolean }) {
       <Link to="/app/accounts" className="app-mobile-nav__item" activeProps={{ className: 'app-mobile-nav__item is-active' }}>
         <Landmark aria-hidden="true" />
         <span>Accounts</span>
+      </Link>
+      <Link to="/app/household" className="app-mobile-nav__item" activeProps={{ className: 'app-mobile-nav__item is-active' }}>
+        <Users aria-hidden="true" />
+        <span>Household</span>
       </Link>
     </nav>
   )

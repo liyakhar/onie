@@ -23,6 +23,7 @@ export type FinanceCategory = (typeof FINANCE_CATEGORIES)[number]
 
 export type FinanceTransaction = {
   id: string
+  accountId?: string
   date: string
   merchant: string
   account: string
@@ -58,6 +59,17 @@ export type FinanceDashboardData = {
   insights: FinanceInsight[]
   summary: ReturnType<typeof getDemoFinanceSummary>
   syncStatus: BankSyncStatus
+  household?: {
+    currentMemberId: string
+    members: Array<{
+      id: string
+      userId: string
+      name: string
+      email: string
+      role: 'OWNER' | 'MEMBER'
+      householdShareBasisPoints: number
+    }>
+  }
 }
 
 export type BudgetCategory = {
@@ -74,6 +86,8 @@ export type FinancialAccount = {
   currency?: string
   institution: string
   lastSynced: string
+  ownership?: Array<{ memberId: string; shareBasisPoints: number }>
+  connectionStatus?: 'CONNECTED' | 'SYNCING' | 'NEEDS_RECONNECT' | 'FAILED' | 'DISABLED' | 'NOT_CONNECTED'
 }
 
 export type RecurringPayment = {

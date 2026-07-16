@@ -15,16 +15,17 @@ import {
 import { loadBankSyncState } from '#/server/bank-sync'
 import { getDb } from '#/server/db-access.server'
 import { getSessionUser } from '#/server/session.server'
-import { requireBillingUser } from '#/server/billing.server'
+import { requireFinanceHousehold } from '#/server/household-access.server'
 
 export const getFinanceDashboard = createServerFn({ method: 'GET' }).handler(async () => {
-  await requireBillingUser()
-  const devDashboard = await getDevFinanceDashboard()
-  if (devDashboard) return devDashboard
+  const context = await requireFinanceHousehold()
+  const household = await loadHouseholdMetadata(context.workspaceId, context.memberId)
+  const devDashboard = await getDevFinanceDashboard(context.workspaceId)
+  if (devDashboard) return attachDevHousehold(devDashboard, household)
 
   const syncState = await loadBankSyncState()
 
-  const planning = await loadFinancePlanningData(syncState.transactions)
+  const planning = await loadFinancePlanningData(syncState.transactions, context.workspaceId)
   const recurringPayments = planning.recurringPayments
   const transactions = markRecurringTransactions(syncState.transactions, recurringPayments)
   const summary = getFinanceSummary({
@@ -47,6 +48,7 @@ export const getFinanceDashboard = createServerFn({ method: 'GET' }).handler(asy
     recurringPayments,
     insights: buildStatusNotes(summary.reviewCount, syncState.accounts.length),
     summary,
+    household,
   } satisfies FinanceDashboardData
 })
 
@@ -59,8 +61,8 @@ export const getFinanceTransactions = createServerFn({ method: 'GET' })
     }) => data ?? {},
   )
   .handler(async ({ data }) => {
-    await requireBillingUser()
-    const devDashboard = await getDevFinanceDashboard()
+    const context = await requireFinanceHousehold()
+    const devDashboard = await getDevFinanceDashboard(context.workspaceId)
     if (devDashboard) {
       return {
         transactions: filterFinanceTransactions(devDashboard.transactions, data),
@@ -77,8 +79,8 @@ export const getFinanceTransactions = createServerFn({ method: 'GET' })
   })
 
 export const getFinanceBudget = createServerFn({ method: 'GET' }).handler(async () => {
-  await requireBillingUser()
-  const devDashboard = await getDevFinanceDashboard()
+  const context = await requireFinanceHousehold()
+  const devDashboard = await getDevFinanceDashboard(context.workspaceId)
   if (devDashboard) {
     return {
       month: devDashboard.month,
@@ -91,7 +93,7 @@ export const getFinanceBudget = createServerFn({ method: 'GET' }).handler(async 
   }
 
   const syncState = await loadBankSyncState()
-  const planning = await loadFinancePlanningData(syncState.transactions)
+  const planning = await loadFinancePlanningData(syncState.transactions, context.workspaceId)
   const recurringPayments = planning.recurringPayments
   const transactions = markRecurringTransactions(syncState.transactions, recurringPayments)
   const summary = getFinanceSummary({
@@ -113,12 +115,14 @@ export const getFinanceBudget = createServerFn({ method: 'GET' }).handler(async 
 })
 
 export const getFinanceAccounts = createServerFn({ method: 'GET' }).handler(async () => {
-  await requireBillingUser()
-  const devDashboard = await getDevFinanceDashboard()
+  const context = await requireFinanceHousehold()
+  const household = await loadHouseholdMetadata(context.workspaceId, context.memberId)
+  const devDashboard = await getDevFinanceDashboard(context.workspaceId)
   if (devDashboard) {
     return {
-      accounts: devDashboard.accounts,
+      accounts: attachDevHousehold(devDashboard, household).accounts,
       syncStatus: devDashboard.syncStatus,
+      household,
     }
   }
 
@@ -126,28 +130,29 @@ export const getFinanceAccounts = createServerFn({ method: 'GET' }).handler(asyn
   return {
     accounts: syncState.accounts,
     syncStatus: syncState.status,
+    household,
   }
 })
 
 export const getFinanceRecurringPayments = createServerFn({ method: 'GET' }).handler(async () => {
-  await requireBillingUser()
-  const devDashboard = await getDevFinanceDashboard()
+  const context = await requireFinanceHousehold()
+  const devDashboard = await getDevFinanceDashboard(context.workspaceId)
   if (devDashboard) {
     return { recurringPayments: devDashboard.recurringPayments, currency: devDashboard.accounts[0]?.currency || 'USD' }
   }
 
   const syncState = await loadBankSyncState()
-  const planning = await loadFinancePlanningData(syncState.transactions)
+  const planning = await loadFinancePlanningData(syncState.transactions, context.workspaceId)
   return { recurringPayments: planning.recurringPayments, currency: syncState.accounts[0]?.currency || 'USD' }
 })
 
 export const getFinanceInsights = createServerFn({ method: 'GET' }).handler(async () => {
-  await requireBillingUser()
-  const devDashboard = await getDevFinanceDashboard()
+  const context = await requireFinanceHousehold()
+  const devDashboard = await getDevFinanceDashboard(context.workspaceId)
   if (devDashboard) return { insights: devDashboard.insights }
 
   const syncState = await loadBankSyncState()
-  const planning = await loadFinancePlanningData(syncState.transactions)
+  const planning = await loadFinancePlanningData(syncState.transactions, context.workspaceId)
   const recurringPayments = planning.recurringPayments
   const transactions = markRecurringTransactions(syncState.transactions, recurringPayments)
   const summary = getFinanceSummary({
@@ -169,7 +174,8 @@ export const updateFinanceBudgetAllocation = createServerFn({ method: 'POST' })
     allocated: Number(data?.allocated ?? 0),
   }))
   .handler(async ({ data }) => {
-    const user = await requireBillingUser()
+    const context = await requireFinanceHousehold()
+    const user = context.user
     if (!FINANCE_CATEGORIES.includes(data.category) || !Number.isFinite(data.allocated) || data.allocated < 0) {
       throw new Error('Enter a valid monthly amount.')
     }
@@ -184,7 +190,7 @@ export const updateFinanceBudgetAllocation = createServerFn({ method: 'POST' })
     }
 
     const prisma = await getDb()
-    const workspace = await getOrCreatePlanningWorkspace(user.id)
+    const workspace = { id: context.workspaceId }
     const category = await prisma.transactionCategory.upsert({
       where: { workspaceId_name: { workspaceId: workspace.id, name: data.category } },
       create: { workspaceId: workspace.id, name: data.category, system: true },
@@ -222,7 +228,8 @@ export const updateFinanceRecurringPayment = createServerFn({ method: 'POST' })
     category: data?.category,
   }))
   .handler(async ({ data }) => {
-    const user = await requireBillingUser()
+    const context = await requireFinanceHousehold()
+    const user = context.user
     if (!data.merchant || !Number.isFinite(data.amount) || data.amount < 0 || !data.nextDate) {
       throw new Error('Enter a merchant, amount, and next date.')
     }
@@ -248,7 +255,7 @@ export const updateFinanceRecurringPayment = createServerFn({ method: 'POST' })
     }
 
     const prisma = await getDb()
-    const workspace = await getOrCreatePlanningWorkspace(user.id)
+    const workspace = await prisma.budgetWorkspace.findUniqueOrThrow({ where: { id: context.workspaceId } })
     const category = await prisma.transactionCategory.upsert({
       where: { workspaceId_name: { workspaceId: workspace.id, name: data.category } },
       create: { workspaceId: workspace.id, name: data.category, system: true },
@@ -284,7 +291,8 @@ export const updateFinanceTransactionCategory = createServerFn({ method: 'POST' 
     category: data?.category,
   }))
   .handler(async ({ data }) => {
-    const user = await requireBillingUser()
+    const context = await requireFinanceHousehold()
+    const user = context.user
     if (!data.transactionId || !FINANCE_CATEGORIES.includes(data.category)) {
       throw new Error('Choose a valid category.')
     }
@@ -301,7 +309,7 @@ export const updateFinanceTransactionCategory = createServerFn({ method: 'POST' 
     const transaction = await prisma.financeTransaction.findFirst({
       where: {
         id: data.transactionId,
-        workspace: { userId: user.id },
+        workspaceId: context.workspaceId,
       },
       include: { merchant: true },
     })
@@ -409,7 +417,7 @@ function buildMutableDevDashboard() {
   } satisfies FinanceDashboardData
 }
 
-async function getDevFinanceDashboard() {
+async function getDevFinanceDashboard(workspaceId: string) {
   if (process.env.NODE_ENV !== 'development') return null
 
   const user = await getSessionUser()
@@ -420,7 +428,7 @@ async function getDevFinanceDashboard() {
   const prisma = await getDb()
   const connectedAccounts = await prisma.financialAccount.count({
     where: {
-      workspace: { userId: user.id },
+      workspaceId,
       bankConnection: { status: 'CONNECTED' },
     },
   })
@@ -433,22 +441,10 @@ function isDevUser(email?: string | null) {
   return process.env.NODE_ENV === 'development' && email === 'dev@wollie.local'
 }
 
-async function getOrCreatePlanningWorkspace(userId: string) {
-  const prisma = await getDb()
-  const existing = await prisma.budgetWorkspace.findFirst({
-    where: { userId, demo: false },
-    orderBy: { createdAt: 'asc' },
-  })
-  if (existing) return existing
-  return prisma.budgetWorkspace.create({ data: { userId, name: 'Personal budget', demo: false } })
-}
-
-async function loadFinancePlanningData(transactions: FinanceTransaction[]) {
-  const user = await getSessionUser()
-  if (!user) return { budget: [] as BudgetCategory[], recurringPayments: [] as RecurringPayment[], rules: [] }
+async function loadFinancePlanningData(transactions: FinanceTransaction[], workspaceId: string) {
   const prisma = await getDb()
   const workspace = await prisma.budgetWorkspace.findFirst({
-    where: { userId: user.id, demo: false },
+    where: { id: workspaceId, demo: false },
     include: {
       budgetMonths: {
         where: { month: getCurrentMonthKey() },
@@ -502,6 +498,41 @@ async function loadFinancePlanningData(transactions: FinanceTransaction[]) {
   })
 
   return { budget, recurringPayments: [...confirmed, ...detected], rules: [] }
+}
+
+async function loadHouseholdMetadata(workspaceId: string, currentMemberId: string) {
+  const prisma = await getDb()
+  const members = await prisma.workspaceMember.findMany({
+    where: { workspaceId },
+    include: { user: { select: { id: true, name: true, email: true } } },
+    orderBy: { createdAt: 'asc' },
+  })
+  return {
+    currentMemberId,
+    members: members.map((member) => ({
+      id: member.id,
+      userId: member.userId,
+      name: member.user.name || member.user.email.split('@')[0],
+      email: member.user.email,
+      role: member.role,
+      householdShareBasisPoints: member.householdShareBasisPoints,
+    })),
+  }
+}
+
+function attachDevHousehold(
+  dashboard: FinanceDashboardData,
+  household: NonNullable<FinanceDashboardData['household']>,
+): FinanceDashboardData {
+  return {
+    ...dashboard,
+    household,
+    accounts: dashboard.accounts.map((account) => ({
+      ...account,
+      ownership: [{ memberId: household.currentMemberId, shareBasisPoints: 10_000 }],
+      connectionStatus: 'CONNECTED',
+    })),
+  }
 }
 
 function normalizeMerchant(value: string) {

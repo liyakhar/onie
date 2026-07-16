@@ -5,11 +5,17 @@ type AccountEmail = {
   html: string
 }
 
+export function isTransactionalEmailConfigured(
+  env: { RESEND_API_KEY?: string; EMAIL_FROM?: string } = process.env,
+) {
+  return Boolean(env.RESEND_API_KEY?.trim() && env.EMAIL_FROM?.trim())
+}
+
 export async function sendAccountEmail(message: AccountEmail) {
   const apiKey = process.env.RESEND_API_KEY?.trim()
   const from = process.env.EMAIL_FROM?.trim()
 
-  if (!apiKey || !from) {
+  if (!isTransactionalEmailConfigured()) {
     if (process.env.NODE_ENV === 'development') {
       console.info(`[wollie] Email not delivered in development: ${message.subject} -> ${message.to}`)
       return

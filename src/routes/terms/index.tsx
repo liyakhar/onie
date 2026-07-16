@@ -22,7 +22,7 @@ function TermsPage() {
       eyebrow="Legal"
       title="Terms of Service"
       summary="These terms apply when you access or use Wollie."
-      updated="July 14, 2026"
+      updated="July 15, 2026"
     >
       <LegalSection title="Using Wollie">
         <p>These terms form a contract between you and {legal.businessName}. You must be at least 18 years old, provide accurate account information, keep your sign-in secure, and use Wollie only for lawful personal purposes.</p>
@@ -73,7 +73,7 @@ function TermsPage() {
       </LegalSection>
 
       <LegalSection title="Law, complaints, and mediation">
-        <p>French law applies, without depriving consumers of mandatory protections available in their country of residence. Courts with jurisdiction under applicable consumer law may hear disputes.</p>
+        <p>Belgian law applies, without depriving consumers of mandatory protections available in their country of residence. Courts with jurisdiction under applicable consumer law may hear disputes.</p>
         <p>Contact us first at <a className="underline underline-offset-4" href={`mailto:${legal.contactEmail}`}>{legal.contactEmail}</a>. If a consumer complaint is not resolved, you may contact {legal.mediatorName}: <a className="underline underline-offset-4" href={legal.mediatorUrl} rel="noreferrer">{legal.mediatorUrl}</a>.</p>
       </LegalSection>
 

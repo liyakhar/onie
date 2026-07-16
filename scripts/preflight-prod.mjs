@@ -20,6 +20,7 @@ const requiredEnv = [
   'LEGAL_BUSINESS_ADDRESS',
   'LEGAL_REGISTRATION_NUMBER',
   'LEGAL_CONTACT_EMAIL',
+  'LEGAL_CONTACT_PHONE',
   'LEGAL_PUBLICATION_DIRECTOR',
   'LEGAL_HOST_NAME',
   'LEGAL_HOST_ADDRESS',
@@ -28,6 +29,8 @@ const requiredEnv = [
   'PUBLIC_DOMAIN_VERIFIED',
   'LEGAL_LAUNCH_FACTS_CONFIRMED',
   'TAX_LAUNCH_POSITION_CONFIRMED',
+  'CLOUDFLARE_PAGES_PROJECT',
+  'CLOUDFLARE_HYPERDRIVE_ID',
 ]
 
 const optionalEnv = [
@@ -107,6 +110,12 @@ if (hasGoogleClientId !== hasGoogleClientSecret) {
 
 if (!value('STRIPE_SECRET_KEY').startsWith('sk_live_')) {
   failures.push('STRIPE_SECRET_KEY must be a live-mode key for paid production launch')
+}
+if (value('CLOUDFLARE_PAGES_PROJECT') !== 'wollie') {
+  failures.push('CLOUDFLARE_PAGES_PROJECT must be the production "wollie" project')
+}
+if (!value('CLOUDFLARE_HYPERDRIVE_ID')) {
+  failures.push('CLOUDFLARE_HYPERDRIVE_ID must explicitly select the production database binding')
 }
 if (!value('STRIPE_WEBHOOK_SECRET').startsWith('whsec_')) {
   failures.push('STRIPE_WEBHOOK_SECRET must be a Stripe webhook signing secret')

@@ -1,12 +1,26 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { buildEnableBankingSnapshot, createProviderJwt } from './enable-banking-sync'
+import {
+  assertEnableBankingAccessAllowed,
+  buildEnableBankingSnapshot,
+  createProviderJwt,
+} from './enable-banking-sync'
 
 const originalApplicationId = process.env.ENABLE_BANKING_APPLICATION_ID
 const originalPrivateKey = process.env.ENABLE_BANKING_PRIVATE_KEY
+const originalNodeEnv = process.env.NODE_ENV
+const originalLiveSync = process.env.ENABLE_LIVE_BANK_SYNC
+const originalEnvironment = process.env.ENABLE_BANKING_ENVIRONMENT
+const originalPublicAccess = process.env.ENABLE_BANKING_PUBLIC_ACCESS_APPROVED
+const originalStagingPassword = process.env.STAGING_ACCESS_PASSWORD
 
 afterEach(() => {
   restoreEnv('ENABLE_BANKING_APPLICATION_ID', originalApplicationId)
   restoreEnv('ENABLE_BANKING_PRIVATE_KEY', originalPrivateKey)
+  restoreEnv('NODE_ENV', originalNodeEnv)
+  restoreEnv('ENABLE_LIVE_BANK_SYNC', originalLiveSync)
+  restoreEnv('ENABLE_BANKING_ENVIRONMENT', originalEnvironment)
+  restoreEnv('ENABLE_BANKING_PUBLIC_ACCESS_APPROVED', originalPublicAccess)
+  restoreEnv('STAGING_ACCESS_PASSWORD', originalStagingPassword)
 })
 
 describe('Enable Banking sync helpers', () => {
@@ -104,6 +118,28 @@ describe('Enable Banking sync helpers', () => {
       exp: 1_800_000_300,
     }))
     expect(verified).toBe(true)
+  })
+
+  it('allows sandbox bank sync in production only behind private staging access', () => {
+    process.env.NODE_ENV = 'production'
+    process.env.ENABLE_LIVE_BANK_SYNC = 'true'
+    process.env.ENABLE_BANKING_ENVIRONMENT = 'sandbox'
+    delete process.env.STAGING_ACCESS_PASSWORD
+
+    expect(() => assertEnableBankingAccessAllowed()).toThrow('private staging')
+    process.env.STAGING_ACCESS_PASSWORD = 'private-staging-password'
+    expect(() => assertEnableBankingAccessAllowed()).not.toThrow()
+  })
+
+  it('blocks public bank sync until unrestricted provider access is approved', () => {
+    process.env.NODE_ENV = 'production'
+    process.env.ENABLE_LIVE_BANK_SYNC = 'true'
+    process.env.ENABLE_BANKING_ENVIRONMENT = 'production'
+    process.env.ENABLE_BANKING_PUBLIC_ACCESS_APPROVED = 'false'
+
+    expect(() => assertEnableBankingAccessAllowed()).toThrow('not approved')
+    process.env.ENABLE_BANKING_PUBLIC_ACCESS_APPROVED = 'true'
+    expect(() => assertEnableBankingAccessAllowed()).not.toThrow()
   })
 })
 

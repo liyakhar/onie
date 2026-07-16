@@ -9,9 +9,11 @@ import tailwindcss from '@tailwindcss/vite'
 import { nitro } from 'nitro/vite'
 
 const cloudflarePages = process.env.NITRO_PRESET === 'cloudflare_pages'
+const cloudflareProjectName = process.env.CLOUDFLARE_PAGES_PROJECT || 'wollie-local-build'
+const cloudflareHyperdriveId = process.env.CLOUDFLARE_HYPERDRIVE_ID?.trim()
 
 const securityHeaders = {
-  'content-security-policy': "default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self' data:; form-action 'self'; frame-ancestors 'none'; img-src 'self' data:; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; upgrade-insecure-requests",
+  'content-security-policy': "default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self' data:; form-action 'self'; frame-ancestors 'none'; img-src 'self' data: https://enablebanking.com; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; upgrade-insecure-requests",
   'permissions-policy': 'camera=(), geolocation=(), microphone=()',
   'referrer-policy': 'strict-origin-when-cross-origin',
   'strict-transport-security': 'max-age=31536000; includeSubDomains',
@@ -69,13 +71,17 @@ const config = defineConfig({
               deployConfig: true,
               nodeCompat: true,
               wrangler: {
-                name: 'wollie',
-                hyperdrive: [
-                  {
-                    binding: 'HYPERDRIVE',
-                    id: 'fdf126ff544b473c87540b89bacedca7',
-                  },
-                ],
+                name: cloudflareProjectName,
+                ...(cloudflareHyperdriveId
+                  ? {
+                      hyperdrive: [
+                        {
+                          binding: 'HYPERDRIVE',
+                          id: cloudflareHyperdriveId,
+                        },
+                      ],
+                    }
+                  : {}),
               },
             },
           }

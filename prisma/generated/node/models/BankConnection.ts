@@ -223,6 +223,7 @@ export type BankConnectionWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"BankConnection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BankConnection"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  workspace?: Prisma.XOR<Prisma.BudgetWorkspaceScalarRelationFilter, Prisma.BudgetWorkspaceWhereInput>
   accounts?: Prisma.FinancialAccountListRelationFilter
   syncRuns?: Prisma.SyncRunListRelationFilter
 }
@@ -239,6 +240,7 @@ export type BankConnectionOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  workspace?: Prisma.BudgetWorkspaceOrderByWithRelationInput
   accounts?: Prisma.FinancialAccountOrderByRelationAggregateInput
   syncRuns?: Prisma.SyncRunOrderByRelationAggregateInput
 }
@@ -259,6 +261,7 @@ export type BankConnectionWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"BankConnection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BankConnection"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  workspace?: Prisma.XOR<Prisma.BudgetWorkspaceScalarRelationFilter, Prisma.BudgetWorkspaceWhereInput>
   accounts?: Prisma.FinancialAccountListRelationFilter
   syncRuns?: Prisma.SyncRunListRelationFilter
 }, "id" | "provider_providerItemId">
@@ -297,7 +300,6 @@ export type BankConnectionScalarWhereWithAggregatesInput = {
 
 export type BankConnectionCreateInput = {
   id?: string
-  workspaceId: string
   provider: $Enums.FinanceConnectionProvider
   providerItemId?: string | null
   tokenRef?: string | null
@@ -306,6 +308,7 @@ export type BankConnectionCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutBankConnectionsInput
+  workspace: Prisma.BudgetWorkspaceCreateNestedOneWithoutBankConnectionsInput
   accounts?: Prisma.FinancialAccountCreateNestedManyWithoutBankConnectionInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutBankConnectionInput
 }
@@ -327,7 +330,6 @@ export type BankConnectionUncheckedCreateInput = {
 
 export type BankConnectionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumFinanceConnectionProviderFieldUpdateOperationsInput | $Enums.FinanceConnectionProvider
   providerItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -336,6 +338,7 @@ export type BankConnectionUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutBankConnectionsNestedInput
+  workspace?: Prisma.BudgetWorkspaceUpdateOneRequiredWithoutBankConnectionsNestedInput
   accounts?: Prisma.FinancialAccountUpdateManyWithoutBankConnectionNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutBankConnectionNestedInput
 }
@@ -370,7 +373,6 @@ export type BankConnectionCreateManyInput = {
 
 export type BankConnectionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumFinanceConnectionProviderFieldUpdateOperationsInput | $Enums.FinanceConnectionProvider
   providerItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -494,6 +496,48 @@ export type BankConnectionUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.BankConnectionScalarWhereInput | Prisma.BankConnectionScalarWhereInput[]
 }
 
+export type BankConnectionCreateNestedManyWithoutWorkspaceInput = {
+  create?: Prisma.XOR<Prisma.BankConnectionCreateWithoutWorkspaceInput, Prisma.BankConnectionUncheckedCreateWithoutWorkspaceInput> | Prisma.BankConnectionCreateWithoutWorkspaceInput[] | Prisma.BankConnectionUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.BankConnectionCreateOrConnectWithoutWorkspaceInput | Prisma.BankConnectionCreateOrConnectWithoutWorkspaceInput[]
+  createMany?: Prisma.BankConnectionCreateManyWorkspaceInputEnvelope
+  connect?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+}
+
+export type BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput = {
+  create?: Prisma.XOR<Prisma.BankConnectionCreateWithoutWorkspaceInput, Prisma.BankConnectionUncheckedCreateWithoutWorkspaceInput> | Prisma.BankConnectionCreateWithoutWorkspaceInput[] | Prisma.BankConnectionUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.BankConnectionCreateOrConnectWithoutWorkspaceInput | Prisma.BankConnectionCreateOrConnectWithoutWorkspaceInput[]
+  createMany?: Prisma.BankConnectionCreateManyWorkspaceInputEnvelope
+  connect?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+}
+
+export type BankConnectionUpdateManyWithoutWorkspaceNestedInput = {
+  create?: Prisma.XOR<Prisma.BankConnectionCreateWithoutWorkspaceInput, Prisma.BankConnectionUncheckedCreateWithoutWorkspaceInput> | Prisma.BankConnectionCreateWithoutWorkspaceInput[] | Prisma.BankConnectionUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.BankConnectionCreateOrConnectWithoutWorkspaceInput | Prisma.BankConnectionCreateOrConnectWithoutWorkspaceInput[]
+  upsert?: Prisma.BankConnectionUpsertWithWhereUniqueWithoutWorkspaceInput | Prisma.BankConnectionUpsertWithWhereUniqueWithoutWorkspaceInput[]
+  createMany?: Prisma.BankConnectionCreateManyWorkspaceInputEnvelope
+  set?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  disconnect?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  delete?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  connect?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  update?: Prisma.BankConnectionUpdateWithWhereUniqueWithoutWorkspaceInput | Prisma.BankConnectionUpdateWithWhereUniqueWithoutWorkspaceInput[]
+  updateMany?: Prisma.BankConnectionUpdateManyWithWhereWithoutWorkspaceInput | Prisma.BankConnectionUpdateManyWithWhereWithoutWorkspaceInput[]
+  deleteMany?: Prisma.BankConnectionScalarWhereInput | Prisma.BankConnectionScalarWhereInput[]
+}
+
+export type BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput = {
+  create?: Prisma.XOR<Prisma.BankConnectionCreateWithoutWorkspaceInput, Prisma.BankConnectionUncheckedCreateWithoutWorkspaceInput> | Prisma.BankConnectionCreateWithoutWorkspaceInput[] | Prisma.BankConnectionUncheckedCreateWithoutWorkspaceInput[]
+  connectOrCreate?: Prisma.BankConnectionCreateOrConnectWithoutWorkspaceInput | Prisma.BankConnectionCreateOrConnectWithoutWorkspaceInput[]
+  upsert?: Prisma.BankConnectionUpsertWithWhereUniqueWithoutWorkspaceInput | Prisma.BankConnectionUpsertWithWhereUniqueWithoutWorkspaceInput[]
+  createMany?: Prisma.BankConnectionCreateManyWorkspaceInputEnvelope
+  set?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  disconnect?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  delete?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  connect?: Prisma.BankConnectionWhereUniqueInput | Prisma.BankConnectionWhereUniqueInput[]
+  update?: Prisma.BankConnectionUpdateWithWhereUniqueWithoutWorkspaceInput | Prisma.BankConnectionUpdateWithWhereUniqueWithoutWorkspaceInput[]
+  updateMany?: Prisma.BankConnectionUpdateManyWithWhereWithoutWorkspaceInput | Prisma.BankConnectionUpdateManyWithWhereWithoutWorkspaceInput[]
+  deleteMany?: Prisma.BankConnectionScalarWhereInput | Prisma.BankConnectionScalarWhereInput[]
+}
+
 export type EnumFinanceConnectionProviderFieldUpdateOperationsInput = {
   set?: $Enums.FinanceConnectionProvider
 }
@@ -536,7 +580,6 @@ export type BankConnectionUpdateOneWithoutSyncRunsNestedInput = {
 
 export type BankConnectionCreateWithoutUserInput = {
   id?: string
-  workspaceId: string
   provider: $Enums.FinanceConnectionProvider
   providerItemId?: string | null
   tokenRef?: string | null
@@ -544,6 +587,7 @@ export type BankConnectionCreateWithoutUserInput = {
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  workspace: Prisma.BudgetWorkspaceCreateNestedOneWithoutBankConnectionsInput
   accounts?: Prisma.FinancialAccountCreateNestedManyWithoutBankConnectionInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutBankConnectionInput
 }
@@ -604,9 +648,8 @@ export type BankConnectionScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"BankConnection"> | Date | string
 }
 
-export type BankConnectionCreateWithoutAccountsInput = {
+export type BankConnectionCreateWithoutWorkspaceInput = {
   id?: string
-  workspaceId: string
   provider: $Enums.FinanceConnectionProvider
   providerItemId?: string | null
   tokenRef?: string | null
@@ -615,6 +658,61 @@ export type BankConnectionCreateWithoutAccountsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutBankConnectionsInput
+  accounts?: Prisma.FinancialAccountCreateNestedManyWithoutBankConnectionInput
+  syncRuns?: Prisma.SyncRunCreateNestedManyWithoutBankConnectionInput
+}
+
+export type BankConnectionUncheckedCreateWithoutWorkspaceInput = {
+  id?: string
+  userId: string
+  provider: $Enums.FinanceConnectionProvider
+  providerItemId?: string | null
+  tokenRef?: string | null
+  status?: $Enums.FinanceConnectionStatus
+  lastSyncedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.FinancialAccountUncheckedCreateNestedManyWithoutBankConnectionInput
+  syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutBankConnectionInput
+}
+
+export type BankConnectionCreateOrConnectWithoutWorkspaceInput = {
+  where: Prisma.BankConnectionWhereUniqueInput
+  create: Prisma.XOR<Prisma.BankConnectionCreateWithoutWorkspaceInput, Prisma.BankConnectionUncheckedCreateWithoutWorkspaceInput>
+}
+
+export type BankConnectionCreateManyWorkspaceInputEnvelope = {
+  data: Prisma.BankConnectionCreateManyWorkspaceInput | Prisma.BankConnectionCreateManyWorkspaceInput[]
+  skipDuplicates?: boolean
+}
+
+export type BankConnectionUpsertWithWhereUniqueWithoutWorkspaceInput = {
+  where: Prisma.BankConnectionWhereUniqueInput
+  update: Prisma.XOR<Prisma.BankConnectionUpdateWithoutWorkspaceInput, Prisma.BankConnectionUncheckedUpdateWithoutWorkspaceInput>
+  create: Prisma.XOR<Prisma.BankConnectionCreateWithoutWorkspaceInput, Prisma.BankConnectionUncheckedCreateWithoutWorkspaceInput>
+}
+
+export type BankConnectionUpdateWithWhereUniqueWithoutWorkspaceInput = {
+  where: Prisma.BankConnectionWhereUniqueInput
+  data: Prisma.XOR<Prisma.BankConnectionUpdateWithoutWorkspaceInput, Prisma.BankConnectionUncheckedUpdateWithoutWorkspaceInput>
+}
+
+export type BankConnectionUpdateManyWithWhereWithoutWorkspaceInput = {
+  where: Prisma.BankConnectionScalarWhereInput
+  data: Prisma.XOR<Prisma.BankConnectionUpdateManyMutationInput, Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceInput>
+}
+
+export type BankConnectionCreateWithoutAccountsInput = {
+  id?: string
+  provider: $Enums.FinanceConnectionProvider
+  providerItemId?: string | null
+  tokenRef?: string | null
+  status?: $Enums.FinanceConnectionStatus
+  lastSyncedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutBankConnectionsInput
+  workspace: Prisma.BudgetWorkspaceCreateNestedOneWithoutBankConnectionsInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutBankConnectionInput
 }
 
@@ -650,7 +748,6 @@ export type BankConnectionUpdateToOneWithWhereWithoutAccountsInput = {
 
 export type BankConnectionUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumFinanceConnectionProviderFieldUpdateOperationsInput | $Enums.FinanceConnectionProvider
   providerItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -659,6 +756,7 @@ export type BankConnectionUpdateWithoutAccountsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutBankConnectionsNestedInput
+  workspace?: Prisma.BudgetWorkspaceUpdateOneRequiredWithoutBankConnectionsNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutBankConnectionNestedInput
 }
 
@@ -678,7 +776,6 @@ export type BankConnectionUncheckedUpdateWithoutAccountsInput = {
 
 export type BankConnectionCreateWithoutSyncRunsInput = {
   id?: string
-  workspaceId: string
   provider: $Enums.FinanceConnectionProvider
   providerItemId?: string | null
   tokenRef?: string | null
@@ -687,6 +784,7 @@ export type BankConnectionCreateWithoutSyncRunsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutBankConnectionsInput
+  workspace: Prisma.BudgetWorkspaceCreateNestedOneWithoutBankConnectionsInput
   accounts?: Prisma.FinancialAccountCreateNestedManyWithoutBankConnectionInput
 }
 
@@ -722,7 +820,6 @@ export type BankConnectionUpdateToOneWithWhereWithoutSyncRunsInput = {
 
 export type BankConnectionUpdateWithoutSyncRunsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumFinanceConnectionProviderFieldUpdateOperationsInput | $Enums.FinanceConnectionProvider
   providerItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -731,6 +828,7 @@ export type BankConnectionUpdateWithoutSyncRunsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutBankConnectionsNestedInput
+  workspace?: Prisma.BudgetWorkspaceUpdateOneRequiredWithoutBankConnectionsNestedInput
   accounts?: Prisma.FinancialAccountUpdateManyWithoutBankConnectionNestedInput
 }
 
@@ -762,7 +860,6 @@ export type BankConnectionCreateManyUserInput = {
 
 export type BankConnectionUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumFinanceConnectionProviderFieldUpdateOperationsInput | $Enums.FinanceConnectionProvider
   providerItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -770,6 +867,7 @@ export type BankConnectionUpdateWithoutUserInput = {
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workspace?: Prisma.BudgetWorkspaceUpdateOneRequiredWithoutBankConnectionsNestedInput
   accounts?: Prisma.FinancialAccountUpdateManyWithoutBankConnectionNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutBankConnectionNestedInput
 }
@@ -791,6 +889,58 @@ export type BankConnectionUncheckedUpdateWithoutUserInput = {
 export type BankConnectionUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumFinanceConnectionProviderFieldUpdateOperationsInput | $Enums.FinanceConnectionProvider
+  providerItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFinanceConnectionStatusFieldUpdateOperationsInput | $Enums.FinanceConnectionStatus
+  lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type BankConnectionCreateManyWorkspaceInput = {
+  id?: string
+  userId: string
+  provider: $Enums.FinanceConnectionProvider
+  providerItemId?: string | null
+  tokenRef?: string | null
+  status?: $Enums.FinanceConnectionStatus
+  lastSyncedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type BankConnectionUpdateWithoutWorkspaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumFinanceConnectionProviderFieldUpdateOperationsInput | $Enums.FinanceConnectionProvider
+  providerItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFinanceConnectionStatusFieldUpdateOperationsInput | $Enums.FinanceConnectionStatus
+  lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutBankConnectionsNestedInput
+  accounts?: Prisma.FinancialAccountUpdateManyWithoutBankConnectionNestedInput
+  syncRuns?: Prisma.SyncRunUpdateManyWithoutBankConnectionNestedInput
+}
+
+export type BankConnectionUncheckedUpdateWithoutWorkspaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumFinanceConnectionProviderFieldUpdateOperationsInput | $Enums.FinanceConnectionProvider
+  providerItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFinanceConnectionStatusFieldUpdateOperationsInput | $Enums.FinanceConnectionStatus
+  lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.FinancialAccountUncheckedUpdateManyWithoutBankConnectionNestedInput
+  syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutBankConnectionNestedInput
+}
+
+export type BankConnectionUncheckedUpdateManyWithoutWorkspaceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumFinanceConnectionProviderFieldUpdateOperationsInput | $Enums.FinanceConnectionProvider
   providerItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -852,6 +1002,7 @@ export type BankConnectionSelect<ExtArgs extends runtime.Types.Extensions.Intern
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  workspace?: boolean | Prisma.BudgetWorkspaceDefaultArgs<ExtArgs>
   accounts?: boolean | Prisma.BankConnection$accountsArgs<ExtArgs>
   syncRuns?: boolean | Prisma.BankConnection$syncRunsArgs<ExtArgs>
   _count?: boolean | Prisma.BankConnectionCountOutputTypeDefaultArgs<ExtArgs>
@@ -869,6 +1020,7 @@ export type BankConnectionSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  workspace?: boolean | Prisma.BudgetWorkspaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["bankConnection"]>
 
 export type BankConnectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -883,6 +1035,7 @@ export type BankConnectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  workspace?: boolean | Prisma.BudgetWorkspaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["bankConnection"]>
 
 export type BankConnectionSelectScalar = {
@@ -901,21 +1054,25 @@ export type BankConnectionSelectScalar = {
 export type BankConnectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "workspaceId" | "provider" | "providerItemId" | "tokenRef" | "status" | "lastSyncedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["bankConnection"]>
 export type BankConnectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  workspace?: boolean | Prisma.BudgetWorkspaceDefaultArgs<ExtArgs>
   accounts?: boolean | Prisma.BankConnection$accountsArgs<ExtArgs>
   syncRuns?: boolean | Prisma.BankConnection$syncRunsArgs<ExtArgs>
   _count?: boolean | Prisma.BankConnectionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BankConnectionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  workspace?: boolean | Prisma.BudgetWorkspaceDefaultArgs<ExtArgs>
 }
 export type BankConnectionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  workspace?: boolean | Prisma.BudgetWorkspaceDefaultArgs<ExtArgs>
 }
 
 export type $BankConnectionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "BankConnection"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    workspace: Prisma.$BudgetWorkspacePayload<ExtArgs>
     accounts: Prisma.$FinancialAccountPayload<ExtArgs>[]
     syncRuns: Prisma.$SyncRunPayload<ExtArgs>[]
   }
@@ -1325,6 +1482,7 @@ readonly fields: BankConnectionFieldRefs;
 export interface Prisma__BankConnectionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  workspace<T extends Prisma.BudgetWorkspaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspaceDefaultArgs<ExtArgs>>): Prisma.Prisma__BudgetWorkspaceClient<runtime.Types.Result.GetResult<Prisma.$BudgetWorkspacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   accounts<T extends Prisma.BankConnection$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BankConnection$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinancialAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   syncRuns<T extends Prisma.BankConnection$syncRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BankConnection$syncRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SyncRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**

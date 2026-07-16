@@ -1,8 +1,10 @@
 import { betterAuth } from 'better-auth'
+import { APIError } from 'better-auth/api'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { tanstackStartCookies } from 'better-auth/tanstack-start'
 import { getRequest } from '@tanstack/react-start/server'
 import { getPrisma } from '#/db.server'
+import { PRIVACY_VERSION, TERMS_VERSION } from '#/lib/legal-versions'
 import { accountActionEmail, sendAccountEmail } from '#/server/email.server'
 
 function slugify(value: string) {
@@ -109,6 +111,25 @@ function createAuth() {
     databaseHooks: {
       user: {
         create: {
+          before: async (user) => {
+            if (
+              !user.termsAcceptedAt ||
+              user.termsVersion !== TERMS_VERSION ||
+              user.privacyVersion !== PRIVACY_VERSION
+            ) {
+              throw new APIError('BAD_REQUEST', {
+                message: 'Accept the current Terms and Privacy Notice to create an account.',
+              })
+            }
+
+            return {
+              data: {
+                termsAcceptedAt: new Date(),
+                termsVersion: TERMS_VERSION,
+                privacyVersion: PRIVACY_VERSION,
+              },
+            }
+          },
           after: async (user) => {
             const prisma = getPrisma()
             const base = user.name || user.email.split('@')[0]

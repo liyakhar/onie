@@ -37,6 +37,7 @@ import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
 import { Route as UUsernameRouteImport } from './routes/u/$username'
 import { Route as PPostIdRouteImport } from './routes/p/$postId'
+import { Route as InviteTokenRouteImport } from './routes/invite/$token'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoPrismaRouteImport } from './routes/demo/prisma'
 import { Route as DemoBetterAuthRouteImport } from './routes/demo/better-auth'
@@ -45,9 +46,11 @@ import { Route as BillingSuccessRouteImport } from './routes/billing/success'
 import { Route as AppTransactionsRouteImport } from './routes/app/transactions'
 import { Route as AppRecurringRouteImport } from './routes/app/recurring'
 import { Route as AppInsightsRouteImport } from './routes/app/insights'
+import { Route as AppHouseholdRouteImport } from './routes/app/household'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
 import { Route as AppBudgetsRouteImport } from './routes/app/budgets'
 import { Route as AppAccountsRouteImport } from './routes/app/accounts'
+import { Route as AppReportsHouseholdRouteImport } from './routes/app/reports/household'
 import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe/webhook'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as PPostIdEditRouteRouteImport } from './routes/p/$postId/edit/route'
@@ -193,6 +196,11 @@ const PPostIdRoute = PPostIdRouteImport.update({
   path: '/$postId',
   getParentRoute: () => PRouteRoute,
 } as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
   id: '/demo/tanstack-query',
   path: '/demo/tanstack-query',
@@ -233,6 +241,11 @@ const AppInsightsRoute = AppInsightsRouteImport.update({
   path: '/insights',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppHouseholdRoute = AppHouseholdRouteImport.update({
+  id: '/household',
+  path: '/household',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppExploreRoute = AppExploreRouteImport.update({
   id: '/explore',
   path: '/explore',
@@ -246,6 +259,11 @@ const AppBudgetsRoute = AppBudgetsRouteImport.update({
 const AppAccountsRoute = AppAccountsRouteImport.update({
   id: '/accounts',
   path: '/accounts',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppReportsHouseholdRoute = AppReportsHouseholdRouteImport.update({
+  id: '/reports/household',
+  path: '/reports/household',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
@@ -290,6 +308,7 @@ export interface FileRoutesByFullPath {
   '/app/accounts': typeof AppAccountsRoute
   '/app/budgets': typeof AppBudgetsRoute
   '/app/explore': typeof AppExploreRoute
+  '/app/household': typeof AppHouseholdRoute
   '/app/insights': typeof AppInsightsRoute
   '/app/recurring': typeof AppRecurringRoute
   '/app/transactions': typeof AppTransactionsRoute
@@ -298,6 +317,7 @@ export interface FileRoutesByFullPath {
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/prisma': typeof DemoPrismaRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/invite/$token': typeof InviteTokenRoute
   '/p/$postId': typeof PPostIdRouteWithChildren
   '/u/$username': typeof UUsernameRoute
   '/about/': typeof AboutIndexRoute
@@ -312,6 +332,7 @@ export interface FileRoutesByFullPath {
   '/p/$postId/edit': typeof PPostIdEditRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
+  '/app/reports/household': typeof AppReportsHouseholdRoute
   '/p/$postId/edit/': typeof PPostIdEditIndexRoute
 }
 export interface FileRoutesByTo {
@@ -327,6 +348,7 @@ export interface FileRoutesByTo {
   '/app/accounts': typeof AppAccountsRoute
   '/app/budgets': typeof AppBudgetsRoute
   '/app/explore': typeof AppExploreRoute
+  '/app/household': typeof AppHouseholdRoute
   '/app/insights': typeof AppInsightsRoute
   '/app/recurring': typeof AppRecurringRoute
   '/app/transactions': typeof AppTransactionsRoute
@@ -335,6 +357,7 @@ export interface FileRoutesByTo {
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/prisma': typeof DemoPrismaRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/invite/$token': typeof InviteTokenRoute
   '/p/$postId': typeof PPostIdRouteWithChildren
   '/u/$username': typeof UUsernameRoute
   '/about': typeof AboutIndexRoute
@@ -348,6 +371,7 @@ export interface FileRoutesByTo {
   '/welcome': typeof WelcomeIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
+  '/app/reports/household': typeof AppReportsHouseholdRoute
   '/p/$postId/edit': typeof PPostIdEditIndexRoute
 }
 export interface FileRoutesById {
@@ -372,6 +396,7 @@ export interface FileRoutesById {
   '/app/accounts': typeof AppAccountsRoute
   '/app/budgets': typeof AppBudgetsRoute
   '/app/explore': typeof AppExploreRoute
+  '/app/household': typeof AppHouseholdRoute
   '/app/insights': typeof AppInsightsRoute
   '/app/recurring': typeof AppRecurringRoute
   '/app/transactions': typeof AppTransactionsRoute
@@ -380,6 +405,7 @@ export interface FileRoutesById {
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/prisma': typeof DemoPrismaRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/invite/$token': typeof InviteTokenRoute
   '/p/$postId': typeof PPostIdRouteWithChildren
   '/u/$username': typeof UUsernameRoute
   '/about/': typeof AboutIndexRoute
@@ -394,6 +420,7 @@ export interface FileRoutesById {
   '/p/$postId/edit': typeof PPostIdEditRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
+  '/app/reports/household': typeof AppReportsHouseholdRoute
   '/p/$postId/edit/': typeof PPostIdEditIndexRoute
 }
 export interface FileRouteTypes {
@@ -419,6 +446,7 @@ export interface FileRouteTypes {
     | '/app/accounts'
     | '/app/budgets'
     | '/app/explore'
+    | '/app/household'
     | '/app/insights'
     | '/app/recurring'
     | '/app/transactions'
@@ -427,6 +455,7 @@ export interface FileRouteTypes {
     | '/demo/better-auth'
     | '/demo/prisma'
     | '/demo/tanstack-query'
+    | '/invite/$token'
     | '/p/$postId'
     | '/u/$username'
     | '/about/'
@@ -441,6 +470,7 @@ export interface FileRouteTypes {
     | '/p/$postId/edit'
     | '/api/auth/$'
     | '/api/stripe/webhook'
+    | '/app/reports/household'
     | '/p/$postId/edit/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -456,6 +486,7 @@ export interface FileRouteTypes {
     | '/app/accounts'
     | '/app/budgets'
     | '/app/explore'
+    | '/app/household'
     | '/app/insights'
     | '/app/recurring'
     | '/app/transactions'
@@ -464,6 +495,7 @@ export interface FileRouteTypes {
     | '/demo/better-auth'
     | '/demo/prisma'
     | '/demo/tanstack-query'
+    | '/invite/$token'
     | '/p/$postId'
     | '/u/$username'
     | '/about'
@@ -477,6 +509,7 @@ export interface FileRouteTypes {
     | '/welcome'
     | '/api/auth/$'
     | '/api/stripe/webhook'
+    | '/app/reports/household'
     | '/p/$postId/edit'
   id:
     | '__root__'
@@ -500,6 +533,7 @@ export interface FileRouteTypes {
     | '/app/accounts'
     | '/app/budgets'
     | '/app/explore'
+    | '/app/household'
     | '/app/insights'
     | '/app/recurring'
     | '/app/transactions'
@@ -508,6 +542,7 @@ export interface FileRouteTypes {
     | '/demo/better-auth'
     | '/demo/prisma'
     | '/demo/tanstack-query'
+    | '/invite/$token'
     | '/p/$postId'
     | '/u/$username'
     | '/about/'
@@ -522,6 +557,7 @@ export interface FileRouteTypes {
     | '/p/$postId/edit'
     | '/api/auth/$'
     | '/api/stripe/webhook'
+    | '/app/reports/household'
     | '/p/$postId/edit/'
   fileRoutesById: FileRoutesById
 }
@@ -548,6 +584,7 @@ export interface RootRouteChildren {
   DemoBetterAuthRoute: typeof DemoBetterAuthRoute
   DemoPrismaRoute: typeof DemoPrismaRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
+  InviteTokenRoute: typeof InviteTokenRoute
   BlogIndexRoute: typeof BlogIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
@@ -751,6 +788,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PPostIdRouteImport
       parentRoute: typeof PRouteRoute
     }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/demo/tanstack-query': {
       id: '/demo/tanstack-query'
       path: '/demo/tanstack-query'
@@ -807,6 +851,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInsightsRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/household': {
+      id: '/app/household'
+      path: '/household'
+      fullPath: '/app/household'
+      preLoaderRoute: typeof AppHouseholdRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/explore': {
       id: '/app/explore'
       path: '/explore'
@@ -826,6 +877,13 @@ declare module '@tanstack/react-router' {
       path: '/accounts'
       fullPath: '/app/accounts'
       preLoaderRoute: typeof AppAccountsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/reports/household': {
+      id: '/app/reports/household'
+      path: '/reports/household'
+      fullPath: '/app/reports/household'
+      preLoaderRoute: typeof AppReportsHouseholdRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/api/stripe/webhook': {
@@ -875,20 +933,24 @@ interface AppRouteRouteChildren {
   AppAccountsRoute: typeof AppAccountsRoute
   AppBudgetsRoute: typeof AppBudgetsRoute
   AppExploreRoute: typeof AppExploreRoute
+  AppHouseholdRoute: typeof AppHouseholdRoute
   AppInsightsRoute: typeof AppInsightsRoute
   AppRecurringRoute: typeof AppRecurringRoute
   AppTransactionsRoute: typeof AppTransactionsRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppReportsHouseholdRoute: typeof AppReportsHouseholdRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppAccountsRoute: AppAccountsRoute,
   AppBudgetsRoute: AppBudgetsRoute,
   AppExploreRoute: AppExploreRoute,
+  AppHouseholdRoute: AppHouseholdRoute,
   AppInsightsRoute: AppInsightsRoute,
   AppRecurringRoute: AppRecurringRoute,
   AppTransactionsRoute: AppTransactionsRoute,
   AppIndexRoute: AppIndexRoute,
+  AppReportsHouseholdRoute: AppReportsHouseholdRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
@@ -1033,6 +1095,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoBetterAuthRoute: DemoBetterAuthRoute,
   DemoPrismaRoute: DemoPrismaRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
+  InviteTokenRoute: InviteTokenRoute,
   BlogIndexRoute: BlogIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiStripeWebhookRoute: ApiStripeWebhookRoute,
@@ -1042,10 +1105,11 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

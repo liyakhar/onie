@@ -11,6 +11,7 @@ import {
   isEncryptedCredential,
 } from '#/server/credential-crypto'
 import { loadEnableBankingData } from '#/server/enable-banking-sync'
+import { getFinanceHouseholdForUser } from '#/server/household-access.server'
 
 export type BankSyncProviderId = 'demo' | 'simplefin' | 'enable-banking' | 'plaid'
 
@@ -146,6 +147,7 @@ export const loadBankSyncState = createServerOnlyFn(
   async (): Promise<NormalizedBankConnection> => {
     const { getSessionUser } = await import('#/server/session.server')
     const user = await getSessionUser()
+    const household = user ? await getFinanceHouseholdForUser(user.id) : null
     const european = user
       ? await loadEnableBankingData(user.id)
       : { accounts: [], transactions: [], lastSynced: 'Not connected' }
@@ -166,6 +168,11 @@ export const loadBankSyncState = createServerOnlyFn(
         : await getSimpleFinConnection('', {
             disconnectedDescription: 'Connect a bank or card to start live sync.',
           })
+    }
+
+    if (household) {
+      const persistedHousehold = await loadPersistedHouseholdSnapshot(household.workspaceId)
+      if (persistedHousehold.accounts.length) return persistedHousehold
     }
 
     if (!european.accounts.length) return synced
@@ -516,8 +523,8 @@ async function getSimpleFinConnection(
 }
 
 const requireBankSyncUser = createServerOnlyFn(async () => {
-  const { requireBillingUser } = await import('#/server/billing.server')
-  return requireBillingUser()
+  const { requireFinanceHousehold } = await import('#/server/household-access.server')
+  return (await requireFinanceHousehold()).user
 })
 
 const getUserSimpleFinConnection = createServerOnlyFn(async () => {
@@ -589,120 +596,137 @@ const persistSimpleFinSnapshot = createServerOnlyFn(
 
       for (const account of snapshot.accounts) {
         const savedAccount = await tx.financialAccount.upsert({
-        where: {
-          bankConnectionId_providerAccountId: {
+          where: {
+            bankConnectionId_providerAccountId: {
+              bankConnectionId: connection.id,
+              providerAccountId: account.providerAccountId,
+            },
+          },
+          create: {
+            workspaceId: connection.workspaceId,
             bankConnectionId: connection.id,
             providerAccountId: account.providerAccountId,
+            name: account.name,
+            institution: account.institution,
+            type: account.accountType,
+            currency: account.currency,
+            balanceMinor: account.balanceMinor,
+            lastSyncedAt: account.lastSyncedAt,
           },
-        },
-        create: {
-          workspaceId: connection.workspaceId,
-          bankConnectionId: connection.id,
-          providerAccountId: account.providerAccountId,
-          name: account.name,
-          institution: account.institution,
-          type: account.accountType,
-          currency: account.currency,
-          balanceMinor: account.balanceMinor,
-          lastSyncedAt: account.lastSyncedAt,
-        },
-        update: {
-          name: account.name,
-          institution: account.institution,
-          type: account.accountType,
-          currency: account.currency,
-          balanceMinor: account.balanceMinor,
-          lastSyncedAt: account.lastSyncedAt,
-        },
-      })
+          update: {
+            name: account.name,
+            institution: account.institution,
+            type: account.accountType,
+            currency: account.currency,
+            balanceMinor: account.balanceMinor,
+            lastSyncedAt: account.lastSyncedAt,
+          },
+        })
+
+        const member = await tx.workspaceMember.findUnique({
+          where: {
+            workspaceId_userId: {
+              workspaceId: connection.workspaceId,
+              userId: connection.userId,
+            },
+          },
+          select: { id: true },
+        })
+        if (!member) throw new Error('Bank connection owner is not a household member.')
+        const ownershipCount = await tx.accountOwnership.count({ where: { accountId: savedAccount.id } })
+        if (ownershipCount === 0) {
+          await tx.accountOwnership.create({
+            data: { accountId: savedAccount.id, memberId: member.id, shareBasisPoints: 10_000 },
+          })
+        }
 
         for (const transaction of account.transactions) {
-        const normalizedMerchantName = normalizeMerchantName(transaction.merchantName)
-        const [category, merchant, existingTransaction] = await Promise.all([
-          tx.transactionCategory.upsert({
-            where: {
-              workspaceId_name: {
+          const normalizedMerchantName = normalizeMerchantName(transaction.merchantName)
+          const [category, merchant, existingTransaction] = await Promise.all([
+            tx.transactionCategory.upsert({
+              where: {
+                workspaceId_name: {
+                  workspaceId: connection.workspaceId,
+                  name: transaction.categoryName,
+                },
+              },
+              create: {
                 workspaceId: connection.workspaceId,
                 name: transaction.categoryName,
+                system: true,
               },
-            },
-            create: {
-              workspaceId: connection.workspaceId,
-              name: transaction.categoryName,
-              system: true,
-            },
-            update: {},
-          }),
-          tx.merchant.upsert({
-            where: {
-              workspaceId_normalizedName: {
+              update: {},
+            }),
+            tx.merchant.upsert({
+              where: {
+                workspaceId_normalizedName: {
+                  workspaceId: connection.workspaceId,
+                  normalizedName: normalizedMerchantName,
+                },
+              },
+              create: {
                 workspaceId: connection.workspaceId,
+                name: transaction.merchantName,
                 normalizedName: normalizedMerchantName,
               },
-            },
-            create: {
+              update: { name: transaction.merchantName },
+            }),
+            tx.financeTransaction.findUnique({
+              where: {
+                accountId_providerTransactionId: {
+                  accountId: savedAccount.id,
+                  providerTransactionId: transaction.providerTransactionId,
+                },
+              },
+              select: { id: true },
+            }),
+          ])
+
+          if (!existingTransaction) transactionsAdded += 1
+
+          const savedRule = await tx.categoryRule.findFirst({
+            where: {
               workspaceId: connection.workspaceId,
-              name: transaction.merchantName,
-              normalizedName: normalizedMerchantName,
+              merchantId: merchant.id,
             },
-            update: { name: transaction.merchantName },
-          }),
-          tx.financeTransaction.findUnique({
+            select: { categoryId: true },
+          })
+          const categoryId = savedRule?.categoryId ?? category.id
+          const status = transaction.status === 'PENDING'
+            ? 'PENDING'
+            : savedRule
+              ? 'CLEARED'
+              : transaction.status
+
+          await tx.financeTransaction.upsert({
             where: {
               accountId_providerTransactionId: {
                 accountId: savedAccount.id,
                 providerTransactionId: transaction.providerTransactionId,
               },
             },
-            select: { id: true },
-          }),
-        ])
-
-        if (!existingTransaction) transactionsAdded += 1
-
-          const savedRule = await tx.categoryRule.findFirst({
-          where: {
-            workspaceId: connection.workspaceId,
-            merchantId: merchant.id,
-          },
-          select: { categoryId: true },
-        })
-        const categoryId = savedRule?.categoryId ?? category.id
-        const status = transaction.status === 'PENDING'
-          ? 'PENDING'
-          : savedRule
-            ? 'CLEARED'
-            : transaction.status
-
-          await tx.financeTransaction.upsert({
-          where: {
-            accountId_providerTransactionId: {
+            create: {
+              workspaceId: connection.workspaceId,
               accountId: savedAccount.id,
+              categoryId,
+              merchantId: merchant.id,
               providerTransactionId: transaction.providerTransactionId,
+              postedAt: transaction.postedAt,
+              description: transaction.description,
+              amountMinor: transaction.amountMinor,
+              currency: transaction.currency,
+              status,
             },
-          },
-          create: {
-            workspaceId: connection.workspaceId,
-            accountId: savedAccount.id,
-            categoryId,
-            merchantId: merchant.id,
-            providerTransactionId: transaction.providerTransactionId,
-            postedAt: transaction.postedAt,
-            description: transaction.description,
-            amountMinor: transaction.amountMinor,
-            currency: transaction.currency,
-            status,
-          },
-          update: {
-            categoryId,
-            merchantId: merchant.id,
-            postedAt: transaction.postedAt,
-            description: transaction.description,
-            amountMinor: transaction.amountMinor,
-            currency: transaction.currency,
-            status,
-          },
-        })
+            update: {
+              categoryId,
+              merchantId: merchant.id,
+              postedAt: transaction.postedAt,
+              description: transaction.description,
+              amountMinor: transaction.amountMinor,
+              currency: transaction.currency,
+              status,
+            },
+          })
         }
       }
 
@@ -749,7 +773,7 @@ const loadPersistedSimpleFinSnapshot = createServerOnlyFn(
     })
 
     const accounts: FinancialAccount[] = savedAccounts.map((account) => ({
-      id: account.providerAccountId || account.id,
+      id: account.id,
       name: account.name,
       type:
         account.type === 'CREDIT_CARD'
@@ -767,6 +791,7 @@ const loadPersistedSimpleFinSnapshot = createServerOnlyFn(
       .flatMap((account) =>
         account.transactions.map((transaction) => ({
           id: transaction.id,
+          accountId: account.id,
           date: transaction.postedAt.toISOString(),
           merchant: transaction.merchant?.name || transaction.description,
           account: account.name,
@@ -786,6 +811,87 @@ const loadPersistedSimpleFinSnapshot = createServerOnlyFn(
     return { accounts, transactions }
   },
 )
+
+const loadPersistedHouseholdSnapshot = createServerOnlyFn(async (
+  workspaceId: string,
+): Promise<NormalizedBankConnection> => {
+  const { getDb } = await import('#/server/db-access.server')
+  const prisma = await getDb()
+  const [savedAccounts, connections] = await Promise.all([
+    prisma.financialAccount.findMany({
+      where: { workspaceId },
+      include: {
+        ownershipShares: true,
+        bankConnection: { select: { provider: true, status: true, lastSyncedAt: true } },
+        transactions: {
+          include: { category: true, merchant: true },
+          orderBy: { postedAt: 'desc' },
+        },
+      },
+      orderBy: { createdAt: 'asc' },
+    }),
+    prisma.bankConnection.findMany({
+      where: { workspaceId, status: { not: 'DISABLED' } },
+      select: { provider: true, status: true, lastSyncedAt: true },
+    }),
+  ])
+  const latestSync = connections
+    .map((connection) => connection.lastSyncedAt)
+    .filter((value): value is Date => Boolean(value))
+    .sort((left, right) => right.getTime() - left.getTime())[0]
+  const attention = connections.filter((connection) =>
+    connection.status === 'FAILED' || connection.status === 'NEEDS_RECONNECT',
+  )
+  const accounts: FinancialAccount[] = savedAccounts.map((account) => ({
+    id: account.id,
+    name: account.name,
+    type: account.type === 'CREDIT_CARD' ? 'Credit card' : account.type === 'SAVINGS' ? 'Savings' : 'Checking',
+    balance: account.balanceMinor / 100,
+    currency: account.currency,
+    institution: account.institution || 'Connected bank',
+    lastSynced: formatSavedDate(account.lastSyncedAt),
+    connectionStatus: account.bankConnection?.status || 'NOT_CONNECTED',
+    ownership: account.ownershipShares.map((share) => ({
+      memberId: share.memberId,
+      shareBasisPoints: share.shareBasisPoints,
+    })),
+  }))
+  const transactions: FinanceTransaction[] = savedAccounts
+    .flatMap((account) => account.transactions.map((transaction) => ({
+      id: transaction.id,
+      accountId: account.id,
+      date: transaction.postedAt.toISOString(),
+      merchant: transaction.merchant?.name || transaction.description,
+      account: account.name,
+      category: toFinanceCategory(transaction.category?.name),
+      amount: transaction.amountMinor / 100,
+      currency: transaction.currency,
+      status: transaction.status === 'PENDING'
+        ? 'pending' as const
+        : transaction.status === 'NEEDS_REVIEW'
+          ? 'needs-review' as const
+          : 'cleared' as const,
+      recurring: transaction.recurring,
+    })))
+    .sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime())
+  const provider: BankSyncProviderId = connections.some((connection) => connection.provider === 'ENABLE_BANKING')
+    ? 'enable-banking'
+    : 'simplefin'
+  return {
+    provider,
+    status: {
+      mode: connections.length ? 'live-connected' : 'live-disabled',
+      label: attention.length ? 'Sync needs attention' : 'Connected',
+      description: attention.length
+        ? `${attention.length} bank connection${attention.length === 1 ? '' : 's'} need attention. Showing the last saved data.`
+        : `${connections.length} household bank connection${connections.length === 1 ? '' : 's'} available.`,
+      lastSynced: formatSavedDate(latestSync),
+      canConnectLive: true,
+    },
+    accounts,
+    transactions,
+  }
+})
 
 const recordFailedSimpleFinSync = createServerOnlyFn(
   async (connection: SimpleFinConnectionRecord, error: unknown) => {
@@ -952,23 +1058,9 @@ const deleteUserSimpleFinConnection = createServerOnlyFn(async (userId: string) 
 })
 
 const getOrCreateFinanceWorkspace = createServerOnlyFn(async (userId: string) => {
-  const { getDb } = await import('#/server/db-access.server')
-  const prisma = await getDb()
-  const workspace = await prisma.budgetWorkspace.findFirst({
-    where: { userId, demo: false },
-    orderBy: { createdAt: 'asc' },
-  })
-
-  if (workspace) return workspace
-
-  return prisma.budgetWorkspace.create({
-    data: {
-      userId,
-      name: 'Personal budget',
-      currency: 'USD',
-      demo: false,
-    },
-  })
+  const { getOrCreateFinanceHousehold } = await import('#/server/household-access.server')
+  const context = await getOrCreateFinanceHousehold(userId, 'USD')
+  return { id: context.workspaceId }
 })
 
 function decodeSimpleFinToken(token: string) {

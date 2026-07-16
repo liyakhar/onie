@@ -23,6 +23,7 @@ import {
   type FinanceTransaction,
   type RecurringPayment,
 } from '#/lib/finance-demo'
+import { buildMemberFinanceView } from '#/lib/household-finance'
 import {
   Select,
   SelectContent,
@@ -50,8 +51,29 @@ export const Route = createFileRoute('/app/')({
 })
 
 function MoneyDashboardPage() {
-  const { accounts, budget, month, recurringPayments, rules, syncStatus, transactions } =
-    Route.useLoaderData()
+  const dashboard = Route.useLoaderData()
+  const { household, month, rules, syncStatus } = dashboard
+  const currentMember = household?.members.find((member) => member.id === household.currentMemberId)
+  const [viewId, setViewId] = useState(
+    currentMember?.role === 'MEMBER' ? currentMember.id : 'household',
+  )
+  const selectedMember = household?.members.find((member) => member.id === viewId)
+  const memberView = selectedMember && household
+    ? buildMemberFinanceView({
+        members: household.members,
+        accounts: dashboard.accounts.map((account) => ({
+          ...account,
+          ownership: account.ownership || [{ memberId: household.currentMemberId, shareBasisPoints: 10_000 }],
+        })),
+        transactions: dashboard.transactions,
+        budget: dashboard.budget,
+        recurringPayments: dashboard.recurringPayments,
+      }, selectedMember.id)
+    : null
+  const accounts = memberView?.accounts || dashboard.accounts
+  const transactions = memberView?.transactions || dashboard.transactions
+  const budget = memberView?.budget || dashboard.budget
+  const recurringPayments = memberView?.recurringPayments || dashboard.recurringPayments
   const hasAccounts = accounts.length > 0
   const currencies = Array.from(new Set(accounts.map((account) => account.currency || 'USD')))
   const [currency, setCurrency] = useState(currencies[0] || 'USD')
@@ -98,23 +120,40 @@ function MoneyDashboardPage() {
 
   return (
     <main id="main" className="mx-auto grid w-full max-w-7xl gap-5 bg-white px-4 py-5 text-zinc-950 sm:px-6 lg:px-8">
-      <header className="border-b border-zinc-200 pb-5">
+      <header className="flex flex-col gap-4 border-b border-zinc-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">Overview</h1>
           <p className="mt-1 text-sm text-zinc-500">
-            {month}{hasAccounts ? ` · Updated ${syncStatus.lastSynced}` : ''}
+            {month}{hasAccounts ? ` · Updated ${syncStatus.lastSynced}` : ''}{memberView ? ` · ${selectedMember?.name}'s view` : ' · Household view'}
           </p>
         </div>
-        {currencies.length > 1 && (
-          <Select value={currency} onValueChange={setCurrency}>
-            <SelectTrigger className="mt-4 w-24 border-zinc-200 bg-white" aria-label="Dashboard currency">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="border-zinc-200 bg-white">
-              {currencies.map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        )}
+        <div className="flex flex-wrap gap-2">
+          {household && household.members.length > 1 && (
+            <Select value={viewId} onValueChange={setViewId}>
+              <SelectTrigger className="min-h-11 w-40 border-zinc-200 bg-white" aria-label="Money view">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="border-zinc-200 bg-white">
+                <SelectItem value="household">Our household</SelectItem>
+                {household.members.map((member) => (
+                  <SelectItem key={member.id} value={member.id}>
+                    {member.id === household.currentMemberId ? 'My view' : `${member.name}'s view`}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+          {currencies.length > 1 && (
+            <Select value={currency} onValueChange={setCurrency}>
+              <SelectTrigger className="min-h-11 w-24 border-zinc-200 bg-white" aria-label="Dashboard currency">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="border-zinc-200 bg-white">
+                {currencies.map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          )}
+        </div>
       </header>
 
       {hasAccounts && !hasPlan && (
@@ -150,6 +189,20 @@ function MoneyDashboardPage() {
               <SmallStat label="Bills" value={formatMoney(-summary.upcomingRecurring, currency)} />
               <SmallStat label="Card debt" value={formatMoney(-summary.creditCardDebt, currency)} />
             </dl>
+            <details className="mt-5 border-t border-zinc-200 pt-4 text-sm">
+              <summary className="min-h-11 cursor-pointer content-center font-medium underline-offset-4 hover:underline">How this is calculated</summary>
+              <p className="mt-2 leading-6 text-zinc-600">
+                Wollie starts with {formatMoney(summary.liquidCash, currency)} in liquid cash, subtracts {formatMoney(summary.creditCardDebt, currency)} in card debt and {formatMoney(summary.upcomingRecurring, currency)} in confirmed upcoming bills, then limits the result to what remains in your flexible monthly plan.
+              </p>
+              {memberView && (
+                <p className="mt-2 leading-6 text-zinc-600">
+                  Account balances and transactions use {selectedMember?.name}'s ownership percentage. Shared budgets and bills use their {selectedMember?.householdShareBasisPoints ? selectedMember.householdShareBasisPoints / 100 : 0}% household cost share.
+                </p>
+              )}
+              <p className="mt-2 text-xs leading-5 text-zinc-500">
+                {reviewTransactions.length + pendingTransactions.length} unresolved transaction{reviewTransactions.length + pendingTransactions.length === 1 ? '' : 's'} · bank status: {syncStatus.label.toLowerCase()} · last update: {syncStatus.lastSynced}
+              </p>
+            </details>
           </div>
           <div className="border-t border-zinc-200 p-5 sm:p-7 lg:border-l lg:border-t-0">
             <div className="flex items-start justify-between gap-4">

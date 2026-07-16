@@ -1,4 +1,4 @@
-# Wollie France/EU compliance workbook
+# Wollie Belgium/EU compliance workbook
 
 Status: working draft for founder completion and professional review. This document records operational facts; it is not a substitute for advice on disputed or fact-specific legal questions.
 
@@ -6,21 +6,22 @@ Status: working draft for founder completion and professional review. This docum
 
 Do not set `LEGAL_LAUNCH_FACTS_CONFIRMED=true` until every item has evidence.
 
-- [ ] Legal operator name and form (EI, micro-entrepreneur, SASU, etc.)
+- [ ] Legal operator name and form (Belgian sole proprietorship, SRL/BV, or other validated structure)
+- [ ] Wollie commercial/trade name linked to the legal operator; every legal page and customer contract says "[operator], trading as Wollie" where appropriate
 - [ ] Registered business address
-- [ ] SIREN/SIRET and registration wording
+- [ ] Enterprise/VAT number and registration wording
 - [ ] Publication director
-- [ ] Owned launch domain and working support/privacy email
+- [ ] Owned launch domain and working support/privacy email plus customer telephone number
 - [ ] Hosting company name and address confirmed against the actual deployment
-- [ ] Consumer mediator selected, contracted, and published
+- [ ] Competent Belgian qualified consumer-dispute entity identified and published; internal complaint-first procedure documented
 - [ ] Enable Banking contract, company KYB, and unrestricted production activation
 - [ ] Current processor agreements/DPAs retained for Stripe, Enable Banking, Cloudflare, database host, and Resend
 - [ ] Terms, Privacy Policy, Legal Notice, withdrawal wording, and Checkout reviewed against the final facts
-- [ ] France-only versus wider-EU launch territory chosen
+- [ ] Belgium-only versus wider-EU launch territory chosen
 
 ## 2. Record of processing activities
 
-The CNIL says the small-company exception is narrow; routine customer processing and risky financial-data processing belong in the register.
+The Belgian Data Protection Authority says controllers and processors must maintain internal documentation of processing and that Article 30 provides very few exceptions.
 
 | Activity | Data | Purpose and legal basis | Recipients | Retention rule | Controls |
 | --- | --- | --- | --- | --- | --- |
@@ -45,7 +46,14 @@ For each provider, save the signed agreement/DPA, service location, subprocessor
 
 ## 4. DPIA/AIPD screening
 
-Wollie processes highly personal financial data continuously and derives categorized spending and recurring-payment insights. Those facts plausibly satisfy more than one high-risk screening criterion (highly personal data, systematic monitoring/evaluation, and innovative aggregation). Complete a full CNIL PIA before unrestricted public bank sync.
+Wollie processes highly personal financial data continuously and derives categorized spending and recurring-payment insights. Those facts plausibly satisfy more than one high-risk screening criterion. Complete and sign a full Belgian GDPR DPIA/AIPD before unrestricted public bank sync.
+
+Working package:
+
+- `docs/legal/aipd-wollie-bank-data.md`
+- `docs/legal/retention-and-deletion-schedule.md`
+- `docs/legal/provider-evidence-register.md`
+- `docs/legal/precompany-readiness-evidence.md`
 
 The DPIA must cover:
 
@@ -80,16 +88,16 @@ The DPIA must cover:
 
 - Does Wollie act only as Enable Banking's customer/agent application, or have any independent PSD2/AISP obligations under the final contract and launch countries?
 - Is the immediate-performance/withdrawal wording and Stripe consent sufficient for the exact subscription flow?
-- Are cancellation, refund, conformity, governing-law, mediation, and renewal terms complete for France and chosen EU markets?
+- Are cancellation, refund, conformity, governing-law, mediation, and renewal terms complete for Belgium and chosen EU markets?
 - Is each provider a processor, independent controller, or joint controller for each data flow?
 - Is the DPIA conclusion and residual-risk decision defensible?
 - What exact billing, claims, security-log, and backup retention periods apply?
 
 ## Official references
 
-- CNIL processing register: https://cnil.fr/fr/RGPD-le-registre-des-activites-de-traitement
-- CNIL DPIA guidance: https://www.cnil.fr/fr/ce-quil-faut-savoir-sur-lanalyse-dimpact-relative-la-protection-des-donnees-aipd
+- Belgian processing register: https://www.dataprotectionauthority.be/professioneel/avg/register-van-verwerkingsactiviteiten
+- Belgian DPIA/AIPD guidance: https://www.dataprotectionauthority.be/index.php/professionnel/rgpd-/analyse-d-impact-relative-a-la-protection-des-donnees
 - GDPR: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679
-- DGCCRF e-commerce rules: https://www.economie.gouv.fr/dgccrf/les-fiches-pratiques/e-commerce-les-regles-entre-professionnels-et-consommateurs
-- DGCCRF consumer mediation: https://www.economie.gouv.fr/mediation-conso/vous-etes-un-professionnel/vos-principales-obligations-0
+- Belgian e-commerce information duties: https://economie.fgov.be/sites/default/files/Files/Entreprises/guidelines-obligations-information-dans-le-cadre-du-e-commerce.pdf
+- Belgian Consumer Mediation Service: https://mediationconsommateur.be/
 - Enable Banking production activation: https://enablebanking.com/docs/api/control-panel/

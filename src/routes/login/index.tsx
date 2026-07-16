@@ -16,7 +16,9 @@ export type { LoginSearch }
 
 function safeAppRedirect(value: unknown) {
   if (typeof value !== 'string') return '/app'
-  return value === '/app' || value.startsWith('/app/') ? value : '/app'
+  return value === '/app' || value.startsWith('/app/') || value.startsWith('/invite/')
+    ? value
+    : '/app'
 }
 
 const DEV_LOGIN = {

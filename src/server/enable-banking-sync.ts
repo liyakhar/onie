@@ -93,17 +93,13 @@ export const getEnableBankingInstitutions = createServerFn({ method: 'GET' })
   .validator((data: { country: string }) => ({ country: normalizeCountry(data?.country) }))
   .handler(async ({ data }) => {
     await requireUser()
-    const response = await providerRequest<{ aspsps?: Array<Record<string, unknown>> }>(
-      `/aspsps?country=${encodeURIComponent(data.country)}&psu_type=personal&service=AIS`,
-    )
-    return (response.aspsps || [])
-      .map((bank) => ({
-        name: String(bank.name || '').trim(),
-        country: String(bank.country || data.country).trim().toUpperCase(),
-        beta: bank.beta === true,
-      }))
-      .filter((bank): bank is Institution => Boolean(bank.name && bank.country))
-      .sort((left, right) => left.name.localeCompare(right.name))
+    return getProviderInstitutions(data.country)
+  })
+
+export const getPublicEnableBankingInstitutions = createServerFn({ method: 'GET' })
+  .validator((data: { country: string }) => ({ country: normalizeCountry(data?.country) }))
+  .handler(async ({ data }) => {
+    return getProviderInstitutions(data.country)
   })
 
 export const startEnableBankingConnection = createServerFn({ method: 'POST' })
@@ -272,6 +268,8 @@ export const loadEnableBankingData = createServerOnlyFn(async (userId: string) =
   const savedAccounts = await prisma.financialAccount.findMany({
     where: { bankConnectionId: { in: connections.map((connection) => connection.id) } },
     include: {
+      ownershipShares: true,
+      bankConnection: { select: { status: true } },
       transactions: {
         include: { category: true, merchant: true },
         orderBy: { postedAt: 'desc' },
@@ -280,17 +278,23 @@ export const loadEnableBankingData = createServerOnlyFn(async (userId: string) =
     orderBy: { createdAt: 'asc' },
   })
   const accounts: FinancialAccount[] = savedAccounts.map((account) => ({
-    id: account.providerAccountId || account.id,
+    id: account.id,
     name: account.name,
     type: account.type === 'CREDIT_CARD' ? 'Credit card' : account.type === 'SAVINGS' ? 'Savings' : 'Checking',
     balance: account.balanceMinor / 100,
     currency: account.currency,
     institution: account.institution || 'European bank',
     lastSynced: formatDate(account.lastSyncedAt),
+    connectionStatus: account.bankConnection?.status || 'NOT_CONNECTED',
+    ownership: account.ownershipShares.map((share) => ({
+      memberId: share.memberId,
+      shareBasisPoints: share.shareBasisPoints,
+    })),
   }))
   const transactions: FinanceTransaction[] = savedAccounts.flatMap((account) =>
     account.transactions.map((transaction) => ({
       id: transaction.id,
+      accountId: account.id,
       date: transaction.postedAt.toISOString(),
       merchant: displayMerchantName(transaction.merchant?.name || transaction.description),
       account: account.name,
@@ -392,6 +396,21 @@ async function providerRequest<T = Record<string, unknown>>(path: string, init: 
   return await response.json() as T
 }
 
+async function getProviderInstitutions(country: string) {
+  const response = await providerRequest<{ aspsps?: Array<Record<string, unknown>> }>(
+    `/aspsps?country=${encodeURIComponent(country)}&psu_type=personal&service=AIS`,
+  )
+  return (response.aspsps || [])
+    .map((bank) => ({
+      name: String(bank.name || '').trim(),
+      country: String(bank.country || country).trim().toUpperCase(),
+      beta: bank.beta === true,
+      logoUrl: typeof bank.logo === 'string' ? bank.logo : null,
+    }))
+    .filter((bank): bank is Institution & { logoUrl: string | null } => Boolean(bank.name && bank.country && bank.name !== 'Mock ASPSP'))
+    .sort((left, right) => left.name.localeCompare(right.name))
+}
+
 export async function createProviderJwt(nowSeconds = Math.floor(Date.now() / 1_000)) {
   const { applicationId, privateKey } = getProviderConfig()
   const header = base64UrlJson({ typ: 'JWT', alg: 'RS256', kid: applicationId })
@@ -488,6 +507,22 @@ async function persistSnapshot(connection: ConnectionRecord, snapshot: EnableBan
           lastSyncedAt: syncedAt,
         },
       })
+      const member = await tx.workspaceMember.findUnique({
+        where: {
+          workspaceId_userId: {
+            workspaceId: connection.workspaceId,
+            userId: connection.userId,
+          },
+        },
+        select: { id: true },
+      })
+      if (!member) throw new Error('Bank connection owner is not a household member.')
+      const ownershipCount = await tx.accountOwnership.count({ where: { accountId: savedAccount.id } })
+      if (ownershipCount === 0) {
+        await tx.accountOwnership.create({
+          data: { accountId: savedAccount.id, memberId: member.id, shareBasisPoints: 10_000 },
+        })
+      }
       for (const transaction of account.transactions) {
         const normalizedName = normalizeMerchant(transaction.merchantName)
         const [category, merchant, existing] = await Promise.all([
@@ -665,9 +700,24 @@ function timingSafeEqual(left: string, right: string) {
   return difference === 0
 }
 function assertLiveSyncAllowed() {
-  if (process.env.NODE_ENV === 'production' && process.env.ENABLE_LIVE_BANK_SYNC !== 'true') {
+  if (process.env.NODE_ENV !== 'production') return
+  if (process.env.ENABLE_LIVE_BANK_SYNC !== 'true') {
     throw new Error('Live bank sync is not enabled in production.')
   }
+  const environment = process.env.ENABLE_BANKING_ENVIRONMENT
+  if (environment === 'sandbox' && !process.env.STAGING_ACCESS_PASSWORD?.trim()) {
+    throw new Error('Enable Banking sandbox access requires private staging protection.')
+  }
+  if (environment === 'production' && process.env.ENABLE_BANKING_PUBLIC_ACCESS_APPROVED !== 'true') {
+    throw new Error('Public Enable Banking access is not approved yet.')
+  }
+  if (environment !== 'sandbox' && environment !== 'production') {
+    throw new Error('Choose the Enable Banking sandbox or production environment explicitly.')
+  }
+}
+
+export function assertEnableBankingAccessAllowed() {
+  assertLiveSyncAllowed()
 }
 function getEncryptionSecret() {
   const explicit = process.env.BANK_SYNC_ENCRYPTION_KEY?.trim()
@@ -676,17 +726,17 @@ function getEncryptionSecret() {
   throw new Error('BANK_SYNC_ENCRYPTION_KEY is required for bank sync.')
 }
 async function requireUser() {
-  const { requireBillingUser } = await import('#/server/billing.server')
-  return requireBillingUser()
+  const { requireFinanceHousehold } = await import('#/server/household-access.server')
+  return (await requireFinanceHousehold()).user
 }
 async function getDb() {
   const { getDb: loadDb } = await import('#/server/db-access.server')
   return loadDb()
 }
 async function getOrCreateWorkspace(userId: string) {
-  const prisma = await getDb()
-  const workspace = await prisma.budgetWorkspace.findFirst({ where: { userId, demo: false }, orderBy: { createdAt: 'asc' } })
-  return workspace || prisma.budgetWorkspace.create({ data: { userId, name: 'Personal budget', currency: 'EUR', demo: false } })
+  const { getOrCreateFinanceHousehold } = await import('#/server/household-access.server')
+  const context = await getOrCreateFinanceHousehold(userId, 'EUR')
+  return { id: context.workspaceId }
 }
 function chooseBalance(balances: ProviderBalance[]) {
   return balances.find((balance) => /ITAV|interimAvailable/i.test(balance.balance_type || ''))

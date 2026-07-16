@@ -19,6 +19,14 @@ export function BillingActions({
   const [error, setError] = useState('')
   const subscribed = billing?.state === 'subscribed'
 
+  if (billing?.isHouseholdOwner === false) {
+    return (
+      <p className={`text-sm leading-6 ${theme === 'dark' ? 'text-white/65' : 'text-zinc-600'}`}>
+        Your household plan is managed by {billing.householdOwnerName || 'the household owner'}.
+      </p>
+    )
+  }
+
   const openCheckout = async () => {
     setError('')
     setLoading(true)

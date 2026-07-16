@@ -7,6 +7,7 @@ import {
   ListFilter,
   CreditCard,
   Settings,
+  Users,
 } from 'lucide-react'
 import BetterAuthHeader from '#/integrations/better-auth/header-user'
 import { OnieMark } from '#/components/OnieMark'
@@ -51,6 +52,14 @@ export default function AppNav({ locked = false }: { locked?: boolean }) {
           >
             <Landmark aria-hidden="true" />
             <span>Bank accounts</span>
+          </Link>}
+          {!locked && <Link
+            to="/app/household"
+            className="app-nav__account-link"
+            activeProps={{ className: 'app-nav__account-link is-active' }}
+          >
+            <Users aria-hidden="true" />
+            <span>Household</span>
           </Link>}
           <Link
             to="/pricing"

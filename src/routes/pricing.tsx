@@ -107,7 +107,7 @@ function PricingPage() {
         <section className="border-y border-zinc-200 bg-zinc-50 px-4 py-14 sm:px-6 lg:px-8">
           <div className="mx-auto grid max-w-7xl gap-px overflow-hidden border border-zinc-200 bg-zinc-200 md:grid-cols-3">
             {[
-              [ShieldCheck, 'Private by default', 'Financial data stays inside your account.'],
+              [ShieldCheck, 'Private by default', 'Financial data stays with you and household members you invite.'],
               [LockKeyhole, 'Stripe-hosted payment', 'Wollie never stores your card details.'],
               [RefreshCcw, 'Change anytime', 'Manage invoices, billing, and cancellation in Stripe.'],
             ].map(([Icon, title, body]) => {

@@ -1,0 +1,116 @@
+import type {
+  BudgetCategory,
+  FinanceTransaction,
+  FinancialAccount,
+  RecurringPayment,
+} from './finance-demo'
+
+export const BASIS_POINTS_TOTAL = 10_000
+
+export type HouseholdRole = 'OWNER' | 'MEMBER'
+
+export type HouseholdMember = {
+  id: string
+  name: string
+  email?: string
+  role: HouseholdRole
+  householdShareBasisPoints: number
+}
+
+export type OwnershipShare = {
+  memberId: string
+  shareBasisPoints: number
+}
+
+export type HouseholdAccount = FinancialAccount & {
+  ownership: OwnershipShare[]
+  connectionStatus?: 'CONNECTED' | 'SYNCING' | 'NEEDS_RECONNECT' | 'FAILED' | 'DISABLED' | 'NOT_CONNECTED'
+}
+
+export type HouseholdTransaction = FinanceTransaction & {
+  accountId?: string
+}
+
+export type HouseholdFinanceInput = {
+  members: HouseholdMember[]
+  accounts: HouseholdAccount[]
+  transactions: HouseholdTransaction[]
+  budget: BudgetCategory[]
+  recurringPayments: RecurringPayment[]
+}
+
+export function validateBasisPointShares<T extends OwnershipShare>(shares: T[]): T[] {
+  if (shares.length === 0) throw new Error('Add at least one ownership share.')
+
+  const memberIds = new Set<string>()
+  for (const share of shares) {
+    if (memberIds.has(share.memberId)) {
+      throw new Error('Each household member can appear only once.')
+    }
+    memberIds.add(share.memberId)
+
+    if (!Number.isInteger(share.shareBasisPoints)) {
+      throw new Error('Shares must use whole basis points.')
+    }
+    if (share.shareBasisPoints < 0 || share.shareBasisPoints > BASIS_POINTS_TOTAL) {
+      throw new Error('Each share must be between 0% and 100%.')
+    }
+  }
+
+  const total = shares.reduce((sum, share) => sum + share.shareBasisPoints, 0)
+  if (total !== BASIS_POINTS_TOTAL) throw new Error('Shares must total 100%.')
+  return shares
+}
+
+export function combineBasisPointShares(...shares: Array<number | null | undefined>) {
+  const total = shares.reduce<number>((sum, share) => sum + (share ?? 0), 0)
+  if (!Number.isInteger(total) || total < 0 || total > BASIS_POINTS_TOTAL) {
+    throw new Error('Combined shares must stay between 0% and 100%.')
+  }
+  return total
+}
+
+export function buildMemberFinanceView(
+  input: HouseholdFinanceInput,
+  memberId: string,
+) {
+  const member = input.members.find((item) => item.id === memberId)
+  if (!member) throw new Error('Household member not found.')
+
+  const accountShares = new Map<string, number>()
+  const accountNames = new Map<string, string>()
+  const accounts = input.accounts.flatMap((account) => {
+    const share = account.ownership.find((item) => item.memberId === memberId)?.shareBasisPoints ?? 0
+    accountShares.set(account.id, share)
+    accountNames.set(account.name, account.id)
+    if (share === 0) return []
+    return [{ ...account, balance: scaleAmount(account.balance, share) }]
+  })
+
+  const transactions = input.transactions.flatMap((transaction) => {
+    const accountId = transaction.accountId || accountNames.get(transaction.account)
+    const share = accountId ? accountShares.get(accountId) ?? 0 : 0
+    if (share === 0) return []
+    return [{ ...transaction, amount: scaleAmount(transaction.amount, share) }]
+  })
+
+  const householdShare = member.householdShareBasisPoints
+  return {
+    member,
+    accounts,
+    transactions,
+    budget: input.budget.map((category) => ({
+      ...category,
+      allocated: scaleAmount(category.allocated, householdShare),
+      spent: scaleAmount(category.spent, householdShare),
+    })),
+    recurringPayments: input.recurringPayments.map((payment) => ({
+      ...payment,
+      amount: scaleAmount(payment.amount, householdShare),
+    })),
+  }
+}
+
+export function scaleAmount(value: number, shareBasisPoints: number) {
+  return Math.round(value * 100 * shareBasisPoints / BASIS_POINTS_TOTAL) / 100
+}

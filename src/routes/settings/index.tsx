@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Download, FileSpreadsheet, FileText, Upload } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import type { Category } from '#/generated/prisma/client'
 import { Badge } from '#/components/ui/badge'
@@ -18,10 +18,17 @@ import { Textarea } from '#/components/ui/textarea'
 import { getMyProfile, updateProfile } from '#/server/profiles'
 import { BillingActions } from '#/components/billing/BillingActions'
 import { getBillingOverview } from '#/server/billing'
+import { getTransactionalEmailReadiness } from '#/server/email-readiness'
 import { authClient } from '#/lib/auth-client'
 import { loginSearch } from '#/lib/auth-nav'
 import { buildPageMeta } from '#/lib/seo'
-import { exportMyAccountData } from '#/server/account-data'
+import {
+  exportAccountOwnershipCsv,
+  exportFinanceBackup,
+  exportFinanceCsv,
+  previewFinanceBackupRestore,
+  restoreFinancePlanningFromBackup,
+} from '#/server/account-data'
 
 const settingsMeta = buildPageMeta({
   path: '/settings',
@@ -36,8 +43,12 @@ export const Route = createFileRoute('/settings/')({
     links: settingsMeta.links,
   }),
   loader: async () => {
-    const [profile, billing] = await Promise.all([getMyProfile(), getBillingOverview()])
-    return { profile, billing }
+    const [profile, billing, emailReadiness] = await Promise.all([
+      getMyProfile(),
+      getBillingOverview(),
+      getTransactionalEmailReadiness(),
+    ])
+    return { profile, billing, emailReadiness }
   },
   component: SettingsPage,
 })
@@ -45,7 +56,7 @@ export const Route = createFileRoute('/settings/')({
 function SettingsPage() {
   const router = useRouter()
   const { data: session, isPending } = authClient.useSession()
-  const { profile, billing } = Route.useLoaderData()
+  const { profile, billing, emailReadiness } = Route.useLoaderData()
   const [username, setUsername] = useState(profile?.username ?? '')
   const [headline, setHeadline] = useState(profile?.headline ?? '')
   const [bio, setBio] = useState(profile?.bio ?? '')
@@ -56,6 +67,11 @@ function SettingsPage() {
   const [privacyLoading, setPrivacyLoading] = useState<'export' | 'delete' | null>(null)
   const [privacyMessage, setPrivacyMessage] = useState('')
   const [privacyError, setPrivacyError] = useState('')
+  const [exportLoading, setExportLoading] = useState<string | null>(null)
+  const [restoreText, setRestoreText] = useState('')
+  const [restorePreview, setRestorePreview] = useState<Awaited<ReturnType<typeof previewFinanceBackupRestore>> | null>(null)
+  const [restoreMessage, setRestoreMessage] = useState('')
+  const [restoreError, setRestoreError] = useState('')
 
   useEffect(() => {
     if (!isPending && !session?.user) {
@@ -95,18 +111,80 @@ function SettingsPage() {
     setPrivacyError('')
     setPrivacyMessage('')
     try {
-      const data = await exportMyAccountData()
-      const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }))
-      const anchor = document.createElement('a')
-      anchor.href = url
-      anchor.download = `wollie-data-${new Date().toISOString().slice(0, 10)}.json`
-      anchor.click()
-      URL.revokeObjectURL(url)
+      const data = await exportFinanceBackup()
+      downloadBlob({
+        content: JSON.stringify(data, null, 2),
+        filename: `wollie-finance-backup-${new Date().toISOString().slice(0, 10)}.json`,
+        type: 'application/json',
+      })
       setPrivacyMessage('Your data export was downloaded.')
     } catch (reason) {
       setPrivacyError(reason instanceof Error ? reason.message : 'Could not export your data.')
     } finally {
       setPrivacyLoading(null)
+    }
+  }
+
+  const downloadExport = async (kind: 'backup' | 'household-csv' | 'personal-csv' | 'ownership-csv') => {
+    setExportLoading(kind)
+    setRestoreError('')
+    setRestoreMessage('')
+    try {
+      if (kind === 'backup') {
+        const data = await exportFinanceBackup()
+        downloadBlob({
+          content: JSON.stringify(data, null, 2),
+          filename: `wollie-finance-backup-${new Date().toISOString().slice(0, 10)}.json`,
+          type: 'application/json',
+        })
+      } else if (kind === 'ownership-csv') {
+        const data = await exportAccountOwnershipCsv()
+        downloadBlob({ content: data.content, filename: data.filename, type: data.mimeType })
+      } else {
+        const data = await exportFinanceCsv({ data: { scope: kind === 'personal-csv' ? 'personal' : 'household' } })
+        downloadBlob({ content: data.content, filename: data.filename, type: data.mimeType })
+      }
+      setRestoreMessage('Export downloaded.')
+    } catch (reason) {
+      setRestoreError(reason instanceof Error ? reason.message : 'Could not prepare export.')
+    } finally {
+      setExportLoading(null)
+    }
+  }
+
+  const chooseBackupFile = async (file: File | undefined) => {
+    if (!file) return
+    setRestoreError('')
+    setRestoreMessage('')
+    setRestorePreview(null)
+    try {
+      const backupText = await file.text()
+      const preview = await previewFinanceBackupRestore({ data: { backupText } })
+      setRestoreText(backupText)
+      setRestorePreview(preview)
+      setRestoreMessage('Backup file looks valid.')
+    } catch (reason) {
+      setRestoreText('')
+      setRestoreError(reason instanceof Error ? reason.message : 'Could not read backup.')
+    }
+  }
+
+  const restoreBackup = async () => {
+    if (!restoreText || !restorePreview) return
+    if (!window.confirm('Restore planning data from this backup? This replaces current budget allocations and recurring payments. Bank data is not overwritten.')) return
+    setExportLoading('restore')
+    setRestoreError('')
+    setRestoreMessage('')
+    try {
+      const result = await restoreFinancePlanningFromBackup({ data: { backupText: restoreText } })
+      setRestoreMessage(`Restored ${result.budgetAllocations} budget allocations, ${result.recurringPayments} recurring payments, and ${result.ownershipShares} ownership shares.`)
+      setRestorePreview(null)
+      setRestoreText('')
+      await router.invalidate()
+    } catch (reason) {
+      setRestoreError(reason instanceof Error ? reason.message : 'Could not restore backup.')
+    } finally {
+      setExportLoading(null)
     }
   }
 
@@ -254,11 +332,11 @@ function SettingsPage() {
           <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
             <CardHeader className="border-b border-zinc-200 pb-4">
               <CardTitle>Privacy</CardTitle>
-              <CardDescription>Your financial data stays private</CardDescription>
+              <CardDescription>Private to you and household members you invite</CardDescription>
             </CardHeader>
             <CardContent className="pt-5">
               <ul className="grid gap-3 text-sm text-zinc-600">
-                <li className="border-b border-zinc-200 pb-3">Private by default</li>
+                <li className="border-b border-zinc-200 pb-3">Shared only with an invited household member</li>
                 <li className="border-b border-zinc-200 pb-3">No public financial profile</li>
                 <li>Credentials stay server-side</li>
               </ul>
@@ -275,7 +353,11 @@ function SettingsPage() {
                 <Button
                   type="button"
                   variant="ghost"
-                  disabled={privacyLoading !== null || (billing?.state === 'subscribed' && !billing.cancelAtPeriodEnd)}
+                  disabled={
+                    privacyLoading !== null ||
+                    !emailReadiness.configured ||
+                    (billing?.state === 'subscribed' && !billing.cancelAtPeriodEnd)
+                  }
                   onClick={() => void requestAccountDeletion()}
                   className="w-full text-red-700 hover:bg-red-50 hover:text-red-800"
                 >
@@ -284,6 +366,9 @@ function SettingsPage() {
                 {billing?.state === 'subscribed' && !billing.cancelAtPeriodEnd && (
                   <p className="text-xs leading-5 text-zinc-500">Cancel subscription renewal in Billing before deleting your account.</p>
                 )}
+                {!emailReadiness.configured && (
+                  <p className="text-xs leading-5 text-zinc-500">Account deletion will be available after secure confirmation email is configured.</p>
+                )}
                 {privacyMessage && <p className="text-xs leading-5 text-emerald-700" role="status">{privacyMessage}</p>}
                 {privacyError && <p className="text-xs leading-5 text-red-700" role="alert">{privacyError}</p>}
               </div>
@@ -291,6 +376,115 @@ function SettingsPage() {
           </Card>
         </div>
       </div>
+
+      <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
+        <CardHeader className="border-b border-zinc-200 pb-4">
+          <CardTitle>Exports &amp; recovery</CardTitle>
+          <CardDescription>Download clean tables, keep a full backup, or restore planning data from a backup.</CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-5 pt-5">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <ExportButton
+              icon={Download}
+              title="Full backup"
+              description="JSON backup for recovery and portability."
+              loading={exportLoading === 'backup'}
+              onClick={() => void downloadExport('backup')}
+            />
+            <ExportButton
+              icon={FileSpreadsheet}
+              title="Household CSV"
+              description="All household transactions as a table."
+              loading={exportLoading === 'household-csv'}
+              onClick={() => void downloadExport('household-csv')}
+            />
+            <ExportButton
+              icon={FileSpreadsheet}
+              title="Personal CSV"
+              description="Your ownership-adjusted transaction table."
+              loading={exportLoading === 'personal-csv'}
+              onClick={() => void downloadExport('personal-csv')}
+            />
+            <ExportButton
+              icon={FileText}
+              title="Ownership CSV"
+              description="Accounts, members, and ownership shares."
+              loading={exportLoading === 'ownership-csv'}
+              onClick={() => void downloadExport('ownership-csv')}
+            />
+          </div>
+
+          <div className="grid gap-4 border-t border-zinc-200 pt-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
+            <div>
+              <label className="grid gap-2 text-sm font-medium">
+                Restore from backup
+                <input
+                  type="file"
+                  accept="application/json,.json"
+                  onChange={(event) => void chooseBackupFile(event.currentTarget.files?.[0])}
+                  className="min-h-11 rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-zinc-950 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white"
+                />
+              </label>
+              <p className="mt-2 text-xs leading-5 text-zinc-500">
+                Restore replaces budget allocations and recurring payments. It does not restore bank login tokens, live balances, transactions, or billing.
+              </p>
+              {restorePreview && (
+                <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-700">
+                  <p className="font-medium text-zinc-950">{restorePreview.workspace}</p>
+                  <p className="mt-1">
+                    {restorePreview.members} members · {restorePreview.accounts} accounts · {restorePreview.transactions} transactions · {restorePreview.budgetAllocations} budget allocations · {restorePreview.recurringPayments} recurring payments
+                  </p>
+                  <p className="mt-2 text-xs leading-5 text-zinc-500">{restorePreview.warning}</p>
+                </div>
+              )}
+            </div>
+            <Button
+              type="button"
+              disabled={!restorePreview || exportLoading === 'restore'}
+              onClick={() => void restoreBackup()}
+              className="min-h-11 bg-zinc-950 text-white hover:bg-zinc-800 lg:mt-7"
+            >
+              <Upload aria-hidden="true" />
+              {exportLoading === 'restore' ? 'Restoring…' : 'Restore planning'}
+            </Button>
+          </div>
+
+          {restoreMessage && <p className="text-sm text-emerald-700" role="status">{restoreMessage}</p>}
+          {restoreError && <p className="text-sm text-red-700" role="alert">{restoreError}</p>}
+        </CardContent>
+      </Card>
     </main>
   )
+}
+
+function ExportButton({ icon: Icon, title, description, loading, onClick }: {
+  icon: typeof Download
+  title: string
+  description: string
+  loading: boolean
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      disabled={loading}
+      onClick={onClick}
+      className="grid min-h-32 gap-3 rounded-lg border border-zinc-200 bg-white p-4 text-left transition-colors hover:bg-zinc-50 disabled:cursor-wait disabled:opacity-70"
+    >
+      <Icon className="size-5 text-[var(--color-wollie-accent)]" aria-hidden="true" />
+      <span>
+        <span className="block text-sm font-semibold text-zinc-950">{loading ? 'Preparing…' : title}</span>
+        <span className="mt-1 block text-xs leading-5 text-zinc-500">{description}</span>
+      </span>
+    </button>
+  )
+}
+
+function downloadBlob({ content, filename, type }: { content: string; filename: string; type: string }) {
+  const url = URL.createObjectURL(new Blob([content], { type }))
+  const anchor = document.createElement('a')
+  anchor.href = url
+  anchor.download = filename
+  anchor.click()
+  URL.revokeObjectURL(url)
 }

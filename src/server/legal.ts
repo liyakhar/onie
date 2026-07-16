@@ -10,6 +10,7 @@ export const getLegalIdentity = createServerFn({ method: 'GET' }).handler(async 
   businessAddress: publicValue('LEGAL_BUSINESS_ADDRESS'),
   registrationNumber: publicValue('LEGAL_REGISTRATION_NUMBER'),
   contactEmail: publicValue('LEGAL_CONTACT_EMAIL'),
+  contactPhone: publicValue('LEGAL_CONTACT_PHONE'),
   publicationDirector: publicValue('LEGAL_PUBLICATION_DIRECTOR'),
   hostName: publicValue('LEGAL_HOST_NAME'),
   hostAddress: publicValue('LEGAL_HOST_ADDRESS'),

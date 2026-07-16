@@ -275,6 +275,7 @@ export type FinancialAccountWhereInput = {
   workspace?: Prisma.XOR<Prisma.BudgetWorkspaceScalarRelationFilter, Prisma.BudgetWorkspaceWhereInput>
   bankConnection?: Prisma.XOR<Prisma.BankConnectionNullableScalarRelationFilter, Prisma.BankConnectionWhereInput> | null
   transactions?: Prisma.FinanceTransactionListRelationFilter
+  ownershipShares?: Prisma.AccountOwnershipListRelationFilter
 }
 
 export type FinancialAccountOrderByWithRelationInput = {
@@ -293,6 +294,7 @@ export type FinancialAccountOrderByWithRelationInput = {
   workspace?: Prisma.BudgetWorkspaceOrderByWithRelationInput
   bankConnection?: Prisma.BankConnectionOrderByWithRelationInput
   transactions?: Prisma.FinanceTransactionOrderByRelationAggregateInput
+  ownershipShares?: Prisma.AccountOwnershipOrderByRelationAggregateInput
 }
 
 export type FinancialAccountWhereUniqueInput = Prisma.AtLeast<{
@@ -315,6 +317,7 @@ export type FinancialAccountWhereUniqueInput = Prisma.AtLeast<{
   workspace?: Prisma.XOR<Prisma.BudgetWorkspaceScalarRelationFilter, Prisma.BudgetWorkspaceWhereInput>
   bankConnection?: Prisma.XOR<Prisma.BankConnectionNullableScalarRelationFilter, Prisma.BankConnectionWhereInput> | null
   transactions?: Prisma.FinanceTransactionListRelationFilter
+  ownershipShares?: Prisma.AccountOwnershipListRelationFilter
 }, "id" | "bankConnectionId_providerAccountId">
 
 export type FinancialAccountOrderByWithAggregationInput = {
@@ -369,6 +372,7 @@ export type FinancialAccountCreateInput = {
   workspace: Prisma.BudgetWorkspaceCreateNestedOneWithoutAccountsInput
   bankConnection?: Prisma.BankConnectionCreateNestedOneWithoutAccountsInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutAccountInput
+  ownershipShares?: Prisma.AccountOwnershipCreateNestedManyWithoutAccountInput
 }
 
 export type FinancialAccountUncheckedCreateInput = {
@@ -385,6 +389,7 @@ export type FinancialAccountUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutAccountInput
+  ownershipShares?: Prisma.AccountOwnershipUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type FinancialAccountUpdateInput = {
@@ -401,6 +406,7 @@ export type FinancialAccountUpdateInput = {
   workspace?: Prisma.BudgetWorkspaceUpdateOneRequiredWithoutAccountsNestedInput
   bankConnection?: Prisma.BankConnectionUpdateOneWithoutAccountsNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutAccountNestedInput
+  ownershipShares?: Prisma.AccountOwnershipUpdateManyWithoutAccountNestedInput
 }
 
 export type FinancialAccountUncheckedUpdateInput = {
@@ -417,6 +423,7 @@ export type FinancialAccountUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutAccountNestedInput
+  ownershipShares?: Prisma.AccountOwnershipUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type FinancialAccountCreateManyInput = {
@@ -631,6 +638,20 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type FinancialAccountCreateNestedOneWithoutOwnershipSharesInput = {
+  create?: Prisma.XOR<Prisma.FinancialAccountCreateWithoutOwnershipSharesInput, Prisma.FinancialAccountUncheckedCreateWithoutOwnershipSharesInput>
+  connectOrCreate?: Prisma.FinancialAccountCreateOrConnectWithoutOwnershipSharesInput
+  connect?: Prisma.FinancialAccountWhereUniqueInput
+}
+
+export type FinancialAccountUpdateOneRequiredWithoutOwnershipSharesNestedInput = {
+  create?: Prisma.XOR<Prisma.FinancialAccountCreateWithoutOwnershipSharesInput, Prisma.FinancialAccountUncheckedCreateWithoutOwnershipSharesInput>
+  connectOrCreate?: Prisma.FinancialAccountCreateOrConnectWithoutOwnershipSharesInput
+  upsert?: Prisma.FinancialAccountUpsertWithoutOwnershipSharesInput
+  connect?: Prisma.FinancialAccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinancialAccountUpdateToOneWithWhereWithoutOwnershipSharesInput, Prisma.FinancialAccountUpdateWithoutOwnershipSharesInput>, Prisma.FinancialAccountUncheckedUpdateWithoutOwnershipSharesInput>
+}
+
 export type FinancialAccountCreateNestedOneWithoutTransactionsInput = {
   create?: Prisma.XOR<Prisma.FinancialAccountCreateWithoutTransactionsInput, Prisma.FinancialAccountUncheckedCreateWithoutTransactionsInput>
   connectOrCreate?: Prisma.FinancialAccountCreateOrConnectWithoutTransactionsInput
@@ -658,6 +679,7 @@ export type FinancialAccountCreateWithoutWorkspaceInput = {
   updatedAt?: Date | string
   bankConnection?: Prisma.BankConnectionCreateNestedOneWithoutAccountsInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutAccountInput
+  ownershipShares?: Prisma.AccountOwnershipCreateNestedManyWithoutAccountInput
 }
 
 export type FinancialAccountUncheckedCreateWithoutWorkspaceInput = {
@@ -673,6 +695,7 @@ export type FinancialAccountUncheckedCreateWithoutWorkspaceInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutAccountInput
+  ownershipShares?: Prisma.AccountOwnershipUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type FinancialAccountCreateOrConnectWithoutWorkspaceInput = {
@@ -732,6 +755,7 @@ export type FinancialAccountCreateWithoutBankConnectionInput = {
   updatedAt?: Date | string
   workspace: Prisma.BudgetWorkspaceCreateNestedOneWithoutAccountsInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutAccountInput
+  ownershipShares?: Prisma.AccountOwnershipCreateNestedManyWithoutAccountInput
 }
 
 export type FinancialAccountUncheckedCreateWithoutBankConnectionInput = {
@@ -747,6 +771,7 @@ export type FinancialAccountUncheckedCreateWithoutBankConnectionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutAccountInput
+  ownershipShares?: Prisma.AccountOwnershipUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type FinancialAccountCreateOrConnectWithoutBankConnectionInput = {
@@ -775,6 +800,86 @@ export type FinancialAccountUpdateManyWithWhereWithoutBankConnectionInput = {
   data: Prisma.XOR<Prisma.FinancialAccountUpdateManyMutationInput, Prisma.FinancialAccountUncheckedUpdateManyWithoutBankConnectionInput>
 }
 
+export type FinancialAccountCreateWithoutOwnershipSharesInput = {
+  id?: string
+  providerAccountId?: string | null
+  name: string
+  institution?: string | null
+  type: $Enums.FinanceAccountType
+  currency?: string
+  balanceMinor: number
+  lastSyncedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  workspace: Prisma.BudgetWorkspaceCreateNestedOneWithoutAccountsInput
+  bankConnection?: Prisma.BankConnectionCreateNestedOneWithoutAccountsInput
+  transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutAccountInput
+}
+
+export type FinancialAccountUncheckedCreateWithoutOwnershipSharesInput = {
+  id?: string
+  workspaceId: string
+  bankConnectionId?: string | null
+  providerAccountId?: string | null
+  name: string
+  institution?: string | null
+  type: $Enums.FinanceAccountType
+  currency?: string
+  balanceMinor: number
+  lastSyncedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type FinancialAccountCreateOrConnectWithoutOwnershipSharesInput = {
+  where: Prisma.FinancialAccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinancialAccountCreateWithoutOwnershipSharesInput, Prisma.FinancialAccountUncheckedCreateWithoutOwnershipSharesInput>
+}
+
+export type FinancialAccountUpsertWithoutOwnershipSharesInput = {
+  update: Prisma.XOR<Prisma.FinancialAccountUpdateWithoutOwnershipSharesInput, Prisma.FinancialAccountUncheckedUpdateWithoutOwnershipSharesInput>
+  create: Prisma.XOR<Prisma.FinancialAccountCreateWithoutOwnershipSharesInput, Prisma.FinancialAccountUncheckedCreateWithoutOwnershipSharesInput>
+  where?: Prisma.FinancialAccountWhereInput
+}
+
+export type FinancialAccountUpdateToOneWithWhereWithoutOwnershipSharesInput = {
+  where?: Prisma.FinancialAccountWhereInput
+  data: Prisma.XOR<Prisma.FinancialAccountUpdateWithoutOwnershipSharesInput, Prisma.FinancialAccountUncheckedUpdateWithoutOwnershipSharesInput>
+}
+
+export type FinancialAccountUpdateWithoutOwnershipSharesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  providerAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumFinanceAccountTypeFieldUpdateOperationsInput | $Enums.FinanceAccountType
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  balanceMinor?: Prisma.IntFieldUpdateOperationsInput | number
+  lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workspace?: Prisma.BudgetWorkspaceUpdateOneRequiredWithoutAccountsNestedInput
+  bankConnection?: Prisma.BankConnectionUpdateOneWithoutAccountsNestedInput
+  transactions?: Prisma.FinanceTransactionUpdateManyWithoutAccountNestedInput
+}
+
+export type FinancialAccountUncheckedUpdateWithoutOwnershipSharesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  workspaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  bankConnectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumFinanceAccountTypeFieldUpdateOperationsInput | $Enums.FinanceAccountType
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  balanceMinor?: Prisma.IntFieldUpdateOperationsInput | number
+  lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutAccountNestedInput
+}
+
 export type FinancialAccountCreateWithoutTransactionsInput = {
   id?: string
   providerAccountId?: string | null
@@ -788,6 +893,7 @@ export type FinancialAccountCreateWithoutTransactionsInput = {
   updatedAt?: Date | string
   workspace: Prisma.BudgetWorkspaceCreateNestedOneWithoutAccountsInput
   bankConnection?: Prisma.BankConnectionCreateNestedOneWithoutAccountsInput
+  ownershipShares?: Prisma.AccountOwnershipCreateNestedManyWithoutAccountInput
 }
 
 export type FinancialAccountUncheckedCreateWithoutTransactionsInput = {
@@ -803,6 +909,7 @@ export type FinancialAccountUncheckedCreateWithoutTransactionsInput = {
   lastSyncedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ownershipShares?: Prisma.AccountOwnershipUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type FinancialAccountCreateOrConnectWithoutTransactionsInput = {
@@ -834,6 +941,7 @@ export type FinancialAccountUpdateWithoutTransactionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspace?: Prisma.BudgetWorkspaceUpdateOneRequiredWithoutAccountsNestedInput
   bankConnection?: Prisma.BankConnectionUpdateOneWithoutAccountsNestedInput
+  ownershipShares?: Prisma.AccountOwnershipUpdateManyWithoutAccountNestedInput
 }
 
 export type FinancialAccountUncheckedUpdateWithoutTransactionsInput = {
@@ -849,6 +957,7 @@ export type FinancialAccountUncheckedUpdateWithoutTransactionsInput = {
   lastSyncedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ownershipShares?: Prisma.AccountOwnershipUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type FinancialAccountCreateManyWorkspaceInput = {
@@ -878,6 +987,7 @@ export type FinancialAccountUpdateWithoutWorkspaceInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bankConnection?: Prisma.BankConnectionUpdateOneWithoutAccountsNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutAccountNestedInput
+  ownershipShares?: Prisma.AccountOwnershipUpdateManyWithoutAccountNestedInput
 }
 
 export type FinancialAccountUncheckedUpdateWithoutWorkspaceInput = {
@@ -893,6 +1003,7 @@ export type FinancialAccountUncheckedUpdateWithoutWorkspaceInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutAccountNestedInput
+  ownershipShares?: Prisma.AccountOwnershipUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type FinancialAccountUncheckedUpdateManyWithoutWorkspaceInput = {
@@ -936,6 +1047,7 @@ export type FinancialAccountUpdateWithoutBankConnectionInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspace?: Prisma.BudgetWorkspaceUpdateOneRequiredWithoutAccountsNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutAccountNestedInput
+  ownershipShares?: Prisma.AccountOwnershipUpdateManyWithoutAccountNestedInput
 }
 
 export type FinancialAccountUncheckedUpdateWithoutBankConnectionInput = {
@@ -951,6 +1063,7 @@ export type FinancialAccountUncheckedUpdateWithoutBankConnectionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutAccountNestedInput
+  ownershipShares?: Prisma.AccountOwnershipUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type FinancialAccountUncheckedUpdateManyWithoutBankConnectionInput = {
@@ -974,10 +1087,12 @@ export type FinancialAccountUncheckedUpdateManyWithoutBankConnectionInput = {
 
 export type FinancialAccountCountOutputType = {
   transactions: number
+  ownershipShares: number
 }
 
 export type FinancialAccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   transactions?: boolean | FinancialAccountCountOutputTypeCountTransactionsArgs
+  ownershipShares?: boolean | FinancialAccountCountOutputTypeCountOwnershipSharesArgs
 }
 
 /**
@@ -997,6 +1112,13 @@ export type FinancialAccountCountOutputTypeCountTransactionsArgs<ExtArgs extends
   where?: Prisma.FinanceTransactionWhereInput
 }
 
+/**
+ * FinancialAccountCountOutputType without action
+ */
+export type FinancialAccountCountOutputTypeCountOwnershipSharesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AccountOwnershipWhereInput
+}
+
 
 export type FinancialAccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1014,6 +1136,7 @@ export type FinancialAccountSelect<ExtArgs extends runtime.Types.Extensions.Inte
   workspace?: boolean | Prisma.BudgetWorkspaceDefaultArgs<ExtArgs>
   bankConnection?: boolean | Prisma.FinancialAccount$bankConnectionArgs<ExtArgs>
   transactions?: boolean | Prisma.FinancialAccount$transactionsArgs<ExtArgs>
+  ownershipShares?: boolean | Prisma.FinancialAccount$ownershipSharesArgs<ExtArgs>
   _count?: boolean | Prisma.FinancialAccountCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["financialAccount"]>
 
@@ -1071,6 +1194,7 @@ export type FinancialAccountInclude<ExtArgs extends runtime.Types.Extensions.Int
   workspace?: boolean | Prisma.BudgetWorkspaceDefaultArgs<ExtArgs>
   bankConnection?: boolean | Prisma.FinancialAccount$bankConnectionArgs<ExtArgs>
   transactions?: boolean | Prisma.FinancialAccount$transactionsArgs<ExtArgs>
+  ownershipShares?: boolean | Prisma.FinancialAccount$ownershipSharesArgs<ExtArgs>
   _count?: boolean | Prisma.FinancialAccountCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FinancialAccountIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1088,6 +1212,7 @@ export type $FinancialAccountPayload<ExtArgs extends runtime.Types.Extensions.In
     workspace: Prisma.$BudgetWorkspacePayload<ExtArgs>
     bankConnection: Prisma.$BankConnectionPayload<ExtArgs> | null
     transactions: Prisma.$FinanceTransactionPayload<ExtArgs>[]
+    ownershipShares: Prisma.$AccountOwnershipPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1499,6 +1624,7 @@ export interface Prisma__FinancialAccountClient<T, Null = never, ExtArgs extends
   workspace<T extends Prisma.BudgetWorkspaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspaceDefaultArgs<ExtArgs>>): Prisma.Prisma__BudgetWorkspaceClient<runtime.Types.Result.GetResult<Prisma.$BudgetWorkspacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   bankConnection<T extends Prisma.FinancialAccount$bankConnectionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinancialAccount$bankConnectionArgs<ExtArgs>>): Prisma.Prisma__BankConnectionClient<runtime.Types.Result.GetResult<Prisma.$BankConnectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   transactions<T extends Prisma.FinancialAccount$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinancialAccount$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ownershipShares<T extends Prisma.FinancialAccount$ownershipSharesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinancialAccount$ownershipSharesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountOwnershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1981,6 +2107,30 @@ export type FinancialAccount$transactionsArgs<ExtArgs extends runtime.Types.Exte
   take?: number
   skip?: number
   distinct?: Prisma.FinanceTransactionScalarFieldEnum | Prisma.FinanceTransactionScalarFieldEnum[]
+}
+
+/**
+ * FinancialAccount.ownershipShares
+ */
+export type FinancialAccount$ownershipSharesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AccountOwnership
+   */
+  select?: Prisma.AccountOwnershipSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AccountOwnership
+   */
+  omit?: Prisma.AccountOwnershipOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountOwnershipInclude<ExtArgs> | null
+  where?: Prisma.AccountOwnershipWhereInput
+  orderBy?: Prisma.AccountOwnershipOrderByWithRelationInput | Prisma.AccountOwnershipOrderByWithRelationInput[]
+  cursor?: Prisma.AccountOwnershipWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AccountOwnershipScalarFieldEnum | Prisma.AccountOwnershipScalarFieldEnum[]
 }
 
 /**

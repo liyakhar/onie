@@ -208,6 +208,9 @@ export type BudgetWorkspaceWhereInput = {
   insights?: Prisma.MoneyInsightListRelationFilter
   rules?: Prisma.CategoryRuleListRelationFilter
   syncRuns?: Prisma.SyncRunListRelationFilter
+  members?: Prisma.WorkspaceMemberListRelationFilter
+  invitations?: Prisma.HouseholdInvitationListRelationFilter
+  bankConnections?: Prisma.BankConnectionListRelationFilter
 }
 
 export type BudgetWorkspaceOrderByWithRelationInput = {
@@ -228,6 +231,9 @@ export type BudgetWorkspaceOrderByWithRelationInput = {
   insights?: Prisma.MoneyInsightOrderByRelationAggregateInput
   rules?: Prisma.CategoryRuleOrderByRelationAggregateInput
   syncRuns?: Prisma.SyncRunOrderByRelationAggregateInput
+  members?: Prisma.WorkspaceMemberOrderByRelationAggregateInput
+  invitations?: Prisma.HouseholdInvitationOrderByRelationAggregateInput
+  bankConnections?: Prisma.BankConnectionOrderByRelationAggregateInput
 }
 
 export type BudgetWorkspaceWhereUniqueInput = Prisma.AtLeast<{
@@ -251,6 +257,9 @@ export type BudgetWorkspaceWhereUniqueInput = Prisma.AtLeast<{
   insights?: Prisma.MoneyInsightListRelationFilter
   rules?: Prisma.CategoryRuleListRelationFilter
   syncRuns?: Prisma.SyncRunListRelationFilter
+  members?: Prisma.WorkspaceMemberListRelationFilter
+  invitations?: Prisma.HouseholdInvitationListRelationFilter
+  bankConnections?: Prisma.BankConnectionListRelationFilter
 }, "id">
 
 export type BudgetWorkspaceOrderByWithAggregationInput = {
@@ -296,6 +305,9 @@ export type BudgetWorkspaceCreateInput = {
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceUncheckedCreateInput = {
@@ -315,6 +327,9 @@ export type BudgetWorkspaceUncheckedCreateInput = {
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceUpdateInput = {
@@ -334,6 +349,9 @@ export type BudgetWorkspaceUpdateInput = {
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceUncheckedUpdateInput = {
@@ -353,6 +371,9 @@ export type BudgetWorkspaceUncheckedUpdateInput = {
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceCreateManyInput = {
@@ -471,6 +492,20 @@ export type BudgetWorkspaceUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.BudgetWorkspaceScalarWhereInput | Prisma.BudgetWorkspaceScalarWhereInput[]
 }
 
+export type BudgetWorkspaceCreateNestedOneWithoutBankConnectionsInput = {
+  create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutBankConnectionsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutBankConnectionsInput>
+  connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutBankConnectionsInput
+  connect?: Prisma.BudgetWorkspaceWhereUniqueInput
+}
+
+export type BudgetWorkspaceUpdateOneRequiredWithoutBankConnectionsNestedInput = {
+  create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutBankConnectionsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutBankConnectionsInput>
+  connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutBankConnectionsInput
+  upsert?: Prisma.BudgetWorkspaceUpsertWithoutBankConnectionsInput
+  connect?: Prisma.BudgetWorkspaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetWorkspaceUpdateToOneWithWhereWithoutBankConnectionsInput, Prisma.BudgetWorkspaceUpdateWithoutBankConnectionsInput>, Prisma.BudgetWorkspaceUncheckedUpdateWithoutBankConnectionsInput>
+}
+
 export type BudgetWorkspaceCreateNestedOneWithoutAccountsInput = {
   create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutAccountsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutAccountsInput>
   connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutAccountsInput
@@ -483,6 +518,34 @@ export type BudgetWorkspaceUpdateOneRequiredWithoutAccountsNestedInput = {
   upsert?: Prisma.BudgetWorkspaceUpsertWithoutAccountsInput
   connect?: Prisma.BudgetWorkspaceWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetWorkspaceUpdateToOneWithWhereWithoutAccountsInput, Prisma.BudgetWorkspaceUpdateWithoutAccountsInput>, Prisma.BudgetWorkspaceUncheckedUpdateWithoutAccountsInput>
+}
+
+export type BudgetWorkspaceCreateNestedOneWithoutMembersInput = {
+  create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutMembersInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutMembersInput>
+  connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutMembersInput
+  connect?: Prisma.BudgetWorkspaceWhereUniqueInput
+}
+
+export type BudgetWorkspaceUpdateOneRequiredWithoutMembersNestedInput = {
+  create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutMembersInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutMembersInput>
+  connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutMembersInput
+  upsert?: Prisma.BudgetWorkspaceUpsertWithoutMembersInput
+  connect?: Prisma.BudgetWorkspaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetWorkspaceUpdateToOneWithWhereWithoutMembersInput, Prisma.BudgetWorkspaceUpdateWithoutMembersInput>, Prisma.BudgetWorkspaceUncheckedUpdateWithoutMembersInput>
+}
+
+export type BudgetWorkspaceCreateNestedOneWithoutInvitationsInput = {
+  create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutInvitationsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutInvitationsInput>
+  connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutInvitationsInput
+  connect?: Prisma.BudgetWorkspaceWhereUniqueInput
+}
+
+export type BudgetWorkspaceUpdateOneRequiredWithoutInvitationsNestedInput = {
+  create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutInvitationsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutInvitationsInput>
+  connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutInvitationsInput
+  upsert?: Prisma.BudgetWorkspaceUpsertWithoutInvitationsInput
+  connect?: Prisma.BudgetWorkspaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetWorkspaceUpdateToOneWithWhereWithoutInvitationsInput, Prisma.BudgetWorkspaceUpdateWithoutInvitationsInput>, Prisma.BudgetWorkspaceUncheckedUpdateWithoutInvitationsInput>
 }
 
 export type BudgetWorkspaceCreateNestedOneWithoutCategoriesInput = {
@@ -613,6 +676,9 @@ export type BudgetWorkspaceCreateWithoutUserInput = {
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceUncheckedCreateWithoutUserInput = {
@@ -631,6 +697,9 @@ export type BudgetWorkspaceUncheckedCreateWithoutUserInput = {
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceCreateOrConnectWithoutUserInput = {
@@ -672,6 +741,106 @@ export type BudgetWorkspaceScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"BudgetWorkspace"> | Date | string
 }
 
+export type BudgetWorkspaceCreateWithoutBankConnectionsInput = {
+  id?: string
+  name?: string
+  currency?: string
+  demo?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutFinanceWorkspacesInput
+  accounts?: Prisma.FinancialAccountCreateNestedManyWithoutWorkspaceInput
+  categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
+  merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
+  budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
+  recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
+  insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
+  rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
+  syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+}
+
+export type BudgetWorkspaceUncheckedCreateWithoutBankConnectionsInput = {
+  id?: string
+  userId: string
+  name?: string
+  currency?: string
+  demo?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.FinancialAccountUncheckedCreateNestedManyWithoutWorkspaceInput
+  categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
+  merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
+  recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
+  insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
+  rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
+  syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+}
+
+export type BudgetWorkspaceCreateOrConnectWithoutBankConnectionsInput = {
+  where: Prisma.BudgetWorkspaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutBankConnectionsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutBankConnectionsInput>
+}
+
+export type BudgetWorkspaceUpsertWithoutBankConnectionsInput = {
+  update: Prisma.XOR<Prisma.BudgetWorkspaceUpdateWithoutBankConnectionsInput, Prisma.BudgetWorkspaceUncheckedUpdateWithoutBankConnectionsInput>
+  create: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutBankConnectionsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutBankConnectionsInput>
+  where?: Prisma.BudgetWorkspaceWhereInput
+}
+
+export type BudgetWorkspaceUpdateToOneWithWhereWithoutBankConnectionsInput = {
+  where?: Prisma.BudgetWorkspaceWhereInput
+  data: Prisma.XOR<Prisma.BudgetWorkspaceUpdateWithoutBankConnectionsInput, Prisma.BudgetWorkspaceUncheckedUpdateWithoutBankConnectionsInput>
+}
+
+export type BudgetWorkspaceUpdateWithoutBankConnectionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutFinanceWorkspacesNestedInput
+  accounts?: Prisma.FinancialAccountUpdateManyWithoutWorkspaceNestedInput
+  categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
+  merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
+  budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
+  recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
+  insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
+  rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
+  syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type BudgetWorkspaceUncheckedUpdateWithoutBankConnectionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.FinancialAccountUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
+  merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
+  recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
+  insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
+  rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+}
+
 export type BudgetWorkspaceCreateWithoutAccountsInput = {
   id?: string
   name?: string
@@ -688,6 +857,9 @@ export type BudgetWorkspaceCreateWithoutAccountsInput = {
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceUncheckedCreateWithoutAccountsInput = {
@@ -706,6 +878,9 @@ export type BudgetWorkspaceUncheckedCreateWithoutAccountsInput = {
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceCreateOrConnectWithoutAccountsInput = {
@@ -740,6 +915,9 @@ export type BudgetWorkspaceUpdateWithoutAccountsInput = {
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceUncheckedUpdateWithoutAccountsInput = {
@@ -758,6 +936,209 @@ export type BudgetWorkspaceUncheckedUpdateWithoutAccountsInput = {
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type BudgetWorkspaceCreateWithoutMembersInput = {
+  id?: string
+  name?: string
+  currency?: string
+  demo?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutFinanceWorkspacesInput
+  accounts?: Prisma.FinancialAccountCreateNestedManyWithoutWorkspaceInput
+  categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
+  merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
+  budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
+  recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
+  insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
+  rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
+  syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
+}
+
+export type BudgetWorkspaceUncheckedCreateWithoutMembersInput = {
+  id?: string
+  userId: string
+  name?: string
+  currency?: string
+  demo?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.FinancialAccountUncheckedCreateNestedManyWithoutWorkspaceInput
+  categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
+  merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
+  recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
+  insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
+  rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
+  syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
+}
+
+export type BudgetWorkspaceCreateOrConnectWithoutMembersInput = {
+  where: Prisma.BudgetWorkspaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutMembersInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutMembersInput>
+}
+
+export type BudgetWorkspaceUpsertWithoutMembersInput = {
+  update: Prisma.XOR<Prisma.BudgetWorkspaceUpdateWithoutMembersInput, Prisma.BudgetWorkspaceUncheckedUpdateWithoutMembersInput>
+  create: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutMembersInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutMembersInput>
+  where?: Prisma.BudgetWorkspaceWhereInput
+}
+
+export type BudgetWorkspaceUpdateToOneWithWhereWithoutMembersInput = {
+  where?: Prisma.BudgetWorkspaceWhereInput
+  data: Prisma.XOR<Prisma.BudgetWorkspaceUpdateWithoutMembersInput, Prisma.BudgetWorkspaceUncheckedUpdateWithoutMembersInput>
+}
+
+export type BudgetWorkspaceUpdateWithoutMembersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutFinanceWorkspacesNestedInput
+  accounts?: Prisma.FinancialAccountUpdateManyWithoutWorkspaceNestedInput
+  categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
+  merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
+  budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
+  recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
+  insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
+  rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
+  syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type BudgetWorkspaceUncheckedUpdateWithoutMembersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.FinancialAccountUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
+  merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
+  recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
+  insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
+  rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type BudgetWorkspaceCreateWithoutInvitationsInput = {
+  id?: string
+  name?: string
+  currency?: string
+  demo?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutFinanceWorkspacesInput
+  accounts?: Prisma.FinancialAccountCreateNestedManyWithoutWorkspaceInput
+  categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
+  merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
+  budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
+  recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
+  insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
+  rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
+  syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
+}
+
+export type BudgetWorkspaceUncheckedCreateWithoutInvitationsInput = {
+  id?: string
+  userId: string
+  name?: string
+  currency?: string
+  demo?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.FinancialAccountUncheckedCreateNestedManyWithoutWorkspaceInput
+  categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
+  merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
+  recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
+  insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
+  rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
+  syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
+}
+
+export type BudgetWorkspaceCreateOrConnectWithoutInvitationsInput = {
+  where: Prisma.BudgetWorkspaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutInvitationsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutInvitationsInput>
+}
+
+export type BudgetWorkspaceUpsertWithoutInvitationsInput = {
+  update: Prisma.XOR<Prisma.BudgetWorkspaceUpdateWithoutInvitationsInput, Prisma.BudgetWorkspaceUncheckedUpdateWithoutInvitationsInput>
+  create: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutInvitationsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutInvitationsInput>
+  where?: Prisma.BudgetWorkspaceWhereInput
+}
+
+export type BudgetWorkspaceUpdateToOneWithWhereWithoutInvitationsInput = {
+  where?: Prisma.BudgetWorkspaceWhereInput
+  data: Prisma.XOR<Prisma.BudgetWorkspaceUpdateWithoutInvitationsInput, Prisma.BudgetWorkspaceUncheckedUpdateWithoutInvitationsInput>
+}
+
+export type BudgetWorkspaceUpdateWithoutInvitationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutFinanceWorkspacesNestedInput
+  accounts?: Prisma.FinancialAccountUpdateManyWithoutWorkspaceNestedInput
+  categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
+  merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
+  budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
+  recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
+  insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
+  rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
+  syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type BudgetWorkspaceUncheckedUpdateWithoutInvitationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.FinancialAccountUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
+  merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
+  recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
+  insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
+  rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceCreateWithoutCategoriesInput = {
@@ -776,6 +1157,9 @@ export type BudgetWorkspaceCreateWithoutCategoriesInput = {
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceUncheckedCreateWithoutCategoriesInput = {
@@ -794,6 +1178,9 @@ export type BudgetWorkspaceUncheckedCreateWithoutCategoriesInput = {
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceCreateOrConnectWithoutCategoriesInput = {
@@ -828,6 +1215,9 @@ export type BudgetWorkspaceUpdateWithoutCategoriesInput = {
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceUncheckedUpdateWithoutCategoriesInput = {
@@ -846,6 +1236,9 @@ export type BudgetWorkspaceUncheckedUpdateWithoutCategoriesInput = {
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceCreateWithoutMerchantsInput = {
@@ -864,6 +1257,9 @@ export type BudgetWorkspaceCreateWithoutMerchantsInput = {
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceUncheckedCreateWithoutMerchantsInput = {
@@ -882,6 +1278,9 @@ export type BudgetWorkspaceUncheckedCreateWithoutMerchantsInput = {
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceCreateOrConnectWithoutMerchantsInput = {
@@ -916,6 +1315,9 @@ export type BudgetWorkspaceUpdateWithoutMerchantsInput = {
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceUncheckedUpdateWithoutMerchantsInput = {
@@ -934,6 +1336,9 @@ export type BudgetWorkspaceUncheckedUpdateWithoutMerchantsInput = {
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceCreateWithoutTransactionsInput = {
@@ -952,6 +1357,9 @@ export type BudgetWorkspaceCreateWithoutTransactionsInput = {
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceUncheckedCreateWithoutTransactionsInput = {
@@ -970,6 +1378,9 @@ export type BudgetWorkspaceUncheckedCreateWithoutTransactionsInput = {
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceCreateOrConnectWithoutTransactionsInput = {
@@ -1004,6 +1415,9 @@ export type BudgetWorkspaceUpdateWithoutTransactionsInput = {
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceUncheckedUpdateWithoutTransactionsInput = {
@@ -1022,6 +1436,9 @@ export type BudgetWorkspaceUncheckedUpdateWithoutTransactionsInput = {
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceCreateWithoutBudgetMonthsInput = {
@@ -1040,6 +1457,9 @@ export type BudgetWorkspaceCreateWithoutBudgetMonthsInput = {
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceUncheckedCreateWithoutBudgetMonthsInput = {
@@ -1058,6 +1478,9 @@ export type BudgetWorkspaceUncheckedCreateWithoutBudgetMonthsInput = {
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceCreateOrConnectWithoutBudgetMonthsInput = {
@@ -1092,6 +1515,9 @@ export type BudgetWorkspaceUpdateWithoutBudgetMonthsInput = {
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceUncheckedUpdateWithoutBudgetMonthsInput = {
@@ -1110,6 +1536,9 @@ export type BudgetWorkspaceUncheckedUpdateWithoutBudgetMonthsInput = {
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceCreateWithoutRecurringPaymentsInput = {
@@ -1128,6 +1557,9 @@ export type BudgetWorkspaceCreateWithoutRecurringPaymentsInput = {
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceUncheckedCreateWithoutRecurringPaymentsInput = {
@@ -1146,6 +1578,9 @@ export type BudgetWorkspaceUncheckedCreateWithoutRecurringPaymentsInput = {
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceCreateOrConnectWithoutRecurringPaymentsInput = {
@@ -1180,6 +1615,9 @@ export type BudgetWorkspaceUpdateWithoutRecurringPaymentsInput = {
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceUncheckedUpdateWithoutRecurringPaymentsInput = {
@@ -1198,6 +1636,9 @@ export type BudgetWorkspaceUncheckedUpdateWithoutRecurringPaymentsInput = {
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceCreateWithoutSyncRunsInput = {
@@ -1216,6 +1657,9 @@ export type BudgetWorkspaceCreateWithoutSyncRunsInput = {
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceUncheckedCreateWithoutSyncRunsInput = {
@@ -1234,6 +1678,9 @@ export type BudgetWorkspaceUncheckedCreateWithoutSyncRunsInput = {
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceCreateOrConnectWithoutSyncRunsInput = {
@@ -1268,6 +1715,9 @@ export type BudgetWorkspaceUpdateWithoutSyncRunsInput = {
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceUncheckedUpdateWithoutSyncRunsInput = {
@@ -1286,6 +1736,9 @@ export type BudgetWorkspaceUncheckedUpdateWithoutSyncRunsInput = {
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceCreateWithoutInsightsInput = {
@@ -1304,6 +1757,9 @@ export type BudgetWorkspaceCreateWithoutInsightsInput = {
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceUncheckedCreateWithoutInsightsInput = {
@@ -1322,6 +1778,9 @@ export type BudgetWorkspaceUncheckedCreateWithoutInsightsInput = {
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceCreateOrConnectWithoutInsightsInput = {
@@ -1356,6 +1815,9 @@ export type BudgetWorkspaceUpdateWithoutInsightsInput = {
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceUncheckedUpdateWithoutInsightsInput = {
@@ -1374,6 +1836,9 @@ export type BudgetWorkspaceUncheckedUpdateWithoutInsightsInput = {
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceCreateWithoutRulesInput = {
@@ -1392,6 +1857,9 @@ export type BudgetWorkspaceCreateWithoutRulesInput = {
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceUncheckedCreateWithoutRulesInput = {
@@ -1410,6 +1878,9 @@ export type BudgetWorkspaceUncheckedCreateWithoutRulesInput = {
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
   syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
 }
 
 export type BudgetWorkspaceCreateOrConnectWithoutRulesInput = {
@@ -1444,6 +1915,9 @@ export type BudgetWorkspaceUpdateWithoutRulesInput = {
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceUncheckedUpdateWithoutRulesInput = {
@@ -1462,6 +1936,9 @@ export type BudgetWorkspaceUncheckedUpdateWithoutRulesInput = {
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceCreateManyUserInput = {
@@ -1489,6 +1966,9 @@ export type BudgetWorkspaceUpdateWithoutUserInput = {
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceUncheckedUpdateWithoutUserInput = {
@@ -1507,6 +1987,9 @@ export type BudgetWorkspaceUncheckedUpdateWithoutUserInput = {
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
 }
 
 export type BudgetWorkspaceUncheckedUpdateManyWithoutUserInput = {
@@ -1533,6 +2016,9 @@ export type BudgetWorkspaceCountOutputType = {
   insights: number
   rules: number
   syncRuns: number
+  members: number
+  invitations: number
+  bankConnections: number
 }
 
 export type BudgetWorkspaceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1545,6 +2031,9 @@ export type BudgetWorkspaceCountOutputTypeSelect<ExtArgs extends runtime.Types.E
   insights?: boolean | BudgetWorkspaceCountOutputTypeCountInsightsArgs
   rules?: boolean | BudgetWorkspaceCountOutputTypeCountRulesArgs
   syncRuns?: boolean | BudgetWorkspaceCountOutputTypeCountSyncRunsArgs
+  members?: boolean | BudgetWorkspaceCountOutputTypeCountMembersArgs
+  invitations?: boolean | BudgetWorkspaceCountOutputTypeCountInvitationsArgs
+  bankConnections?: boolean | BudgetWorkspaceCountOutputTypeCountBankConnectionsArgs
 }
 
 /**
@@ -1620,6 +2109,27 @@ export type BudgetWorkspaceCountOutputTypeCountSyncRunsArgs<ExtArgs extends runt
   where?: Prisma.SyncRunWhereInput
 }
 
+/**
+ * BudgetWorkspaceCountOutputType without action
+ */
+export type BudgetWorkspaceCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkspaceMemberWhereInput
+}
+
+/**
+ * BudgetWorkspaceCountOutputType without action
+ */
+export type BudgetWorkspaceCountOutputTypeCountInvitationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HouseholdInvitationWhereInput
+}
+
+/**
+ * BudgetWorkspaceCountOutputType without action
+ */
+export type BudgetWorkspaceCountOutputTypeCountBankConnectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BankConnectionWhereInput
+}
+
 
 export type BudgetWorkspaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1639,6 +2149,9 @@ export type BudgetWorkspaceSelect<ExtArgs extends runtime.Types.Extensions.Inter
   insights?: boolean | Prisma.BudgetWorkspace$insightsArgs<ExtArgs>
   rules?: boolean | Prisma.BudgetWorkspace$rulesArgs<ExtArgs>
   syncRuns?: boolean | Prisma.BudgetWorkspace$syncRunsArgs<ExtArgs>
+  members?: boolean | Prisma.BudgetWorkspace$membersArgs<ExtArgs>
+  invitations?: boolean | Prisma.BudgetWorkspace$invitationsArgs<ExtArgs>
+  bankConnections?: boolean | Prisma.BudgetWorkspace$bankConnectionsArgs<ExtArgs>
   _count?: boolean | Prisma.BudgetWorkspaceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["budgetWorkspace"]>
 
@@ -1686,6 +2199,9 @@ export type BudgetWorkspaceInclude<ExtArgs extends runtime.Types.Extensions.Inte
   insights?: boolean | Prisma.BudgetWorkspace$insightsArgs<ExtArgs>
   rules?: boolean | Prisma.BudgetWorkspace$rulesArgs<ExtArgs>
   syncRuns?: boolean | Prisma.BudgetWorkspace$syncRunsArgs<ExtArgs>
+  members?: boolean | Prisma.BudgetWorkspace$membersArgs<ExtArgs>
+  invitations?: boolean | Prisma.BudgetWorkspace$invitationsArgs<ExtArgs>
+  bankConnections?: boolean | Prisma.BudgetWorkspace$bankConnectionsArgs<ExtArgs>
   _count?: boolean | Prisma.BudgetWorkspaceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BudgetWorkspaceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1708,6 +2224,9 @@ export type $BudgetWorkspacePayload<ExtArgs extends runtime.Types.Extensions.Int
     insights: Prisma.$MoneyInsightPayload<ExtArgs>[]
     rules: Prisma.$CategoryRulePayload<ExtArgs>[]
     syncRuns: Prisma.$SyncRunPayload<ExtArgs>[]
+    members: Prisma.$WorkspaceMemberPayload<ExtArgs>[]
+    invitations: Prisma.$HouseholdInvitationPayload<ExtArgs>[]
+    bankConnections: Prisma.$BankConnectionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2121,6 +2640,9 @@ export interface Prisma__BudgetWorkspaceClient<T, Null = never, ExtArgs extends 
   insights<T extends Prisma.BudgetWorkspace$insightsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$insightsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MoneyInsightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   rules<T extends Prisma.BudgetWorkspace$rulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$rulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryRulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   syncRuns<T extends Prisma.BudgetWorkspace$syncRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$syncRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SyncRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  members<T extends Prisma.BudgetWorkspace$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invitations<T extends Prisma.BudgetWorkspace$invitationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HouseholdInvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  bankConnections<T extends Prisma.BudgetWorkspace$bankConnectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$bankConnectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BankConnectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2771,6 +3293,78 @@ export type BudgetWorkspace$syncRunsArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.SyncRunScalarFieldEnum | Prisma.SyncRunScalarFieldEnum[]
+}
+
+/**
+ * BudgetWorkspace.members
+ */
+export type BudgetWorkspace$membersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkspaceMember
+   */
+  select?: Prisma.WorkspaceMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkspaceMember
+   */
+  omit?: Prisma.WorkspaceMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkspaceMemberInclude<ExtArgs> | null
+  where?: Prisma.WorkspaceMemberWhereInput
+  orderBy?: Prisma.WorkspaceMemberOrderByWithRelationInput | Prisma.WorkspaceMemberOrderByWithRelationInput[]
+  cursor?: Prisma.WorkspaceMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkspaceMemberScalarFieldEnum | Prisma.WorkspaceMemberScalarFieldEnum[]
+}
+
+/**
+ * BudgetWorkspace.invitations
+ */
+export type BudgetWorkspace$invitationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HouseholdInvitation
+   */
+  select?: Prisma.HouseholdInvitationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HouseholdInvitation
+   */
+  omit?: Prisma.HouseholdInvitationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HouseholdInvitationInclude<ExtArgs> | null
+  where?: Prisma.HouseholdInvitationWhereInput
+  orderBy?: Prisma.HouseholdInvitationOrderByWithRelationInput | Prisma.HouseholdInvitationOrderByWithRelationInput[]
+  cursor?: Prisma.HouseholdInvitationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HouseholdInvitationScalarFieldEnum | Prisma.HouseholdInvitationScalarFieldEnum[]
+}
+
+/**
+ * BudgetWorkspace.bankConnections
+ */
+export type BudgetWorkspace$bankConnectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BankConnection
+   */
+  select?: Prisma.BankConnectionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BankConnection
+   */
+  omit?: Prisma.BankConnectionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BankConnectionInclude<ExtArgs> | null
+  where?: Prisma.BankConnectionWhereInput
+  orderBy?: Prisma.BankConnectionOrderByWithRelationInput | Prisma.BankConnectionOrderByWithRelationInput[]
+  cursor?: Prisma.BankConnectionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BankConnectionScalarFieldEnum | Prisma.BankConnectionScalarFieldEnum[]
 }
 
 /**

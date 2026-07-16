@@ -113,6 +113,24 @@ export const FinanceSyncStatus = {
 export type FinanceSyncStatus = (typeof FinanceSyncStatus)[keyof typeof FinanceSyncStatus]
 
 
+export const HouseholdRole = {
+  OWNER: 'OWNER',
+  MEMBER: 'MEMBER'
+} as const
+
+export type HouseholdRole = (typeof HouseholdRole)[keyof typeof HouseholdRole]
+
+
+export const HouseholdInvitationStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REVOKED: 'REVOKED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type HouseholdInvitationStatus = (typeof HouseholdInvitationStatus)[keyof typeof HouseholdInvitationStatus]
+
+
 export const NotificationType = {
   LIKE: 'LIKE',
   COMMENT: 'COMMENT',
