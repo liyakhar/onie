@@ -18,6 +18,7 @@ export function BillingActions({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const subscribed = billing?.state === 'subscribed'
+  const founder = billing?.state === 'founder'
   const billingConfigured = billing?.billingConfigured ?? false
 
   if (billing?.isHouseholdOwner === false) {
@@ -64,6 +65,19 @@ export function BillingActions({
           {loading ? 'Opening billing…' : 'Manage subscription'}
         </Button>
         {error && <p className="text-sm text-red-700" role="alert">{error}</p>}
+      </div>
+    )
+  }
+
+  if (founder) {
+    return (
+      <div className="grid gap-3">
+        <div className={`rounded-lg border px-4 py-3 ${theme === 'dark' ? 'border-white/15 bg-white/5 text-white' : 'border-zinc-200 bg-white text-zinc-950'}`}>
+          <p className="text-sm font-medium">Founder access is active.</p>
+          <p className={`mt-1 text-sm leading-6 ${theme === 'dark' ? 'text-white/60' : 'text-zinc-600'}`}>
+            This account can use Wollie without a paid Stripe subscription.
+          </p>
+        </div>
       </div>
     )
   }

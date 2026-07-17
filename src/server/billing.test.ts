@@ -16,7 +16,13 @@ vi.mock('#/server/session.server', () => ({
   getSessionUser: vi.fn(),
 }))
 
-import { constructStripeEvent, handleStripeEvent } from './billing.server'
+import {
+  constructStripeEvent,
+  handleStripeEvent,
+  isFounderEmail,
+  loadBillingAccess,
+  shouldCollectCheckoutTermsConsent,
+} from './billing.server'
 
 function subscription(
   status: Stripe.Subscription.Status,
@@ -53,6 +59,7 @@ describe('Stripe test-mode event handling', () => {
   afterEach(() => {
     delete process.env.STRIPE_SECRET_KEY
     delete process.env.STRIPE_WEBHOOK_SECRET
+    delete process.env.FOUNDER_EMAILS
   })
 
   it('grants subscription state after a successful test subscription event', async () => {
@@ -112,5 +119,56 @@ describe('Stripe test-mode event handling', () => {
       body: payload,
       headers: { 'stripe-signature': 't=1,v1=forged' },
     }))).rejects.toThrow()
+  })
+})
+
+describe('Founder billing access', () => {
+  beforeEach(() => {
+    findUser.mockReset()
+  })
+
+  afterEach(() => {
+    delete process.env.FOUNDER_EMAILS
+  })
+
+  it('matches founder emails case-insensitively from comma-separated configuration', () => {
+    expect(isFounderEmail('LiyaKharitonova+Wollie@gmail.com', {
+      FOUNDER_EMAILS: 'liyakharitonova@gmail.com, liyakharitonova+wollie@gmail.com',
+    })).toBe(true)
+    expect(isFounderEmail('someone@example.com', {
+      FOUNDER_EMAILS: 'liyakharitonova@gmail.com',
+    })).toBe(false)
+  })
+
+  it('keeps founder access open even when the normal trial has ended', async () => {
+    process.env.FOUNDER_EMAILS = 'liyakharitonova@gmail.com,liyakharitonova+wollie@gmail.com'
+    findUser.mockResolvedValue({
+      email: 'liyakharitonova+wollie@gmail.com',
+      createdAt: new Date('2026-01-01T00:00:00.000Z'),
+      billingSubscription: null,
+    })
+
+    const billing = await loadBillingAccess('user_founder')
+
+    expect(billing).toEqual(expect.objectContaining({
+      hasAccess: true,
+      state: 'founder',
+      statusLabel: 'Founder access',
+    }))
+  })
+})
+
+describe('Stripe Checkout Terms consent', () => {
+  it('is required by default and in production-style configuration', () => {
+    expect(shouldCollectCheckoutTermsConsent({})).toBe(true)
+    expect(shouldCollectCheckoutTermsConsent({
+      STRIPE_CHECKOUT_TERMS_CONSENT: 'true',
+    })).toBe(true)
+  })
+
+  it('can be disabled explicitly for pre-company private staging', () => {
+    expect(shouldCollectCheckoutTermsConsent({
+      STRIPE_CHECKOUT_TERMS_CONSENT: 'false',
+    })).toBe(false)
   })
 })

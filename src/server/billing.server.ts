@@ -9,7 +9,7 @@ const ACCESS_STATUSES = new Set(['active', 'trialing', 'past_due'])
 
 export type BillingAccess = {
   hasAccess: boolean
-  state: 'development' | 'trial' | 'subscribed' | 'expired'
+  state: 'development' | 'founder' | 'trial' | 'subscribed' | 'expired'
   status: string
   statusLabel: string
   billingConfigured: boolean
@@ -25,6 +25,18 @@ export type BillingAccess = {
 
 export function trialEndsAt(createdAt: Date) {
   return new Date(createdAt.getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1_000)
+}
+
+export function isFounderEmail(
+  email: string,
+  env: { FOUNDER_EMAILS?: string } = process.env,
+) {
+  const normalizedEmail = email.trim().toLowerCase()
+  return (env.FOUNDER_EMAILS || '')
+    .split(',')
+    .map((item) => item.trim().toLowerCase())
+    .filter(Boolean)
+    .includes(normalizedEmail)
 }
 
 export async function loadBillingAccess(userId: string): Promise<BillingAccess> {
@@ -54,22 +66,25 @@ export async function loadBillingAccess(userId: string): Promise<BillingAccess> 
   const subscription = user.billingSubscription
   const status = subscription?.status || 'none'
   const subscribed = ACCESS_STATUSES.has(status)
+  const founder = isFounderEmail(user.email)
   const isDevelopmentAccount =
     process.env.NODE_ENV === 'development' && user.email === 'dev@wollie.local'
 
   const state = isDevelopmentAccount
     ? 'development'
-    : subscribed
-      ? 'subscribed'
-      : remainingMs > 0
-        ? 'trial'
-        : 'expired'
+    : founder
+      ? 'founder'
+      : subscribed
+        ? 'subscribed'
+        : remainingMs > 0
+          ? 'trial'
+          : 'expired'
 
   return {
     hasAccess: state !== 'expired',
     state,
     status,
-    statusLabel: billingStatusLabel(status, subscription?.cancelAtPeriodEnd || false),
+    statusLabel: founder ? 'Founder access' : billingStatusLabel(status, subscription?.cancelAtPeriodEnd || false),
     billingConfigured: isStripeBillingConfigured(),
     trialEndsAt: trialEnd.toISOString(),
     daysRemaining,
@@ -92,6 +107,12 @@ export function isStripeBillingConfigured(
       && env.STRIPE_MONTHLY_PRICE_ID?.trim()
       && env.STRIPE_YEARLY_PRICE_ID?.trim(),
   )
+}
+
+export function shouldCollectCheckoutTermsConsent(
+  env: { STRIPE_CHECKOUT_TERMS_CONSENT?: string } = process.env,
+) {
+  return env.STRIPE_CHECKOUT_TERMS_CONSENT !== 'false'
 }
 
 export async function requireBillingUser() {
@@ -141,12 +162,15 @@ export async function createStripeCheckout(
   const stripe = await getStripeClient()
   const siteUrl = getSiteUrl()
   const automaticTax = process.env.STRIPE_AUTOMATIC_TAX === 'true'
+  const collectTermsConsent = shouldCollectCheckoutTermsConsent()
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
     line_items: [{ price, quantity: 1 }],
     billing_address_collection: 'required',
     automatic_tax: { enabled: automaticTax },
-    consent_collection: { terms_of_service: 'required' },
+    ...(collectTermsConsent
+      ? { consent_collection: { terms_of_service: 'required' as const } }
+      : {}),
     custom_text: {
       submit: {
         message: 'By subscribing, you request immediate access before the 14-day withdrawal period ends. Statutory withdrawal rights remain available as described in the Terms.',

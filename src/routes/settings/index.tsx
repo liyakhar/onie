@@ -285,13 +285,15 @@ function SettingsPage() {
               <CardDescription>
                 {billing?.state === 'trial'
                   ? `${billing.daysRemaining} day${billing.daysRemaining === 1 ? '' : 's'} left in your free trial`
+                  : billing?.state === 'founder'
+                    ? 'Founder access is active'
                   : billing?.state === 'development'
                     ? 'Development account access'
                     : billing?.statusLabel || 'Choose a Wollie plan'}
               </CardDescription>
               <CardAction>
                 <Badge variant="outline" className="rounded-md border-[color-mix(in_oklch,var(--color-wollie-accent)_28%,white)] bg-[color-mix(in_oklch,var(--color-wollie-accent)_9%,white)] text-[var(--color-wollie-accent)]">
-                  {billing?.state === 'subscribed' ? 'Active' : billing?.state === 'trial' ? 'Trial' : 'Billing'}
+                  {billing?.state === 'subscribed' ? 'Active' : billing?.state === 'founder' ? 'Founder' : billing?.state === 'trial' ? 'Trial' : 'Billing'}
                 </Badge>
               </CardAction>
             </CardHeader>
