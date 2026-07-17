@@ -718,7 +718,11 @@ function assertLiveSyncAllowed() {
   if (environment === 'sandbox' && !process.env.STAGING_ACCESS_PASSWORD?.trim()) {
     throw new Error('Enable Banking sandbox access requires private staging protection.')
   }
-  if (environment === 'production' && process.env.ENABLE_BANKING_PUBLIC_ACCESS_APPROVED !== 'true') {
+  if (
+    environment === 'production'
+    && process.env.ENABLE_BANKING_PUBLIC_ACCESS_APPROVED !== 'true'
+    && process.env.ENABLE_BANKING_RESTRICTED_TESTING !== 'true'
+  ) {
     throw new Error('Public Enable Banking access is not approved yet.')
   }
   if (environment !== 'sandbox' && environment !== 'production') {

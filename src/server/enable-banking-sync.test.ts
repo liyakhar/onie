@@ -11,6 +11,7 @@ const originalNodeEnv = process.env.NODE_ENV
 const originalLiveSync = process.env.ENABLE_LIVE_BANK_SYNC
 const originalEnvironment = process.env.ENABLE_BANKING_ENVIRONMENT
 const originalPublicAccess = process.env.ENABLE_BANKING_PUBLIC_ACCESS_APPROVED
+const originalRestrictedTesting = process.env.ENABLE_BANKING_RESTRICTED_TESTING
 const originalStagingPassword = process.env.STAGING_ACCESS_PASSWORD
 
 afterEach(() => {
@@ -20,6 +21,7 @@ afterEach(() => {
   restoreEnv('ENABLE_LIVE_BANK_SYNC', originalLiveSync)
   restoreEnv('ENABLE_BANKING_ENVIRONMENT', originalEnvironment)
   restoreEnv('ENABLE_BANKING_PUBLIC_ACCESS_APPROVED', originalPublicAccess)
+  restoreEnv('ENABLE_BANKING_RESTRICTED_TESTING', originalRestrictedTesting)
   restoreEnv('STAGING_ACCESS_PASSWORD', originalStagingPassword)
 })
 
@@ -136,9 +138,20 @@ describe('Enable Banking sync helpers', () => {
     process.env.ENABLE_LIVE_BANK_SYNC = 'true'
     process.env.ENABLE_BANKING_ENVIRONMENT = 'production'
     process.env.ENABLE_BANKING_PUBLIC_ACCESS_APPROVED = 'false'
+    process.env.ENABLE_BANKING_RESTRICTED_TESTING = 'false'
 
     expect(() => assertEnableBankingAccessAllowed()).toThrow('not approved')
     process.env.ENABLE_BANKING_PUBLIC_ACCESS_APPROVED = 'true'
+    expect(() => assertEnableBankingAccessAllowed()).not.toThrow()
+  })
+
+  it('allows production bank sync for restricted tester mode without public access approval', () => {
+    process.env.NODE_ENV = 'production'
+    process.env.ENABLE_LIVE_BANK_SYNC = 'true'
+    process.env.ENABLE_BANKING_ENVIRONMENT = 'production'
+    process.env.ENABLE_BANKING_PUBLIC_ACCESS_APPROVED = 'false'
+    process.env.ENABLE_BANKING_RESTRICTED_TESTING = 'true'
+
     expect(() => assertEnableBankingAccessAllowed()).not.toThrow()
   })
 })
