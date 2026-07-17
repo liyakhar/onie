@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import { Download, ExternalLink, Users } from 'lucide-react'
+import { Download, Users } from 'lucide-react'
 import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
 import {
@@ -208,21 +208,18 @@ function AccountsPage() {
                 ? enableBanking.needsReconnect
                   ? 'Reconnect'
                   : `Synced ${enableBanking.lastSynced}`
-                : enableBanking.configured
+                : enableBanking.openForConnections
                   ? enableBanking.environment
-                  : 'Setup required'}
+                  : 'Coming soon'}
             </Badge>
           </CardAction>
         </CardHeader>
         <CardContent className="grid gap-6 pt-6">
-          {!enableBanking.configured ? (
+          {!enableBanking.openForConnections ? (
             <div className="flex flex-col items-start gap-3 text-sm text-zinc-600">
-              <p>Add the Enable Banking application ID and private key to the Wollie server, then reload this page.</p>
-              <Button asChild variant="outline" className="border-zinc-200 bg-white text-zinc-950 hover:bg-zinc-100">
-                <a href="https://enablebanking.com/cp" target="_blank" rel="noreferrer">
-                  Open Enable Banking <ExternalLink aria-hidden="true" />
-                </a>
-              </Button>
+              <p>
+                Bank connections are not open yet. We are finishing the secure provider setup before testers connect real accounts.
+              </p>
             </div>
           ) : enableBanking.connected ? (
             <div className="flex flex-wrap gap-2">

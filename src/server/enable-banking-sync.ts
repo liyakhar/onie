@@ -244,8 +244,18 @@ export const getEnableBankingStatus = createServerFn({ method: 'GET' }).handler(
   })
   const connection = await getConnection(user.id)
   const hasSession = connection?.credential.kind === 'session'
+  const configured = hasProviderConfig()
+  let openForConnections = configured
+  if (configured) {
+    try {
+      assertLiveSyncAllowed()
+    } catch {
+      openForConnections = false
+    }
+  }
   return {
-    configured: hasProviderConfig(),
+    configured,
+    openForConnections,
     environment: process.env.ENABLE_BANKING_ENVIRONMENT === 'production' ? 'Live' : 'Sandbox',
     connected: hasSession,
     needsReconnect: hasSession && (saved?.status === 'NEEDS_RECONNECT' || saved?.status === 'FAILED'),
