@@ -1,5 +1,9 @@
 import { createMiddleware, createStart } from '@tanstack/react-start'
-import { stagingAccessResponse } from '#/lib/staging-access'
+import { canonicalAppRedirect, stagingAccessResponse } from '#/lib/staging-access'
+
+const canonicalApp = createMiddleware().server(async ({ next, request }) => {
+  return canonicalAppRedirect(request) || next()
+})
 
 const stagingAccess = createMiddleware().server(async ({ next, request }) => {
   const denied = stagingAccessResponse(request, {
@@ -10,5 +14,5 @@ const stagingAccess = createMiddleware().server(async ({ next, request }) => {
 })
 
 export const startInstance = createStart(() => ({
-  requestMiddleware: [stagingAccess],
+  requestMiddleware: [canonicalApp, stagingAccess],
 }))

@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { parseBasicAuthorization, stagingAccessResponse } from './staging-access'
+import {
+  canonicalAppRedirect,
+  parseBasicAuthorization,
+  stagingAccessResponse,
+} from './staging-access'
 
 function request(path = '/', authorization?: string) {
   return new Request(`https://staging.example${path}`, {
@@ -42,6 +46,41 @@ describe('staging access', () => {
       stagingAccessResponse(request('/api/stripe/webhook'), {
         password: 'a-secure-test-password',
       }),
+    ).toBeNull()
+  })
+})
+
+describe('canonical app redirect', () => {
+  it('redirects Cloudflare production routes to Railway and preserves the path and query', () => {
+    const response = canonicalAppRedirect(
+      new Request('https://wollie.pages.dev/app/accounts?state=test'),
+    )
+
+    expect(response?.status).toBe(307)
+    expect(response?.headers.get('location')).toBe(
+      'https://onie-web-production.up.railway.app/app/accounts?state=test',
+    )
+    expect(response?.headers.get('cache-control')).toBe('no-store')
+  })
+
+  it('redirects Cloudflare preview deployments too', () => {
+    const response = canonicalAppRedirect(
+      new Request('https://75e573a5.wollie.pages.dev/pricing'),
+    )
+
+    expect(response?.headers.get('location')).toBe(
+      'https://onie-web-production.up.railway.app/pricing',
+    )
+  })
+
+  it('does not redirect Railway or local requests', () => {
+    expect(
+      canonicalAppRedirect(
+        new Request('https://onie-web-production.up.railway.app/app/accounts'),
+      ),
+    ).toBeNull()
+    expect(
+      canonicalAppRedirect(new Request('http://localhost:3000/app/accounts')),
     ).toBeNull()
   })
 })

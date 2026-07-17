@@ -3,6 +3,31 @@ export type StagingAccessConfig = {
   username?: string
 }
 
+const railwayProductionUrl = 'https://onie-web-production.up.railway.app'
+
+export function canonicalAppRedirect(
+  request: Request,
+  canonicalUrl = process.env.CANONICAL_APP_URL || railwayProductionUrl,
+): Response | null {
+  const source = new URL(request.url)
+  const isCloudflareDeployment =
+    source.hostname === 'wollie.pages.dev' || source.hostname.endsWith('.wollie.pages.dev')
+
+  if (!isCloudflareDeployment) return null
+
+  const target = new URL(canonicalUrl)
+  target.pathname = source.pathname
+  target.search = source.search
+
+  return new Response(null, {
+    status: 307,
+    headers: {
+      'cache-control': 'no-store',
+      location: target.toString(),
+    },
+  })
+}
+
 export function stagingAccessResponse(
   request: Request,
   config: StagingAccessConfig,
