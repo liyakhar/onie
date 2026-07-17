@@ -7,7 +7,7 @@ shared prompt library for teams,,,Informational,Published,P1,Team libs,serp-2026
 claude code skills vs rules,,,Informational,Published,P1,Skills,serp-2026-06,Related to published skills post; comparison intent,Published /blog/claude-code-skills-vs-rules
 mcp server cursor setup,,,Informational,Published,P1,MCP,serp-2026-06,mcp.json config questions common in tutorials,Step-by-step Cursor MCP.json + verify tools,Published /blog/mcp-server-cursor-setup
 agent skills best practices,,,Informational,Published,P1,Skills,serp-2026-06,Listicles + Anthropic repo SEO,Published /blog/agent-skills-best-practices
-claude code hooks tutorial,,,Informational,Queued,P2,Skills,serp-2026-06,Emerging topic; fewer definitive guides,Hooks for quality gates; link workflow examples post
+claude code hooks tutorial,,,Informational,Published,P2,Skills,serp-2026-06,Emerging topic; fewer definitive guides,Published /blog/claude-code-hooks-tutorial
 share claude code skills with team,,,Informational,Queued,P2,Team libs,serp-2026-06,Git-shared .claude/skills angle under-served,Review process + Onie public feed
 agent workflow template,,,Informational,Queued,P2,Documentation,serp-2026-06,Template posts rank on Notion/Medium,Downloadable template + Onie /p/ examples
 share ai prompts with team,,,Informational,Queued,P2,Team libs,serp-2026-06,Prompt wallet / Glean content ranks,Agent workflow angle not ChatGPT-only

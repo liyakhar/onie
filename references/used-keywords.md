@@ -71,6 +71,20 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - how to write agent skills ✓
   - progressive disclosure pattern ✓
 
+### claude code hooks tutorial
+
+- **Page:** `/blog/claude-code-hooks-tutorial`
+- **Published:** 2026-07-17
+- **Intent:** Informational
+- **Volume / KD:** pending
+- **Cluster:**
+  - claude code hooks tutorial ✓
+  - claude code hooks guide ✓
+  - pretooluse hook ✓
+  - posttooluse hook ✓
+  - claude code automation ✓
+  - claude code lifecycle events ✓
+
 ### how to write claude code skills
 
 - **Page:** `/blog/how-to-write-claude-code-skills`

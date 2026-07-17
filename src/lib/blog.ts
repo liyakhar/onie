@@ -9,11 +9,13 @@ import { sharedPromptLibraryPost } from '#/content/blog/shared-prompt-library-fo
 import { mcpServerCursorSetupPost } from '#/content/blog/mcp-server-cursor-setup'
 import { installClaudeCodePost } from '#/content/blog/install-claude-code'
 import { agentSkillsBestPracticesPost } from '#/content/blog/agent-skills-best-practices'
+import { claudeCodeHooksTutorialPost } from '#/content/blog/claude-code-hooks-tutorial'
 
 const posts: BlogPost[] = [
   installClaudeCodePost,
   mcpServerCursorSetupPost,
   agentSkillsBestPracticesPost,
+  claudeCodeHooksTutorialPost,
   sharedPromptLibraryPost,
   claudeCodeSkillsVsRulesPost,
   claudeCodeSkillsPost,
