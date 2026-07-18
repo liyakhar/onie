@@ -26,7 +26,7 @@ export const claudeCodeSkillsVsRulesPost: BlogPost = {
     'how-to-write-claude-code-skills',
     'cursor-rules-vs-skills',
     'claude-code-workflow-examples',
-    'claude-code-hooks-tutorial',
+    'share-claude-code-skills-with-team',
   ],
   body: `
 ## The short answer

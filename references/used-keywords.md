@@ -85,6 +85,20 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - claude code automation ✓
   - claude code lifecycle events ✓
 
+### share claude code skills with team
+
+- **Page:** `/blog/share-claude-code-skills-with-team`
+- **Published:** 2026-07-18
+- **Intent:** Informational
+- **Volume / KD:** pending
+- **Cluster:**
+  - share claude code skills with team ✓
+  - team claude code skills ✓
+  - shared skills library claude code ✓
+  - claude code plugin marketplace ✓
+  - team prompt management ✓
+  - claude code conventions ✓
+
 ### how to write claude code skills
 
 - **Page:** `/blog/how-to-write-claude-code-skills`
