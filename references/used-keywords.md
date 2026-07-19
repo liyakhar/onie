@@ -4,6 +4,20 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
 
 ## Active primaries
 
+### agent workflow template
+
+- **Page:** `/blog/agent-workflow-template`
+- **Published:** 2026-07-19
+- **Intent:** Informational
+- **Volume / KD:** pending SEMrush/Ahrefs validation (serp-2026-07 initial research)
+- **Cluster:**
+  - agent workflow template ✓
+  - agent workflow example ✓
+  - how to structure ai workflows ✓
+  - DOE framework ✓
+  - workflow automation template ✓
+  - claude code workflow template ✓
+
 ### install claude code
 
 - **Page:** `/blog/install-claude-code`

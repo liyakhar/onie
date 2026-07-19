@@ -9,7 +9,7 @@ mcp server cursor setup,,,Informational,Published,P1,MCP,serp-2026-06,mcp.json c
 agent skills best practices,,,Informational,Published,P1,Skills,serp-2026-06,Listicles + Anthropic repo SEO,Published /blog/agent-skills-best-practices
 claude code hooks tutorial,,,Informational,Published,P2,Skills,serp-2026-06,Emerging topic; fewer definitive guides,Published /blog/claude-code-hooks-tutorial
 share claude code skills with team,,,Informational,Published,P2,Team libs,serp-2026-06,Git-shared .claude/skills angle under-served,Published /blog/share-claude-code-skills-with-team
-agent workflow template,,,Informational,Queued,P2,Documentation,serp-2026-06,Template posts rank on Notion/Medium,Downloadable template + Onie /p/ examples
+agent workflow template,,,Informational,Published,P2,Documentation,serp-2026-06,Template posts rank on Notion/Medium,Published /blog/agent-workflow-template
 share ai prompts with team,,,Informational,Queued,P2,Team libs,serp-2026-06,Prompt wallet / Glean content ranks,Agent workflow angle not ChatGPT-only
 prompt library governance,,,Informational,Queued,P2,Team libs,serp-2026-06,Enterprise governance posts; niche KD,Ownership + lifecycle for agent assets
 claude code SKILL.md format,,,Informational,Queued,P2,Skills,serp-2026-06,Long-tail; supports skills cluster,Frontmatter deep-dive; link skills 101 post

@@ -11,6 +11,7 @@ import { installClaudeCodePost } from '#/content/blog/install-claude-code'
 import { agentSkillsBestPracticesPost } from '#/content/blog/agent-skills-best-practices'
 import { claudeCodeHooksTutorialPost } from '#/content/blog/claude-code-hooks-tutorial'
 import { shareClaudeCodeSkillsPost } from '#/content/blog/share-claude-code-skills-with-team'
+import { agentWorkflowTemplatePost } from '#/content/blog/agent-workflow-template'
 
 const posts: BlogPost[] = [
   installClaudeCodePost,
@@ -23,6 +24,7 @@ const posts: BlogPost[] = [
   claudeCodeSkillsPost,
   cursorRulesVsSkillsPost,
   documentWorkflowsPost,
+  agentWorkflowTemplatePost,
   claudeCodeWorkflowExamplesPost,
   buildMcpServerPost,
 ]
