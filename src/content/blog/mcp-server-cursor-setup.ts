@@ -23,7 +23,7 @@ export const mcpServerCursorSetupPost: BlogPost = {
   },
   tldr:
     'Cursor reads MCP servers from ~/.cursor/mcp.json (global, all projects) or .cursor/mcp.json (project root, per-workspace). Add server entries under mcpServers with command/args for local servers or url for remote ones. Environment variables load from your shell profile. Reload Cursor (Cmd+Shift+P > "Reload Window") to apply changes. Project-level configs commit to git for team sharing.',
-  relatedSlugs: ['build-mcp-server', 'how-to-write-claude-code-skills'],
+  relatedSlugs: ['claude-code-mcp-add', 'build-mcp-server', 'how-to-write-claude-code-skills'],
   body: `
 ## Why Cursor's MCP support matters
 

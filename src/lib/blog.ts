@@ -12,10 +12,12 @@ import { agentSkillsBestPracticesPost } from '#/content/blog/agent-skills-best-p
 import { claudeCodeHooksTutorialPost } from '#/content/blog/claude-code-hooks-tutorial'
 import { shareClaudeCodeSkillsPost } from '#/content/blog/share-claude-code-skills-with-team'
 import { agentWorkflowTemplatePost } from '#/content/blog/agent-workflow-template'
+import { claudeCodeMcpAddPost } from '#/content/blog/claude-code-mcp-add'
 
 const posts: BlogPost[] = [
   installClaudeCodePost,
   mcpServerCursorSetupPost,
+  claudeCodeMcpAddPost,
   agentSkillsBestPracticesPost,
   claudeCodeHooksTutorialPost,
   shareClaudeCodeSkillsPost,

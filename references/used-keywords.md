@@ -4,6 +4,19 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
 
 ## Active primaries
 
+### claude code mcp add
+
+- **Page:** `/blog/claude-code-mcp-add`
+- **Published:** 2026-07-20
+- **Intent:** Navigational
+- **Volume / KD:** 110 / 17 (dataforseo:2026-06-16)
+- **Cluster:**
+  - claude code mcp add ✓
+  - claude mcp add command ✓
+  - how to add mcp server ✓
+  - claude code mcp configuration ✓
+  - mcp server registration ✓
+
 ### agent workflow template
 
 - **Page:** `/blog/agent-workflow-template`
