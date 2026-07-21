@@ -22,7 +22,7 @@ export const claudeCodeMcpAddPost: BlogPost = {
   },
   tldr:
     'The claude mcp add command registers an MCP server with Claude Code in seconds. Use it once per server—at local, project, or user scope—and every session gets access to that server's tools. For local servers, provide the command to run. For hosted servers, provide a URL. Both support environment variables, headers, and OAuth.',
-  relatedSlugs: ['build-mcp-server', 'mcp-server-cursor-setup'],
+  relatedSlugs: ['model-context-protocol-tutorial', 'build-mcp-server', 'mcp-server-cursor-setup'],
   body: `
 ## When you need claude mcp add
 

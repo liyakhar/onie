@@ -4,6 +4,20 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
 
 ## Active primaries
 
+### model context protocol tutorial
+
+- **Page:** `/blog/model-context-protocol-tutorial`
+- **Published:** 2026-07-21
+- **Intent:** Navigational
+- **Volume / KD:** 50 / 35 (dataforseo:2026-06-16)
+- **Cluster:**
+  - model context protocol tutorial ✓
+  - mcp server tutorial ✓
+  - how mcp works ✓
+  - mcp client server ✓
+  - mcp resources tools prompts ✓
+  - mcp setup guide ✓
+
 ### claude code mcp add
 
 - **Page:** `/blog/claude-code-mcp-add`
