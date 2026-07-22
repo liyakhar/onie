@@ -206,3 +206,17 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - prompt versioning ✓
   - prompt approval workflow ✓
   - ai prompt organization ✓
+
+### share ai prompts with team
+
+- **Page:** `/blog/share-ai-prompts-with-team`
+- **Published:** 2026-07-22
+- **Intent:** Informational
+- **Volume / KD:** pending
+- **Cluster:**
+  - share ai prompts with team ✓
+  - share prompts claude ✓
+  - team prompt management ✓
+  - prompt sharing workflow ✓
+  - shared prompt library ✓
+  - how to organize team prompts ✓

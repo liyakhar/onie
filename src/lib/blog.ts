@@ -14,6 +14,7 @@ import { shareClaudeCodeSkillsPost } from '#/content/blog/share-claude-code-skil
 import { agentWorkflowTemplatePost } from '#/content/blog/agent-workflow-template'
 import { claudeCodeMcpAddPost } from '#/content/blog/claude-code-mcp-add'
 import { modelContextProtocolTutorialPost } from '#/content/blog/model-context-protocol-tutorial'
+import { shareAiPromptsWithTeamPost } from '#/content/blog/share-ai-prompts-with-team'
 
 const posts: BlogPost[] = [
   installClaudeCodePost,
@@ -23,6 +24,7 @@ const posts: BlogPost[] = [
   agentSkillsBestPracticesPost,
   claudeCodeHooksTutorialPost,
   shareClaudeCodeSkillsPost,
+  shareAiPromptsWithTeamPost,
   sharedPromptLibraryPost,
   claudeCodeSkillsVsRulesPost,
   claudeCodeSkillsPost,

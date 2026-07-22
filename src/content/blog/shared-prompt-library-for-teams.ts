@@ -23,7 +23,7 @@ export const sharedPromptLibraryPost: BlogPost = {
   },
   tldr:
     'A shared prompt library is central version control for your team\'s best AI workflows. Store prompts with metadata (cluster, model, version), tag them by use case, add approval gates before deploy, and track which versions work. Start with a shared folder or a simple registry in git; grow into a governance layer once teams cross 20+ people. The ROI is fastest in customer-facing workflows (support, marketing copy) where inconsistency is visible.',
-  relatedSlugs: ['document-ai-agent-workflows', 'how-to-write-claude-code-skills'],
+  relatedSlugs: ['shared-prompt-library-for-teams', 'share-claude-code-skills-with-team', 'document-ai-agent-workflows'],
   body: `
 ## Why shared prompts matter more than tools
 
