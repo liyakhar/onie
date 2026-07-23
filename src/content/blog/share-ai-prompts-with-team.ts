@@ -24,9 +24,9 @@ export const shareAiPromptsWithTeamPost: BlogPost = {
   tldr:
     'Share prompts using git (version control, team review), native platform features (Claude Console sharing, Workspace access), or lightweight prompt apps (Prompt Wallet, TeamPrompt). Start with git for small teams; add governance layers (ownership, approval, versioning) as you scale. The best method depends on team size, tool choice, and how prompts flow into your workflow.',
   relatedSlugs: [
+    'prompt-library-governance',
     'shared-prompt-library-for-teams',
     'share-claude-code-skills-with-team',
-    'document-ai-agent-workflows',
   ],
   body: `
 ## The prompt scatter problem
