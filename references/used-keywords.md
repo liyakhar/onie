@@ -220,3 +220,35 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - prompt sharing workflow ✓
   - shared prompt library ✓
   - how to organize team prompts ✓
+
+### prompt library governance
+
+- **Page:** `/blog/prompt-library-governance`
+- **Published:** 2026-07-23
+- **Intent:** Informational
+- **Volume / KD:** pending
+- **Cluster:**
+  - prompt library governance ✓
+  - prompt governance framework ✓
+  - how to govern prompts ✓
+  - prompt lifecycle management ✓
+  - prompt versioning and approval ✓
+  - team prompt standards ✓
+  - ai workflow governance ✓
+  - prompt deprecation policy ✓
+
+### claude code SKILL.md format
+
+- **Page:** `/blog/claude-code-skillmd-format`
+- **Published:** 2026-07-24
+- **Intent:** Informational
+- **Volume / KD:** pending
+- **Cluster:**
+  - claude code SKILL.md format ✓
+  - SKILL.md frontmatter ✓
+  - how to structure SKILL.md ✓
+  - claude code skill directory ✓
+  - SKILL.md triggering ✓
+  - skill metadata fields ✓
+  - claude skill template ✓
+  - SKILL.md examples ✓

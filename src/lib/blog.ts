@@ -15,6 +15,8 @@ import { agentWorkflowTemplatePost } from '#/content/blog/agent-workflow-templat
 import { claudeCodeMcpAddPost } from '#/content/blog/claude-code-mcp-add'
 import { modelContextProtocolTutorialPost } from '#/content/blog/model-context-protocol-tutorial'
 import { shareAiPromptsWithTeamPost } from '#/content/blog/share-ai-prompts-with-team'
+import { promptLibraryGovernancePost } from '#/content/blog/prompt-library-governance'
+import { claudeCodeSkillmdFormatPost } from '#/content/blog/claude-code-skillmd-format'
 
 const posts: BlogPost[] = [
   installClaudeCodePost,
@@ -26,8 +28,10 @@ const posts: BlogPost[] = [
   shareClaudeCodeSkillsPost,
   shareAiPromptsWithTeamPost,
   sharedPromptLibraryPost,
+  promptLibraryGovernancePost,
   claudeCodeSkillsVsRulesPost,
   claudeCodeSkillsPost,
+  claudeCodeSkillmdFormatPost,
   cursorRulesVsSkillsPost,
   documentWorkflowsPost,
   agentWorkflowTemplatePost,

@@ -11,8 +11,8 @@ claude code hooks tutorial,,,Informational,Published,P2,Skills,serp-2026-06,Emer
 share claude code skills with team,,,Informational,Published,P2,Team libs,serp-2026-06,Git-shared .claude/skills angle under-served,Published /blog/share-claude-code-skills-with-team
 agent workflow template,,,Informational,Published,P2,Documentation,serp-2026-06,Template posts rank on Notion/Medium,Published /blog/agent-workflow-template
 share ai prompts with team,,,Informational,Published,P2,Team libs,serp-2026-06,Prompt wallet / Glean content ranks,Published /blog/share-ai-prompts-with-team
-prompt library governance,,,Informational,Queued,P2,Team libs,serp-2026-06,Enterprise governance posts; niche KD,Ownership + lifecycle for agent assets
-claude code SKILL.md format,,,Informational,Queued,P2,Skills,serp-2026-06,Long-tail; supports skills cluster,Frontmatter deep-dive; link skills 101 post
+prompt library governance,,,Informational,Published,P2,Team libs,serp-2026-06,Enterprise governance posts; niche KD,Published /blog/prompt-library-governance
+claude code SKILL.md format,,,Informational,Published,P2,Skills,serp-2026-06,Long-tail; supports skills cluster,Published /blog/claude-code-skillmd-format
 when to use skills vs rules,,,Informational,Queued,P2,Skills,serp-2026-06,PAA under cursor/claude comparisons,Short FAQ-heavy post; internal link rules vs skills
 claude code subagents workflow,,,Informational,Queued,P3,Skills,serp-2026-06,Multi-agent content growing on Medium/Substack,Orchestration examples from practitioners
 mcp tools resources prompts difference,,,Informational,Queued,P3,MCP,serp-2026-06,Conceptual MCP questions in courses,Explain primitives; link MCP build post

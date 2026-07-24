@@ -24,9 +24,9 @@ export const agentSkillsBestPracticesPost: BlogPost = {
     'Effective agent skills follow a progressive disclosure pattern: metadata (name + description) advertise what the skill does; SKILL.md stays under 500 lines with step-by-step procedures; supplementary files live in flat subdirectories (references/, scripts/, assets/) and load only when needed. The description is your control — it decides whether the agent activates the skill at all.',
   relatedSlugs: [
     'how-to-write-claude-code-skills',
+    'claude-code-skillmd-format',
     'claude-code-skills-vs-rules',
     'document-ai-agent-workflows',
-    'build-mcp-server',
   ],
   body: `
 ## The skill discovery problem
