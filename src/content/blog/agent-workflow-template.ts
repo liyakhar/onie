@@ -26,6 +26,7 @@ export const agentWorkflowTemplatePost: BlogPost = {
   relatedSlugs: [
     'document-ai-agent-workflows',
     'claude-code-workflow-examples',
+    'claude-code-subagents-workflow',
     'how-to-write-claude-code-skills',
   ],
   body: `

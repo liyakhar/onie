@@ -252,3 +252,17 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - skill metadata fields ✓
   - claude skill template ✓
   - SKILL.md examples ✓
+
+### claude code subagents workflow
+
+- **Page:** `/blog/claude-code-subagents-workflow`
+- **Published:** 2026-07-25
+- **Intent:** Informational
+- **Volume / KD:** pending
+- **Cluster:**
+  - claude code subagents workflow ✓
+  - claude code subagents vs workflows ✓
+  - dynamic workflows claude code ✓
+  - agent teams claude code ✓
+  - multi-agent orchestration ✓
+  - subagents vs agent teams ✓
