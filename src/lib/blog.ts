@@ -18,6 +18,7 @@ import { shareAiPromptsWithTeamPost } from '#/content/blog/share-ai-prompts-with
 import { promptLibraryGovernancePost } from '#/content/blog/prompt-library-governance'
 import { claudeCodeSkillmdFormatPost } from '#/content/blog/claude-code-skillmd-format'
 import { claudeCodeSubagentsWorkflowPost } from '#/content/blog/claude-code-subagents-workflow'
+import { whenToUseSkillsVsRulesPost } from '#/content/blog/when-to-use-skills-vs-rules'
 
 const posts: BlogPost[] = [
   installClaudeCodePost,
@@ -38,6 +39,7 @@ const posts: BlogPost[] = [
   agentWorkflowTemplatePost,
   claudeCodeWorkflowExamplesPost,
   claudeCodeSubagentsWorkflowPost,
+  whenToUseSkillsVsRulesPost,
   buildMcpServerPost,
 ]
 

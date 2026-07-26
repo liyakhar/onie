@@ -253,6 +253,19 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - claude skill template ✓
   - SKILL.md examples ✓
 
+### when to use skills vs rules
+
+- **Page:** `/blog/when-to-use-skills-vs-rules`
+- **Published:** 2026-07-26
+- **Intent:** Informational
+- **Volume / KD:** pending SEMrush/Ahrefs validation (serp-2026-07 initial research)
+- **Cluster:**
+  - when to use skills vs rules ✓
+  - skills vs rules comparison ✓
+  - agent skills vs rules ✓
+  - claude code rules vs skills ✓
+  - when to use agent skills ✓
+
 ### claude code subagents workflow
 
 - **Page:** `/blog/claude-code-subagents-workflow`

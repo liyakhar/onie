@@ -27,6 +27,7 @@ export const cursorRulesVsSkillsPost: BlogPost = {
     'how-to-write-claude-code-skills',
     'claude-code-workflow-examples',
     'document-ai-agent-workflows',
+    'when-to-use-skills-vs-rules',
   ],
   body: `
 ## The short answer
