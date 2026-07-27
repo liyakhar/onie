@@ -19,6 +19,7 @@ import { promptLibraryGovernancePost } from '#/content/blog/prompt-library-gover
 import { claudeCodeSkillmdFormatPost } from '#/content/blog/claude-code-skillmd-format'
 import { claudeCodeSubagentsWorkflowPost } from '#/content/blog/claude-code-subagents-workflow'
 import { whenToUseSkillsVsRulesPost } from '#/content/blog/when-to-use-skills-vs-rules'
+import { mcpToolsResourcesPromptsPost } from '#/content/blog/mcp-tools-resources-prompts'
 
 const posts: BlogPost[] = [
   installClaudeCodePost,
@@ -40,6 +41,7 @@ const posts: BlogPost[] = [
   claudeCodeWorkflowExamplesPost,
   claudeCodeSubagentsWorkflowPost,
   whenToUseSkillsVsRulesPost,
+  mcpToolsResourcesPromptsPost,
   buildMcpServerPost,
 ]
 

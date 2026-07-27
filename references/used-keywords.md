@@ -279,3 +279,17 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - agent teams claude code ✓
   - multi-agent orchestration ✓
   - subagents vs agent teams ✓
+
+### mcp tools resources prompts difference
+
+- **Page:** `/blog/mcp-tools-resources-prompts`
+- **Published:** 2026-07-27
+- **Intent:** Informational
+- **Volume / KD:** pending SEMrush/Ahrefs validation (serp-2026-07 initial research)
+- **Cluster:**
+  - mcp tools resources prompts difference ✓
+  - mcp primitives explained ✓
+  - mcp tools vs resources ✓
+  - mcp prompts templates ✓
+  - when to use mcp tools resources prompts ✓
+  - mcp architecture primitives ✓

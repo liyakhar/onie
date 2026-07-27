@@ -23,7 +23,7 @@ export const modelContextProtocolTutorialPost: BlogPost = {
   },
   tldr:
     'Model Context Protocol (MCP) standardizes how AI hosts like Claude or Cursor discover and invoke external tools. MCP is built on three primitives—Resources (read-only data), Tools (callable functions), and Prompts (task templates)—communicated over JSON-RPC. Learn the architecture, build your first server in under an hour, and deploy it locally or to the cloud.',
-  relatedSlugs: ['build-mcp-server', 'claude-code-mcp-add', 'mcp-server-cursor-setup'],
+  relatedSlugs: ['build-mcp-server', 'claude-code-mcp-add', 'mcp-tools-resources-prompts'],
   body: `
 ## Why MCP matters in 2026
 

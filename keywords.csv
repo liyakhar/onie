@@ -15,7 +15,7 @@ prompt library governance,,,Informational,Published,P2,Team libs,serp-2026-06,En
 claude code SKILL.md format,,,Informational,Published,P2,Skills,serp-2026-06,Long-tail; supports skills cluster,Published /blog/claude-code-skillmd-format
 when to use skills vs rules,,,Informational,Published,P2,Skills,serp-2026-06,PAA under cursor/claude comparisons,Published /blog/when-to-use-skills-vs-rules
 claude code subagents workflow,,,Informational,Published,P3,Skills,serp-2026-06,Multi-agent content growing on Medium/Substack,Published /blog/claude-code-subagents-workflow
-mcp tools resources prompts difference,,,Informational,Queued,P3,MCP,serp-2026-06,Conceptual MCP questions in courses,Explain primitives; link MCP build post
+mcp tools resources prompts difference,,,Informational,Published,P3,MCP,serp-2026-06,Conceptual MCP questions in courses,Published /blog/mcp-tools-resources-prompts
 agent observability for developers,,,Informational,Queued,P3,Documentation,serp-2026-06,Eng audience; overlaps dev tooling,Trace runs + document in public workflow
 ux research ai agent workflow,,,Informational,Queued,P3,Field,product-seed,Maps to demo post UX synthesis,Field silo; link /p/ UX workflow
 literature review ai agent workflow,,,Informational,Queued,P3,Field,product-seed,Maps to demo science post,Field silo; link /p/ literature triage
