@@ -20,8 +20,10 @@ import { claudeCodeSkillmdFormatPost } from '#/content/blog/claude-code-skillmd-
 import { claudeCodeSubagentsWorkflowPost } from '#/content/blog/claude-code-subagents-workflow'
 import { whenToUseSkillsVsRulesPost } from '#/content/blog/when-to-use-skills-vs-rules'
 import { mcpToolsResourcesPromptsPost } from '#/content/blog/mcp-tools-resources-prompts'
+import { agentObservabilityForDevelopersPost } from '#/content/blog/agent-observability-for-developers'
 
 const posts: BlogPost[] = [
+  agentObservabilityForDevelopersPost,
   installClaudeCodePost,
   modelContextProtocolTutorialPost,
   mcpServerCursorSetupPost,

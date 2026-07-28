@@ -28,6 +28,7 @@ export const agentWorkflowTemplatePost: BlogPost = {
     'claude-code-workflow-examples',
     'claude-code-subagents-workflow',
     'how-to-write-claude-code-skills',
+    'agent-observability-for-developers',
   ],
   body: `
 ## Why most agent workflows fail in production

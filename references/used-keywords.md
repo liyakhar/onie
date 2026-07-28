@@ -293,3 +293,17 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - mcp prompts templates ✓
   - when to use mcp tools resources prompts ✓
   - mcp architecture primitives ✓
+
+### agent observability for developers
+
+- **Page:** `/blog/agent-observability-for-developers`
+- **Published:** 2026-07-28
+- **Intent:** Informational
+- **Volume / KD:** pending SEMrush/Ahrefs validation (serp-2026-07 initial research)
+- **Cluster:**
+  - agent observability for developers ✓
+  - ai agent tracing ✓
+  - distributed tracing ai agents ✓
+  - agent debugging production ✓
+  - opentelemetry ai agents ✓
+  - agent workflow observability ✓
