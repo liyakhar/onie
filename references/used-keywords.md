@@ -4,6 +4,20 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
 
 ## Active primaries
 
+### ux research ai agent workflow
+
+- **Page:** `/blog/ux-research-ai-agent-workflow`
+- **Published:** 2026-07-29
+- **Intent:** Informational
+- **Volume / KD:** pending
+- **Cluster:**
+  - ux research ai agent workflow ✓
+  - ai agent ux research ✓
+  - automated ux research synthesis ✓
+  - research pipeline automation ✓
+  - interview analysis with ai ✓
+  - research report generation ai ✓
+
 ### model context protocol tutorial
 
 - **Page:** `/blog/model-context-protocol-tutorial`

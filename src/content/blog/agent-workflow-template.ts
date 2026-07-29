@@ -24,11 +24,10 @@ export const agentWorkflowTemplatePost: BlogPost = {
   tldr:
     'Split your agent workflows into three layers: Directives (Markdown SOPs defining "what to do"), Orchestration (the AI making decisions and routing tasks), and Execution (deterministic scripts doing the actual work). This DOE pattern prevents error compounding, makes workflows debuggable, and lets you swap model or tool providers without rewriting everything.',
   relatedSlugs: [
+    'ux-research-ai-agent-workflow',
     'document-ai-agent-workflows',
     'claude-code-workflow-examples',
     'claude-code-subagents-workflow',
-    'how-to-write-claude-code-skills',
-    'agent-observability-for-developers',
   ],
   body: `
 ## Why most agent workflows fail in production

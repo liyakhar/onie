@@ -21,8 +21,10 @@ import { claudeCodeSubagentsWorkflowPost } from '#/content/blog/claude-code-suba
 import { whenToUseSkillsVsRulesPost } from '#/content/blog/when-to-use-skills-vs-rules'
 import { mcpToolsResourcesPromptsPost } from '#/content/blog/mcp-tools-resources-prompts'
 import { agentObservabilityForDevelopersPost } from '#/content/blog/agent-observability-for-developers'
+import { uxResearchAiAgentWorkflowPost } from '#/content/blog/ux-research-ai-agent-workflow'
 
 const posts: BlogPost[] = [
+  uxResearchAiAgentWorkflowPost,
   agentObservabilityForDevelopersPost,
   installClaudeCodePost,
   modelContextProtocolTutorialPost,
