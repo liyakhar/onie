@@ -18,6 +18,20 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - interview analysis with ai ✓
   - research report generation ai ✓
 
+### literature review ai agent workflow
+
+- **Page:** `/blog/literature-review-ai-agent-workflow`
+- **Published:** 2026-07-30
+- **Intent:** Informational
+- **Volume / KD:** pending
+- **Cluster:**
+  - literature review ai agent workflow ✓
+  - ai agents literature review ✓
+  - systematic review automation ✓
+  - multi-agent research pipeline ✓
+  - automated literature review screening ✓
+  - research synthesis ai agent ✓
+
 ### model context protocol tutorial
 
 - **Page:** `/blog/model-context-protocol-tutorial`

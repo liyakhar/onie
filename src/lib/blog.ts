@@ -22,8 +22,10 @@ import { whenToUseSkillsVsRulesPost } from '#/content/blog/when-to-use-skills-vs
 import { mcpToolsResourcesPromptsPost } from '#/content/blog/mcp-tools-resources-prompts'
 import { agentObservabilityForDevelopersPost } from '#/content/blog/agent-observability-for-developers'
 import { uxResearchAiAgentWorkflowPost } from '#/content/blog/ux-research-ai-agent-workflow'
+import { literatureReviewAiAgentWorkflowPost } from '#/content/blog/literature-review-ai-agent-workflow'
 
 const posts: BlogPost[] = [
+  literatureReviewAiAgentWorkflowPost,
   uxResearchAiAgentWorkflowPost,
   agentObservabilityForDevelopersPost,
   installClaudeCodePost,

@@ -23,7 +23,7 @@ export const uxResearchAiAgentWorkflowPost: BlogPost = {
   },
   tldr:
     'UX research involves repetitive work: transcription cleanup, thematic coding, report drafting. AI agents automate these steps, freeing researchers for strategic analysis and insight validation. The pattern is human-in-the-loop: agents handle synthesis, you validate and interpret. Using a multi-agent pipeline (guide creator, transcript cleaner, synthesis assistant), you maintain methodological rigor while cutting research turnaround by half.',
-  relatedSlugs: ['agent-workflow-template', 'document-ai-agent-workflows', 'claude-code-subagents-workflow'],
+  relatedSlugs: ['literature-review-ai-agent-workflow', 'agent-workflow-template', 'document-ai-agent-workflows'],
   body: `
 ## The research bottleneck
 
