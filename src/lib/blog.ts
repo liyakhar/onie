@@ -23,8 +23,10 @@ import { mcpToolsResourcesPromptsPost } from '#/content/blog/mcp-tools-resources
 import { agentObservabilityForDevelopersPost } from '#/content/blog/agent-observability-for-developers'
 import { uxResearchAiAgentWorkflowPost } from '#/content/blog/ux-research-ai-agent-workflow'
 import { literatureReviewAiAgentWorkflowPost } from '#/content/blog/literature-review-ai-agent-workflow'
+import { saasMvpAgentWorkflowPost } from '#/content/blog/saas-mvp-agent-workflow'
 
 const posts: BlogPost[] = [
+  saasMvpAgentWorkflowPost,
   literatureReviewAiAgentWorkflowPost,
   uxResearchAiAgentWorkflowPost,
   agentObservabilityForDevelopersPost,

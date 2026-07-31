@@ -19,7 +19,7 @@ mcp tools resources prompts difference,,,Informational,Published,P3,MCP,serp-202
 agent observability for developers,,,Informational,Published,P3,Documentation,serp-2026-06,Eng audience; overlaps dev tooling,Published /blog/agent-observability-for-developers
 ux research ai agent workflow,,,Informational,Published,P3,Field,product-seed,Maps to demo post UX synthesis,Published /blog/ux-research-ai-agent-workflow
 literature review ai agent workflow,,,Informational,Published,P3,Field,product-seed,Maps to demo science post,Published /blog/literature-review-ai-agent-workflow
-saas mvp agent workflow,,,Informational,Queued,P3,Field,product-seed,Maps to demo SaaS post,Field silo; link /p/ SaaS MVP loop
+saas mvp agent workflow,,,Informational,Published,P3,Field,product-seed,Maps to demo SaaS post,Published /blog/saas-mvp-agent-workflow
 cursor agent skills migrate,,,Informational,Queued,P3,Skills,serp-2026-06,Cursor /migrate-to-skills command docs new,Migration walkthrough from .mdc rules
 public agent workflow feed,,,Informational,Queued,P3,Product,product-seed,Branded / category creation,Onie positioning post — use after 5+ how-tos
 cursor rules vs skills,90,0,Informational,Published,P1,Skills,dataforseo:2026-06-16,DEV + Cursor docs rank; few side-by-side tests; DataForSEO validated 2026-06-16; Published /blog/cursor-rules-vs-skills,Decision guide + migrate-to-skills; CTA publish team workflow on Onie

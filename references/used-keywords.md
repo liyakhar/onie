@@ -4,6 +4,20 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
 
 ## Active primaries
 
+### saas mvp agent workflow
+
+- **Page:** `/blog/saas-mvp-agent-workflow`
+- **Published:** 2026-07-31
+- **Intent:** Informational
+- **Volume / KD:** pending
+- **Cluster:**
+  - saas mvp agent workflow ✓
+  - ai agent saas business model ✓
+  - how to build agent saas ✓
+  - minimal useful agent ✓
+  - agent-first product ✓
+  - saas product with ai agents ✓
+
 ### ux research ai agent workflow
 
 - **Page:** `/blog/ux-research-ai-agent-workflow`
