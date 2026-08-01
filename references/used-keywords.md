@@ -4,6 +4,21 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
 
 ## Active primaries
 
+### cursor agent skills migrate
+
+- **Page:** `/blog/cursor-agent-skills-migrate`
+- **Published:** 2026-08-01
+- **Intent:** Informational
+- **Volume / KD:** pending
+- **Cluster:**
+  - cursor agent skills migrate ✓
+  - migrate cursor rules to skills ✓
+  - cursor skills vs rules ✓
+  - cursor /migrate-to-skills command ✓
+  - how to use cursor skills ✓
+  - cursor skill structure ✓
+  - cursor skill best practices ✓
+
 ### saas mvp agent workflow
 
 - **Page:** `/blog/saas-mvp-agent-workflow`

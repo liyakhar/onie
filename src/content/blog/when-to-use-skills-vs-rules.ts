@@ -23,6 +23,7 @@ export const whenToUseSkillsVsRulesPost: BlogPost = {
   tldr:
     'Rules are always-on policy that apply to every task. Skills are on-demand procedures you invoke when relevant. Use rules for what must apply even on ad-hoc requests (conventions, security, standards); use skills for multi-step workflows that waste context if loaded always. The choice matters because context is limited—every token in rules competes with your code.',
   relatedSlugs: [
+    'cursor-agent-skills-migrate',
     'cursor-rules-vs-skills',
     'claude-code-skills-vs-rules',
     'how-to-write-claude-code-skills',
