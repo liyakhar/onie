@@ -28,6 +28,7 @@ export const agentWorkflowTemplatePost: BlogPost = {
     'ux-research-ai-agent-workflow',
     'document-ai-agent-workflows',
     'claude-code-workflow-examples',
+    'public-agent-workflow-feed',
     'claude-code-subagents-workflow',
   ],
   body: `

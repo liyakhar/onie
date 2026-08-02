@@ -4,6 +4,22 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
 
 ## Active primaries
 
+### public agent workflow feed
+
+- **Page:** `/blog/public-agent-workflow-feed`
+- **Published:** 2026-08-02
+- **Intent:** Informational
+- **Volume / KD:** pending
+- **Cluster:**
+  - public agent workflow feed ✓
+  - share agent workflows ✓
+  - agent workflow marketplace ✓
+  - agent workflow discovery ✓
+  - publish workflows openly ✓
+  - workflow feed infrastructure ✓
+  - agent workflow standards ✓
+  - workflow versioning and schema drift ✓
+
 ### cursor agent skills migrate
 
 - **Page:** `/blog/cursor-agent-skills-migrate`

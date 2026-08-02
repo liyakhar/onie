@@ -1,4 +1,5 @@
 Keyword,Volume,KD,Intent,Status,Priority,Cluster,Source,SERP_Notes,Onie_Angle
+public agent workflow feed,,,Informational,Published,P3,Product,product-seed,Branded / category creation; agent-feed protocol + workflow discovery,Published /blog/public-agent-workflow-feed
 install claude code,22200,11,Informational,Published,P1,Skills,dataforseo:2026-06-16,"Discovered via keyword_ideas; vol 22200, KD 11",Published /blog/install-claude-code
 how to build an mcp server,480,2,Informational,Published,P1,MCP,dataforseo:2026-06-16,Official MCP docs + YouTube tutorials; gap Cursor+Claude config; DataForSEO validated 2026-06-16,Published /blog/build-mcp-server
 claude code mcp add,110,17,Navigational,Published,P1,MCP,dataforseo:2026-06-16,Claude Code docs rank for MCP install; DataForSEO validated 2026-06-16,Published /blog/claude-code-mcp-add
@@ -21,7 +22,6 @@ ux research ai agent workflow,,,Informational,Published,P3,Field,product-seed,Ma
 literature review ai agent workflow,,,Informational,Published,P3,Field,product-seed,Maps to demo science post,Published /blog/literature-review-ai-agent-workflow
 saas mvp agent workflow,,,Informational,Published,P3,Field,product-seed,Maps to demo SaaS post,Published /blog/saas-mvp-agent-workflow
 cursor agent skills migrate,,,Informational,Published,P3,Skills,serp-2026-06,Cursor /migrate-to-skills command docs new,Published /blog/cursor-agent-skills-migrate
-public agent workflow feed,,,Informational,Queued,P3,Product,product-seed,Branded / category creation,Onie positioning post — use after 5+ how-tos
 cursor rules vs skills,90,0,Informational,Published,P1,Skills,dataforseo:2026-06-16,DEV + Cursor docs rank; few side-by-side tests; DataForSEO validated 2026-06-16; Published /blog/cursor-rules-vs-skills,Decision guide + migrate-to-skills; CTA publish team workflow on Onie
 how to write claude code skills,,,Informational,Published,P1,Skills,estimated,Replaced placeholder vol/KD — validate in SEMrush,Extends published /blog/how-to-write-claude-code-skills
 how to document ai agent workflows,,,Informational,Published,P1,Documentation,estimated,Replaced placeholder vol/KD — validate in SEMrush,Extends published /blog/document-ai-agent-workflows

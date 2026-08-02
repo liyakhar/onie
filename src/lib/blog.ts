@@ -25,8 +25,10 @@ import { uxResearchAiAgentWorkflowPost } from '#/content/blog/ux-research-ai-age
 import { literatureReviewAiAgentWorkflowPost } from '#/content/blog/literature-review-ai-agent-workflow'
 import { saasMvpAgentWorkflowPost } from '#/content/blog/saas-mvp-agent-workflow'
 import { cursorAgentSkillsMigratePost } from '#/content/blog/cursor-agent-skills-migrate'
+import { publicAgentWorkflowFeedPost } from '#/content/blog/public-agent-workflow-feed'
 
 const posts: BlogPost[] = [
+  publicAgentWorkflowFeedPost,
   cursorAgentSkillsMigratePost,
   saasMvpAgentWorkflowPost,
   literatureReviewAiAgentWorkflowPost,
