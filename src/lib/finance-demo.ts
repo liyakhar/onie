@@ -5,6 +5,7 @@ import {
   type BudgetPlan,
   type BudgetRule,
 } from './budget-engine'
+import type { IncomeEnvelopePlan } from './income-allocation-engine'
 
 export const FINANCE_CATEGORIES = [
   'Income',
@@ -20,6 +21,9 @@ export const FINANCE_CATEGORIES = [
 ] as const
 
 export type FinanceCategory = (typeof FINANCE_CATEGORIES)[number]
+// Provider and household rules may add categories such as Tax. Keep the built-in
+// union for autocomplete while allowing those persisted names through the finance flow.
+export type TransactionCategoryName = FinanceCategory | (string & {})
 
 export type FinanceTransaction = {
   id: string
@@ -27,7 +31,7 @@ export type FinanceTransaction = {
   date: string
   merchant: string
   account: string
-  category: FinanceCategory
+  category: TransactionCategoryName
   amount: number
   currency?: string
   status: 'cleared' | 'pending' | 'needs-review'
@@ -59,6 +63,7 @@ export type FinanceDashboardData = {
   insights: FinanceInsight[]
   summary: ReturnType<typeof getDemoFinanceSummary>
   syncStatus: BankSyncStatus
+  envelopeBudget?: IncomeEnvelopePlan
   household?: {
     currentMemberId: string
     members: Array<{
@@ -73,7 +78,9 @@ export type FinanceDashboardData = {
 }
 
 export type BudgetCategory = {
-  name: FinanceCategory
+  name: string
+  group?: 'Fixed' | 'Flexible' | 'Future'
+  categoryNames?: string[]
   allocated: number
   spent: number
 }
@@ -96,7 +103,7 @@ export type RecurringPayment = {
   amount: number
   cadence: 'monthly' | 'yearly'
   nextDate: string
-  category: FinanceCategory
+  category: TransactionCategoryName
   currency?: string
   confirmed?: boolean
   source?: 'confirmed' | 'detected'
@@ -253,6 +260,8 @@ export const demoInsights: FinanceInsight[] = [
   },
 ]
 
+const DEMO_REFERENCE_DATE = new Date('2026-07-14T12:00:00.000Z')
+
 export function formatMoney(amount: number, currency = 'USD') {
   const value = Math.abs(amount).toLocaleString('en-US', {
     style: 'currency',
@@ -269,6 +278,7 @@ export function getDemoFinanceSummary() {
     transactions: demoTransactions,
     budget: demoBudget,
     recurringPayments: demoRecurringPayments,
+    referenceDate: DEMO_REFERENCE_DATE,
   })
 }
 
@@ -309,8 +319,17 @@ export function getFinanceSummary({
   const monthlyIncome = spendingTransactions
     .filter((transaction) => transaction.amount > 0)
     .reduce((sum, transaction) => sum + transaction.amount, 0)
+  const futureCategories = new Set(
+    budget
+      .filter((category) => category.group === 'Future' || category.name === 'Savings')
+      .flatMap((category) => category.categoryNames?.length ? category.categoryNames : [category.name])
+      .map((category) => category.toLocaleLowerCase()),
+  )
+  const saved = spendingTransactions
+    .filter((transaction) => transaction.amount < 0 && futureCategories.has(transaction.category.toLocaleLowerCase()))
+    .reduce((sum, transaction) => sum + Math.abs(transaction.amount), 0)
   const spent = spendingTransactions
-    .filter((transaction) => transaction.amount < 0)
+    .filter((transaction) => transaction.amount < 0 && !futureCategories.has(transaction.category.toLocaleLowerCase()))
     .reduce((sum, transaction) => sum + Math.abs(transaction.amount), 0)
   const upcomingRecurring = recurringPayments
     .filter((payment) => payment.confirmed !== false)
@@ -331,6 +350,7 @@ export function getFinanceSummary({
     creditCardDebt,
     monthlyIncome,
     spent,
+    saved,
     upcomingRecurring,
     allocated: budgetPlan.allocated,
     spentAgainstBudget: budgetPlan.spent,
@@ -488,7 +508,7 @@ export function filterFinanceTransactions(
   options: {
     q?: string
     status?: FinanceTransaction['status'] | 'all'
-    category?: FinanceCategory | 'all'
+    category?: TransactionCategoryName | 'all'
   },
 ) {
   const q = options.q?.trim().toLowerCase()

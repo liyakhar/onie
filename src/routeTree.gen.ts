@@ -49,6 +49,7 @@ import { Route as AppInsightsRouteImport } from './routes/app/insights'
 import { Route as AppHouseholdRouteImport } from './routes/app/household'
 import { Route as AppExploreRouteImport } from './routes/app/explore'
 import { Route as AppBudgetsRouteImport } from './routes/app/budgets'
+import { Route as AppBillingRouteImport } from './routes/app/billing'
 import { Route as AppAccountsRouteImport } from './routes/app/accounts'
 import { Route as AppReportsHouseholdRouteImport } from './routes/app/reports/household'
 import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe/webhook'
@@ -256,6 +257,11 @@ const AppBudgetsRoute = AppBudgetsRouteImport.update({
   path: '/budgets',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppBillingRoute = AppBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppAccountsRoute = AppAccountsRouteImport.update({
   id: '/accounts',
   path: '/accounts',
@@ -306,6 +312,7 @@ export interface FileRoutesByFullPath {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app/accounts': typeof AppAccountsRoute
+  '/app/billing': typeof AppBillingRoute
   '/app/budgets': typeof AppBudgetsRoute
   '/app/explore': typeof AppExploreRoute
   '/app/household': typeof AppHouseholdRoute
@@ -346,6 +353,7 @@ export interface FileRoutesByTo {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app/accounts': typeof AppAccountsRoute
+  '/app/billing': typeof AppBillingRoute
   '/app/budgets': typeof AppBudgetsRoute
   '/app/explore': typeof AppExploreRoute
   '/app/household': typeof AppHouseholdRoute
@@ -394,6 +402,7 @@ export interface FileRoutesById {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/app/accounts': typeof AppAccountsRoute
+  '/app/billing': typeof AppBillingRoute
   '/app/budgets': typeof AppBudgetsRoute
   '/app/explore': typeof AppExploreRoute
   '/app/household': typeof AppHouseholdRoute
@@ -444,6 +453,7 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/app/accounts'
+    | '/app/billing'
     | '/app/budgets'
     | '/app/explore'
     | '/app/household'
@@ -484,6 +494,7 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/app/accounts'
+    | '/app/billing'
     | '/app/budgets'
     | '/app/explore'
     | '/app/household'
@@ -531,6 +542,7 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/app/accounts'
+    | '/app/billing'
     | '/app/budgets'
     | '/app/explore'
     | '/app/household'
@@ -872,6 +884,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppBudgetsRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/billing': {
+      id: '/app/billing'
+      path: '/billing'
+      fullPath: '/app/billing'
+      preLoaderRoute: typeof AppBillingRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/accounts': {
       id: '/app/accounts'
       path: '/accounts'
@@ -931,6 +950,7 @@ const AboutRouteRouteWithChildren = AboutRouteRoute._addFileChildren(
 
 interface AppRouteRouteChildren {
   AppAccountsRoute: typeof AppAccountsRoute
+  AppBillingRoute: typeof AppBillingRoute
   AppBudgetsRoute: typeof AppBudgetsRoute
   AppExploreRoute: typeof AppExploreRoute
   AppHouseholdRoute: typeof AppHouseholdRoute
@@ -943,6 +963,7 @@ interface AppRouteRouteChildren {
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppAccountsRoute: AppAccountsRoute,
+  AppBillingRoute: AppBillingRoute,
   AppBudgetsRoute: AppBudgetsRoute,
   AppExploreRoute: AppExploreRoute,
   AppHouseholdRoute: AppHouseholdRoute,

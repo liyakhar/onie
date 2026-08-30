@@ -145,6 +145,24 @@ enum FinanceSyncStatus {
   RUNNING
 }
 
+enum BudgetBucketGroup {
+  FIXED
+  FLEXIBLE
+  FUTURE
+}
+
+enum BudgetBucketPurpose {
+  SPENDING
+  RESERVE
+  GOAL
+}
+
+enum BudgetAllocationRuleType {
+  FIXED
+  PERCENT_OF_INCOME
+  REMAINDER
+}
+
 enum HouseholdRole {
   OWNER
   MEMBER
@@ -171,6 +189,8 @@ model BudgetWorkspace {
   categories        TransactionCategory[]
   merchants         Merchant[]
   budgetMonths      BudgetMonth[]
+  budgetBuckets     BudgetBucket[]
+  allocationRules   BudgetAllocationRule[]
   transactions      FinanceTransaction[]
   recurringPayments RecurringPayment[]
   insights          MoneyInsight[]
@@ -291,6 +311,7 @@ model TransactionCategory {
 
   transactions      FinanceTransaction[]
   allocations       BudgetAllocation[]
+  budgetBucketMap   BudgetBucketCategory?
   recurringPayments RecurringPayment[]
   rules             CategoryRule[]
 
@@ -368,6 +389,52 @@ model BudgetAllocation {
 
   @@unique([budgetMonthId, categoryId])
   @@index([categoryId])
+}
+
+model BudgetBucket {
+  id          String              @id @default(cuid())
+  workspaceId String
+  workspace   BudgetWorkspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  group       BudgetBucketGroup   @default(FLEXIBLE)
+  purpose     BudgetBucketPurpose @default(SPENDING)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  categoryMappings BudgetBucketCategory[]
+  allocationRule   BudgetAllocationRule?
+
+  @@unique([workspaceId, name])
+  @@index([workspaceId])
+}
+
+model BudgetBucketCategory {
+  id         String              @id @default(cuid())
+  bucketId   String
+  bucket     BudgetBucket        @relation(fields: [bucketId], references: [id], onDelete: Cascade)
+  categoryId String              @unique
+  category   TransactionCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+
+  @@unique([bucketId, categoryId])
+  @@index([bucketId])
+}
+
+model BudgetAllocationRule {
+  id                    String                   @id @default(cuid())
+  workspaceId           String
+  workspace             BudgetWorkspace          @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  bucketId              String                   @unique
+  bucket                BudgetBucket             @relation(fields: [bucketId], references: [id], onDelete: Cascade)
+  type                  BudgetAllocationRuleType
+  fixedMinor            Int?
+  percentageBasisPoints Int?
+  priority              Int                      @default(0)
+  createdAt             DateTime                 @default(now())
+  updatedAt             DateTime                 @updatedAt
+
+  @@index([workspaceId, priority])
 }
 
 model RecurringPayment {

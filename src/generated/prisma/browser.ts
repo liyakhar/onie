@@ -83,6 +83,21 @@ export type BudgetMonth = Prisma.BudgetMonthModel
  */
 export type BudgetAllocation = Prisma.BudgetAllocationModel
 /**
+ * Model BudgetBucket
+ * 
+ */
+export type BudgetBucket = Prisma.BudgetBucketModel
+/**
+ * Model BudgetBucketCategory
+ * 
+ */
+export type BudgetBucketCategory = Prisma.BudgetBucketCategoryModel
+/**
+ * Model BudgetAllocationRule
+ * 
+ */
+export type BudgetAllocationRule = Prisma.BudgetAllocationRuleModel
+/**
  * Model RecurringPayment
  * 
  */

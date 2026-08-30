@@ -203,6 +203,8 @@ export type BudgetWorkspaceWhereInput = {
   categories?: Prisma.TransactionCategoryListRelationFilter
   merchants?: Prisma.MerchantListRelationFilter
   budgetMonths?: Prisma.BudgetMonthListRelationFilter
+  budgetBuckets?: Prisma.BudgetBucketListRelationFilter
+  allocationRules?: Prisma.BudgetAllocationRuleListRelationFilter
   transactions?: Prisma.FinanceTransactionListRelationFilter
   recurringPayments?: Prisma.RecurringPaymentListRelationFilter
   insights?: Prisma.MoneyInsightListRelationFilter
@@ -226,6 +228,8 @@ export type BudgetWorkspaceOrderByWithRelationInput = {
   categories?: Prisma.TransactionCategoryOrderByRelationAggregateInput
   merchants?: Prisma.MerchantOrderByRelationAggregateInput
   budgetMonths?: Prisma.BudgetMonthOrderByRelationAggregateInput
+  budgetBuckets?: Prisma.BudgetBucketOrderByRelationAggregateInput
+  allocationRules?: Prisma.BudgetAllocationRuleOrderByRelationAggregateInput
   transactions?: Prisma.FinanceTransactionOrderByRelationAggregateInput
   recurringPayments?: Prisma.RecurringPaymentOrderByRelationAggregateInput
   insights?: Prisma.MoneyInsightOrderByRelationAggregateInput
@@ -252,6 +256,8 @@ export type BudgetWorkspaceWhereUniqueInput = Prisma.AtLeast<{
   categories?: Prisma.TransactionCategoryListRelationFilter
   merchants?: Prisma.MerchantListRelationFilter
   budgetMonths?: Prisma.BudgetMonthListRelationFilter
+  budgetBuckets?: Prisma.BudgetBucketListRelationFilter
+  allocationRules?: Prisma.BudgetAllocationRuleListRelationFilter
   transactions?: Prisma.FinanceTransactionListRelationFilter
   recurringPayments?: Prisma.RecurringPaymentListRelationFilter
   insights?: Prisma.MoneyInsightListRelationFilter
@@ -300,6 +306,8 @@ export type BudgetWorkspaceCreateInput = {
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
@@ -322,6 +330,8 @@ export type BudgetWorkspaceUncheckedCreateInput = {
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -344,6 +354,8 @@ export type BudgetWorkspaceUpdateInput = {
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
@@ -366,6 +378,8 @@ export type BudgetWorkspaceUncheckedUpdateInput = {
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -604,6 +618,34 @@ export type BudgetWorkspaceUpdateOneRequiredWithoutBudgetMonthsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetWorkspaceUpdateToOneWithWhereWithoutBudgetMonthsInput, Prisma.BudgetWorkspaceUpdateWithoutBudgetMonthsInput>, Prisma.BudgetWorkspaceUncheckedUpdateWithoutBudgetMonthsInput>
 }
 
+export type BudgetWorkspaceCreateNestedOneWithoutBudgetBucketsInput = {
+  create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutBudgetBucketsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutBudgetBucketsInput>
+  connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutBudgetBucketsInput
+  connect?: Prisma.BudgetWorkspaceWhereUniqueInput
+}
+
+export type BudgetWorkspaceUpdateOneRequiredWithoutBudgetBucketsNestedInput = {
+  create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutBudgetBucketsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutBudgetBucketsInput>
+  connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutBudgetBucketsInput
+  upsert?: Prisma.BudgetWorkspaceUpsertWithoutBudgetBucketsInput
+  connect?: Prisma.BudgetWorkspaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetWorkspaceUpdateToOneWithWhereWithoutBudgetBucketsInput, Prisma.BudgetWorkspaceUpdateWithoutBudgetBucketsInput>, Prisma.BudgetWorkspaceUncheckedUpdateWithoutBudgetBucketsInput>
+}
+
+export type BudgetWorkspaceCreateNestedOneWithoutAllocationRulesInput = {
+  create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutAllocationRulesInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutAllocationRulesInput>
+  connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutAllocationRulesInput
+  connect?: Prisma.BudgetWorkspaceWhereUniqueInput
+}
+
+export type BudgetWorkspaceUpdateOneRequiredWithoutAllocationRulesNestedInput = {
+  create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutAllocationRulesInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutAllocationRulesInput>
+  connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutAllocationRulesInput
+  upsert?: Prisma.BudgetWorkspaceUpsertWithoutAllocationRulesInput
+  connect?: Prisma.BudgetWorkspaceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetWorkspaceUpdateToOneWithWhereWithoutAllocationRulesInput, Prisma.BudgetWorkspaceUpdateWithoutAllocationRulesInput>, Prisma.BudgetWorkspaceUncheckedUpdateWithoutAllocationRulesInput>
+}
+
 export type BudgetWorkspaceCreateNestedOneWithoutRecurringPaymentsInput = {
   create?: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutRecurringPaymentsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutRecurringPaymentsInput>
   connectOrCreate?: Prisma.BudgetWorkspaceCreateOrConnectWithoutRecurringPaymentsInput
@@ -671,6 +713,8 @@ export type BudgetWorkspaceCreateWithoutUserInput = {
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
@@ -692,6 +736,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutUserInput = {
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -753,6 +799,8 @@ export type BudgetWorkspaceCreateWithoutBankConnectionsInput = {
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
@@ -774,6 +822,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutBankConnectionsInput = {
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -811,6 +861,8 @@ export type BudgetWorkspaceUpdateWithoutBankConnectionsInput = {
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
@@ -832,6 +884,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutBankConnectionsInput = {
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -852,6 +906,8 @@ export type BudgetWorkspaceCreateWithoutAccountsInput = {
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
@@ -873,6 +929,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutAccountsInput = {
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -910,6 +968,8 @@ export type BudgetWorkspaceUpdateWithoutAccountsInput = {
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
@@ -931,6 +991,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutAccountsInput = {
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -953,6 +1015,8 @@ export type BudgetWorkspaceCreateWithoutMembersInput = {
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
@@ -974,6 +1038,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutMembersInput = {
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1011,6 +1077,8 @@ export type BudgetWorkspaceUpdateWithoutMembersInput = {
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
@@ -1032,6 +1100,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutMembersInput = {
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1053,6 +1123,8 @@ export type BudgetWorkspaceCreateWithoutInvitationsInput = {
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
@@ -1074,6 +1146,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutInvitationsInput = {
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1111,6 +1185,8 @@ export type BudgetWorkspaceUpdateWithoutInvitationsInput = {
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
@@ -1132,6 +1208,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutInvitationsInput = {
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1152,6 +1230,8 @@ export type BudgetWorkspaceCreateWithoutCategoriesInput = {
   accounts?: Prisma.FinancialAccountCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
@@ -1173,6 +1253,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutCategoriesInput = {
   accounts?: Prisma.FinancialAccountUncheckedCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1210,6 +1292,8 @@ export type BudgetWorkspaceUpdateWithoutCategoriesInput = {
   accounts?: Prisma.FinancialAccountUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
@@ -1231,6 +1315,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutCategoriesInput = {
   accounts?: Prisma.FinancialAccountUncheckedUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1252,6 +1338,8 @@ export type BudgetWorkspaceCreateWithoutMerchantsInput = {
   accounts?: Prisma.FinancialAccountCreateNestedManyWithoutWorkspaceInput
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
@@ -1273,6 +1361,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutMerchantsInput = {
   accounts?: Prisma.FinancialAccountUncheckedCreateNestedManyWithoutWorkspaceInput
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1310,6 +1400,8 @@ export type BudgetWorkspaceUpdateWithoutMerchantsInput = {
   accounts?: Prisma.FinancialAccountUpdateManyWithoutWorkspaceNestedInput
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
@@ -1331,6 +1423,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutMerchantsInput = {
   accounts?: Prisma.FinancialAccountUncheckedUpdateManyWithoutWorkspaceNestedInput
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1353,6 +1447,8 @@ export type BudgetWorkspaceCreateWithoutTransactionsInput = {
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
@@ -1374,6 +1470,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutTransactionsInput = {
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1411,6 +1509,8 @@ export type BudgetWorkspaceUpdateWithoutTransactionsInput = {
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
@@ -1432,6 +1532,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutTransactionsInput = {
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1452,6 +1554,8 @@ export type BudgetWorkspaceCreateWithoutBudgetMonthsInput = {
   accounts?: Prisma.FinancialAccountCreateNestedManyWithoutWorkspaceInput
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
@@ -1473,6 +1577,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutBudgetMonthsInput = {
   accounts?: Prisma.FinancialAccountUncheckedCreateNestedManyWithoutWorkspaceInput
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1510,6 +1616,8 @@ export type BudgetWorkspaceUpdateWithoutBudgetMonthsInput = {
   accounts?: Prisma.FinancialAccountUpdateManyWithoutWorkspaceNestedInput
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
@@ -1531,6 +1639,224 @@ export type BudgetWorkspaceUncheckedUpdateWithoutBudgetMonthsInput = {
   accounts?: Prisma.FinancialAccountUncheckedUpdateManyWithoutWorkspaceNestedInput
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
+  recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
+  insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
+  rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type BudgetWorkspaceCreateWithoutBudgetBucketsInput = {
+  id?: string
+  name?: string
+  currency?: string
+  demo?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutFinanceWorkspacesInput
+  accounts?: Prisma.FinancialAccountCreateNestedManyWithoutWorkspaceInput
+  categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
+  merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
+  budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
+  transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
+  recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
+  insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
+  rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
+  syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
+}
+
+export type BudgetWorkspaceUncheckedCreateWithoutBudgetBucketsInput = {
+  id?: string
+  userId: string
+  name?: string
+  currency?: string
+  demo?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.FinancialAccountUncheckedCreateNestedManyWithoutWorkspaceInput
+  categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
+  merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
+  transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
+  recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
+  insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
+  rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
+  syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
+}
+
+export type BudgetWorkspaceCreateOrConnectWithoutBudgetBucketsInput = {
+  where: Prisma.BudgetWorkspaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutBudgetBucketsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutBudgetBucketsInput>
+}
+
+export type BudgetWorkspaceUpsertWithoutBudgetBucketsInput = {
+  update: Prisma.XOR<Prisma.BudgetWorkspaceUpdateWithoutBudgetBucketsInput, Prisma.BudgetWorkspaceUncheckedUpdateWithoutBudgetBucketsInput>
+  create: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutBudgetBucketsInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutBudgetBucketsInput>
+  where?: Prisma.BudgetWorkspaceWhereInput
+}
+
+export type BudgetWorkspaceUpdateToOneWithWhereWithoutBudgetBucketsInput = {
+  where?: Prisma.BudgetWorkspaceWhereInput
+  data: Prisma.XOR<Prisma.BudgetWorkspaceUpdateWithoutBudgetBucketsInput, Prisma.BudgetWorkspaceUncheckedUpdateWithoutBudgetBucketsInput>
+}
+
+export type BudgetWorkspaceUpdateWithoutBudgetBucketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutFinanceWorkspacesNestedInput
+  accounts?: Prisma.FinancialAccountUpdateManyWithoutWorkspaceNestedInput
+  categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
+  merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
+  budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
+  transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
+  recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
+  insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
+  rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
+  syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type BudgetWorkspaceUncheckedUpdateWithoutBudgetBucketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.FinancialAccountUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
+  merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
+  recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
+  insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
+  rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
+  syncRuns?: Prisma.SyncRunUncheckedUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUncheckedUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUncheckedUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type BudgetWorkspaceCreateWithoutAllocationRulesInput = {
+  id?: string
+  name?: string
+  currency?: string
+  demo?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutFinanceWorkspacesInput
+  accounts?: Prisma.FinancialAccountCreateNestedManyWithoutWorkspaceInput
+  categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
+  merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
+  budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
+  recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
+  insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
+  rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
+  syncRuns?: Prisma.SyncRunCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionCreateNestedManyWithoutWorkspaceInput
+}
+
+export type BudgetWorkspaceUncheckedCreateWithoutAllocationRulesInput = {
+  id?: string
+  userId: string
+  name?: string
+  currency?: string
+  demo?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.FinancialAccountUncheckedCreateNestedManyWithoutWorkspaceInput
+  categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
+  merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
+  recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
+  insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
+  rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
+  syncRuns?: Prisma.SyncRunUncheckedCreateNestedManyWithoutWorkspaceInput
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
+  invitations?: Prisma.HouseholdInvitationUncheckedCreateNestedManyWithoutWorkspaceInput
+  bankConnections?: Prisma.BankConnectionUncheckedCreateNestedManyWithoutWorkspaceInput
+}
+
+export type BudgetWorkspaceCreateOrConnectWithoutAllocationRulesInput = {
+  where: Prisma.BudgetWorkspaceWhereUniqueInput
+  create: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutAllocationRulesInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutAllocationRulesInput>
+}
+
+export type BudgetWorkspaceUpsertWithoutAllocationRulesInput = {
+  update: Prisma.XOR<Prisma.BudgetWorkspaceUpdateWithoutAllocationRulesInput, Prisma.BudgetWorkspaceUncheckedUpdateWithoutAllocationRulesInput>
+  create: Prisma.XOR<Prisma.BudgetWorkspaceCreateWithoutAllocationRulesInput, Prisma.BudgetWorkspaceUncheckedCreateWithoutAllocationRulesInput>
+  where?: Prisma.BudgetWorkspaceWhereInput
+}
+
+export type BudgetWorkspaceUpdateToOneWithWhereWithoutAllocationRulesInput = {
+  where?: Prisma.BudgetWorkspaceWhereInput
+  data: Prisma.XOR<Prisma.BudgetWorkspaceUpdateWithoutAllocationRulesInput, Prisma.BudgetWorkspaceUncheckedUpdateWithoutAllocationRulesInput>
+}
+
+export type BudgetWorkspaceUpdateWithoutAllocationRulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutFinanceWorkspacesNestedInput
+  accounts?: Prisma.FinancialAccountUpdateManyWithoutWorkspaceNestedInput
+  categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
+  merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
+  budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
+  recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
+  insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
+  rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
+  syncRuns?: Prisma.SyncRunUpdateManyWithoutWorkspaceNestedInput
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
+  invitations?: Prisma.HouseholdInvitationUpdateManyWithoutWorkspaceNestedInput
+  bankConnections?: Prisma.BankConnectionUpdateManyWithoutWorkspaceNestedInput
+}
+
+export type BudgetWorkspaceUncheckedUpdateWithoutAllocationRulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  demo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.FinancialAccountUncheckedUpdateManyWithoutWorkspaceNestedInput
+  categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
+  merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1553,6 +1879,8 @@ export type BudgetWorkspaceCreateWithoutRecurringPaymentsInput = {
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
@@ -1574,6 +1902,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutRecurringPaymentsInput = {
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1611,6 +1941,8 @@ export type BudgetWorkspaceUpdateWithoutRecurringPaymentsInput = {
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
@@ -1632,6 +1964,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutRecurringPaymentsInput = {
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1653,6 +1987,8 @@ export type BudgetWorkspaceCreateWithoutSyncRunsInput = {
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
@@ -1674,6 +2010,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutSyncRunsInput = {
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1711,6 +2049,8 @@ export type BudgetWorkspaceUpdateWithoutSyncRunsInput = {
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
@@ -1732,6 +2072,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutSyncRunsInput = {
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1753,6 +2095,8 @@ export type BudgetWorkspaceCreateWithoutInsightsInput = {
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleCreateNestedManyWithoutWorkspaceInput
@@ -1774,6 +2118,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutInsightsInput = {
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   rules?: Prisma.CategoryRuleUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1811,6 +2157,8 @@ export type BudgetWorkspaceUpdateWithoutInsightsInput = {
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUpdateManyWithoutWorkspaceNestedInput
@@ -1832,6 +2180,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutInsightsInput = {
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   rules?: Prisma.CategoryRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1853,6 +2203,8 @@ export type BudgetWorkspaceCreateWithoutRulesInput = {
   categories?: Prisma.TransactionCategoryCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightCreateNestedManyWithoutWorkspaceInput
@@ -1874,6 +2226,8 @@ export type BudgetWorkspaceUncheckedCreateWithoutRulesInput = {
   categories?: Prisma.TransactionCategoryUncheckedCreateNestedManyWithoutWorkspaceInput
   merchants?: Prisma.MerchantUncheckedCreateNestedManyWithoutWorkspaceInput
   budgetMonths?: Prisma.BudgetMonthUncheckedCreateNestedManyWithoutWorkspaceInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedCreateNestedManyWithoutWorkspaceInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedCreateNestedManyWithoutWorkspaceInput
   transactions?: Prisma.FinanceTransactionUncheckedCreateNestedManyWithoutWorkspaceInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedCreateNestedManyWithoutWorkspaceInput
   insights?: Prisma.MoneyInsightUncheckedCreateNestedManyWithoutWorkspaceInput
@@ -1911,6 +2265,8 @@ export type BudgetWorkspaceUpdateWithoutRulesInput = {
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
@@ -1932,6 +2288,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutRulesInput = {
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -1961,6 +2319,8 @@ export type BudgetWorkspaceUpdateWithoutUserInput = {
   categories?: Prisma.TransactionCategoryUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUpdateManyWithoutWorkspaceNestedInput
@@ -1982,6 +2342,8 @@ export type BudgetWorkspaceUncheckedUpdateWithoutUserInput = {
   categories?: Prisma.TransactionCategoryUncheckedUpdateManyWithoutWorkspaceNestedInput
   merchants?: Prisma.MerchantUncheckedUpdateManyWithoutWorkspaceNestedInput
   budgetMonths?: Prisma.BudgetMonthUncheckedUpdateManyWithoutWorkspaceNestedInput
+  budgetBuckets?: Prisma.BudgetBucketUncheckedUpdateManyWithoutWorkspaceNestedInput
+  allocationRules?: Prisma.BudgetAllocationRuleUncheckedUpdateManyWithoutWorkspaceNestedInput
   transactions?: Prisma.FinanceTransactionUncheckedUpdateManyWithoutWorkspaceNestedInput
   recurringPayments?: Prisma.RecurringPaymentUncheckedUpdateManyWithoutWorkspaceNestedInput
   insights?: Prisma.MoneyInsightUncheckedUpdateManyWithoutWorkspaceNestedInput
@@ -2011,6 +2373,8 @@ export type BudgetWorkspaceCountOutputType = {
   categories: number
   merchants: number
   budgetMonths: number
+  budgetBuckets: number
+  allocationRules: number
   transactions: number
   recurringPayments: number
   insights: number
@@ -2026,6 +2390,8 @@ export type BudgetWorkspaceCountOutputTypeSelect<ExtArgs extends runtime.Types.E
   categories?: boolean | BudgetWorkspaceCountOutputTypeCountCategoriesArgs
   merchants?: boolean | BudgetWorkspaceCountOutputTypeCountMerchantsArgs
   budgetMonths?: boolean | BudgetWorkspaceCountOutputTypeCountBudgetMonthsArgs
+  budgetBuckets?: boolean | BudgetWorkspaceCountOutputTypeCountBudgetBucketsArgs
+  allocationRules?: boolean | BudgetWorkspaceCountOutputTypeCountAllocationRulesArgs
   transactions?: boolean | BudgetWorkspaceCountOutputTypeCountTransactionsArgs
   recurringPayments?: boolean | BudgetWorkspaceCountOutputTypeCountRecurringPaymentsArgs
   insights?: boolean | BudgetWorkspaceCountOutputTypeCountInsightsArgs
@@ -2072,6 +2438,20 @@ export type BudgetWorkspaceCountOutputTypeCountMerchantsArgs<ExtArgs extends run
  */
 export type BudgetWorkspaceCountOutputTypeCountBudgetMonthsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.BudgetMonthWhereInput
+}
+
+/**
+ * BudgetWorkspaceCountOutputType without action
+ */
+export type BudgetWorkspaceCountOutputTypeCountBudgetBucketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BudgetBucketWhereInput
+}
+
+/**
+ * BudgetWorkspaceCountOutputType without action
+ */
+export type BudgetWorkspaceCountOutputTypeCountAllocationRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BudgetAllocationRuleWhereInput
 }
 
 /**
@@ -2144,6 +2524,8 @@ export type BudgetWorkspaceSelect<ExtArgs extends runtime.Types.Extensions.Inter
   categories?: boolean | Prisma.BudgetWorkspace$categoriesArgs<ExtArgs>
   merchants?: boolean | Prisma.BudgetWorkspace$merchantsArgs<ExtArgs>
   budgetMonths?: boolean | Prisma.BudgetWorkspace$budgetMonthsArgs<ExtArgs>
+  budgetBuckets?: boolean | Prisma.BudgetWorkspace$budgetBucketsArgs<ExtArgs>
+  allocationRules?: boolean | Prisma.BudgetWorkspace$allocationRulesArgs<ExtArgs>
   transactions?: boolean | Prisma.BudgetWorkspace$transactionsArgs<ExtArgs>
   recurringPayments?: boolean | Prisma.BudgetWorkspace$recurringPaymentsArgs<ExtArgs>
   insights?: boolean | Prisma.BudgetWorkspace$insightsArgs<ExtArgs>
@@ -2194,6 +2576,8 @@ export type BudgetWorkspaceInclude<ExtArgs extends runtime.Types.Extensions.Inte
   categories?: boolean | Prisma.BudgetWorkspace$categoriesArgs<ExtArgs>
   merchants?: boolean | Prisma.BudgetWorkspace$merchantsArgs<ExtArgs>
   budgetMonths?: boolean | Prisma.BudgetWorkspace$budgetMonthsArgs<ExtArgs>
+  budgetBuckets?: boolean | Prisma.BudgetWorkspace$budgetBucketsArgs<ExtArgs>
+  allocationRules?: boolean | Prisma.BudgetWorkspace$allocationRulesArgs<ExtArgs>
   transactions?: boolean | Prisma.BudgetWorkspace$transactionsArgs<ExtArgs>
   recurringPayments?: boolean | Prisma.BudgetWorkspace$recurringPaymentsArgs<ExtArgs>
   insights?: boolean | Prisma.BudgetWorkspace$insightsArgs<ExtArgs>
@@ -2219,6 +2603,8 @@ export type $BudgetWorkspacePayload<ExtArgs extends runtime.Types.Extensions.Int
     categories: Prisma.$TransactionCategoryPayload<ExtArgs>[]
     merchants: Prisma.$MerchantPayload<ExtArgs>[]
     budgetMonths: Prisma.$BudgetMonthPayload<ExtArgs>[]
+    budgetBuckets: Prisma.$BudgetBucketPayload<ExtArgs>[]
+    allocationRules: Prisma.$BudgetAllocationRulePayload<ExtArgs>[]
     transactions: Prisma.$FinanceTransactionPayload<ExtArgs>[]
     recurringPayments: Prisma.$RecurringPaymentPayload<ExtArgs>[]
     insights: Prisma.$MoneyInsightPayload<ExtArgs>[]
@@ -2635,6 +3021,8 @@ export interface Prisma__BudgetWorkspaceClient<T, Null = never, ExtArgs extends 
   categories<T extends Prisma.BudgetWorkspace$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   merchants<T extends Prisma.BudgetWorkspace$merchantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$merchantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MerchantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   budgetMonths<T extends Prisma.BudgetWorkspace$budgetMonthsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$budgetMonthsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetMonthPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  budgetBuckets<T extends Prisma.BudgetWorkspace$budgetBucketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$budgetBucketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetBucketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  allocationRules<T extends Prisma.BudgetWorkspace$allocationRulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$allocationRulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetAllocationRulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transactions<T extends Prisma.BudgetWorkspace$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   recurringPayments<T extends Prisma.BudgetWorkspace$recurringPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$recurringPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecurringPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   insights<T extends Prisma.BudgetWorkspace$insightsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BudgetWorkspace$insightsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MoneyInsightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3173,6 +3561,54 @@ export type BudgetWorkspace$budgetMonthsArgs<ExtArgs extends runtime.Types.Exten
   take?: number
   skip?: number
   distinct?: Prisma.BudgetMonthScalarFieldEnum | Prisma.BudgetMonthScalarFieldEnum[]
+}
+
+/**
+ * BudgetWorkspace.budgetBuckets
+ */
+export type BudgetWorkspace$budgetBucketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BudgetBucket
+   */
+  select?: Prisma.BudgetBucketSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BudgetBucket
+   */
+  omit?: Prisma.BudgetBucketOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BudgetBucketInclude<ExtArgs> | null
+  where?: Prisma.BudgetBucketWhereInput
+  orderBy?: Prisma.BudgetBucketOrderByWithRelationInput | Prisma.BudgetBucketOrderByWithRelationInput[]
+  cursor?: Prisma.BudgetBucketWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BudgetBucketScalarFieldEnum | Prisma.BudgetBucketScalarFieldEnum[]
+}
+
+/**
+ * BudgetWorkspace.allocationRules
+ */
+export type BudgetWorkspace$allocationRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BudgetAllocationRule
+   */
+  select?: Prisma.BudgetAllocationRuleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BudgetAllocationRule
+   */
+  omit?: Prisma.BudgetAllocationRuleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BudgetAllocationRuleInclude<ExtArgs> | null
+  where?: Prisma.BudgetAllocationRuleWhereInput
+  orderBy?: Prisma.BudgetAllocationRuleOrderByWithRelationInput | Prisma.BudgetAllocationRuleOrderByWithRelationInput[]
+  cursor?: Prisma.BudgetAllocationRuleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BudgetAllocationRuleScalarFieldEnum | Prisma.BudgetAllocationRuleScalarFieldEnum[]
 }
 
 /**

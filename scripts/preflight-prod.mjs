@@ -13,7 +13,7 @@ const requiredEnv = [
   'STRIPE_MONTHLY_PRICE_ID',
   'STRIPE_YEARLY_PRICE_ID',
   'STRIPE_AUTOMATIC_TAX',
-  'RESEND_API_KEY',
+  'STRIPE_CHECKOUT_TERMS_CONSENT',
   'EMAIL_FROM',
   'LEGAL_BUSINESS_NAME',
   'LEGAL_BUSINESS_FORM',
@@ -36,6 +36,8 @@ const requiredEnv = [
 const optionalEnv = [
   'GOOGLE_CLIENT_ID',
   'GOOGLE_CLIENT_SECRET',
+  'BREVO_API_KEY',
+  'RESEND_API_KEY',
   'ENABLE_LIVE_BANK_SYNC',
   'BANK_SYNC_ENCRYPTION_KEY',
   'SIMPLEFIN_ACCESS_URL',
@@ -103,13 +105,14 @@ const enableBankingApplicationId = value('ENABLE_BANKING_APPLICATION_ID')
 const enableBankingPrivateKey = value('ENABLE_BANKING_PRIVATE_KEY')
 const enableBankingRedirectUrl = value('ENABLE_BANKING_REDIRECT_URL')
 const stripeAutomaticTax = value('STRIPE_AUTOMATIC_TAX')
+const hasTransactionalEmailProvider = Boolean(value('BREVO_API_KEY') || value('RESEND_API_KEY'))
 
 if (hasGoogleClientId !== hasGoogleClientSecret) {
   warnings.push('Google OAuth is partially configured; set both GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET or neither')
 }
 
-if (!value('STRIPE_SECRET_KEY').startsWith('sk_live_')) {
-  failures.push('STRIPE_SECRET_KEY must be a live-mode key for paid production launch')
+if (!/^(sk|rk)_live_/.test(value('STRIPE_SECRET_KEY'))) {
+  failures.push('STRIPE_SECRET_KEY must be a live-mode standard/restricted key for paid production launch')
 }
 if (value('CLOUDFLARE_PAGES_PROJECT') !== 'wollie') {
   failures.push('CLOUDFLARE_PAGES_PROJECT must be the production "wollie" project')
@@ -125,6 +128,12 @@ for (const key of ['STRIPE_MONTHLY_PRICE_ID', 'STRIPE_YEARLY_PRICE_ID']) {
 }
 if (!['true', 'false'].includes(stripeAutomaticTax)) {
   failures.push('STRIPE_AUTOMATIC_TAX must explicitly be true or false')
+}
+if (value('STRIPE_CHECKOUT_TERMS_CONSENT') !== 'true') {
+  failures.push('STRIPE_CHECKOUT_TERMS_CONSENT must be true for paid production launch')
+}
+if (!hasTransactionalEmailProvider) {
+  failures.push('BREVO_API_KEY or RESEND_API_KEY is required for production account emails')
 }
 for (const key of [
   'PUBLIC_DOMAIN_VERIFIED',
@@ -201,6 +210,7 @@ for (const key of requiredEnv) {
 for (const key of optionalEnv) {
   console.log(`${value(key) ? '✓' : '○'} ${key}`)
 }
+console.log(`${hasTransactionalEmailProvider ? '✓' : '✕'} transactional email provider`)
 
 if (warnings.length) {
   console.log('')

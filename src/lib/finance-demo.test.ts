@@ -84,6 +84,25 @@ describe('finance demo data', () => {
     expect(summary.safeToSpend).toBe(1500)
   })
 
+  it('keeps money sent to a future envelope out of spending', () => {
+    const summary = getFinanceSummary({
+      accounts: [{ id: 'checking', name: 'Checking', type: 'Checking', balance: 6_000, institution: 'Bank', lastSynced: 'Now' }],
+      transactions: [
+        { id: 'pension', date: '2026-07-02', merchant: 'Pension provider', account: 'Checking', category: 'Pension', amount: -4_000, status: 'cleared' },
+        { id: 'food', date: '2026-07-03', merchant: 'Market', account: 'Checking', category: 'Groceries', amount: -200, status: 'cleared' },
+      ],
+      budget: [
+        { name: 'Pension', group: 'Future', categoryNames: ['Pension'], allocated: 4_000, spent: 4_000 },
+        { name: 'Food', group: 'Flexible', categoryNames: ['Groceries'], allocated: 1_000, spent: 200 },
+      ],
+      recurringPayments: [],
+      referenceDate: new Date('2026-07-14T12:00:00Z'),
+    })
+
+    expect(summary.spent).toBe(200)
+    expect(summary.saved).toBe(4_000)
+  })
+
   it('detects stable monthly charges from transaction history', () => {
     const recurring = detectRecurringPayments(
       [

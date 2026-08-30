@@ -277,6 +277,84 @@ export type EnumFinanceTransactionStatusWithAggregatesFilter<$PrismaModel = neve
   _max?: Prisma.NestedEnumFinanceTransactionStatusFilter<$PrismaModel>
 }
 
+export type EnumBudgetBucketGroupFilter<$PrismaModel = never> = {
+  equals?: $Enums.BudgetBucketGroup | Prisma.EnumBudgetBucketGroupFieldRefInput<$PrismaModel>
+  in?: $Enums.BudgetBucketGroup[] | Prisma.ListEnumBudgetBucketGroupFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BudgetBucketGroup[] | Prisma.ListEnumBudgetBucketGroupFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBudgetBucketGroupFilter<$PrismaModel> | $Enums.BudgetBucketGroup
+}
+
+export type EnumBudgetBucketPurposeFilter<$PrismaModel = never> = {
+  equals?: $Enums.BudgetBucketPurpose | Prisma.EnumBudgetBucketPurposeFieldRefInput<$PrismaModel>
+  in?: $Enums.BudgetBucketPurpose[] | Prisma.ListEnumBudgetBucketPurposeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BudgetBucketPurpose[] | Prisma.ListEnumBudgetBucketPurposeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBudgetBucketPurposeFilter<$PrismaModel> | $Enums.BudgetBucketPurpose
+}
+
+export type EnumBudgetBucketGroupWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BudgetBucketGroup | Prisma.EnumBudgetBucketGroupFieldRefInput<$PrismaModel>
+  in?: $Enums.BudgetBucketGroup[] | Prisma.ListEnumBudgetBucketGroupFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BudgetBucketGroup[] | Prisma.ListEnumBudgetBucketGroupFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBudgetBucketGroupWithAggregatesFilter<$PrismaModel> | $Enums.BudgetBucketGroup
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBudgetBucketGroupFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBudgetBucketGroupFilter<$PrismaModel>
+}
+
+export type EnumBudgetBucketPurposeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BudgetBucketPurpose | Prisma.EnumBudgetBucketPurposeFieldRefInput<$PrismaModel>
+  in?: $Enums.BudgetBucketPurpose[] | Prisma.ListEnumBudgetBucketPurposeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BudgetBucketPurpose[] | Prisma.ListEnumBudgetBucketPurposeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBudgetBucketPurposeWithAggregatesFilter<$PrismaModel> | $Enums.BudgetBucketPurpose
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBudgetBucketPurposeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBudgetBucketPurposeFilter<$PrismaModel>
+}
+
+export type EnumBudgetAllocationRuleTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.BudgetAllocationRuleType | Prisma.EnumBudgetAllocationRuleTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BudgetAllocationRuleType[] | Prisma.ListEnumBudgetAllocationRuleTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BudgetAllocationRuleType[] | Prisma.ListEnumBudgetAllocationRuleTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBudgetAllocationRuleTypeFilter<$PrismaModel> | $Enums.BudgetAllocationRuleType
+}
+
+export type IntNullableFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableFilter<$PrismaModel> | number | null
+}
+
+export type EnumBudgetAllocationRuleTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BudgetAllocationRuleType | Prisma.EnumBudgetAllocationRuleTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BudgetAllocationRuleType[] | Prisma.ListEnumBudgetAllocationRuleTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BudgetAllocationRuleType[] | Prisma.ListEnumBudgetAllocationRuleTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBudgetAllocationRuleTypeWithAggregatesFilter<$PrismaModel> | $Enums.BudgetAllocationRuleType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBudgetAllocationRuleTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBudgetAllocationRuleTypeFilter<$PrismaModel>
+}
+
+export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _sum?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
+}
+
 export type EnumFinanceRecurringCadenceFilter<$PrismaModel = never> = {
   equals?: $Enums.FinanceRecurringCadence | Prisma.EnumFinanceRecurringCadenceFieldRefInput<$PrismaModel>
   in?: $Enums.FinanceRecurringCadence[] | Prisma.ListEnumFinanceRecurringCadenceFieldRefInput<$PrismaModel>
@@ -636,6 +714,84 @@ export type NestedEnumFinanceTransactionStatusWithAggregatesFilter<$PrismaModel 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumFinanceTransactionStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumFinanceTransactionStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumBudgetBucketGroupFilter<$PrismaModel = never> = {
+  equals?: $Enums.BudgetBucketGroup | Prisma.EnumBudgetBucketGroupFieldRefInput<$PrismaModel>
+  in?: $Enums.BudgetBucketGroup[] | Prisma.ListEnumBudgetBucketGroupFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BudgetBucketGroup[] | Prisma.ListEnumBudgetBucketGroupFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBudgetBucketGroupFilter<$PrismaModel> | $Enums.BudgetBucketGroup
+}
+
+export type NestedEnumBudgetBucketPurposeFilter<$PrismaModel = never> = {
+  equals?: $Enums.BudgetBucketPurpose | Prisma.EnumBudgetBucketPurposeFieldRefInput<$PrismaModel>
+  in?: $Enums.BudgetBucketPurpose[] | Prisma.ListEnumBudgetBucketPurposeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BudgetBucketPurpose[] | Prisma.ListEnumBudgetBucketPurposeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBudgetBucketPurposeFilter<$PrismaModel> | $Enums.BudgetBucketPurpose
+}
+
+export type NestedEnumBudgetBucketGroupWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BudgetBucketGroup | Prisma.EnumBudgetBucketGroupFieldRefInput<$PrismaModel>
+  in?: $Enums.BudgetBucketGroup[] | Prisma.ListEnumBudgetBucketGroupFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BudgetBucketGroup[] | Prisma.ListEnumBudgetBucketGroupFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBudgetBucketGroupWithAggregatesFilter<$PrismaModel> | $Enums.BudgetBucketGroup
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBudgetBucketGroupFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBudgetBucketGroupFilter<$PrismaModel>
+}
+
+export type NestedEnumBudgetBucketPurposeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BudgetBucketPurpose | Prisma.EnumBudgetBucketPurposeFieldRefInput<$PrismaModel>
+  in?: $Enums.BudgetBucketPurpose[] | Prisma.ListEnumBudgetBucketPurposeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BudgetBucketPurpose[] | Prisma.ListEnumBudgetBucketPurposeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBudgetBucketPurposeWithAggregatesFilter<$PrismaModel> | $Enums.BudgetBucketPurpose
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBudgetBucketPurposeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBudgetBucketPurposeFilter<$PrismaModel>
+}
+
+export type NestedEnumBudgetAllocationRuleTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.BudgetAllocationRuleType | Prisma.EnumBudgetAllocationRuleTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BudgetAllocationRuleType[] | Prisma.ListEnumBudgetAllocationRuleTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BudgetAllocationRuleType[] | Prisma.ListEnumBudgetAllocationRuleTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBudgetAllocationRuleTypeFilter<$PrismaModel> | $Enums.BudgetAllocationRuleType
+}
+
+export type NestedEnumBudgetAllocationRuleTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BudgetAllocationRuleType | Prisma.EnumBudgetAllocationRuleTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BudgetAllocationRuleType[] | Prisma.ListEnumBudgetAllocationRuleTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BudgetAllocationRuleType[] | Prisma.ListEnumBudgetAllocationRuleTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBudgetAllocationRuleTypeWithAggregatesFilter<$PrismaModel> | $Enums.BudgetAllocationRuleType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBudgetAllocationRuleTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBudgetAllocationRuleTypeFilter<$PrismaModel>
+}
+
+export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _sum?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
+}
+
+export type NestedFloatNullableFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
 }
 
 export type NestedEnumFinanceRecurringCadenceFilter<$PrismaModel = never> = {

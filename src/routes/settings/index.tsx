@@ -16,7 +16,6 @@ import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
 import { Textarea } from '#/components/ui/textarea'
 import { getMyProfile, updateProfile } from '#/server/profiles'
-import { BillingActions } from '#/components/billing/BillingActions'
 import { getBillingOverview } from '#/server/billing'
 import { getTransactionalEmailReadiness } from '#/server/email-readiness'
 import { authClient } from '#/lib/auth-client'
@@ -282,32 +281,15 @@ function SettingsPage() {
           <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
             <CardHeader className="border-b border-zinc-200 pb-4">
               <CardTitle>Plan &amp; billing</CardTitle>
-              <CardDescription>
-                {billing?.state === 'trial'
-                  ? `${billing.daysRemaining} day${billing.daysRemaining === 1 ? '' : 's'} left in your free trial`
-                  : billing?.state === 'founder'
-                    ? 'Founder access is active'
-                  : billing?.state === 'development'
-                    ? 'Development account access'
-                    : billing?.statusLabel || 'Choose a Wollie plan'}
-              </CardDescription>
-              <CardAction>
-                <Badge variant="outline" className="rounded-md border-[color-mix(in_oklch,var(--color-wollie-accent)_28%,white)] bg-[color-mix(in_oklch,var(--color-wollie-accent)_9%,white)] text-[var(--color-wollie-accent)]">
-                  {billing?.state === 'subscribed' ? 'Active' : billing?.state === 'founder' ? 'Founder' : billing?.state === 'trial' ? 'Trial' : 'Billing'}
-                </Badge>
-              </CardAction>
+              <CardDescription>View your current access and compare every plan option.</CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-4 pt-5">
-              {billing?.currentPeriodEnd && (
-                <p className="text-sm text-zinc-600">
-                  {billing.cancelAtPeriodEnd ? 'Access until' : 'Renews'}{' '}
-                  {new Intl.DateTimeFormat('en', { dateStyle: 'medium' }).format(new Date(billing.currentPeriodEnd))}
-                </p>
-              )}
-              <BillingActions billing={billing} compact />
-              <Link to="/pricing" search={{ checkout: undefined }} className="text-sm font-medium text-[var(--color-wollie-accent)] hover:underline">
-                View pricing details
-              </Link>
+            <CardContent className="pt-5">
+              <Button asChild variant="outline" className="w-full justify-between border-zinc-200 bg-white text-zinc-950 hover:bg-zinc-100">
+                <Link to="/app/billing">
+                  Manage plan &amp; billing
+                  <ArrowRight aria-hidden="true" />
+                </Link>
+              </Button>
             </CardContent>
           </Card>
 
@@ -381,45 +363,52 @@ function SettingsPage() {
 
       <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
         <CardHeader className="border-b border-zinc-200 pb-4">
-          <CardTitle>Exports &amp; recovery</CardTitle>
-          <CardDescription>Download clean tables, keep a full backup, or restore planning data from a backup.</CardDescription>
+          <CardTitle>Back up, export &amp; restore</CardTitle>
+          <CardDescription>Save a backup for recovery, or download transactions for a spreadsheet.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-5 pt-5">
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <ExportButton
-              icon={Download}
-              title="Full backup"
-              description="JSON backup for recovery and portability."
-              loading={exportLoading === 'backup'}
-              onClick={() => void downloadExport('backup')}
-            />
-            <ExportButton
-              icon={FileSpreadsheet}
-              title="Household CSV"
-              description="All household transactions as a table."
-              loading={exportLoading === 'household-csv'}
-              onClick={() => void downloadExport('household-csv')}
-            />
-            <ExportButton
-              icon={FileSpreadsheet}
-              title="Personal CSV"
-              description="Your ownership-adjusted transaction table."
-              loading={exportLoading === 'personal-csv'}
-              onClick={() => void downloadExport('personal-csv')}
-            />
-            <ExportButton
-              icon={FileText}
-              title="Ownership CSV"
-              description="Accounts, members, and ownership shares."
-              loading={exportLoading === 'ownership-csv'}
-              onClick={() => void downloadExport('ownership-csv')}
-            />
+          <div className="grid gap-4 lg:grid-cols-2">
+            <section className="grid gap-4 rounded-lg border border-zinc-200 bg-zinc-50 p-5">
+              <div className="flex items-start gap-3">
+                <div className="grid size-9 shrink-0 place-items-center rounded-md bg-emerald-100 text-emerald-700"><Download className="size-5" aria-hidden="true" /></div>
+                <div>
+                  <h3 className="text-sm font-semibold text-zinc-950">Save a full backup</h3>
+                  <p className="mt-1 text-sm leading-5 text-zinc-600">Best for safekeeping or moving your plan later. Includes your household’s finance data in one JSON file.</p>
+                </div>
+              </div>
+              <Button type="button" disabled={exportLoading === 'backup'} onClick={() => void downloadExport('backup')} className="w-full sm:w-fit wollie-primary-action">
+                <Download aria-hidden="true" />
+                {exportLoading === 'backup' ? 'Preparing backup…' : 'Download full backup'}
+              </Button>
+            </section>
+
+            <section className="grid gap-4 rounded-lg border border-zinc-200 p-5">
+              <div className="flex items-start gap-3">
+                <div className="grid size-9 shrink-0 place-items-center rounded-md bg-zinc-100 text-zinc-700"><FileSpreadsheet className="size-5" aria-hidden="true" /></div>
+                <div>
+                  <h3 className="text-sm font-semibold text-zinc-950">Export transactions</h3>
+                  <p className="mt-1 text-sm leading-5 text-zinc-600">Use a CSV file in Excel, Numbers, or Google Sheets.</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Button type="button" variant="outline" disabled={exportLoading === 'household-csv'} onClick={() => void downloadExport('household-csv')}>
+                  {exportLoading === 'household-csv' ? 'Preparing…' : 'All household transactions'}
+                </Button>
+                <Button type="button" variant="outline" disabled={exportLoading === 'personal-csv'} onClick={() => void downloadExport('personal-csv')}>
+                  {exportLoading === 'personal-csv' ? 'Preparing…' : 'My share only'}
+                </Button>
+              </div>
+              <Button type="button" variant="ghost" disabled={exportLoading === 'ownership-csv'} onClick={() => void downloadExport('ownership-csv')} className="w-fit px-0 text-zinc-600 hover:bg-transparent hover:text-zinc-950">
+                <FileText aria-hidden="true" />
+                {exportLoading === 'ownership-csv' ? 'Preparing…' : 'Download account ownership & shares (CSV)'}
+              </Button>
+            </section>
           </div>
 
           <div className="grid gap-4 border-t border-zinc-200 pt-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
             <div>
               <label className="grid gap-2 text-sm font-medium">
-                Restore from backup
+                Restore a saved plan
                 <input
                   type="file"
                   accept="application/json,.json"
@@ -428,13 +417,13 @@ function SettingsPage() {
                 />
               </label>
               <p className="mt-2 text-xs leading-5 text-zinc-500">
-                Restore replaces budget allocations and recurring payments. It does not restore bank login tokens, live balances, transactions, or billing.
+                This replaces your budget allocations, recurring payments, and ownership shares. It never restores bank login tokens, live balances, transactions, or billing.
               </p>
               {restorePreview && (
                 <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-700">
                   <p className="font-medium text-zinc-950">{restorePreview.workspace}</p>
                   <p className="mt-1">
-                    {restorePreview.members} members · {restorePreview.accounts} accounts · {restorePreview.transactions} transactions · {restorePreview.budgetAllocations} budget allocations · {restorePreview.recurringPayments} recurring payments
+                    Ready to restore {restorePreview.budgetAllocations} budget allocations, {restorePreview.recurringPayments} recurring payments, and ownership shares.
                   </p>
                   <p className="mt-2 text-xs leading-5 text-zinc-500">{restorePreview.warning}</p>
                 </div>
@@ -447,7 +436,7 @@ function SettingsPage() {
               className="min-h-11 bg-zinc-950 text-white hover:bg-zinc-800 lg:mt-7"
             >
               <Upload aria-hidden="true" />
-              {exportLoading === 'restore' ? 'Restoring…' : 'Restore planning'}
+              {exportLoading === 'restore' ? 'Restoring…' : 'Restore this backup'}
             </Button>
           </div>
 
@@ -456,29 +445,6 @@ function SettingsPage() {
         </CardContent>
       </Card>
     </main>
-  )
-}
-
-function ExportButton({ icon: Icon, title, description, loading, onClick }: {
-  icon: typeof Download
-  title: string
-  description: string
-  loading: boolean
-  onClick: () => void
-}) {
-  return (
-    <button
-      type="button"
-      disabled={loading}
-      onClick={onClick}
-      className="grid min-h-32 gap-3 rounded-lg border border-zinc-200 bg-white p-4 text-left transition-colors hover:bg-zinc-50 disabled:cursor-wait disabled:opacity-70"
-    >
-      <Icon className="size-5 text-[var(--color-wollie-accent)]" aria-hidden="true" />
-      <span>
-        <span className="block text-sm font-semibold text-zinc-950">{loading ? 'Preparing…' : title}</span>
-        <span className="mt-1 block text-xs leading-5 text-zinc-500">{description}</span>
-      </span>
-    </button>
   )
 }
 

@@ -18,7 +18,7 @@ export const Route = createFileRoute('/billing/success')({
   loader: async ({ deps }) => {
     if (!deps.sessionId) return { error: 'Missing checkout session.' }
     await syncCheckoutSession({ data: { sessionId: deps.sessionId } })
-    throw redirect({ to: '/app' })
+    throw redirect({ to: '/app/billing' })
   },
   component: BillingSuccess,
 })

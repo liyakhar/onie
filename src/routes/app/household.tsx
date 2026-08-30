@@ -39,6 +39,7 @@ function HouseholdPage() {
   const owner = data.members.find((member) => member.role === 'OWNER')
   const partner = data.members.find((member) => member.role === 'MEMBER')
   const isOwner = data.currentRole === 'OWNER'
+  const hasPartner = Boolean(partner)
 
   async function refreshWith(action: () => Promise<unknown>, success: string) {
     setBusy(true)
@@ -89,9 +90,9 @@ function HouseholdPage() {
     <main id="main" className="mx-auto grid w-full max-w-7xl gap-5 bg-white px-4 py-5 text-zinc-950 sm:px-6 lg:px-8">
       <header className="flex flex-col gap-4 border-b border-zinc-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Household</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{hasPartner ? 'Household' : 'Share with a partner'}</h1>
           <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-500">
-            Share the full picture while keeping a clear view of what is mine, yours, and ours.
+            {hasPartner ? 'Share the full picture while keeping a clear view of what is mine, yours, and ours.' : 'Your money is private. Invite a partner when you want to plan together.'}
           </p>
         </div>
         <Button asChild variant="outline" className="min-h-11 sm:justify-self-end">
@@ -109,8 +110,8 @@ function HouseholdPage() {
 
       <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
         <CardHeader className="border-b border-zinc-200 pb-4">
-          <CardTitle>People</CardTitle>
-          <CardDescription>{data.members.length === 1 ? 'Your personal household' : 'One shared household plan'}</CardDescription>
+          <CardTitle>{hasPartner ? 'People' : 'Your space'}</CardTitle>
+          <CardDescription>{hasPartner ? 'One shared household plan' : 'Just you for now'}</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-5 pt-5">
           <ul className="divide-y divide-zinc-200">
@@ -125,7 +126,7 @@ function HouseholdPage() {
                   </div>
                   <p className="mt-1 truncate text-sm text-zinc-500">{member.email}</p>
                 </div>
-                <p className="text-sm tabular-nums text-zinc-600">{member.householdShareBasisPoints / 100}% of shared costs</p>
+                {hasPartner && <p className="text-sm tabular-nums text-zinc-600">{member.householdShareBasisPoints / 100}% of shared costs</p>}
                 {isOwner && member.role === 'MEMBER' && (
                   <Button
                     type="button"

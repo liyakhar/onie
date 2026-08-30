@@ -113,6 +113,33 @@ export const FinanceSyncStatus = {
 export type FinanceSyncStatus = (typeof FinanceSyncStatus)[keyof typeof FinanceSyncStatus]
 
 
+export const BudgetBucketGroup = {
+  FIXED: 'FIXED',
+  FLEXIBLE: 'FLEXIBLE',
+  FUTURE: 'FUTURE'
+} as const
+
+export type BudgetBucketGroup = (typeof BudgetBucketGroup)[keyof typeof BudgetBucketGroup]
+
+
+export const BudgetBucketPurpose = {
+  SPENDING: 'SPENDING',
+  RESERVE: 'RESERVE',
+  GOAL: 'GOAL'
+} as const
+
+export type BudgetBucketPurpose = (typeof BudgetBucketPurpose)[keyof typeof BudgetBucketPurpose]
+
+
+export const BudgetAllocationRuleType = {
+  FIXED: 'FIXED',
+  PERCENT_OF_INCOME: 'PERCENT_OF_INCOME',
+  REMAINDER: 'REMAINDER'
+} as const
+
+export type BudgetAllocationRuleType = (typeof BudgetAllocationRuleType)[keyof typeof BudgetAllocationRuleType]
+
+
 export const HouseholdRole = {
   OWNER: 'OWNER',
   MEMBER: 'MEMBER'

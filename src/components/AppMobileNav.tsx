@@ -18,11 +18,11 @@ export function AppMobileNav({ locked = false }: { locked?: boolean }) {
       </Link>
       <Link to="/app/transactions" className="app-mobile-nav__item" activeProps={{ className: 'app-mobile-nav__item is-active' }}>
         <ListFilter aria-hidden="true" />
-        <span>Activity</span>
+        <span>Transactions</span>
       </Link>
       <Link to="/app/budgets" className="app-mobile-nav__item" activeProps={{ className: 'app-mobile-nav__item is-active' }}>
         <ChartNoAxesCombined aria-hidden="true" />
-        <span>Plan</span>
+        <span>Money plan</span>
       </Link>
       <Link to="/app/recurring" className="app-mobile-nav__item" activeProps={{ className: 'app-mobile-nav__item is-active' }}>
         <CalendarDays aria-hidden="true" />

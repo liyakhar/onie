@@ -60,6 +60,7 @@ describe('Stripe test-mode event handling', () => {
     delete process.env.STRIPE_SECRET_KEY
     delete process.env.STRIPE_WEBHOOK_SECRET
     delete process.env.FOUNDER_EMAILS
+    delete process.env.WOLLIE_BILLING_MODE
   })
 
   it('grants subscription state after a successful test subscription event', async () => {
@@ -129,6 +130,7 @@ describe('Founder billing access', () => {
 
   afterEach(() => {
     delete process.env.FOUNDER_EMAILS
+    delete process.env.WOLLIE_BILLING_MODE
   })
 
   it('matches founder emails case-insensitively from comma-separated configuration', () => {
@@ -155,6 +157,42 @@ describe('Founder billing access', () => {
       state: 'founder',
       statusLabel: 'Founder access',
     }))
+  })
+
+  it('keeps every account open during early access with Household limits', async () => {
+    findUser.mockResolvedValue({
+      email: 'person@example.com',
+      billingSubscription: null,
+    })
+
+    const billing = await loadBillingAccess('user_early_access')
+
+    expect(billing).toEqual(expect.objectContaining({
+      hasAccess: true,
+      state: 'early_access',
+      plan: 'household',
+      billingMode: 'early_access',
+      paidPlansEnabled: false,
+    }))
+    expect(billing.limits.budgetEnvelopes).toBeNull()
+  })
+
+  it('uses the permanent Free plan when freemium mode is enabled', async () => {
+    process.env.WOLLIE_BILLING_MODE = 'freemium'
+    findUser.mockResolvedValue({
+      email: 'person@example.com',
+      billingSubscription: null,
+    })
+
+    const billing = await loadBillingAccess('user_free')
+
+    expect(billing).toEqual(expect.objectContaining({
+      hasAccess: true,
+      state: 'free',
+      plan: 'free',
+      billingMode: 'freemium',
+    }))
+    expect(billing.limits.budgetEnvelopes).toBe(12)
   })
 })
 

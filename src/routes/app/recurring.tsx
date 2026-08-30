@@ -4,7 +4,7 @@ import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '#/components/ui/select'
-import { FINANCE_CATEGORIES, formatMoney, type FinanceCategory, type RecurringPayment } from '#/lib/finance-demo'
+import { formatMoney, type RecurringPayment, type TransactionCategoryName } from '#/lib/finance-demo'
 import { getFinanceRecurringPayments, updateFinanceRecurringPayment } from '#/server/finance'
 
 export const Route = createFileRoute('/app/recurring')({
@@ -15,7 +15,7 @@ export const Route = createFileRoute('/app/recurring')({
 type Draft = Pick<RecurringPayment, 'id' | 'merchant' | 'amount' | 'nextDate' | 'cadence' | 'category' | 'confirmed'>
 
 export function RecurringPage() {
-  const { currency, recurringPayments } = Route.useLoaderData()
+  const { categoryOptions, currency, recurringPayments } = Route.useLoaderData()
   const router = useRouter()
   const [drafts, setDrafts] = useState<Record<string, Draft>>(() => Object.fromEntries(recurringPayments.map((item) => [item.id, { ...item, nextDate: toDateInput(item.nextDate) }])))
   const [newBill, setNewBill] = useState<Draft>({ id: '', merchant: '', amount: 0, nextDate: toDateInput(new Date().toISOString()), cadence: 'monthly', category: 'Subscriptions', confirmed: true })
@@ -51,7 +51,7 @@ export function RecurringPage() {
           <h2 id="add-bill-heading" className="font-semibold">Add a bill</h2>
           <Button type="button" variant="ghost" onClick={() => setShowAddBill(false)}>Cancel</Button>
         </div>
-        <div className="mt-4"><BillFields draft={newBill} onChange={setNewBill} /></div>
+        <div className="mt-4"><BillFields categoryOptions={categoryOptions} draft={newBill} onChange={setNewBill} /></div>
         <Button className="wollie-primary-action mt-3 min-h-11" disabled={saving === 'new'} onClick={() => void persist(newBill, 'save')}>{saving === 'new' ? 'Adding…' : 'Add bill'}</Button>
       </section>}
 
@@ -69,7 +69,7 @@ export function RecurringPage() {
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <div><div className="flex items-center gap-2"><h3 className="font-medium">{item.merchant}</h3><Badge variant="outline" className="rounded-md font-normal">{item.confirmed === false ? 'Detected' : 'Confirmed'}</Badge></div><p className="mt-1 text-sm text-zinc-500">{formatMoney(-item.amount, item.currency || currency)} · {item.cadence}</p></div>
                   </div>
-                  <BillFields draft={draft} onChange={(next) => setDrafts((current) => ({ ...current, [item.id]: next }))} />
+                  <BillFields categoryOptions={categoryOptions} draft={draft} onChange={(next) => setDrafts((current) => ({ ...current, [item.id]: next }))} />
                   <div className="mt-3 flex flex-wrap gap-2">
                     <Button className="wollie-primary-action min-h-11" disabled={saving === item.id} onClick={() => void persist(draft, item.confirmed === false ? 'confirm' : 'save')}>{saving === item.id ? 'Saving…' : item.confirmed === false ? 'Confirm bill' : 'Save changes'}</Button>
                     <Button variant="outline" className="min-h-11 border-zinc-200 bg-white" disabled={saving === item.id} onClick={() => void persist(draft, 'dismiss')}>{item.confirmed === false ? 'Not recurring' : 'Remove'}</Button>
@@ -85,14 +85,22 @@ export function RecurringPage() {
   )
 }
 
-function BillFields({ draft, onChange }: { draft: Draft; onChange: (draft: Draft) => void }) {
+function BillFields({
+  categoryOptions,
+  draft,
+  onChange,
+}: {
+  categoryOptions: string[]
+  draft: Draft
+  onChange: (draft: Draft) => void
+}) {
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.4fr)_8rem_10rem_10rem_minmax(0,1fr)]">
       <label className="grid gap-1 text-xs text-zinc-500">Merchant<Input name={`merchant-${draft.id || 'new'}`} value={draft.merchant} onChange={(event) => onChange({ ...draft, merchant: event.target.value })} className="min-h-11 border-zinc-200 bg-white text-zinc-950" /></label>
       <label className="grid gap-1 text-xs text-zinc-500">Amount<Input name={`amount-${draft.id || 'new'}`} inputMode="decimal" value={draft.amount || ''} onChange={(event) => onChange({ ...draft, amount: Number(event.target.value) })} className="min-h-11 border-zinc-200 bg-white text-zinc-950" /></label>
       <label className="grid gap-1 text-xs text-zinc-500">Next date<Input name={`date-${draft.id || 'new'}`} type="date" value={draft.nextDate} onChange={(event) => onChange({ ...draft, nextDate: event.target.value })} className="min-h-11 border-zinc-200 bg-white text-zinc-950" /></label>
       <label className="grid gap-1 text-xs text-zinc-500">Cadence<Select value={draft.cadence} onValueChange={(value) => onChange({ ...draft, cadence: value as Draft['cadence'] })}><SelectTrigger className="min-h-11 border-zinc-200 bg-white text-zinc-950"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="monthly">Monthly</SelectItem><SelectItem value="yearly">Yearly</SelectItem></SelectContent></Select></label>
-      <label className="grid gap-1 text-xs text-zinc-500">Category<Select value={draft.category} onValueChange={(value) => onChange({ ...draft, category: value as FinanceCategory })}><SelectTrigger className="min-h-11 border-zinc-200 bg-white text-zinc-950"><SelectValue /></SelectTrigger><SelectContent>{FINANCE_CATEGORIES.filter((item) => !['Income', 'Transfer'].includes(item)).map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}</SelectContent></Select></label>
+      <label className="grid gap-1 text-xs text-zinc-500">Category<Select value={draft.category} onValueChange={(value) => onChange({ ...draft, category: value as TransactionCategoryName })}><SelectTrigger className="min-h-11 border-zinc-200 bg-white text-zinc-950"><SelectValue /></SelectTrigger><SelectContent>{categoryOptions.map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}</SelectContent></Select></label>
     </div>
   )
 }

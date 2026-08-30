@@ -32,11 +32,11 @@ export default function AppNav({ locked = false }: { locked?: boolean }) {
           </Link>
           <Link to="/app/transactions" className="app-nav__tab" activeProps={{ className: 'app-nav__tab is-active' }}>
             <ListFilter aria-hidden="true" />
-            <span>Activity</span>
+            <span>Transactions</span>
           </Link>
           <Link to="/app/budgets" className="app-nav__tab" activeProps={{ className: 'app-nav__tab is-active' }}>
             <ChartNoAxesCombined aria-hidden="true" />
-            <span>Plan</span>
+            <span>Money plan</span>
           </Link>
           <Link to="/app/recurring" className="app-nav__tab" activeProps={{ className: 'app-nav__tab is-active' }}>
             <CalendarDays aria-hidden="true" />
@@ -62,8 +62,7 @@ export default function AppNav({ locked = false }: { locked?: boolean }) {
             <span>Household</span>
           </Link>}
           <Link
-            to="/pricing"
-            search={{ checkout: undefined }}
+            to="/app/billing"
             className="app-nav__account-link"
             activeProps={{ className: 'app-nav__account-link is-active' }}
           >

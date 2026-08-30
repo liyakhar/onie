@@ -3,6 +3,7 @@ import { FINANCE_CATEGORIES, type FinanceCategory } from '#/lib/finance-demo'
 import { getDb } from '#/server/db-access.server'
 import { requireFinanceHousehold } from '#/server/household-access.server'
 import { getSessionUser } from '#/server/session.server'
+import { loadBillingAccess } from '#/server/billing.server'
 
 const EXPORT_FORMAT = 'wollie-finance-backup-v2'
 
@@ -53,6 +54,10 @@ export const restoreFinancePlanningFromBackup = createServerFn({ method: 'POST' 
   .handler(async ({ data }) => {
     const backup = parseBackup(data.backupText)
     const context = await requireFinanceHousehold()
+    const billing = await loadBillingAccess(context.ownerUserId)
+    if (!billing.limits.backupRestore) {
+      throw new Error('Backup restore is included with the Household plan. Your existing data and exports remain available.')
+    }
     const prisma = await getDb()
     const sourceWorkspace = backup.finance.workspace
 

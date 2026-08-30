@@ -180,6 +180,7 @@ describe('SimpleFIN bank sync helpers', () => {
           transactions: [
             { id: 'unknown', amount: '-20', payee: 'ACME 49382' },
             { id: 'transfer', amount: '-500', payee: 'Internal transfer' },
+            { id: 'credit-transfer', amount: '500', payee: 'Card payment transfer' },
           ],
         },
       ],
@@ -189,6 +190,9 @@ describe('SimpleFIN bank sync helpers', () => {
       expect.objectContaining({ categoryName: 'Shopping', status: 'NEEDS_REVIEW' }),
     )
     expect(result.accounts[0]?.transactions[1]).toEqual(
+      expect.objectContaining({ categoryName: 'Transfer', status: 'CLEARED' }),
+    )
+    expect(result.accounts[0]?.transactions[2]).toEqual(
       expect.objectContaining({ categoryName: 'Transfer', status: 'CLEARED' }),
     )
   })

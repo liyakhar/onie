@@ -2,29 +2,32 @@ import type Stripe from 'stripe'
 import { getSiteUrl } from '#/lib/site'
 import { getDb } from '#/server/db-access.server'
 import { getSessionUser } from '#/server/session.server'
-
-export const TRIAL_DAYS = 14
+import {
+  getBillingMode,
+  planLimits,
+  type BillingMode,
+  type PlanLimits,
+  type WolliePlanId,
+} from '#/lib/billing-plans'
 
 const ACCESS_STATUSES = new Set(['active', 'trialing', 'past_due'])
 
 export type BillingAccess = {
   hasAccess: boolean
-  state: 'development' | 'founder' | 'trial' | 'subscribed' | 'expired'
+  state: 'development' | 'founder' | 'early_access' | 'free' | 'subscribed'
+  plan: WolliePlanId
+  billingMode: BillingMode
+  limits: PlanLimits
   status: string
   statusLabel: string
   billingConfigured: boolean
-  trialEndsAt: string
-  daysRemaining: number
+  paidPlansEnabled: boolean
   currentPeriodEnd: string | null
   cancelAtPeriodEnd: boolean
   hasCustomer: boolean
   interval: 'month' | 'year' | null
   isHouseholdOwner?: boolean
   householdOwnerName?: string
-}
-
-export function trialEndsAt(createdAt: Date) {
-  return new Date(createdAt.getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1_000)
 }
 
 export function isFounderEmail(
@@ -45,7 +48,6 @@ export async function loadBillingAccess(userId: string): Promise<BillingAccess> 
     where: { id: userId },
     select: {
       email: true,
-      createdAt: true,
       billingSubscription: {
         select: {
           stripeCustomerId: true,
@@ -60,15 +62,13 @@ export async function loadBillingAccess(userId: string): Promise<BillingAccess> 
 
   if (!user) throw new Error('Account not found.')
 
-  const trialEnd = trialEndsAt(user.createdAt)
-  const remainingMs = trialEnd.getTime() - Date.now()
-  const daysRemaining = Math.max(0, Math.ceil(remainingMs / (24 * 60 * 60 * 1_000)))
   const subscription = user.billingSubscription
   const status = subscription?.status || 'none'
   const subscribed = ACCESS_STATUSES.has(status)
   const founder = isFounderEmail(user.email)
   const isDevelopmentAccount =
     process.env.NODE_ENV === 'development' && user.email === 'dev@wollie.local'
+  const billingMode = getBillingMode()
 
   const state = isDevelopmentAccount
     ? 'development'
@@ -76,18 +76,28 @@ export async function loadBillingAccess(userId: string): Promise<BillingAccess> 
       ? 'founder'
       : subscribed
         ? 'subscribed'
-        : remainingMs > 0
-          ? 'trial'
-          : 'expired'
+        : billingMode === 'early_access'
+          ? 'early_access'
+          : 'free'
+  const plan: WolliePlanId = state === 'free' ? 'free' : 'household'
+  const billingConfigured = isStripeBillingConfigured()
 
   return {
-    hasAccess: state !== 'expired',
+    hasAccess: true,
     state,
+    plan,
+    billingMode,
+    limits: planLimits(plan),
     status,
-    statusLabel: founder ? 'Founder access' : billingStatusLabel(status, subscription?.cancelAtPeriodEnd || false),
-    billingConfigured: isStripeBillingConfigured(),
-    trialEndsAt: trialEnd.toISOString(),
-    daysRemaining,
+    statusLabel: state === 'early_access'
+      ? 'Free during early access'
+      : founder
+        ? 'Founder access'
+        : state === 'free'
+          ? 'Free plan'
+          : billingStatusLabel(status, subscription?.cancelAtPeriodEnd || false),
+    billingConfigured,
+    paidPlansEnabled: billingMode === 'freemium' && billingConfigured,
     currentPeriodEnd: subscription?.currentPeriodEnd?.toISOString() || null,
     cancelAtPeriodEnd: subscription?.cancelAtPeriodEnd || false,
     hasCustomer: Boolean(subscription?.stripeCustomerId),
@@ -118,10 +128,6 @@ export function shouldCollectCheckoutTermsConsent(
 export async function requireBillingUser() {
   const user = await getSessionUser()
   if (!user) throw new Error('Sign in required.')
-  const billing = await loadBillingAccess(user.id)
-  if (!billing.hasAccess) {
-    throw new Error('Your Wollie trial has ended. Choose a plan to continue.')
-  }
   return user
 }
 
@@ -138,6 +144,9 @@ export async function createStripeCheckout(
   userId: string,
   interval: 'month' | 'year',
 ) {
+  if (getBillingMode() !== 'freemium' || !isStripeBillingConfigured()) {
+    throw new Error('Paid plans are not available during early access.')
+  }
   const prisma = await getDb()
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -180,7 +189,7 @@ export async function createStripeCheckout(
     metadata: { wollieUserId: user.id },
     subscription_data: { metadata: { wollieUserId: user.id } },
     success_url: `${siteUrl}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${siteUrl}/pricing?checkout=cancelled`,
+    cancel_url: `${siteUrl}/app/billing?checkout=cancelled`,
     ...(user.billingSubscription?.stripeCustomerId
       ? { customer: user.billingSubscription.stripeCustomerId }
       : { customer_email: user.email }),

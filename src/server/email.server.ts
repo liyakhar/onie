@@ -6,14 +6,22 @@ type AccountEmail = {
 }
 
 export function isTransactionalEmailConfigured(
-  env: { RESEND_API_KEY?: string; EMAIL_FROM?: string } = process.env,
+  env: { BREVO_API_KEY?: string; RESEND_API_KEY?: string; EMAIL_FROM?: string } = process.env,
 ) {
-  return Boolean(env.RESEND_API_KEY?.trim() && env.EMAIL_FROM?.trim())
+  return Boolean(getTransactionalEmailProvider(env) && env.EMAIL_FROM?.trim())
+}
+
+export function getTransactionalEmailProvider(
+  env: { BREVO_API_KEY?: string; RESEND_API_KEY?: string } = process.env,
+) {
+  if (env.BREVO_API_KEY?.trim()) return 'brevo'
+  if (env.RESEND_API_KEY?.trim()) return 'resend'
+  return null
 }
 
 export async function sendAccountEmail(message: AccountEmail) {
-  const apiKey = process.env.RESEND_API_KEY?.trim()
   const from = process.env.EMAIL_FROM?.trim()
+  const provider = getTransactionalEmailProvider()
 
   if (!isTransactionalEmailConfigured()) {
     if (process.env.NODE_ENV === 'development') {
@@ -23,14 +31,48 @@ export async function sendAccountEmail(message: AccountEmail) {
     throw new Error('Transactional email is not configured.')
   }
 
-  const response = await fetch('https://api.resend.com/emails', {
+  const response = provider === 'brevo'
+    ? await sendViaBrevo({ ...message, from: from! })
+    : await sendViaResend({ ...message, from: from! })
+
+  if (!response.ok) {
+    throw new Error(`Transactional email provider rejected the request (${response.status}).`)
+  }
+}
+
+async function sendViaBrevo(message: AccountEmail & { from: string }) {
+  const apiKey = process.env.BREVO_API_KEY?.trim()
+  const sender = parseSender(message.from)
+
+  return fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      'api-key': apiKey!,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      sender,
+      to: [{ email: message.to }],
+      subject: message.subject,
+      textContent: message.text,
+      htmlContent: message.html,
+    }),
+    signal: AbortSignal.timeout(15_000),
+  })
+}
+
+async function sendViaResend(message: AccountEmail & { from: string }) {
+  const apiKey = process.env.RESEND_API_KEY?.trim()
+
+  return fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from,
+      from: message.from,
       to: [message.to],
       subject: message.subject,
       text: message.text,
@@ -38,10 +80,6 @@ export async function sendAccountEmail(message: AccountEmail) {
     }),
     signal: AbortSignal.timeout(15_000),
   })
-
-  if (!response.ok) {
-    throw new Error(`Transactional email provider rejected the request (${response.status}).`)
-  }
 }
 
 export function accountActionEmail(title: string, introduction: string, url: string) {
@@ -62,4 +100,15 @@ function escapeHtml(value: string) {
     "'": '&#39;',
     '"': '&quot;',
   })[character] || character)
+}
+
+function parseSender(value: string) {
+  const match = value.match(/^\s*(.*?)\s*<([^<>@\s]+@[^<>@\s]+)>\s*$/)
+  if (!match) return { email: value.trim() }
+
+  const [, name, email] = match
+  return {
+    name: name.trim() || undefined,
+    email,
+  }
 }

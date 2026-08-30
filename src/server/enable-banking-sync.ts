@@ -1,5 +1,10 @@
 import { createServerFn, createServerOnlyFn } from '@tanstack/react-start'
-import type { FinanceCategory, FinanceTransaction, FinancialAccount } from '#/lib/finance-demo'
+import type {
+  FinanceCategory,
+  FinanceTransaction,
+  FinancialAccount,
+  TransactionCategoryName,
+} from '#/lib/finance-demo'
 import { decryptCredential, encryptCredential, isEncryptedCredential } from '#/server/credential-crypto'
 
 const API_ORIGIN = 'https://api.enablebanking.com'
@@ -796,6 +801,9 @@ function fallbackTransactionId(transaction: ProviderTransaction, index: number) 
 }
 function inferCategory(description: string, amountMinor: number): FinanceCategory {
   const value = description.toLowerCase()
+  // Card settlements and internal moves can be credits; they must not be
+  // treated as household income just because their signed amount is positive.
+  if (/transfer|wise|revolut/.test(value)) return 'Transfer'
   if (amountMinor > 0) return 'Income'
   if (/rent|mortgage|landlord|housing/.test(value)) return 'Housing'
   if (/whole foods|carrefour|grocery|supermarket|market/.test(value)) return 'Groceries'
@@ -804,7 +812,6 @@ function inferCategory(description: string, amountMinor: number): FinanceCategor
   if (/netflix|spotify|subscription|adobe|icloud/.test(value)) return 'Subscriptions'
   if (/electric|water|internet|phone|utility/.test(value)) return 'Housing'
   if (/doctor|pharmacy|health|dental/.test(value)) return 'Health'
-  if (/transfer|wise|revolut/.test(value)) return 'Transfer'
   return 'Shopping'
 }
 function shouldReview(description: string, amountMinor: number) {
@@ -825,9 +832,11 @@ function maskIdentification(value: string) {
 function normalizeMerchant(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().slice(0, 160) || 'unknown transaction'
 }
-function toCategory(value?: string | null): FinanceCategory {
-  const categories: FinanceCategory[] = ['Housing', 'Groceries', 'Dining', 'Transport', 'Subscriptions', 'Health', 'Shopping', 'Transfer', 'Income']
-  return categories.includes(value as FinanceCategory) ? value as FinanceCategory : 'Shopping'
+function toCategory(value?: string | null): TransactionCategoryName {
+  const category = value?.trim()
+  // Category rules can contain household-specific names. Preserve them here so
+  // a saved envelope mapping still sees the same transaction category.
+  return category || 'Shopping'
 }
 function formatDate(value?: Date | null) {
   if (!value) return 'Not connected'

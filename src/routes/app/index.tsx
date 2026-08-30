@@ -20,6 +20,7 @@ import {
   filterTransactionsForMonth,
   formatMoney,
   getFinanceSummary,
+  type BudgetCategory,
   type FinanceTransaction,
   type RecurringPayment,
 } from '#/lib/finance-demo'
@@ -72,7 +73,7 @@ function MoneyDashboardPage() {
     : null
   const accounts = memberView?.accounts || dashboard.accounts
   const transactions = memberView?.transactions || dashboard.transactions
-  const budget = memberView?.budget || dashboard.budget
+  const budget: BudgetCategory[] = memberView?.budget || dashboard.budget
   const recurringPayments = memberView?.recurringPayments || dashboard.recurringPayments
   const hasAccounts = accounts.length > 0
   const currencies = Array.from(new Set(accounts.map((account) => account.currency || 'USD')))
@@ -99,18 +100,30 @@ function MoneyDashboardPage() {
   const upcomingBills = visibleRecurringPayments.filter((payment) => isWithinNextDays(payment.nextDate, 30))
   const pendingTransactions = visibleTransactions.filter((transaction) => transaction.status === 'pending')
   const recurringTotal = summary.upcomingRecurring
-  const netThisMonth = summary.monthlyIncome - summary.spent - recurringTotal
+  const netThisMonth = summary.monthlyIncome - summary.spent - summary.saved - recurringTotal
   const safeToSpend = summary.safeToSpend
   const hasPlan = budget.some((item) => item.allocated > 0)
+  const hasEnvelopePlan = dashboard.envelopeBudget?.enabled === true
+  const hasMoneyPlan = hasPlan || hasEnvelopePlan
   const connectedInstitution = visibleAccounts[0]?.institution || 'your bank'
   const today = new Date()
   const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate()
   const daysRemaining = Math.max(daysInMonth - today.getDate() + 1, 1)
   const dailyAllowance = Math.max(safeToSpend, 0) / daysRemaining
   const spendingLimit = hasPlan
-    ? Math.max(summary.budgetPlan.allocated, summary.spent, 1)
+    ? Math.max(
+        summary.budgetPlan.groups
+          .filter((group) => group.name !== 'Future')
+          .reduce((total, group) => total + group.allocated, 0),
+        summary.spent,
+        1,
+      )
     : Math.max(summary.monthlyIncome, summary.spent, 1)
+  const savedCategories = budget
+    .filter((category) => category.group === 'Future' || category.name === 'Savings')
+    .flatMap((category) => category.categoryNames?.length ? category.categoryNames : [category.name])
   const priorityCategories = summary.budgetPlan.groups
+    .filter((group) => group.name !== 'Future')
     .flatMap((group) => group.categories)
     .sort((a, b) => b.percentUsed - a.percentUsed)
     .slice(0, 4)
@@ -156,7 +169,7 @@ function MoneyDashboardPage() {
         </div>
       </header>
 
-      {hasAccounts && !hasPlan && (
+      {hasAccounts && !hasMoneyPlan && (
         <section className="grid gap-4 rounded-lg border border-zinc-200 bg-zinc-50 p-5 sm:grid-cols-[1fr_auto] sm:items-center" aria-labelledby="setup-heading">
           <div>
             <h2 id="setup-heading" className="text-base font-semibold tracking-tight">Finish setting up Wollie</h2>
@@ -174,7 +187,7 @@ function MoneyDashboardPage() {
         </section>
       )}
 
-      {hasAccounts && (hasPlan ? (
+      {hasAccounts && (hasMoneyPlan ? (
         <section className="grid overflow-hidden rounded-lg border border-zinc-200 bg-white lg:grid-cols-[minmax(19rem,0.82fr)_minmax(0,1.18fr)]" aria-label="Available to spend and monthly spending pace">
           <div className="flex min-h-64 flex-col justify-between p-5 sm:p-7">
             <div>
@@ -183,6 +196,7 @@ function MoneyDashboardPage() {
                 {formatMoney(safeToSpend, currency)}
               </h2>
               {safeToSpend > 0 && <p className="mt-3 text-sm font-medium text-[var(--color-wollie-accent-deep)]">{formatMoney(dailyAllowance, currency)} a day for {daysRemaining} days</p>}
+              {hasEnvelopePlan && dashboard.envelopeBudget?.incomeMinor === 0 && <p className="mt-3 text-sm text-zinc-500">No cleared income in {month} yet. This month’s envelopes will fill when income arrives.</p>}
             </div>
             <dl className="mt-8 grid grid-cols-3 gap-4 border-t border-zinc-200 pt-4">
               <SmallStat label="Cash" value={formatMoney(summary.liquidCash, currency)} />
@@ -209,13 +223,14 @@ function MoneyDashboardPage() {
               <div><p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Spending pace</p><h3 className="mt-2 text-lg font-semibold tracking-tight">This month</h3></div>
               <p className="text-right text-sm text-zinc-500"><span className="block font-medium text-zinc-950">{formatMoney(summary.spent, currency)}</span>of {formatMoney(spendingLimit, currency)}</p>
             </div>
-            <SpendingPaceChart currency={currency} limit={spendingLimit} spent={summary.spent} transactions={filterTransactionsForMonth(visibleTransactions)} />
+            <SpendingPaceChart currency={currency} limit={spendingLimit} spent={summary.spent} savedCategories={savedCategories} transactions={filterTransactionsForMonth(visibleTransactions)} />
           </div>
         </section>
       ) : (
-        <section className="grid overflow-hidden rounded-lg border border-zinc-200 bg-white sm:grid-cols-3" aria-label="Money this month">
+        <section className="grid overflow-hidden rounded-lg border border-zinc-200 bg-white sm:grid-cols-4" aria-label="Money this month">
           <SummaryStat label="Balance" value={formatMoney(summary.liquidCash, currency)} />
           <SummaryStat label="Spent this month" value={formatMoney(-summary.spent, currency)} />
+          <SummaryStat label="Saved / invested" value={formatMoney(-summary.saved, currency)} />
           <SummaryStat label="Income this month" value={formatMoney(summary.monthlyIncome, currency)} />
         </section>
       ))}
@@ -269,7 +284,7 @@ function MoneyDashboardPage() {
             </section>
           )}
 
-          {hasPlan && <section className="grid gap-4 lg:grid-cols-[minmax(0,1.6fr)_minmax(18rem,0.7fr)]">
+          {hasMoneyPlan && <section className="grid gap-4 lg:grid-cols-[minmax(0,1.6fr)_minmax(18rem,0.7fr)]">
             <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
               <CardHeader className="border-b border-zinc-200 pb-4">
                 <CardTitle>Cash flow</CardTitle>
@@ -277,7 +292,7 @@ function MoneyDashboardPage() {
                   <span className="text-sm font-medium">Net {formatMoney(netThisMonth, currency)}</span>
                 </CardAction>
               </CardHeader>
-              <CardContent className="pt-5"><CashFlowBridge income={summary.monthlyIncome} spent={summary.spent} reserved={recurringTotal} currency={currency} /></CardContent>
+              <CardContent className="pt-5"><CashFlowBridge income={summary.monthlyIncome} spent={summary.spent} saved={summary.saved} reserved={recurringTotal} currency={currency} /></CardContent>
             </Card>
 
             <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
@@ -364,22 +379,24 @@ function BillTimeline({ currency, items }: { currency: string; items: RecurringP
   )
 }
 
-function CashFlowBridge({ currency, income, reserved, spent }: { currency: string; income: number; reserved: number; spent: number }) {
-  const remaining = income - spent - reserved
+function CashFlowBridge({ currency, income, reserved, saved, spent }: { currency: string; income: number; reserved: number; saved: number; spent: number }) {
+  const remaining = income - spent - saved - reserved
   const max = Math.max(income, 1)
   const segments = [
     { label: 'Spent', value: spent, className: 'bg-zinc-950' },
+    { label: 'Saved / invested', value: saved, className: 'bg-[var(--color-wollie-accent)]' },
     { label: 'Bills', value: reserved, className: 'bg-zinc-400' },
-    { label: 'Left', value: Math.max(remaining, 0), className: 'bg-[var(--color-wollie-accent)]' },
+    { label: 'Left', value: Math.max(remaining, 0), className: 'bg-emerald-200' },
   ]
   return (
     <div>
-      <div className="flex h-3 overflow-hidden rounded-full bg-zinc-100" aria-label={`Income ${formatMoney(income, currency)}: spent ${formatMoney(spent, currency)}, bills ${formatMoney(reserved, currency)}, left ${formatMoney(remaining, currency)}`}>
+      <div className="flex h-3 overflow-hidden rounded-full bg-zinc-100" aria-label={`Income ${formatMoney(income, currency)}: spent ${formatMoney(spent, currency)}, saved or invested ${formatMoney(saved, currency)}, bills ${formatMoney(reserved, currency)}, left ${formatMoney(remaining, currency)}`}>
         {segments.map((segment) => <span key={segment.label} className={segment.className} style={{ width: `${Math.max(0, Math.min(100, segment.value / max * 100))}%` }} />)}
       </div>
-      <dl className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <dl className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-5">
         <FlowStat label="Income" value={formatMoney(income, currency)} />
         <FlowStat label="Spent" value={formatMoney(-spent, currency)} />
+        <FlowStat label="Saved / invested" value={formatMoney(-saved, currency)} />
         <FlowStat label="Bills" value={formatMoney(-reserved, currency)} />
         <FlowStat label="Net" value={formatMoney(remaining, currency)} emphasis />
       </dl>
@@ -394,11 +411,13 @@ function FlowStat({ emphasis = false, label, value }: { emphasis?: boolean; labe
 function SpendingPaceChart({
   currency,
   limit,
+  savedCategories,
   spent,
   transactions,
 }: {
   currency: string
   limit: number
+  savedCategories: string[]
   spent: number
   transactions: FinanceTransaction[]
 }) {
@@ -407,7 +426,7 @@ function SpendingPaceChart({
   const totals = new Map<number, number>()
 
   for (const transaction of transactions) {
-    if (transaction.amount >= 0 || transaction.category === 'Transfer' || transaction.recurring) continue
+    if (transaction.amount >= 0 || transaction.category === 'Transfer' || transaction.recurring || savedCategories.some((category) => category.toLocaleLowerCase() === transaction.category.toLocaleLowerCase())) continue
     const date = parseTransactionDate(transaction.date)
     if (date.getMonth() !== now.getMonth() || date.getFullYear() !== now.getFullYear()) continue
     totals.set(date.getDate(), (totals.get(date.getDate()) ?? 0) + Math.abs(transaction.amount))

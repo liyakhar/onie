@@ -54,8 +54,8 @@ for (const key of ['BETTER_AUTH_URL', 'SITE_URL', 'ENABLE_BANKING_REDIRECT_URL']
 }
 
 const stripeKey = value('STRIPE_SECRET_KEY')
-if (stripeKey && !stripeKey.startsWith('sk_test_')) {
-  failures.push('STRIPE_SECRET_KEY must be a Stripe test-mode key or remain unset')
+if (stripeKey && !/^(sk|rk)_test_/.test(stripeKey)) {
+  failures.push('STRIPE_SECRET_KEY must be a Stripe test-mode standard/restricted key or remain unset')
 }
 if (value('STRIPE_WEBHOOK_SECRET') && !value('STRIPE_WEBHOOK_SECRET').startsWith('whsec_')) {
   failures.push('STRIPE_WEBHOOK_SECRET must be a Stripe webhook signing secret')
@@ -72,8 +72,19 @@ if (value('LEGAL_LAUNCH_FACTS_CONFIRMED') === 'true') {
 if (value('TAX_LAUNCH_POSITION_CONFIRMED') === 'true') {
   failures.push('TAX_LAUNCH_POSITION_CONFIRMED must remain false before accountant confirmation')
 }
+if (
+  value('STRIPE_CHECKOUT_TERMS_CONSENT')
+  && !['true', 'false'].includes(value('STRIPE_CHECKOUT_TERMS_CONSENT'))
+) {
+  failures.push('STRIPE_CHECKOUT_TERMS_CONSENT must be either true or false')
+}
+if (value('STRIPE_CHECKOUT_TERMS_CONSENT') === 'false') {
+  warnings.push('Stripe Checkout Terms consent is disabled; use only on private pre-company staging')
+}
 if (!stripeKey) warnings.push('Stripe is not configured; only offline webhook simulations can run')
-if (!value('RESEND_API_KEY')) warnings.push('Resend is not configured; real account emails cannot be verified')
+if (!value('BREVO_API_KEY') && !value('RESEND_API_KEY')) {
+  warnings.push('Transactional email is not configured; real account emails cannot be verified')
+}
 
 console.log('Wollie private staging preflight')
 if (warnings.length) {

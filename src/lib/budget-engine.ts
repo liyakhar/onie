@@ -91,7 +91,9 @@ export function buildBudgetPlan(options: {
   const envelopes = options.budget.map((category) => {
     const available = category.allocated - category.spent
     const percentUsed = category.allocated === 0 ? 0 : Math.round((category.spent / category.allocated) * 100)
-    const state = available < 0 ? 'over' : percentUsed >= 85 ? 'watch' : 'good'
+    const state = budgetGroupFor(category) === 'Future'
+      ? 'good'
+      : available < 0 ? 'over' : percentUsed >= 85 ? 'watch' : 'good'
 
     return {
       ...category,
@@ -103,7 +105,7 @@ export function buildBudgetPlan(options: {
 
   const groups = (['Fixed', 'Flexible', 'Future'] as const)
     .map((groupName) => {
-      const categories = envelopes.filter((category) => CATEGORY_GROUPS[category.name] === groupName)
+      const categories = envelopes.filter((category) => budgetGroupFor(category) === groupName)
       const allocated = categories.reduce((sum, category) => sum + category.allocated, 0)
       const spent = categories.reduce((sum, category) => sum + category.spent, 0)
 
@@ -133,6 +135,11 @@ export function buildBudgetPlan(options: {
     reviewCount: options.transactions.filter((transaction) => transaction.status === 'needs-review').length,
     recurringTotal,
   }
+}
+
+function budgetGroupFor(category: BudgetCategory) {
+  if (category.group) return category.group
+  return CATEGORY_GROUPS[category.name as FinanceCategory] ?? 'Flexible'
 }
 
 export function detectRecurringTransactions(transactions: FinanceTransaction[]) {

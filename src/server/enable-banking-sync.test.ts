@@ -91,6 +91,31 @@ describe('Enable Banking sync helpers', () => {
     expect(snapshot.accounts[0]?.transactions[0]?.merchantName).toBe('Mac Donald Chinon')
   })
 
+  it('does not treat incoming transfers as income', () => {
+    const account = { uid: 'account-1', currency: 'EUR', details: 'Everyday account' }
+    const snapshot = buildEnableBankingSnapshot(
+      { bankName: 'Wise', accounts: [account] },
+      new Map([[
+        account.uid,
+        {
+          balances: [],
+          transactions: [{
+            entry_reference: 'transfer-credit',
+            booking_date: '2026-07-14',
+            credit_debit_indicator: 'CRDT',
+            transaction_amount: { amount: '500.00', currency: 'EUR' },
+            creditor: { name: 'Internal Wise transfer' },
+          }],
+        },
+      ]]),
+    )
+
+    expect(snapshot.accounts[0]?.transactions[0]).toEqual(expect.objectContaining({
+      amountMinor: 50_000,
+      categoryName: 'Transfer',
+    }))
+  })
+
   it('creates an RS256 JWT that verifies with the matching public key', async () => {
     const pair = await crypto.subtle.generateKey(
       { name: 'RSASSA-PKCS1-v1_5', modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' },

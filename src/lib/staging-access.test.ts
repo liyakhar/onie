@@ -1,9 +1,13 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
-  canonicalAppRedirect,
+  canonicalAppResponse,
   parseBasicAuthorization,
   stagingAccessResponse,
 } from './staging-access'
+
+afterEach(() => {
+  vi.unstubAllGlobals()
+})
 
 function request(path = '/', authorization?: string) {
   return new Request(`https://staging.example${path}`, {
@@ -50,37 +54,53 @@ describe('staging access', () => {
   })
 })
 
-describe('canonical app redirect', () => {
-  it('redirects Cloudflare production routes to Railway and preserves the path and query', () => {
-    const response = canonicalAppRedirect(
+describe('canonical app response', () => {
+  it('proxies Cloudflare production routes to Railway and preserves the path and query', async () => {
+    const fetchMock = vi.fn(async (_request: Request) => new Response('Wollie from Railway'))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const response = await canonicalAppResponse(
       new Request('https://wollie.pages.dev/app/accounts?state=test'),
     )
 
-    expect(response?.status).toBe(307)
-    expect(response?.headers.get('location')).toBe(
+    const upstreamRequest = fetchMock.mock.calls[0]![0]
+    expect(upstreamRequest.url).toBe(
       'https://onie-web-production.up.railway.app/app/accounts?state=test',
     )
-    expect(response?.headers.get('cache-control')).toBe('no-store')
+    expect(upstreamRequest.headers.get('x-forwarded-host')).toBe('wollie.pages.dev')
+    expect(await response?.text()).toBe('Wollie from Railway')
   })
 
-  it('redirects Cloudflare preview deployments too', () => {
-    const response = canonicalAppRedirect(
-      new Request('https://75e573a5.wollie.pages.dev/pricing'),
+  it('rewrites Railway redirects so visitors stay on the Cloudflare address', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () =>
+        new Response(null, {
+          status: 302,
+          headers: {
+            location: 'https://onie-web-production.up.railway.app/login?redirect=%2Fapp',
+          },
+        }),
+      ),
+    )
+
+    const response = await canonicalAppResponse(
+      new Request('https://wollie.pages.dev/app'),
     )
 
     expect(response?.headers.get('location')).toBe(
-      'https://onie-web-production.up.railway.app/pricing',
+      'https://wollie.pages.dev/login?redirect=%2Fapp',
     )
   })
 
-  it('does not redirect Railway or local requests', () => {
+  it('does not proxy Railway or local requests', async () => {
     expect(
-      canonicalAppRedirect(
+      await canonicalAppResponse(
         new Request('https://onie-web-production.up.railway.app/app/accounts'),
       ),
     ).toBeNull()
     expect(
-      canonicalAppRedirect(new Request('http://localhost:3000/app/accounts')),
+      await canonicalAppResponse(new Request('http://localhost:3000/app/accounts')),
     ).toBeNull()
   })
 })

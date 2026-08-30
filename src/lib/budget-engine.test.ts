@@ -20,6 +20,20 @@ describe('budget engine', () => {
     expect(plan.recurringTotal).toBe(1876.99)
   })
 
+  it('keeps savings and future contributions out of spending alerts', () => {
+    const plan = buildBudgetPlan({
+      budget: [{ name: 'Pension', group: 'Future', allocated: 1_000, spent: 1_200 }],
+      transactions: [],
+      recurringPayments: [],
+    })
+
+    expect(plan.groups[0]?.categories[0]).toEqual(expect.objectContaining({
+      state: 'good',
+      available: -200,
+    }))
+    expect(plan.overCount).toBe(0)
+  })
+
   it('applies merchant rules before showing transactions', () => {
     const [transaction] = applyBudgetRules(
       [

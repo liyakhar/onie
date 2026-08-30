@@ -91,11 +91,6 @@ export async function requireFinanceHousehold() {
   const user = await getSessionUser()
   if (!user) throw new Error('Sign in required.')
   const context = await getOrCreateFinanceHousehold(user.id)
-  const { loadBillingAccess } = await import('#/server/billing.server')
-  const billing = await loadBillingAccess(context.ownerUserId)
-  if (!billing.hasAccess) {
-    throw new Error('This household’s Wollie trial has ended. The household owner must choose a plan.')
-  }
   return { ...context, user }
 }
 

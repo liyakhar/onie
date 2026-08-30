@@ -6,7 +6,9 @@ import Stripe from 'stripe'
 const key = process.env.STRIPE_SECRET_KEY?.trim()
 const monthlyPriceId = process.env.STRIPE_MONTHLY_PRICE_ID?.trim()
 const yearlyPriceId = process.env.STRIPE_YEARLY_PRICE_ID?.trim()
-if (!key?.startsWith('sk_test_')) throw new Error('STRIPE_SECRET_KEY must be a Stripe test-mode key.')
+if (!/^(sk|rk)_test_/.test(key || '')) {
+  throw new Error('STRIPE_SECRET_KEY must be a Stripe test-mode standard or restricted key.')
+}
 if (!monthlyPriceId?.startsWith('price_') || !yearlyPriceId?.startsWith('price_')) {
   throw new Error('Set both Stripe test Price IDs before running this journey.')
 }

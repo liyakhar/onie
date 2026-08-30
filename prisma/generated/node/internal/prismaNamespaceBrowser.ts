@@ -64,6 +64,9 @@ export const ModelName = {
   FinanceTransaction: 'FinanceTransaction',
   BudgetMonth: 'BudgetMonth',
   BudgetAllocation: 'BudgetAllocation',
+  BudgetBucket: 'BudgetBucket',
+  BudgetBucketCategory: 'BudgetBucketCategory',
+  BudgetAllocationRule: 'BudgetAllocationRule',
   RecurringPayment: 'RecurringPayment',
   SyncRun: 'SyncRun',
   MoneyInsight: 'MoneyInsight',
@@ -284,6 +287,45 @@ export const BudgetAllocationScalarFieldEnum = {
 } as const
 
 export type BudgetAllocationScalarFieldEnum = (typeof BudgetAllocationScalarFieldEnum)[keyof typeof BudgetAllocationScalarFieldEnum]
+
+
+export const BudgetBucketScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  name: 'name',
+  group: 'group',
+  purpose: 'purpose',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BudgetBucketScalarFieldEnum = (typeof BudgetBucketScalarFieldEnum)[keyof typeof BudgetBucketScalarFieldEnum]
+
+
+export const BudgetBucketCategoryScalarFieldEnum = {
+  id: 'id',
+  bucketId: 'bucketId',
+  categoryId: 'categoryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BudgetBucketCategoryScalarFieldEnum = (typeof BudgetBucketCategoryScalarFieldEnum)[keyof typeof BudgetBucketCategoryScalarFieldEnum]
+
+
+export const BudgetAllocationRuleScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  bucketId: 'bucketId',
+  type: 'type',
+  fixedMinor: 'fixedMinor',
+  percentageBasisPoints: 'percentageBasisPoints',
+  priority: 'priority',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BudgetAllocationRuleScalarFieldEnum = (typeof BudgetAllocationRuleScalarFieldEnum)[keyof typeof BudgetAllocationRuleScalarFieldEnum]
 
 
 export const RecurringPaymentScalarFieldEnum = {

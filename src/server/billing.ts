@@ -3,7 +3,12 @@ import { getSessionUser } from '#/server/session.server'
 import { getFinanceHouseholdForUser } from '#/server/household-access.server'
 
 export const getBillingOverview = createServerFn({ method: 'GET' }).handler(async () => {
-  const user = await getSessionUser()
+  let user: Awaited<ReturnType<typeof getSessionUser>> = null
+  try {
+    user = await getSessionUser()
+  } catch (error) {
+    console.warn('[wollie] Treating billing overview as anonymous after session lookup failed.', error)
+  }
   if (!user) return null
   const { loadBillingAccess } = await import('#/server/billing.server')
   const household = await getFinanceHouseholdForUser(user.id)

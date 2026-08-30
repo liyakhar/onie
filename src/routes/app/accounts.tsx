@@ -198,6 +198,12 @@ function AccountsPage() {
         </Button>
       </header>
 
+      {enableBanking.environment?.toLowerCase() === 'sandbox' && (
+        <p className="border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950" role="status">
+          Sandbox data: these balances and transactions are sample data, not a connected bank account.
+        </p>
+      )}
+
       <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
         <CardHeader className="border-b border-zinc-200 pb-4">
           <CardTitle>European banks</CardTitle>

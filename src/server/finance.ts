@@ -1,4 +1,5 @@
 import { createServerFn } from '@tanstack/react-start'
+import { setResponseHeader } from '@tanstack/react-start/server'
 import {
   detectRecurringPayments,
   FINANCE_CATEGORIES,
@@ -11,14 +12,25 @@ import {
   type FinanceDashboardData,
   type FinanceTransaction,
   type RecurringPayment,
+  type TransactionCategoryName,
 } from '#/lib/finance-demo'
 import { loadBankSyncState } from '#/server/bank-sync'
 import { getDb } from '#/server/db-access.server'
+import {
+  budgetCategoriesForIncomeEnvelope,
+  categoryOptionsFor,
+  loadIncomeEnvelopePlan,
+  parseIncomeEnvelopePlanInput,
+  saveIncomeEnvelopePlan,
+  type IncomeEnvelopePlanFormInput,
+} from '#/server/income-envelope-budget.server'
 import { getSessionUser } from '#/server/session.server'
 import { requireFinanceHousehold } from '#/server/household-access.server'
+import { assertWithinPlanLimit } from '#/lib/billing-plans'
+import { loadBillingAccess } from '#/server/billing.server'
 
 export const getFinanceDashboard = createServerFn({ method: 'GET' }).handler(async () => {
-  const context = await requireFinanceHousehold()
+  const context = await requirePrivateFinanceHousehold()
   const household = await loadHouseholdMetadata(context.workspaceId, context.memberId)
   const devDashboard = await getDevFinanceDashboard(context.workspaceId)
   if (devDashboard) return attachDevHousehold(devDashboard, household)
@@ -49,37 +61,48 @@ export const getFinanceDashboard = createServerFn({ method: 'GET' }).handler(asy
     insights: buildStatusNotes(summary.reviewCount, syncState.accounts.length),
     summary,
     household,
+    envelopeBudget: planning.envelopeBudget,
   } satisfies FinanceDashboardData
 })
 
 export const getFinanceTransactions = createServerFn({ method: 'GET' })
-  .inputValidator(
+  .validator(
     (data: {
       q?: string
       status?: FinanceTransaction['status'] | 'all'
-      category?: FinanceCategory | 'all'
+      category?: TransactionCategoryName | 'all'
     }) => data ?? {},
   )
   .handler(async ({ data }) => {
-    const context = await requireFinanceHousehold()
+    const context = await requirePrivateFinanceHousehold()
     const devDashboard = await getDevFinanceDashboard(context.workspaceId)
     if (devDashboard) {
       return {
         transactions: filterFinanceTransactions(devDashboard.transactions, data),
+        canAddManual: true,
+        categoryOptions: devDashboard.envelopeBudget?.categoryOptions ?? categoryOptionsFor([]),
+        envelopeBudget: devDashboard.envelopeBudget,
       }
     }
 
     const syncState = await loadBankSyncState()
     const recurringPayments = detectRecurringPayments(syncState.transactions)
     const transactions = markRecurringTransactions(syncState.transactions, recurringPayments)
+    const envelopeBudget = await loadIncomeEnvelopePlan({
+      workspaceId: context.workspaceId,
+      transactions,
+    })
 
     return {
       transactions: filterFinanceTransactions(transactions, data),
+      canAddManual: false,
+      categoryOptions: envelopeBudget.categoryOptions,
+      envelopeBudget,
     }
   })
 
 export const getFinanceBudget = createServerFn({ method: 'GET' }).handler(async () => {
-  const context = await requireFinanceHousehold()
+  const context = await requirePrivateFinanceHousehold()
   const devDashboard = await getDevFinanceDashboard(context.workspaceId)
   if (devDashboard) {
     return {
@@ -88,7 +111,13 @@ export const getFinanceBudget = createServerFn({ method: 'GET' }).handler(async 
       budgetPlan: devDashboard.budgetPlan,
       summary: devDashboard.summary,
       syncStatus: devDashboard.syncStatus,
-      currency: devDashboard.accounts[0]?.currency || 'USD',
+      currency: devDashboard.envelopeBudget?.currency || devDashboard.accounts[0]?.currency || 'USD',
+      envelopeBudget: devDashboard.envelopeBudget,
+      canChangeCurrency: context.role === 'OWNER',
+      availableCurrencies: availableCurrenciesFor(
+        devDashboard.envelopeBudget?.currency || devDashboard.accounts[0]?.currency || 'USD',
+        devDashboard.accounts,
+      ),
     }
   }
 
@@ -110,12 +139,15 @@ export const getFinanceBudget = createServerFn({ method: 'GET' }).handler(async 
     budgetPlan: summary.budgetPlan,
     summary,
     syncStatus: syncState.status,
-    currency: syncState.accounts[0]?.currency || 'USD',
+    currency: planning.currency,
+    envelopeBudget: planning.envelopeBudget,
+    canChangeCurrency: context.role === 'OWNER',
+    availableCurrencies: availableCurrenciesFor(planning.currency, syncState.accounts),
   }
 })
 
 export const getFinanceAccounts = createServerFn({ method: 'GET' }).handler(async () => {
-  const context = await requireFinanceHousehold()
+  const context = await requirePrivateFinanceHousehold()
   const household = await loadHouseholdMetadata(context.workspaceId, context.memberId)
   const devDashboard = await getDevFinanceDashboard(context.workspaceId)
   if (devDashboard) {
@@ -135,19 +167,27 @@ export const getFinanceAccounts = createServerFn({ method: 'GET' }).handler(asyn
 })
 
 export const getFinanceRecurringPayments = createServerFn({ method: 'GET' }).handler(async () => {
-  const context = await requireFinanceHousehold()
+  const context = await requirePrivateFinanceHousehold()
   const devDashboard = await getDevFinanceDashboard(context.workspaceId)
   if (devDashboard) {
-    return { recurringPayments: devDashboard.recurringPayments, currency: devDashboard.accounts[0]?.currency || 'USD' }
+    return {
+      recurringPayments: devDashboard.recurringPayments,
+      currency: devDashboard.envelopeBudget?.currency || devDashboard.accounts[0]?.currency || 'USD',
+      categoryOptions: devDashboard.envelopeBudget?.categoryOptions ?? categoryOptionsFor([]),
+    }
   }
 
   const syncState = await loadBankSyncState()
   const planning = await loadFinancePlanningData(syncState.transactions, context.workspaceId)
-  return { recurringPayments: planning.recurringPayments, currency: syncState.accounts[0]?.currency || 'USD' }
+  return {
+    recurringPayments: planning.recurringPayments,
+    currency: planning.currency || syncState.accounts[0]?.currency || 'USD',
+    categoryOptions: planning.envelopeBudget?.categoryOptions ?? categoryOptionsFor([]),
+  }
 })
 
 export const getFinanceInsights = createServerFn({ method: 'GET' }).handler(async () => {
-  const context = await requireFinanceHousehold()
+  const context = await requirePrivateFinanceHousehold()
   const devDashboard = await getDevFinanceDashboard(context.workspaceId)
   if (devDashboard) return { insights: devDashboard.insights }
 
@@ -174,7 +214,7 @@ export const updateFinanceBudgetAllocation = createServerFn({ method: 'POST' })
     allocated: Number(data?.allocated ?? 0),
   }))
   .handler(async ({ data }) => {
-    const context = await requireFinanceHousehold()
+    const context = await requirePrivateFinanceHousehold()
     const user = context.user
     if (!FINANCE_CATEGORIES.includes(data.category) || !Number.isFinite(data.allocated) || data.allocated < 0) {
       throw new Error('Enter a valid monthly amount.')
@@ -209,6 +249,23 @@ export const updateFinanceBudgetAllocation = createServerFn({ method: 'POST' })
     return { saved: true }
   })
 
+export const saveFinanceEnvelopeBudget = createServerFn({ method: 'POST' })
+  .validator((data: IncomeEnvelopePlanFormInput) => parseIncomeEnvelopePlanInput(data))
+  .handler(async ({ data }) => {
+    const context = await requirePrivateFinanceHousehold()
+    const billing = await loadBillingAccess(context.ownerUserId)
+    assertWithinPlanLimit(
+      data.buckets.length,
+      billing.limits.budgetEnvelopes,
+      'money-plan envelopes',
+    )
+    return saveIncomeEnvelopePlan({
+      workspaceId: context.workspaceId,
+      role: context.role,
+      plan: data,
+    })
+  })
+
 export const updateFinanceRecurringPayment = createServerFn({ method: 'POST' })
   .validator((data: {
     id?: string
@@ -217,7 +274,7 @@ export const updateFinanceRecurringPayment = createServerFn({ method: 'POST' })
     amount: number
     nextDate: string
     cadence: 'monthly' | 'yearly'
-    category: FinanceCategory
+    category: TransactionCategoryName
   }) => ({
     id: String(data?.id ?? ''),
     action: data?.action,
@@ -225,13 +282,22 @@ export const updateFinanceRecurringPayment = createServerFn({ method: 'POST' })
     amount: Number(data?.amount ?? 0),
     nextDate: String(data?.nextDate ?? ''),
     cadence: data?.cadence,
-    category: data?.category,
+    category: String(data?.category ?? '').trim().replace(/\s+/g, ' '),
   }))
   .handler(async ({ data }) => {
-    const context = await requireFinanceHousehold()
+    const context = await requirePrivateFinanceHousehold()
     const user = context.user
-    if (!data.merchant || !Number.isFinite(data.amount) || data.amount < 0 || !data.nextDate) {
-      throw new Error('Enter a merchant, amount, and next date.')
+    if (
+      !data.merchant
+      || !Number.isFinite(data.amount)
+      || data.amount < 0
+      || !data.nextDate
+      || !data.category
+      || data.category.length > 48
+      || data.category === 'Income'
+      || data.category === 'Transfer'
+    ) {
+      throw new Error('Enter a valid merchant, amount, category, and next date.')
     }
 
     if (isDevUser(user.email)) {
@@ -258,7 +324,11 @@ export const updateFinanceRecurringPayment = createServerFn({ method: 'POST' })
     const workspace = await prisma.budgetWorkspace.findUniqueOrThrow({ where: { id: context.workspaceId } })
     const category = await prisma.transactionCategory.upsert({
       where: { workspaceId_name: { workspaceId: workspace.id, name: data.category } },
-      create: { workspaceId: workspace.id, name: data.category, system: true },
+      create: {
+        workspaceId: workspace.id,
+        name: data.category,
+        system: FINANCE_CATEGORIES.includes(data.category as FinanceCategory),
+      },
       update: {},
     })
     const merchant = await prisma.merchant.upsert({
@@ -286,21 +356,24 @@ export const updateFinanceRecurringPayment = createServerFn({ method: 'POST' })
   })
 
 export const updateFinanceTransactionCategory = createServerFn({ method: 'POST' })
-  .validator((data: { transactionId: string; category: FinanceCategory }) => ({
+  .validator((data: { transactionId: string; category: string }) => ({
     transactionId: String(data?.transactionId ?? ''),
-    category: data?.category,
+    category: String(data?.category ?? '').trim().replace(/\s+/g, ' '),
   }))
   .handler(async ({ data }) => {
-    const context = await requireFinanceHousehold()
+    const context = await requirePrivateFinanceHousehold()
     const user = context.user
-    if (!data.transactionId || !FINANCE_CATEGORIES.includes(data.category)) {
+    if (!data.transactionId || !data.category || data.category.length > 48) {
       throw new Error('Choose a valid category.')
     }
 
     if (isDevUser(user.email)) {
+      if (!FINANCE_CATEGORIES.includes(data.category as FinanceCategory)) {
+        throw new Error('Choose a valid category.')
+      }
       const current = getMutableDevDashboard()
       current.transactions = current.transactions.map((transaction) => transaction.id === data.transactionId
-        ? { ...transaction, category: data.category, status: 'cleared' }
+        ? { ...transaction, category: data.category as FinanceCategory, status: 'cleared' }
         : transaction)
       return { updated: 1 }
     }
@@ -325,7 +398,7 @@ export const updateFinanceTransactionCategory = createServerFn({ method: 'POST' 
       create: {
         workspaceId: transaction.workspaceId,
         name: data.category,
-        system: true,
+        system: FINANCE_CATEGORIES.includes(data.category as FinanceCategory),
       },
       update: {},
     })
@@ -370,6 +443,48 @@ export const updateFinanceTransactionCategory = createServerFn({ method: 'POST' 
     return { updated: updated.count }
   })
 
+export const addDevFinanceTransaction = createServerFn({ method: 'POST' })
+  .validator((data: {
+    merchant: string
+    amount: number
+    category: FinanceCategory
+    date?: string
+  }) => ({
+    merchant: String(data?.merchant ?? '').trim(),
+    amount: Number(data?.amount ?? 0),
+    category: data?.category,
+    date: String(data?.date ?? ''),
+  }))
+  .handler(async ({ data }) => {
+    const context = await requirePrivateFinanceHousehold()
+    const user = context.user
+    if (!isDevUser(user.email)) {
+      throw new Error('Manual dev spending is only available for the local demo user.')
+    }
+    if (!data.merchant || !Number.isFinite(data.amount) || data.amount <= 0 || !FINANCE_CATEGORIES.includes(data.category)) {
+      throw new Error('Enter a merchant, amount, and category.')
+    }
+
+    const current = getMutableDevDashboard()
+    const account = current.accounts.find((item) => item.type === 'Credit card') ?? current.accounts[0]
+    const postedAt = data.date
+      ? new Date(`${data.date}T12:00:00`)
+      : new Date()
+    const transaction: FinanceTransaction = {
+      id: `dev-manual-${Date.now()}`,
+      accountId: account?.id,
+      date: Number.isNaN(postedAt.getTime()) ? new Date().toISOString() : postedAt.toISOString(),
+      merchant: data.merchant,
+      account: account?.name || 'Manual spending',
+      category: data.category,
+      amount: -Math.abs(data.amount),
+      currency: account?.currency || current.accounts[0]?.currency || 'USD',
+      status: 'cleared',
+    }
+    current.transactions = [transaction, ...current.transactions]
+    return { transaction }
+  })
+
 function getCurrentMonthName() {
   return new Intl.DateTimeFormat('en-US', { month: 'long' }).format(new Date())
 }
@@ -400,21 +515,50 @@ function getMutableDevDashboard() {
   return mutableDevDashboard
 }
 
-function buildMutableDevDashboard() {
+async function buildMutableDevDashboard(workspaceId: string) {
   const current = getMutableDevDashboard()
+  const persistedPlan = await loadIncomeEnvelopePlan({
+    workspaceId,
+    transactions: current.transactions,
+  })
+  const budget = persistedPlan.enabled
+    ? budgetCategoriesForIncomeEnvelope(persistedPlan)
+    : applyCurrentSpendingToBudget(current.budget, current.transactions)
   const summary = getFinanceSummary({
     accounts: current.accounts,
     transactions: current.transactions,
-    budget: current.budget,
+    budget,
     recurringPayments: current.recurringPayments,
     rules: current.rules,
   })
   return {
     ...current,
     month: getCurrentMonthName(),
+    budget,
     budgetPlan: summary.budgetPlan,
     summary,
+    envelopeBudget: persistedPlan,
   } satisfies FinanceDashboardData
+}
+
+function applyCurrentSpendingToBudget(
+  budget: BudgetCategory[],
+  transactions: FinanceTransaction[],
+) {
+  const currentTransactions = filterTransactionsForMonth(transactions)
+  const spendingByCategory = new Map<string, number>()
+  for (const transaction of currentTransactions) {
+    if (transaction.amount >= 0 || transaction.category === 'Transfer') continue
+    spendingByCategory.set(
+      transaction.category,
+      (spendingByCategory.get(transaction.category) ?? 0) + Math.abs(transaction.amount),
+    )
+  }
+
+  return budget.map((item) => ({
+    ...item,
+    spent: spendingByCategory.get(item.name) ?? 0,
+  }))
 }
 
 async function getDevFinanceDashboard(workspaceId: string) {
@@ -434,7 +578,7 @@ async function getDevFinanceDashboard(workspaceId: string) {
   })
   if (connectedAccounts > 0) return null
 
-  return buildMutableDevDashboard()
+  return buildMutableDevDashboard(workspaceId)
 }
 
 function isDevUser(email?: string | null) {
@@ -459,11 +603,13 @@ async function loadFinancePlanningData(transactions: FinanceTransaction[], works
       budget: [] as BudgetCategory[],
       recurringPayments: detectRecurringPayments(transactions),
       rules: [],
+      currency: transactions.find((transaction) => transaction.currency)?.currency || 'USD',
+      envelopeBudget: undefined,
     }
   }
 
   const currentTransactions = filterTransactionsForMonth(transactions)
-  const spendingByCategory = new Map<FinanceCategory, number>()
+  const spendingByCategory = new Map<string, number>()
   for (const transaction of currentTransactions) {
     if (transaction.amount >= 0 || transaction.category === 'Transfer') continue
     spendingByCategory.set(
@@ -471,11 +617,15 @@ async function loadFinancePlanningData(transactions: FinanceTransaction[], works
       (spendingByCategory.get(transaction.category) ?? 0) + Math.abs(transaction.amount),
     )
   }
-  const budget = (workspace.budgetMonths[0]?.allocations ?? []).flatMap((allocation) => {
+  const legacyBudget = (workspace.budgetMonths[0]?.allocations ?? []).flatMap((allocation) => {
     const name = allocation.category.name as FinanceCategory
     if (!FINANCE_CATEGORIES.includes(name)) return []
     return [{ name, allocated: allocation.allocatedMinor / 100, spent: spendingByCategory.get(name) ?? 0 }]
   })
+  const envelopeBudget = await loadIncomeEnvelopePlan({ workspaceId: workspace.id, transactions })
+  const budget = envelopeBudget.enabled
+    ? budgetCategoriesForIncomeEnvelope(envelopeBudget)
+    : legacyBudget
   const saved = workspace.recurringPayments.map((payment) => ({
     id: payment.id,
     merchant: payment.merchant?.name || payment.name,
@@ -497,7 +647,32 @@ async function loadFinancePlanningData(transactions: FinanceTransaction[], works
     return !confirmedNames.has(merchant) && !suppressed.has(merchant)
   })
 
-  return { budget, recurringPayments: [...confirmed, ...detected], rules: [] }
+  return {
+    budget,
+    recurringPayments: [...confirmed, ...detected],
+    rules: [],
+    currency: workspace.currency,
+    envelopeBudget,
+  }
+}
+
+async function requirePrivateFinanceHousehold() {
+  const context = await requireFinanceHousehold()
+  setResponseHeader('Cache-Control', 'private, no-store, max-age=0')
+  return context
+}
+
+function availableCurrenciesFor(
+  currency: string,
+  accounts: Array<{ currency?: string }>,
+) {
+  return Array.from(new Set([
+    currency,
+    ...accounts.map((account) => account.currency).filter((value): value is string => Boolean(value)),
+    'EUR',
+    'USD',
+    'GBP',
+  ]))
 }
 
 async function loadHouseholdMetadata(workspaceId: string, currentMemberId: string) {

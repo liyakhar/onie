@@ -4,6 +4,7 @@ import {
   type FinanceCategory,
   type FinanceTransaction,
   type FinancialAccount,
+  type TransactionCategoryName,
 } from '#/lib/finance-demo'
 import {
   decryptCredential,
@@ -932,22 +933,11 @@ function formatSavedDate(value?: Date | null) {
   }).format(value)
 }
 
-function toFinanceCategory(value?: string | null): FinanceCategory {
-  const categories: FinanceCategory[] = [
-    'Income',
-    'Housing',
-    'Groceries',
-    'Transport',
-    'Dining',
-    'Subscriptions',
-    'Shopping',
-    'Savings',
-    'Health',
-    'Transfer',
-  ]
-  return categories.includes(value as FinanceCategory)
-    ? (value as FinanceCategory)
-    : 'Shopping'
+function toFinanceCategory(value?: string | null): TransactionCategoryName {
+  const category = value?.trim()
+  // Keep household-defined category rules intact instead of coercing them to
+  // Shopping before their envelope mapping is evaluated.
+  return category || 'Shopping'
 }
 
 const saveUserSimpleFinAccessUrl = createServerOnlyFn(

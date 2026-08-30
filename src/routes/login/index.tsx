@@ -4,6 +4,8 @@ import { authClient } from '#/lib/auth-client'
 import type { LoginSearch } from '#/lib/auth-nav'
 import { buildPageMeta } from '#/lib/seo'
 import { PRIVACY_VERSION, TERMS_VERSION } from '#/lib/legal-versions'
+import { site } from '#/lib/site'
+import { getTransactionalEmailReadiness } from '#/server/email-readiness'
 
 const loginMeta = buildPageMeta({
   path: '/login',
@@ -42,8 +44,9 @@ export const Route = createFileRoute('/login/')({
     meta: loginMeta.meta,
     links: loginMeta.links,
   }),
-  loader: () => ({
+  loader: async () => ({
     isDev: process.env.NODE_ENV === 'development',
+    emailReadiness: await getTransactionalEmailReadiness(),
   }),
   validateSearch: (search: Record<string, unknown>): LoginSearch => ({
     redirect: safeAppRedirect(search.redirect),
@@ -82,12 +85,14 @@ function LoginPage() {
   const router = useRouter()
   const { redirect, signup } = useSearch({ from: '/login/' })
   const redirectTo = redirect ?? '/app'
-  const { isDev } = Route.useLoaderData()
+  const { isDev, emailReadiness } = Route.useLoaderData()
   const { data: session, isPending } = authClient.useSession()
   const [mode, setMode] = useState<AuthMode>(signup === '1' ? 'signup' : 'signin')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [devLoading, setDevLoading] = useState(false)
@@ -116,14 +121,26 @@ function LoginPage() {
 
     try {
       if (isSignUp) {
+        const trimmedFirstName = firstName.trim()
+        const trimmedLastName = lastName.trim()
+        const fullName = [trimmedFirstName, trimmedLastName].filter(Boolean).join(' ')
+
+        if (!trimmedFirstName || !trimmedLastName) {
+          setError('Enter your first and last name to create an account.')
+          return
+        }
+        if (password !== confirmPassword) {
+          setError('Passwords do not match.')
+          return
+        }
         if (!acceptedLegal) {
           setError('Accept the Terms and acknowledge the Privacy Policy to create an account.')
           return
         }
         const result = await authClient.signUp.email({
-          email,
+          email: email.trim().toLowerCase(),
           password,
-          name,
+          name: fullName,
           termsAcceptedAt: new Date(),
           termsVersion: TERMS_VERSION,
           privacyVersion: PRIVACY_VERSION,
@@ -134,7 +151,7 @@ function LoginPage() {
           await goAfterAuth(router, redirectTo)
         }
       } else {
-        const result = await authClient.signIn.email({ email, password })
+        const result = await authClient.signIn.email({ email: email.trim().toLowerCase(), password })
         if (result.error) {
           setError(result.error.message || 'Sign in failed')
         } else {
@@ -151,6 +168,12 @@ function LoginPage() {
   const handleForgot = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+
+    if (!emailReadiness.configured) {
+      setError('Password reset is temporarily unavailable. Please try again later.')
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -224,7 +247,9 @@ function LoginPage() {
           <p className="app-page__lede">
             {mode === 'forgot-sent'
               ? 'If an account exists for that address, we sent a reset link.'
-              : 'Enter your email and we will send a reset link.'}
+              : emailReadiness.configured
+                ? 'Enter your email and we will send a reset link.'
+                : 'Password reset is temporarily unavailable.'}
           </p>
         </header>
 
@@ -246,8 +271,17 @@ function LoginPage() {
                 />
               </div>
               {error && <p className="post-detail__error">{error}</p>}
+              {!emailReadiness.configured && (
+                <p className="app-form__hint">
+                  Email delivery is not set up yet, so a reset link cannot be sent. Need help?{' '}
+                  <a className="underline underline-offset-4" href={`mailto:${site.email}`}>
+                    Email Wollie support
+                  </a>
+                  .
+                </p>
+              )}
               <div className="app-form__actions">
-                <button type="submit" className="btn" disabled={loading}>
+                <button type="submit" className="btn" disabled={loading || !emailReadiness.configured}>
                   <span className="btn__label">{loading ? 'Sending…' : 'Send reset link'}</span>
                 </button>
               </div>
@@ -284,18 +318,33 @@ function LoginPage() {
       <div className="auth-stack">
         <form onSubmit={handleSubmit} className="auth-form">
           {isSignUp && (
-            <div className="app-form__field">
-              <label className="app-form__label" htmlFor="name">
-                Name
-              </label>
-              <input
-                id="name"
-                className="app-form__input"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                autoComplete="name"
-              />
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="app-form__field">
+                <label className="app-form__label" htmlFor="first-name">
+                  First name
+                </label>
+                <input
+                  id="first-name"
+                  className="app-form__input"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+                  autoComplete="given-name"
+                />
+              </div>
+              <div className="app-form__field">
+                <label className="app-form__label" htmlFor="last-name">
+                  Last name
+                </label>
+                <input
+                  id="last-name"
+                  className="app-form__input"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+                  autoComplete="family-name"
+                />
+              </div>
             </div>
           )}
           <div className="app-form__field">
@@ -355,6 +404,23 @@ function LoginPage() {
               autoComplete={isSignUp ? 'new-password' : 'current-password'}
             />
           </div>
+          {isSignUp && (
+            <div className="app-form__field">
+              <label className="app-form__label" htmlFor="confirm-password">
+                Confirm password
+              </label>
+              <input
+                id="confirm-password"
+                type="password"
+                className="app-form__input"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                minLength={8}
+                autoComplete="new-password"
+              />
+            </div>
+          )}
           {error && <p className="post-detail__error">{error}</p>}
           <div className="app-form__actions">
             <button type="submit" className="btn" disabled={loading}>
