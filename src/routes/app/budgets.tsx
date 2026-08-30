@@ -199,12 +199,11 @@ function EmptyEnvelopePlan({
 function EnvelopeStatus({ month, plan }: { month: string; plan: IncomeEnvelopePlan }) {
   const spendingBuckets = plan.buckets.filter((bucket) => bucket.purpose === 'SPENDING')
   const futureBuckets = plan.buckets.filter((bucket) => bucket.purpose !== 'SPENDING')
-  const hasMappedSpend = spendingBuckets.some((bucket) => bucket.categoryNames.length > 0)
   const targetMinor = plan.buckets.reduce((sum, bucket) => sum + bucket.requestedMinor, 0)
   const hasIncome = plan.incomeMinor > 0
 
   return (
-    <section aria-labelledby="envelope-status-heading" className="border border-zinc-200 bg-white">
+    <section aria-label="Envelope status" className="border border-zinc-200 bg-white">
       {hasIncome ? (
         <div className="grid border-b border-zinc-200 sm:grid-cols-2 lg:grid-cols-4">
           <PlanTotal label="Income received" value={formatMinor(plan.incomeMinor, plan.currency)} />
@@ -220,23 +219,13 @@ function EnvelopeStatus({ month, plan }: { month: string; plan: IncomeEnvelopePl
         </div>
       )}
       {plan.unallocatedMinor > 0 && <p className="border-b border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-600 sm:px-5"><span className="font-medium text-zinc-950">{formatMinor(plan.unallocatedMinor, plan.currency)} is not assigned yet.</span> Add an “Everything left” envelope or another target in Edit plan.</p>}
-      <div className="flex flex-col gap-2 border-b border-zinc-200 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
-        <div>
-          <h2 id="envelope-status-heading" className="font-semibold">This month</h2>
-          {hasIncome && <p className="mt-1 text-sm text-zinc-500">{hasMappedSpend
-            ? 'Funding and spending are shown separately, so you can see what is left at a glance.'
-            : 'Map spending categories in Edit plan to track purchases against an envelope.'}</p>}
-        </div>
-        <Badge variant="outline" className="rounded-md border-zinc-300 bg-white font-normal text-zinc-600">Base currency · {plan.currency}</Badge>
-      </div>
-
-      {spendingBuckets.length > 0 && <PlanSection heading="Spend this month" description="Purchases reduce these envelopes.">
+      {spendingBuckets.length > 0 && <section aria-label="Spending envelopes">
         <ul className="divide-y divide-zinc-200">
           {spendingBuckets.map((bucket) => <SpendingEnvelopeRow bucket={bucket} currency={plan.currency} key={bucket.id} />)}
         </ul>
-      </PlanSection>}
+      </section>}
 
-      {futureBuckets.length > 0 && <PlanSection heading="Savings & future" description="Reserved amounts stay in your plan until a mapped payment is imported.">
+      {futureBuckets.length > 0 && <PlanSection className={spendingBuckets.length > 0 ? 'border-t border-zinc-200' : undefined} heading="Savings & future" description="Reserved amounts stay in your plan until a mapped payment is imported.">
         <ul className="divide-y divide-zinc-200">
           {futureBuckets.map((bucket) => <FutureEnvelopeRow bucket={bucket} currency={plan.currency} key={bucket.id} />)}
         </ul>
@@ -247,10 +236,10 @@ function EnvelopeStatus({ month, plan }: { month: string; plan: IncomeEnvelopePl
   )
 }
 
-function PlanSection({ children, description, heading }: { children: React.ReactNode; description: string; heading: string }) {
+function PlanSection({ children, className, description, heading }: { children: React.ReactNode; className?: string; description: string; heading: string }) {
   const headingId = `${heading.toLocaleLowerCase().replace(/[^a-z]+/g, '-')}-heading`
   return (
-    <section aria-labelledby={headingId}>
+    <section aria-labelledby={headingId} className={className}>
       <div className="border-b border-zinc-200 px-4 py-4 sm:px-5">
         <h3 id={headingId} className="font-medium">{heading}</h3>
         <p className="mt-1 text-sm text-zinc-500">{description}</p>
