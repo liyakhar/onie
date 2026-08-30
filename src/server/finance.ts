@@ -368,12 +368,9 @@ export const updateFinanceTransactionCategory = createServerFn({ method: 'POST' 
     }
 
     if (isDevUser(user.email)) {
-      if (!FINANCE_CATEGORIES.includes(data.category as FinanceCategory)) {
-        throw new Error('Choose a valid category.')
-      }
       const current = getMutableDevDashboard()
       current.transactions = current.transactions.map((transaction) => transaction.id === data.transactionId
-        ? { ...transaction, category: data.category as FinanceCategory, status: 'cleared' }
+        ? { ...transaction, category: data.category, status: 'cleared' }
         : transaction)
       return { updated: 1 }
     }
@@ -443,16 +440,48 @@ export const updateFinanceTransactionCategory = createServerFn({ method: 'POST' 
     return { updated: updated.count }
   })
 
+export const createFinanceTransactionCategory = createServerFn({ method: 'POST' })
+  .validator((data: { name: string }) => ({
+    name: String(data?.name ?? '').trim().replace(/\s+/g, ' '),
+  }))
+  .handler(async ({ data }) => {
+    const context = await requirePrivateFinanceHousehold()
+    const reservedNames = new Set(['income', 'transfer'])
+    if (!data.name || data.name.length > 48 || reservedNames.has(data.name.toLocaleLowerCase())) {
+      throw new Error('Enter a category name other than Income or Transfer.')
+    }
+
+    const prisma = await getDb()
+    const existing = await prisma.transactionCategory.findFirst({
+      where: {
+        workspaceId: context.workspaceId,
+        name: { equals: data.name, mode: 'insensitive' },
+      },
+      select: { name: true },
+    })
+    if (existing) return { category: existing.name, created: false }
+
+    const category = await prisma.transactionCategory.create({
+      data: {
+        workspaceId: context.workspaceId,
+        name: data.name,
+        system: false,
+      },
+      select: { name: true },
+    })
+    return { category: category.name, created: true }
+  })
+
 export const addDevFinanceTransaction = createServerFn({ method: 'POST' })
   .validator((data: {
     merchant: string
     amount: number
-    category: FinanceCategory
+    category: TransactionCategoryName
     date?: string
   }) => ({
     merchant: String(data?.merchant ?? '').trim(),
     amount: Number(data?.amount ?? 0),
-    category: data?.category,
+    category: String(data?.category ?? '').trim().replace(/\s+/g, ' '),
     date: String(data?.date ?? ''),
   }))
   .handler(async ({ data }) => {
@@ -461,7 +490,15 @@ export const addDevFinanceTransaction = createServerFn({ method: 'POST' })
     if (!isDevUser(user.email)) {
       throw new Error('Manual dev spending is only available for the local demo user.')
     }
-    if (!data.merchant || !Number.isFinite(data.amount) || data.amount <= 0 || !FINANCE_CATEGORIES.includes(data.category)) {
+    if (
+      !data.merchant
+      || !Number.isFinite(data.amount)
+      || data.amount <= 0
+      || !data.category
+      || data.category.length > 48
+      || data.category === 'Income'
+      || data.category === 'Transfer'
+    ) {
       throw new Error('Enter a merchant, amount, and category.')
     }
 

@@ -1,5 +1,5 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { useMemo, useState } from 'react'
+import { type FormEvent, useMemo, useState } from 'react'
 import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
@@ -7,11 +7,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '#
 import {
   filterFinanceTransactions,
   formatMoney,
-  type FinanceCategory,
   type FinanceTransaction,
   type TransactionCategoryName,
 } from '#/lib/finance-demo'
-import { addDevFinanceTransaction, getFinanceTransactions, updateFinanceTransactionCategory } from '#/server/finance'
+import {
+  addDevFinanceTransaction,
+  createFinanceTransactionCategory,
+  getFinanceTransactions,
+  updateFinanceTransactionCategory,
+} from '#/server/finance'
 
 export const Route = createFileRoute('/app/transactions')({
   loader: () => getFinanceTransactions({ data: { status: 'all', category: 'all' } }),
@@ -27,10 +31,13 @@ function TransactionsPage() {
   const [month, setMonth] = useState('all')
   const [manualMerchant, setManualMerchant] = useState('')
   const [manualAmount, setManualAmount] = useState('')
-  const [manualCategory, setManualCategory] = useState<FinanceCategory>('Groceries')
+  const [manualCategory, setManualCategory] = useState<TransactionCategoryName>('Groceries')
   const [manualDate, setManualDate] = useState(toDateInput(new Date()))
   const [saving, setSaving] = useState<string | null>(null)
   const [error, setError] = useState('')
+  const [showCategoryCreator, setShowCategoryCreator] = useState(false)
+  const [newCategoryName, setNewCategoryName] = useState('')
+  const [categoryNotice, setCategoryNotice] = useState('')
   const allCategoryOptions = Array.from(new Set([
     'Income',
     'Transfer',
@@ -75,12 +82,58 @@ function TransactionsPage() {
     }
   }
 
+  async function createCategory(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setSaving('category')
+    setError('')
+    setCategoryNotice('')
+    try {
+      const result = await createFinanceTransactionCategory({ data: { name: newCategoryName } })
+      setNewCategoryName('')
+      setShowCategoryCreator(false)
+      await router.invalidate()
+      setCategoryNotice(result.created
+        ? `${result.category} is ready to use. Map it in Money plan to include it in your budget.`
+        : `${result.category} is already available.`)
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : 'Could not add category.')
+    } finally {
+      setSaving(null)
+    }
+  }
+
   return (
     <main id="main" className="mx-auto grid w-full max-w-7xl gap-5 bg-white px-4 py-5 text-zinc-950 sm:px-6 lg:px-8">
-      <header className="border-b border-zinc-200 pb-5">
-        <h1 className="text-2xl font-semibold tracking-tight">Transactions</h1>
-        <p className="mt-1 text-sm text-zinc-500">Search, verify, and categorize every transaction.</p>
+      <header className="flex flex-wrap items-end justify-between gap-3 border-b border-zinc-200 pb-5">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Transactions</h1>
+          <p className="mt-1 text-sm text-zinc-500">Search, verify, and categorize every transaction.</p>
+        </div>
+        <Button type="button" variant="outline" disabled={saving === 'category'} onClick={() => {
+          setShowCategoryCreator((visible) => !visible)
+          setNewCategoryName('')
+          setError('')
+          setCategoryNotice('')
+        }}>
+          {showCategoryCreator ? 'Cancel' : 'Add category'}
+        </Button>
       </header>
+
+      {showCategoryCreator && (
+        <section aria-labelledby="new-category-heading" className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 sm:p-5">
+          <form className="flex flex-col gap-3 sm:flex-row sm:items-end" onSubmit={(event) => void createCategory(event)}>
+            <label className="grid flex-1 gap-1 text-xs text-zinc-500">
+              <span id="new-category-heading">New category</span>
+              <Input autoFocus value={newCategoryName} onChange={(event) => setNewCategoryName(event.target.value)} placeholder="e.g. Pets" className="min-h-11 border-zinc-200 bg-white text-sm text-zinc-950" />
+            </label>
+            <Button className="wollie-primary-action min-h-11" disabled={saving === 'category'} type="submit">
+              {saving === 'category' ? 'Adding…' : 'Add category'}
+            </Button>
+          </form>
+        </section>
+      )}
+
+      {categoryNotice && <p role="status" className="text-sm font-medium text-[var(--color-wollie-accent-deep)]">{categoryNotice}</p>}
 
       {canAddManual && (
         <section aria-labelledby="manual-spending-heading" className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 sm:p-5">
@@ -101,7 +154,7 @@ function TransactionsPage() {
             </label>
             <label className="grid gap-1 text-xs text-zinc-500">
               Category
-                <Select value={manualCategory} onValueChange={(value) => setManualCategory(value as FinanceCategory)}>
+                <Select value={manualCategory} onValueChange={(value) => setManualCategory(value as TransactionCategoryName)}>
                   <SelectTrigger className="min-h-11 border-zinc-200 bg-white text-zinc-950"><SelectValue /></SelectTrigger>
                 <SelectContent>{categoryOptions.map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}</SelectContent>
               </Select>
