@@ -19,7 +19,7 @@ export const Route = createFileRoute('/app/transactions')({
 })
 
 function TransactionsPage() {
-  const { canAddManual, categoryOptions, envelopeBudget, transactions } = Route.useLoaderData()
+  const { canAddManual, categoryOptions, transactions } = Route.useLoaderData()
   const router = useRouter()
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState<FinanceTransaction['status'] | 'all'>('all')
@@ -37,9 +37,6 @@ function TransactionsPage() {
     ...categoryOptions,
     ...transactions.map((transaction) => transaction.category),
   ]))
-  const envelopesByCategory = new Map(
-    envelopeBudget?.buckets.flatMap((bucket) => bucket.categoryNames.map((name) => [name.toLocaleLowerCase(), bucket] as const)) ?? [],
-  )
   const months = useMemo(() => Array.from(new Set(transactions.map((transaction) => transactionMonth(transaction.date)).filter(Boolean))), [transactions])
   const filtered = useMemo(() => filterFinanceTransactions(transactions, { q: query, status, category }).filter((transaction) => month === 'all' || transactionMonth(transaction.date) === month), [category, month, query, status, transactions])
 
@@ -144,12 +141,10 @@ function TransactionsPage() {
         {filtered.length > 0 ? (
           <ul className="divide-y divide-zinc-200">
             {filtered.map((transaction) => {
-              const envelope = envelopesByCategory.get(transaction.category.toLocaleLowerCase())
               return <li key={transaction.id} className="grid gap-3 px-4 py-4 sm:grid-cols-[minmax(0,1fr)_12rem_auto] sm:items-center sm:px-5">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2"><p className="truncate text-sm font-medium">{readableMerchant(transaction.merchant)}</p>{transaction.status !== 'cleared' && <Badge variant="outline" className="rounded-md font-normal">{labelStatus(transaction.status)}</Badge>}</div>
                   <p className="mt-1 truncate text-xs text-zinc-500">{formatDate(transaction.date)} · {transaction.account}</p>
-                  {transaction.amount < 0 && envelope && <p className="mt-1 text-xs font-medium text-[var(--color-wollie-accent-deep)]">{envelope.name} envelope · {formatMoney(envelope.availableMinor / 100, envelopeBudget?.currency || transaction.currency || 'EUR')} left this month</p>}
                 </div>
                 <Select value={transaction.category} disabled={saving === transaction.id} onValueChange={(value) => void updateCategory(transaction, value as TransactionCategoryName)}>
                   <SelectTrigger className="min-h-11 border-zinc-200 bg-white" aria-label={`Category for ${transaction.merchant}`}><SelectValue /></SelectTrigger>
