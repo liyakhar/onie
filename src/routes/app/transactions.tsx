@@ -10,8 +10,11 @@ import {
   type FinanceTransaction,
   type TransactionCategoryName,
 } from '#/lib/finance-demo'
-import { buildTransactionCategoryTotals, type TransactionCategoryTotal } from '#/lib/transaction-category-totals'
-import type { IncomeEnvelopePlan } from '#/lib/income-allocation-engine'
+import {
+  buildTransactionCategoryTotals,
+  sumTransactionCategoryTotals,
+  type TransactionCategoryTotal,
+} from '#/lib/transaction-category-totals'
 import {
   addDevFinanceTransaction,
   createFinanceTransactionCategory,
@@ -244,41 +247,110 @@ function CategoryTotals({
 }) {
   if (totals.length === 0) return null
 
-  return (
-    <section aria-labelledby="category-totals-heading" className="overflow-hidden rounded-lg border border-zinc-200">
-      <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-3 sm:px-5">
-        <h2 id="category-totals-heading" className="font-semibold">Categories</h2>
-        <span className="text-sm text-zinc-500">{periodLabel}</span>
-      </div>
-      <ul className="grid gap-px bg-zinc-200 sm:grid-cols-2">
-        {totals.map((total) => {
-          const active = activeCategory.toLocaleLowerCase() === total.category.toLocaleLowerCase()
-          const subLabel = categoryTotalLabel(total)
-          const showAvailability = canShowEnvelopeAvailability
-            && total.bucket?.purpose === 'SPENDING'
-            && total.totals.length === 1
-            && total.totals[0]?.currency === baseCurrency
+  const spendingTotals = totals.filter((total) => total.bucket?.purpose !== 'RESERVE' && total.bucket?.purpose !== 'GOAL')
+  const savingTotals = totals.filter((total) => total.bucket?.purpose === 'RESERVE' || total.bucket?.purpose === 'GOAL')
 
-          return <li key={total.category} className={`bg-white ${totals.length % 2 === 1 ? 'sm:last:col-span-2' : ''}`}>
+  return (
+    <section aria-label="Category totals" className="overflow-hidden rounded-lg border border-zinc-200">
+      {spendingTotals.length > 0 && <CategoryTotalGroup
+        activeCategory={activeCategory}
+        baseCurrency={baseCurrency}
+        canShowEnvelopeAvailability={canShowEnvelopeAvailability}
+        headingId="category-totals-heading"
+        onSelect={onSelect}
+        periodLabel={periodLabel}
+        totalVerb="spent"
+        title="Spending by category"
+        totals={spendingTotals}
+      />}
+      {savingTotals.length > 0 && <CategoryTotalGroup
+        activeCategory={activeCategory}
+        baseCurrency={baseCurrency}
+        canShowEnvelopeAvailability={canShowEnvelopeAvailability}
+        headingId="saved-category-totals-heading"
+        onSelect={onSelect}
+        periodLabel={periodLabel}
+        totalVerb="saved"
+        title="Saved & invested"
+        totals={savingTotals}
+      />}
+    </section>
+  )
+}
+
+function CategoryTotalGroup({
+  activeCategory,
+  baseCurrency,
+  canShowEnvelopeAvailability,
+  headingId,
+  onSelect,
+  periodLabel,
+  totalVerb,
+  title,
+  totals,
+}: {
+  activeCategory: TransactionCategoryName | 'all'
+  baseCurrency?: string
+  canShowEnvelopeAvailability: boolean
+  headingId: string
+  onSelect: (category: TransactionCategoryName | 'all') => void
+  periodLabel: string
+  totalVerb: 'saved' | 'spent'
+  title: string
+  totals: TransactionCategoryTotal[]
+}) {
+  const totalAmounts = sumTransactionCategoryTotals(totals)
+  const rankedTotals = rankCategoryTotals(totals, totalAmounts)
+  const hasSingleCurrency = totalAmounts.length === 1
+
+  return (
+    <div className="border-b border-zinc-200 last:border-b-0">
+      <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3 px-4 py-4 sm:px-5">
+        <div>
+          <h2 id={headingId} className="font-semibold">{title}</h2>
+          <p className="mt-1 text-sm text-zinc-500">{periodLabel}</p>
+        </div>
+        <div className="text-right">
+          <p className="text-xs text-zinc-500">Total {totalVerb}</p>
+          <p className="mt-0.5 text-lg font-semibold tabular-nums text-zinc-950">
+            {totalAmounts.map((value) => <span className="block" key={value.currency}>{formatMoney(value.amount, value.currency)}</span>)}
+          </p>
+          <p className="mt-1 text-xs text-zinc-500">{totals.length} {totals.length === 1 ? 'category' : 'categories'}</p>
+        </div>
+      </div>
+      <ul className="divide-y divide-zinc-200">
+        {rankedTotals.map((total) => {
+          const active = activeCategory.toLocaleLowerCase() === total.category.toLocaleLowerCase()
+          const availabilityLabel = categoryAvailabilityLabel(total, baseCurrency, canShowEnvelopeAvailability)
+          const share = hasSingleCurrency ? categoryShare(total, totalAmounts) : null
+
+          return <li key={total.category} className="bg-white">
             <button
               aria-pressed={active}
-              className={`flex min-h-20 w-full items-center justify-between gap-4 px-4 py-3 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-zinc-950 sm:px-5 ${active ? 'bg-zinc-100' : 'hover:bg-zinc-50'}`}
+              className={`w-full px-4 py-3 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-zinc-950 sm:px-5 ${active ? 'bg-zinc-100' : 'hover:bg-zinc-50'}`}
               onClick={() => onSelect(active ? 'all' : total.category)}
               type="button"
             >
-              <span className="min-w-0">
-                <span className="block truncate text-sm font-medium text-zinc-950">{total.category}</span>
-                {subLabel && <span className="mt-1 block text-xs text-zinc-500">{subLabel}</span>}
+              <span className="flex items-start justify-between gap-4">
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-medium text-zinc-950">{total.category}</span>
+                  <span className={`mt-1 block text-xs ${availabilityLabel?.isOver ? 'font-medium text-red-700' : 'text-zinc-500'}`}>
+                    {availabilityLabel?.label ?? categoryTotalLabel(total)}
+                  </span>
+                </span>
+                <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-zinc-950">
+                  {total.totals.map((value) => <span className="block" key={value.currency}>{formatMoney(value.amount, value.currency)} {categoryAmountLabel(total)}</span>)}
+                  {share !== null && <span className="mt-1 block text-xs font-normal text-zinc-500">{Math.round(share * 100)}% of total</span>}
+                </span>
               </span>
-              <span className="shrink-0 text-right text-sm font-semibold tabular-nums text-zinc-950">
-                {total.totals.map((value) => <span className="block" key={value.currency}>{formatMoney(value.amount, value.currency)} {categoryAmountLabel(total)}</span>)}
-                {showAvailability && <span className={`mt-1 block text-xs font-medium ${total.bucket!.availableMinor < 0 ? 'text-red-700' : 'text-zinc-500'}`}>{categoryAvailabilityLabel(total.bucket!.availableMinor, baseCurrency!)}</span>}
-              </span>
+              {share !== null && <span aria-hidden="true" className="mt-3 block h-1 overflow-hidden rounded-full bg-zinc-100">
+                <span className="block h-full rounded-full bg-zinc-950" style={{ width: `${Math.max(3, share * 100)}%` }} />
+              </span>}
             </button>
           </li>
         })}
       </ul>
-    </section>
+    </div>
   )
 }
 
@@ -286,17 +358,40 @@ function categoryAmountLabel(total: TransactionCategoryTotal) {
   return total.bucket && total.bucket.purpose !== 'SPENDING' ? 'saved' : 'spent'
 }
 
-function categoryAvailabilityLabel(availableMinor: number, currency: string) {
-  return availableMinor < 0
-    ? `${formatMoney(Math.abs(availableMinor) / 100, currency)} over`
-    : `${formatMoney(availableMinor / 100, currency)} left`
+function categoryAvailabilityLabel(total: TransactionCategoryTotal, baseCurrency: string | undefined, canShowEnvelopeAvailability: boolean) {
+  if (!baseCurrency || !canShowEnvelopeAvailability || total.bucket?.purpose !== 'SPENDING' || total.totals.length !== 1 || total.totals[0]?.currency !== baseCurrency) return null
+
+  const amount = total.bucket.availableMinor
+  return {
+    isOver: amount < 0,
+    label: `${total.bucket.name} plan · ${amount < 0 ? `${formatMoney(Math.abs(amount) / 100, baseCurrency)} over` : `${formatMoney(amount / 100, baseCurrency)} left`}`,
+  }
 }
 
 function categoryTotalLabel(total: TransactionCategoryTotal) {
-  if (!total.bucket) return 'Track only'
-  if (total.bucket.purpose === 'RESERVE') return 'Reserve'
-  if (total.bucket.purpose === 'GOAL') return 'Savings goal'
-  return null
+  if (!total.bucket) return 'No monthly budget'
+  if (total.bucket.purpose === 'RESERVE') return `${total.bucket.name} reserve`
+  if (total.bucket.purpose === 'GOAL') return `${total.bucket.name} goal`
+  return `${total.bucket.name} plan`
+}
+
+function categoryShare(total: TransactionCategoryTotal, totalAmounts: Array<{ amount: number, currency: string }>) {
+  const amount = total.totals[0]
+  const totalAmount = totalAmounts.find((value) => value.currency === amount?.currency)
+  if (!amount || !totalAmount || totalAmount.amount <= 0) return null
+  return amount.amount / totalAmount.amount
+}
+
+function rankCategoryTotals(totals: TransactionCategoryTotal[], totalAmounts: Array<{ amount: number, currency: string }>) {
+  const singleCurrency = totalAmounts.length === 1
+    && totals.every((total) => total.totals.length === 1 && total.totals[0]?.currency === totalAmounts[0]?.currency)
+
+  if (!singleCurrency) return totals
+
+  return [...totals].sort((left, right) => {
+    const amountDifference = (right.totals[0]?.amount ?? 0) - (left.totals[0]?.amount ?? 0)
+    return amountDifference || left.category.localeCompare(right.category)
+  })
 }
 
 function labelStatus(value: string) {

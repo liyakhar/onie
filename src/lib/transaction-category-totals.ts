@@ -5,22 +5,25 @@ type EnvelopeBucket = IncomeEnvelopePlan['buckets'][number]
 
 export type TransactionCategoryTotal = {
   category: string
-  totals: Array<{
-    amount: number
-    currency: string
-  }>
-  bucket?: Pick<EnvelopeBucket, 'availableMinor' | 'purpose'>
+  totals: TransactionCurrencyTotal[]
+  bucket?: Pick<EnvelopeBucket, 'availableMinor' | 'name' | 'purpose'>
+}
+
+export type TransactionCurrencyTotal = {
+  amount: number
+  currency: string
 }
 
 export function buildTransactionCategoryTotals(
   transactions: FinanceTransaction[],
   envelopePlan?: IncomeEnvelopePlan,
 ): TransactionCategoryTotal[] {
-  const bucketByCategory = new Map<string, Pick<EnvelopeBucket, 'availableMinor' | 'purpose'>>()
+  const bucketByCategory = new Map<string, Pick<EnvelopeBucket, 'availableMinor' | 'name' | 'purpose'>>()
   for (const bucket of envelopePlan?.buckets ?? []) {
     for (const category of bucket.categoryNames) {
       bucketByCategory.set(normalizeCategory(category), {
         availableMinor: bucket.availableMinor,
+        name: bucket.name,
         purpose: bucket.purpose,
       })
     }
@@ -55,6 +58,20 @@ export function buildTransactionCategoryTotals(
       bucket: bucketByCategory.get(key),
     }))
     .sort((left, right) => left.category.localeCompare(right.category))
+}
+
+export function sumTransactionCategoryTotals(totals: TransactionCategoryTotal[]): TransactionCurrencyTotal[] {
+  const amountsByCurrency = new Map<string, number>()
+
+  for (const total of totals) {
+    for (const value of total.totals) {
+      amountsByCurrency.set(value.currency, (amountsByCurrency.get(value.currency) ?? 0) + value.amount)
+    }
+  }
+
+  return Array.from(amountsByCurrency.entries())
+    .map(([currency, amount]) => ({ currency, amount }))
+    .sort((left, right) => left.currency.localeCompare(right.currency))
 }
 
 function normalizeCategory(value: string) {

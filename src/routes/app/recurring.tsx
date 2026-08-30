@@ -42,8 +42,8 @@ export function RecurringPage() {
   return (
     <main id="main" className="mx-auto grid w-full max-w-7xl gap-5 bg-white px-4 py-5 text-zinc-950 sm:px-6 lg:px-8">
       <header className="border-b border-zinc-200 pb-5">
-        <h1 className="text-2xl font-semibold tracking-tight">Bills</h1>
-        <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-500">Recurring payments that reduce your available-to-spend amount.</p>
+        <h1 className="text-2xl font-semibold tracking-tight">Bills &amp; subscriptions</h1>
+        <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-500">See what repeats and when it is due. Your Money plan decides how much to set aside.</p>
       </header>
 
       {showAddBill && <section aria-labelledby="add-bill-heading" className="rounded-lg border border-zinc-200 p-4 sm:p-5">

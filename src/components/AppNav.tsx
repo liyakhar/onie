@@ -40,7 +40,7 @@ export default function AppNav({ locked = false }: { locked?: boolean }) {
           </Link>
           <Link to="/app/recurring" className="app-nav__tab" activeProps={{ className: 'app-nav__tab is-active' }}>
             <CalendarDays aria-hidden="true" />
-            <span>Bills</span>
+            <span>Bills &amp; subscriptions</span>
           </Link>
         </nav>}
 

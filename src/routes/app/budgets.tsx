@@ -13,21 +13,19 @@ import type {
 } from '#/lib/income-allocation-engine'
 import { getFinanceBudget, saveFinanceEnvelopeBudget } from '#/server/finance'
 
-const SPENDING_GROUP_OPTIONS: Array<{ value: BudgetBucketGroup; label: string }> = [
-  { value: 'FIXED', label: 'Monthly commitment' },
-  { value: 'FLEXIBLE', label: 'Everyday spending' },
-]
+type PlanKind = 'MONTHLY_BILL' | 'EVERYDAY_SPENDING' | 'SET_ASIDE' | 'SAVINGS_GOAL'
 
-const PURPOSE_OPTIONS: Array<{ value: BudgetBucketPurpose; label: string }> = [
-  { value: 'SPENDING', label: 'Spending this month' },
-  { value: 'RESERVE', label: 'Reserve' },
-  { value: 'GOAL', label: 'Savings goal' },
+const PLAN_KIND_OPTIONS: Array<{ value: PlanKind; label: string }> = [
+  { value: 'MONTHLY_BILL', label: 'Monthly bill' },
+  { value: 'EVERYDAY_SPENDING', label: 'Everyday spending' },
+  { value: 'SET_ASIDE', label: 'Set money aside' },
+  { value: 'SAVINGS_GOAL', label: 'Save for a goal' },
 ]
 
 const RULE_OPTIONS: Array<{ value: IncomeAllocationRuleType; label: string }> = [
-  { value: 'FIXED', label: 'Monthly target' },
-  { value: 'PERCENT_OF_INCOME', label: 'Share of income' },
-  { value: 'REMAINDER', label: 'Everything left' },
+  { value: 'FIXED', label: 'Amount each month' },
+  { value: 'PERCENT_OF_INCOME', label: 'Percentage of income' },
+  { value: 'REMAINDER', label: 'Whatever is left' },
 ]
 
 const BUDGET_SAVE_NOTICE_KEY = 'wollie:budget-save-notice'
@@ -100,7 +98,7 @@ function BudgetContent({ data }: { data: BudgetScreenData }) {
     setMessage('')
     try {
       await saveFinanceEnvelopeBudget({ data: payload })
-      const notice = 'Household envelope plan saved.'
+      const notice = 'Money plan saved.'
       window.sessionStorage.setItem(BUDGET_SAVE_NOTICE_KEY, notice)
       setSaveNotice(notice)
       setEditorMode('none')
@@ -160,7 +158,7 @@ function BudgetContent({ data }: { data: BudgetScreenData }) {
           <summary className="min-h-11 cursor-pointer content-center font-medium text-zinc-950 underline-offset-4 hover:underline">
             How this plan stays up to date
           </summary>
-          <p className="mt-2 max-w-3xl leading-6">Income is shared across your targets. Purchases reduce a spending envelope; a payment mapped to a reserve or goal is shown as a contribution instead.</p>
+          <p className="mt-2 max-w-3xl leading-6">Wollie assigns income to your plan on screen; it does not move money between bank accounts. Purchases update the matching plan item automatically.</p>
         </details>
       )}
     </main>
@@ -184,9 +182,9 @@ function EmptyEnvelopePlan({
         </span>
         <h2 id="envelope-setup-heading" className="mt-4 text-lg font-semibold tracking-tight">Set up a shared monthly plan</h2>
         <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-600">
-          Combine income from both household members, reserve the important amounts first, and let the remaining income fund one “Extra” envelope.
+          Decide how this month’s household income should be used. Wollie tracks the plan without moving money between your bank accounts.
         </p>
-        {hasLegacyPlan && <p className="mt-3 text-sm text-zinc-500">Your existing category limits stay in place until you save this new envelope plan.</p>}
+        {hasLegacyPlan && <p className="mt-3 text-sm text-zinc-500">Your existing category limits stay in place until you save this Money plan.</p>}
       </div>
       <div className="grid gap-2 sm:justify-items-end">
         <Button className="wollie-primary-action min-h-11" onClick={onStarter}>Use household starter</Button>
@@ -203,29 +201,29 @@ function EnvelopeStatus({ month, plan }: { month: string; plan: IncomeEnvelopePl
   const hasIncome = plan.incomeMinor > 0
 
   return (
-    <section aria-label="Envelope status" className="border border-zinc-200 bg-white">
+    <section aria-label="Money plan status" className="border border-zinc-200 bg-white">
       {hasIncome ? (
         <div className="grid border-b border-zinc-200 sm:grid-cols-2 lg:grid-cols-4">
           <PlanTotal label="Income received" value={formatMinor(plan.incomeMinor, plan.currency)} />
           <PlanTotal dark label="Available to spend" value={formatMinor(plan.flexibleAvailableMinor, plan.currency)} />
-          <PlanTotal label="Reserved in plan" value={formatMinor(plan.reservedInPlanMinor, plan.currency)} />
+          <PlanTotal label="Set aside in plan" value={formatMinor(plan.reservedInPlanMinor, plan.currency)} />
           <PlanTotal label="Saved / invested" value={formatMinor(plan.contributedMinor, plan.currency)} />
         </div>
       ) : (
         <div className="border-b border-zinc-200 bg-zinc-50 px-4 py-4 sm:px-5">
           <p className="text-sm font-medium text-zinc-950">Waiting for income</p>
-          <p className="mt-1 text-sm text-zinc-600">No cleared income in {month} yet. Your envelopes will fill when income arrives.</p>
+          <p className="mt-1 text-sm text-zinc-600">No cleared income in {month} yet. Wollie will assign it to your plan when it arrives.</p>
           <p className="mt-1 text-sm text-zinc-500">{formatMinor(targetMinor, plan.currency)} planned this month.</p>
         </div>
       )}
-      {plan.unallocatedMinor > 0 && <p className="border-b border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-600 sm:px-5"><span className="font-medium text-zinc-950">{formatMinor(plan.unallocatedMinor, plan.currency)} is not assigned yet.</span> Add an “Everything left” envelope or another target in Edit plan.</p>}
-      {spendingBuckets.length > 0 && <section aria-label="Spending envelopes">
+      {plan.unallocatedMinor > 0 && <p className="border-b border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-600 sm:px-5"><span className="font-medium text-zinc-950">{formatMinor(plan.unallocatedMinor, plan.currency)} is not assigned yet.</span> Add a “Whatever is left” plan item or another target in Edit plan.</p>}
+      {spendingBuckets.length > 0 && <section aria-label="Spending plan items">
         <ul className="divide-y divide-zinc-200">
           {spendingBuckets.map((bucket) => <SpendingEnvelopeRow bucket={bucket} currency={plan.currency} key={bucket.id} />)}
         </ul>
       </section>}
 
-      {futureBuckets.length > 0 && <PlanSection className={spendingBuckets.length > 0 ? 'border-t border-zinc-200' : undefined} heading="Savings & future" description="Reserved amounts stay in your plan until a mapped payment is imported.">
+      {futureBuckets.length > 0 && <PlanSection className={spendingBuckets.length > 0 ? 'border-t border-zinc-200' : undefined} heading="Savings & future" description="Assigned amounts are a plan. Saved or invested shows only after a matching transaction appears.">
         <ul className="divide-y divide-zinc-200">
           {futureBuckets.map((bucket) => <FutureEnvelopeRow bucket={bucket} currency={plan.currency} key={bucket.id} />)}
         </ul>
@@ -283,26 +281,26 @@ function SpendingEnvelopeRow({
             {bucket.categoryNames.map((category) => <Badge key={category} variant="outline" className="rounded-md border-zinc-200 bg-zinc-50 font-normal text-zinc-600">{category}</Badge>)}
           </div>
           {!awaitingIncome && <p className="mt-1 text-xs text-zinc-500">{bucket.type === 'REMAINDER'
-            ? 'Uses the income left after your other targets are funded.'
+            ? 'Uses the income left after your other targets are assigned.'
             : bucket.shortfallMinor > 0
-              ? `${formatMinor(bucket.shortfallMinor, currency)} still to fund this month.`
-              : 'Fully funded this month.'}</p>}
-          {awaitingIncome && bucket.type === 'REMAINDER' && <p className="mt-1 text-xs text-zinc-500">Uses the income left after your other targets are funded.</p>}
+              ? `${formatMinor(bucket.shortfallMinor, currency)} still to assign this month.`
+              : 'Fully assigned this month.'}</p>}
+          {awaitingIncome && bucket.type === 'REMAINDER' && <p className="mt-1 text-xs text-zinc-500">Uses the income left after your other targets are assigned.</p>}
         </div>
         <p className={`text-right text-sm font-semibold tabular-nums ${bucket.availableMinor < 0 ? 'text-red-700' : bucket.state === 'watch' ? 'text-amber-700' : 'text-zinc-950'}`}>{remainingLabel}</p>
       </div>
 
       {bucket.type !== 'REMAINDER' && <PlanMeter
-        ariaLabel={`${bucket.name}: ${formatMinor(bucket.fundedMinor, currency)} funded of ${formatMinor(bucket.requestedMinor, currency)} target`}
+        ariaLabel={`${bucket.name}: ${formatMinor(bucket.fundedMinor, currency)} assigned of ${formatMinor(bucket.requestedMinor, currency)} target`}
         colour="bg-[var(--color-wollie-accent)]"
         detail={`${formatMinor(bucket.fundedMinor, currency)} of ${formatMinor(bucket.requestedMinor, currency)}`}
-        label="Funded"
+        label="Assigned"
         totalMinor={bucket.requestedMinor}
         valueMinor={bucket.fundedMinor}
       />}
 
       {!awaitingIncome && <PlanMeter
-        ariaLabel={`${bucket.name}: ${spendingDetail} of ${formatMinor(bucket.fundedMinor, currency)} funded`}
+        ariaLabel={`${bucket.name}: ${spendingDetail} of ${formatMinor(bucket.fundedMinor, currency)} assigned`}
         colour={usageColour}
         detail={spendingDetail}
         label="Spent"
@@ -326,7 +324,7 @@ function FutureEnvelopeRow({
     ? 'Waiting for income'
     : contributedBeyondPlan
       ? `${formatMinor(Math.abs(bucket.availableMinor), currency)} contributed beyond this month’s target`
-      : `${formatMinor(bucket.availableMinor, currency)} reserved in plan`
+      : `${formatMinor(bucket.availableMinor, currency)} assigned in plan`
   const contributionText = bucket.pendingContributionMinor > 0
     ? `${formatMinor(bucket.contributedMinor, currency)} contributed · ${formatMinor(bucket.pendingContributionMinor, currency)} pending`
     : `${formatMinor(bucket.contributedMinor, currency)} contributed this month`
@@ -340,16 +338,16 @@ function FutureEnvelopeRow({
             <span className="text-xs text-zinc-500">{bucket.purpose === 'RESERVE' ? 'reserve' : 'savings goal'} · {ruleLabel(bucket, currency)}</span>
             {bucket.categoryNames.map((category) => <Badge key={category} variant="outline" className="rounded-md border-zinc-200 bg-zinc-50 font-normal text-zinc-600">{category}</Badge>)}
           </div>
-          {!awaitingIncome && <p className="mt-1 text-xs text-zinc-500">{contributionText}{bucket.shortfallMinor > 0 ? ` · ${formatMinor(bucket.shortfallMinor, currency)} still to reserve` : ''}</p>}
+          {!awaitingIncome && <p className="mt-1 text-xs text-zinc-500">{contributionText}{bucket.shortfallMinor > 0 ? ` · ${formatMinor(bucket.shortfallMinor, currency)} still to assign` : ''}</p>}
         </div>
         <p className={`max-w-56 text-right text-sm font-semibold tabular-nums ${contributedBeyondPlan ? 'text-[var(--color-wollie-accent-deep)]' : 'text-zinc-950'}`}>{label}</p>
       </div>
 
       <PlanMeter
-        ariaLabel={`${bucket.name}: ${formatMinor(bucket.fundedMinor, currency)} reserved in plan of ${formatMinor(bucket.requestedMinor, currency)} monthly target`}
+        ariaLabel={`${bucket.name}: ${formatMinor(bucket.fundedMinor, currency)} assigned in plan of ${formatMinor(bucket.requestedMinor, currency)} monthly target`}
         colour="bg-[var(--color-wollie-accent)]"
         detail={`${formatMinor(bucket.fundedMinor, currency)} of ${formatMinor(bucket.requestedMinor, currency)}`}
-        label="Reserved"
+        label="Assigned"
         totalMinor={bucket.requestedMinor}
         valueMinor={bucket.fundedMinor}
       />
@@ -395,7 +393,7 @@ function EnvelopeNotices({ plan }: { plan: IncomeEnvelopePlan }) {
     notices.push({ id: 'pending', tone: 'neutral', text: <>{formatMinor(plan.pendingSpendMinor, plan.currency)} of pending transactions is already reflected in this plan.</> })
   }
   if (plan.unassignedSpendMinor > 0) {
-    notices.push({ id: 'unassigned', tone: 'attention', text: <>{formatMinor(plan.unassignedSpendMinor, plan.currency)} of spending has no envelope yet. <Link to="/app/transactions" className="font-medium underline underline-offset-4">Review its category</Link> or map that category in Edit plan.</> })
+    notices.push({ id: 'unassigned', tone: 'attention', text: <>{formatMinor(plan.unassignedSpendMinor, plan.currency)} of spending has no plan item yet. <Link to="/app/transactions" className="font-medium underline underline-offset-4">Review its category</Link> or connect that category in Edit plan.</> })
   }
   if (plan.excludedIncomeMinor > 0 || plan.excludedSpendMinor > 0) {
     notices.push({ id: 'currency', tone: 'neutral', text: <>Transactions in other currencies are excluded: {formatMinor(plan.excludedIncomeMinor, plan.currency)} income and {formatMinor(plan.excludedSpendMinor, plan.currency)} spending. Wollie does not convert currencies automatically.</> })
@@ -455,15 +453,14 @@ function EnvelopeEditor({
     })
   }
 
-  function updatePurpose(id: string, purpose: BudgetBucketPurpose) {
+  function updatePlanKind(id: string, kind: PlanKind) {
     setDrafts((current) => current.map((draft) => {
       if (draft.id !== id) return draft
+      const { group, purpose } = planKindValues(kind)
       return {
         ...draft,
+        group,
         purpose,
-        group: purpose === 'SPENDING'
-          ? draft.group === 'FUTURE' ? 'FLEXIBLE' : draft.group
-          : 'FUTURE',
         type: purpose === 'SPENDING' || draft.type !== 'REMAINDER' ? draft.type : 'FIXED',
       }
     }))
@@ -529,8 +526,8 @@ function EnvelopeEditor({
     <section aria-labelledby="allocation-rules-heading" className="border border-zinc-200 bg-white">
       <div className="flex flex-col gap-3 border-b border-zinc-200 px-4 py-4 sm:flex-row sm:items-end sm:justify-between sm:px-5">
         <div>
-          <h2 id="allocation-rules-heading" className="font-semibold">Your envelopes</h2>
-          <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-500">Every income payment is shared across your targets. Use one “Everything left” envelope for money not reserved elsewhere.</p>
+          <h2 id="allocation-rules-heading" className="font-semibold">Your plan items</h2>
+          <p className="mt-1 max-w-2xl text-sm leading-6 text-zinc-500">Income is shared across your targets proportionally. This is a plan only—Wollie does not move money between your bank accounts.</p>
         </div>
         {canChangeCurrency ? (
           <label className="grid gap-1 text-xs text-zinc-500">
@@ -546,9 +543,9 @@ function EnvelopeEditor({
         {drafts.map((draft, index) => (
           <article className="grid gap-4 px-4 py-5 sm:px-5" key={draft.id}>
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Envelope {index + 1}</p>
+              <p className="text-xs font-medium uppercase tracking-[0.12em] text-zinc-500">Plan item {index + 1}</p>
               <Button
-                aria-label={`Remove ${draft.name || 'envelope'}`}
+                aria-label={`Remove ${draft.name || 'plan item'}`}
                 className="min-h-11 border-zinc-200 text-zinc-700 hover:text-red-700"
                 disabled={drafts.length === 1}
                 onClick={() => setDrafts((current) => current.filter((candidate) => candidate.id !== draft.id))}
@@ -561,39 +558,33 @@ function EnvelopeEditor({
               </Button>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-[minmax(0,1.25fr)_minmax(10rem,0.8fr)_minmax(10rem,0.8fr)_minmax(10rem,0.8fr)_minmax(9rem,0.55fr)] xl:items-end">
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-[minmax(0,1.25fr)_minmax(11rem,0.9fr)_minmax(11rem,0.9fr)_minmax(9rem,0.6fr)] xl:items-end">
               <label className="grid gap-1 text-xs text-zinc-500">
-                Envelope name
-                <Input aria-label="Envelope name" className="min-h-11 border-zinc-200 bg-white text-sm text-zinc-950" onChange={(event) => updateDraft(draft.id, { name: event.target.value })} placeholder="Food" value={draft.name} />
+                Name
+                <Input aria-label="Plan item name" className="min-h-11 border-zinc-200 bg-white text-sm text-zinc-950" onChange={(event) => updateDraft(draft.id, { name: event.target.value })} placeholder="Food" value={draft.name} />
               </label>
               <label className="grid gap-1 text-xs text-zinc-500">
-                Purpose
-                <select value={draft.purpose} onChange={(event) => updatePurpose(draft.id, event.target.value as BudgetBucketPurpose)} className="min-h-11 rounded-md border border-zinc-200 bg-white px-3 text-sm text-zinc-950 outline-none focus-visible:border-zinc-950 focus-visible:ring-2 focus-visible:ring-zinc-300">
-                  {PURPOSE_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                Plan for
+                <select value={planKindFor(draft)} onChange={(event) => updatePlanKind(draft.id, event.target.value as PlanKind)} className="min-h-11 rounded-md border border-zinc-200 bg-white px-3 text-sm text-zinc-950 outline-none focus-visible:border-zinc-950 focus-visible:ring-2 focus-visible:ring-zinc-300">
+                  {PLAN_KIND_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </select>
               </label>
-              {draft.purpose === 'SPENDING' && <label className="grid gap-1 text-xs text-zinc-500">
-                Spending type
-                <select value={draft.group} onChange={(event) => updateDraft(draft.id, { group: event.target.value as BudgetBucketGroup })} className="min-h-11 rounded-md border border-zinc-200 bg-white px-3 text-sm text-zinc-950 outline-none focus-visible:border-zinc-950 focus-visible:ring-2 focus-visible:ring-zinc-300">
-                  {SPENDING_GROUP_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-                </select>
-              </label>}
               <label className="grid gap-1 text-xs text-zinc-500">
-                Funding
+                Income rule
                 <select value={draft.type} onChange={(event) => updateRuleType(draft.id, event.target.value as IncomeAllocationRuleType)} className="min-h-11 rounded-md border border-zinc-200 bg-white px-3 text-sm text-zinc-950 outline-none focus-visible:border-zinc-950 focus-visible:ring-2 focus-visible:ring-zinc-300">
                   {(draft.purpose === 'SPENDING' ? RULE_OPTIONS : RULE_OPTIONS.filter((option) => option.value !== 'REMAINDER')).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </select>
               </label>
-              {draft.type === 'FIXED' && <label className="grid gap-1 text-xs text-zinc-500">Monthly target<Input aria-label={`Monthly target for ${draft.name || 'envelope'}`} className="min-h-11 border-zinc-200 bg-white text-sm text-zinc-950" inputMode="decimal" onChange={(event) => updateDraft(draft.id, { fixedAmount: event.target.value })} placeholder="0.00" value={draft.fixedAmount} /></label>}
-              {draft.type === 'PERCENT_OF_INCOME' && <label className="grid gap-1 text-xs text-zinc-500">Percent<Input aria-label={`Income percentage for ${draft.name || 'envelope'}`} className="min-h-11 border-zinc-200 bg-white text-sm text-zinc-950" inputMode="decimal" onChange={(event) => updateDraft(draft.id, { percentage: event.target.value })} placeholder="10" value={draft.percentage} /></label>}
-              {draft.type === 'REMAINDER' && <div className="min-h-11 content-center text-sm text-zinc-500">Gets any income left after the targets are filled.</div>}
+              {draft.type === 'FIXED' && <label className="grid gap-1 text-xs text-zinc-500">Amount per month<Input aria-label={`Amount per month for ${draft.name || 'plan item'}`} className="min-h-11 border-zinc-200 bg-white text-sm text-zinc-950" inputMode="decimal" onChange={(event) => updateDraft(draft.id, { fixedAmount: event.target.value })} placeholder="0.00" value={draft.fixedAmount} /></label>}
+              {draft.type === 'PERCENT_OF_INCOME' && <label className="grid gap-1 text-xs text-zinc-500">% of income<Input aria-label={`Income percentage for ${draft.name || 'plan item'}`} className="min-h-11 border-zinc-200 bg-white text-sm text-zinc-950" inputMode="decimal" onChange={(event) => updateDraft(draft.id, { percentage: event.target.value })} placeholder="10" value={draft.percentage} /></label>}
+              {draft.type === 'REMAINDER' && <div className="min-h-11 content-center text-sm text-zinc-500">Receives any income left after the other targets.</div>}
             </div>
 
-            <div>
-              <p className="text-xs text-zinc-500">{draft.purpose === 'SPENDING' ? 'Spending categories' : 'Contribution categories'}</p>
-              <p className="mt-1 text-xs leading-5 text-zinc-500">{draft.purpose === 'SPENDING'
-                ? 'Purchases in these categories reduce this envelope. A category can belong to one envelope.'
-                : 'Map a category only if an imported payment should count as a contribution. Leave it blank for a virtual reserve or goal.'}</p>
+            <details className="rounded-md border border-zinc-200 bg-zinc-50 px-3 py-2">
+              <summary className="min-h-9 cursor-pointer content-center text-sm font-medium text-zinc-700">Connect transaction categories{draft.categoryNames.length > 0 ? ` · ${draft.categoryNames.length} selected` : ''}</summary>
+              <p className="mt-2 text-xs leading-5 text-zinc-500">{draft.purpose === 'SPENDING'
+                ? 'Purchases in these categories update this plan item. Each category can connect to one plan item.'
+                : 'Choose categories only when a real payment should count as saved or contributed. You can leave this empty.'}</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {selectableCategories.length > 0 ? selectableCategories.map((category) => {
                   const selected = draft.categoryNames.includes(category)
@@ -612,7 +603,7 @@ function EnvelopeEditor({
               </div>
               <div className="mt-3 flex flex-col gap-2 sm:max-w-sm sm:flex-row">
                 <Input
-                  aria-label={`New transaction category for ${draft.name || 'envelope'}`}
+                  aria-label={`New transaction category for ${draft.name || 'plan item'}`}
                   className="min-h-11 border-zinc-200 bg-white text-sm text-zinc-950"
                   maxLength={48}
                   onChange={(event) => setNewCategoryNames((current) => ({ ...current, [draft.id]: event.target.value }))}
@@ -627,16 +618,16 @@ function EnvelopeEditor({
                 />
                 <Button className="min-h-11 border-zinc-200 bg-white text-zinc-950" onClick={() => addCategory(draft.id)} type="button" variant="outline">Add</Button>
               </div>
-            </div>
+            </details>
           </article>
         ))}
       </div>
 
       <div className="flex flex-col gap-3 border-t border-zinc-200 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
-        <Button className="min-h-11 border-zinc-200 bg-white text-zinc-950" onClick={addEnvelope} type="button" variant="outline"><Plus aria-hidden="true" />Add envelope</Button>
+        <Button className="min-h-11 border-zinc-200 bg-white text-zinc-950" onClick={addEnvelope} type="button" variant="outline"><Plus aria-hidden="true" />Add plan item</Button>
         <div className="flex flex-col gap-2 sm:flex-row">
           <Button className="min-h-11 border-zinc-200 bg-white text-zinc-950" disabled={saving} onClick={onCancel} type="button" variant="outline">Cancel</Button>
-          <Button className="wollie-primary-action min-h-11" disabled={saving} onClick={() => void submit()} type="button">{saving ? 'Saving…' : 'Save household plan'}</Button>
+          <Button className="wollie-primary-action min-h-11" disabled={saving} onClick={() => void submit()} type="button">{saving ? 'Saving…' : 'Save plan'}</Button>
         </div>
       </div>
       {error && <p className="border-t border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700 sm:px-5" role="alert">{error}</p>}
@@ -652,10 +643,23 @@ function formatMinor(amount: number, currency: string) {
   return formatMoney(amount / 100, currency)
 }
 
+function planKindFor(draft: Pick<EnvelopeDraft, 'group' | 'purpose'>): PlanKind {
+  if (draft.purpose === 'RESERVE') return 'SET_ASIDE'
+  if (draft.purpose === 'GOAL') return 'SAVINGS_GOAL'
+  return draft.group === 'FIXED' ? 'MONTHLY_BILL' : 'EVERYDAY_SPENDING'
+}
+
+function planKindValues(kind: PlanKind): { group: BudgetBucketGroup; purpose: BudgetBucketPurpose } {
+  if (kind === 'MONTHLY_BILL') return { group: 'FIXED', purpose: 'SPENDING' }
+  if (kind === 'EVERYDAY_SPENDING') return { group: 'FLEXIBLE', purpose: 'SPENDING' }
+  if (kind === 'SET_ASIDE') return { group: 'FUTURE', purpose: 'RESERVE' }
+  return { group: 'FUTURE', purpose: 'GOAL' }
+}
+
 function ruleLabel(bucket: IncomeEnvelopePlan['buckets'][number], currency: string) {
   if (bucket.type === 'REMAINDER') return 'uses what is left'
   if (bucket.type === 'PERCENT_OF_INCOME') return `${(bucket.percentageBasisPoints ?? 0) / 100}% of income`
-  return `target ${formatMinor(bucket.fixedMinor ?? 0, currency)}`
+  return `${formatMinor(bucket.fixedMinor ?? 0, currency)} each month`
 }
 
 function draftsFromPlan(plan?: IncomeEnvelopePlan): EnvelopeDraft[] | undefined {
