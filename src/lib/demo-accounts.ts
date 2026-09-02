@@ -25,7 +25,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
     field: 'UX_UI',
     loginLabel: 'liya_k',
     headline: 'UX/UI · agent skills for design systems & review loops',
-    bio: 'I publish Cursor skills and workflows for UI audits, component polish, and research synthesis — stuff that actually ships.',
+    bio: 'I publish Cursor skills and workflows for UI audits, component polish, and research synthesis, stuff that actually ships.',
   },
   {
     id: 'demo-sasha-zelts',
@@ -35,7 +35,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
     field: 'ENGINEERING',
     loginLabel: 'sasha_zelts',
     headline: 'Internal tools · automation that closes user-reported bugs',
-    bio: 'I build in-house automations that turn support tickets and repro steps into fixes — triage, patch, verify, notify.',
+    bio: 'I build in-house automations that turn support tickets and repro steps into fixes, triage, patch, verify, notify.',
   },
   {
     id: 'demo-mathiew-builds',
@@ -65,7 +65,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
     field: 'CONTENT',
     loginLabel: 'rayan_roberts',
     headline: 'Image AI for real estate & photography clients',
-    bio: 'I run enhancement pipelines for agencies — sky replacement, staging, upscale — and document the tools + prompts that hold up in production.',
+    bio: 'I run enhancement pipelines for agencies, sky replacement, staging, upscale, and document the tools + prompts that hold up in production.',
   },
 ]
 

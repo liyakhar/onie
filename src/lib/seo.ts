@@ -11,7 +11,7 @@ export function truncateText(text: string, max: number): string {
 }
 
 export function pageTitle(title?: string): string {
-  if (!title) return `${site.name} — ${site.tagline}`
+  if (!title) return `${site.name} | ${site.tagline}`
   const full = `${title} · ${site.name}`
   return truncateText(full, 60)
 }
@@ -71,12 +71,12 @@ export function buildPageMeta({
     { property: 'og:image', content: image },
     { property: 'og:image:width', content: String(OG_IMAGE_WIDTH) },
     { property: 'og:image:height', content: String(OG_IMAGE_HEIGHT) },
-    { property: 'og:image:alt', content: `${site.name} — ${site.tagline}` },
+    { property: 'og:image:alt', content: `${site.name} | ${site.tagline}` },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: resolvedTitle },
     { name: 'twitter:description', content: resolvedDescription },
     { name: 'twitter:image', content: image },
-    { name: 'twitter:image:alt', content: `${site.name} — ${site.tagline}` },
+    { name: 'twitter:image:alt', content: `${site.name} | ${site.tagline}` },
   ]
 
   if (noindex) {

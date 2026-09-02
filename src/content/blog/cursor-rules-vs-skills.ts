@@ -21,7 +21,7 @@ export const cursorRulesVsSkillsPost: BlogPost = {
     bio: 'Runs research synthesis and design QA loops with Claude Code. Publishes the setups she ships on Onie.',
   },
   tldr:
-    'Cursor rules are always-on (or glob-scoped) policy in .mdc files — coding standards, safety rails, and repo conventions. Skills are on-demand playbooks in SKILL.md that load only when the task matches the description. Use rules for what must apply every time; use skills for multi-step workflows you run occasionally. They complement each other; neither replaces the other.',
+    'Cursor rules are always-on (or glob-scoped) policy in .mdc files, coding standards, safety rails, and repo conventions. Skills are on-demand playbooks in SKILL.md that load only when the task matches the description. Use rules for what must apply every time; use skills for multi-step workflows you run occasionally. They complement each other; neither replaces the other.',
   relatedSlugs: [
     'claude-code-skills-vs-rules',
     'how-to-write-claude-code-skills',
@@ -35,7 +35,7 @@ export const cursorRulesVsSkillsPost: BlogPost = {
 
 **Cursor skills** tell the agent how to run a specific workflow when that workflow is relevant: deploy checklists, migration runbooks, research synthesis templates. They load on demand when the description matches what you are doing.
 
-If you need something enforced even when the task looks unrelated — keep a rule. If you need a long, procedural playbook that would waste context on every chat — use a skill.
+If you need something enforced even when the task looks unrelated, keep a rule. If you need a long, procedural playbook that would waste context on every chat, use a skill.
 
 This matches how [Cursor documents the split](https://cursor.com/docs): rules are declarative guardrails; skills are dynamic, procedural packages aligned with the [Agent Skills open format](https://agentskills.io).
 
@@ -53,13 +53,13 @@ Rules can be configured roughly as:
 | Apply to globs | When matching files are in context | Language- or folder-specific conventions |
 | Apply intelligently | Agent decides from rule description | Softer guidance that should not run on unrelated tasks |
 
-Testing reported on [DEV](https://dev.to/nedcodes/cursor-rules-vs-agent-skills-i-tested-both-heres-when-each-one-actually-works-1ld) shows **alwaysApply: true** rules inject even when the task has nothing to do with them. That is by design — predictable enforcement costs context.
+Testing reported on [DEV](https://dev.to/nedcodes/cursor-rules-vs-agent-skills-i-tested-both-heres-when-each-one-actually-works-1ld) shows **alwaysApply: true** rules inject even when the task has nothing to do with them. That is by design, predictable enforcement costs context.
 
 ### Skills (SKILL.md in \`.cursor/skills/\` or \`.agents/skills/\`)
 
 Skills ship as folders with YAML frontmatter (\`name\`, \`description\`) plus markdown instructions, optional \`scripts/\`, and \`references/\`.
 
-The agent reads the **description** to decide relevance. If your task does not match, the skill stays unloaded — which keeps the context window free for code.
+The agent reads the **description** to decide relevance. If your task does not match, the skill stays unloaded, which keeps the context window free for code.
 
 Skills can also be invoked explicitly (\`@\` mention or slash-style commands where supported). Rules do not need a trigger phrase; they are already there.
 
@@ -102,10 +102,10 @@ For SKILL.md structure and trigger writing, see [how to write Claude Code skills
 
 Cursor also has **commands** (explicit invocations) and **hooks** (scripts after agent actions). A useful mental model from the [Cursor forum](https://forum.cursor.com/t/rules-vs-skills-vs-commands-vs-hooks/151829):
 
-- **Rules** — policy (what good code looks like)
-- **Skills** — procedures (how to execute a workflow)
-- **Commands** — you trigger them on purpose
-- **Hooks** — deterministic automation the model cannot skip (format, tests, block dangerous ops)
+- **Rules**, policy (what good code looks like)
+- **Skills**, procedures (how to execute a workflow)
+- **Commands**, you trigger them on purpose
+- **Hooks**, deterministic automation the model cannot skip (format, tests, block dangerous ops)
 
 Hooks are the only layer that **guarantees** behavior. A rule that says "never delete \`migrations/\`" can still be ignored; a hook that rejects the shell command cannot.
 
@@ -125,7 +125,7 @@ Cursor ships a **\`/migrate-to-skills\`** command (agent chat) to convert eligib
 - Formatting and naming that must apply during refactors
 - Anything you want in context even when the task seems off-topic
 
-After migration, run the same tasks you ran before migration. If a skill fails to load, tighten the \`description\` with literal user phrases — the same fix as in [skills troubleshooting](/blog/how-to-write-claude-code-skills#common-mistakes-and-fixes).
+After migration, run the same tasks you ran before migration. If a skill fails to load, tighten the \`description\` with literal user phrases, the same fix as in [skills troubleshooting](/blog/how-to-write-claude-code-skills#common-mistakes-and-fixes).
 
 ## A practical split for a team repo
 
@@ -149,7 +149,7 @@ Document the split in your README or [agent workflow doc](/blog/document-ai-agen
 
 ## Common mistakes
 
-**Moving everything to skills because "rules are deprecated."** They are not. [Cursor positions skills as complementary](https://cursor.com/docs) to rules — dynamic playbooks vs always-on context.
+**Moving everything to skills because "rules are deprecated."** They are not. [Cursor positions skills as complementary](https://cursor.com/docs) to rules, dynamic playbooks vs always-on context.
 
 **Putting coding style in a skill.** Style should apply during unrelated refactors. That is a rule (or glob-scoped rule), not a skill.
 
@@ -177,7 +177,7 @@ Many teams mirror: Cursor rules for IDE guardrails, shared \`.agents/skills/\` f
 
 ## Publish what your team agreed on
 
-Comparisons only matter if the workflow ships. After you settle rules-vs-skills boundaries, publish the playbook on [Onie](/app/explore) so others can fork the folder layout — not just the theory.
+Comparisons only matter if the workflow ships. After you settle rules-vs-skills boundaries, publish the playbook on [Onie](/app/explore) so others can fork the folder layout, not just the theory.
 
 Browse [About](/about) for how Onie treats public practitioner workflows as the source of truth for agent-era teams.
 `.trim(),
@@ -190,7 +190,7 @@ Browse [About](/about) for how Onie treats public practitioner workflows as the 
     {
       question: 'When should I use Cursor rules instead of skills?',
       answer:
-        'Use rules when the instruction must apply even if the task seems unrelated — coding style, security constraints, framework conventions. Use skills when the content is long, procedural, and only relevant for specific tasks.',
+        'Use rules when the instruction must apply even if the task seems unrelated, coding style, security constraints, framework conventions. Use skills when the content is long, procedural, and only relevant for specific tasks.',
     },
     {
       question: 'Can I use both rules and skills together?',
@@ -200,7 +200,7 @@ Browse [About](/about) for how Onie treats public practitioner workflows as the 
     {
       question: 'What is the /migrate-to-skills command?',
       answer:
-        'A Cursor agent command that converts eligible rules into SKILL.md packages. Review the output manually — keep always-on policy as rules and migrate only procedural runbooks that benefit from on-demand loading.',
+        'A Cursor agent command that converts eligible rules into SKILL.md packages. Review the output manually, keep always-on policy as rules and migrate only procedural runbooks that benefit from on-demand loading.',
     },
     {
       question: 'Where do Cursor skills live on disk?',
@@ -215,7 +215,7 @@ Browse [About](/about) for how Onie treats public practitioner workflows as the 
     {
       question: 'What is the difference between skills and hooks in Cursor?',
       answer:
-        'Skills are instructions the agent may follow when relevant. Hooks are scripts that run after agent actions and can enforce behavior deterministically — for example auto-format, tests, or blocking forbidden shell commands.',
+        'Skills are instructions the agent may follow when relevant. Hooks are scripts that run after agent actions and can enforce behavior deterministically, for example auto-format, tests, or blocking forbidden shell commands.',
     },
     {
       question: 'How does this relate to Claude Code skills?',

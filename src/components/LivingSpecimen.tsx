@@ -61,7 +61,7 @@ export function LivingSpecimen() {
             </div>
           ))}
           <p className="axis__help" id="axis-help">
-            Pull the axes. The word reads <em>Building</em> by design — that is the
+            Pull the axes. The word reads <em>Building</em> by design, that is the
             point of a variable workflow.
           </p>
         </div>

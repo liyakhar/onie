@@ -8,7 +8,7 @@ import {
 function transaction(overrides: Partial<{
   id: string
   account: string
-  category: 'Income' | 'Groceries' | 'Tax' | 'Transfer'
+  category: string
   amount: number
   currency: string
   status: 'cleared' | 'pending' | 'needs-review'
@@ -95,6 +95,74 @@ describe('income envelope server projection', () => {
       incomeMinor: 50_000,
       unallocatedMinor: 50_000,
       buckets: [],
+    }))
+  })
+
+  it('puts unmapped purchases in Extra so everyday money is never overstated', () => {
+    const plan = projectIncomeEnvelopePlan({
+      currency: 'EUR',
+      rules: [
+        {
+          id: 'food',
+          bucketId: 'food',
+          bucketName: 'Food',
+          group: 'FLEXIBLE',
+          purpose: 'SPENDING',
+          type: 'FIXED',
+          fixedMinor: 100_000,
+          priority: 0,
+          categoryNames: ['Groceries'],
+        },
+        {
+          id: 'extra',
+          bucketId: 'extra',
+          bucketName: 'Extra',
+          group: 'FLEXIBLE',
+          purpose: 'SPENDING',
+          type: 'REMAINDER',
+          priority: 1,
+          categoryNames: ['Shopping'],
+        },
+      ],
+      transactions: [
+        transaction({ category: 'Income', amount: 3_000 }),
+        transaction({ category: 'Entertainment', amount: -150 }),
+      ],
+    })
+
+    expect(plan).toEqual(expect.objectContaining({
+      unassignedSpendMinor: 15_000,
+      flexibleAvailableMinor: 285_000,
+    }))
+    expect(plan.buckets.find((bucket) => bucket.id === 'extra')).toEqual(expect.objectContaining({
+      clearedSpendMinor: 15_000,
+      availableMinor: 185_000,
+    }))
+  })
+
+  it('deducts unmapped purchases from everyday money when no Extra envelope exists', () => {
+    const plan = projectIncomeEnvelopePlan({
+      currency: 'EUR',
+      rules: [{
+        id: 'food',
+        bucketId: 'food',
+        bucketName: 'Food',
+        group: 'FLEXIBLE',
+        purpose: 'SPENDING',
+        type: 'FIXED',
+        fixedMinor: 100_000,
+        priority: 0,
+        categoryNames: ['Groceries'],
+      }],
+      transactions: [
+        transaction({ category: 'Income', amount: 1_000 }),
+        transaction({ category: 'Entertainment', amount: -200 }),
+      ],
+    })
+
+    expect(plan).toEqual(expect.objectContaining({
+      unassignedSpendMinor: 20_000,
+      flexibleAvailableMinor: 80_000,
     }))
   })
 

@@ -65,6 +65,7 @@ export type FinanceAccountType = (typeof FinanceAccountType)[keyof typeof Financ
 export const FinanceConnectionProvider = {
   DEMO: 'DEMO',
   SIMPLEFIN: 'SIMPLEFIN',
+  SYNCI: 'SYNCI',
   GOCARDLESS: 'GOCARDLESS',
   ENABLE_BANKING: 'ENABLE_BANKING',
   OPEN_BANKING_IO: 'OPEN_BANKING_IO',

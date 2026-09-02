@@ -27,7 +27,7 @@ export const sharedPromptLibraryPost: BlogPost = {
   body: `
 ## Why shared prompts matter more than tools
 
-Teams often skip building a prompt library because it sounds like tooling overhead. The real cost is already there — it\'s just invisible.
+Teams often skip building a prompt library because it sounds like tooling overhead. The real cost is already there, it\'s just invisible.
 
 Your marketing team writes a prompt for customer tone. Your support team writes the same thing again. Three weeks later, your product team writes a slightly different version for onboarding emails. Each produces slightly different output. Customers notice the tone shift.
 
@@ -37,15 +37,15 @@ A shared prompt library is not about which tool you use. It\'s about stopping th
 
 Think of a shared prompt library like a monorepo for AI workflows. Each entry includes:
 
-**The prompt text** — the actual instructions (usually 50–200 words, sometimes longer for complex tasks).
+**The prompt text**, the actual instructions (usually 50–200 words, sometimes longer for complex tasks).
 
-**Metadata** — who wrote it, when, what model it targets (Claude 3.5, GPT-4, etc.), and which version is live. Git handles versioning; the library tracks which commit is in production.
+**Metadata**, who wrote it, when, what model it targets (Claude 3.5, GPT-4, etc.), and which version is live. Git handles versioning; the library tracks which commit is in production.
 
-**Cluster tags** — use case labels like "support", "marketing-copy", "code-review", "data-synthesis". Tag each prompt so teammates can browse by workflow instead of scrolling a flat list.
+**Cluster tags**, use case labels like "support", "marketing-copy", "code-review", "data-synthesis". Tag each prompt so teammates can browse by workflow instead of scrolling a flat list.
 
-**Owner and approval state** — who can edit it, who approved the current version, which team owns maintenance. This prevents orphaned prompts when people leave.
+**Owner and approval state**, who can edit it, who approved the current version, which team owns maintenance. This prevents orphaned prompts when people leave.
 
-**Performance notes** — not required, but invaluable: "This works best on Claude 3.5 for summaries over 5k tokens; GPT-4 for structured JSON." Document the tradeoffs you learned so the next person does not re-learn them.
+**Performance notes**, not required, but invaluable: "This works best on Claude 3.5 for summaries over 5k tokens; GPT-4 for structured JSON." Document the tradeoffs you learned so the next person does not re-learn them.
 
 That is it. A spreadsheet, a git folder with markdown files, or a lightweight app like Prompt Wallet or TeamPrompt can store this. Start with git.
 
@@ -103,15 +103,15 @@ GitHub Actions can lint:
 - Version bumped if text changed
 - Cluster folder exists in REGISTRY.md
 
-For teams using Claude Code or Cursor, add a \`.agents/skills/\` directory that documents how to load prompts from the registry into your workflow — so the agent can link to live versions.
+For teams using Claude Code or Cursor, add a \`.agents/skills/\` directory that documents how to load prompts from the registry into your workflow, so the agent can link to live versions.
 
 ## Scaling to 100+ prompts
 
 Once you cross 50 prompts, flat files get unwieldy. Move to a lightweight app or a small registry service:
 
-**Option 1: Spreadsheet (Google Sheets)** — add columns for cluster, owner, approval status, model tags, live version link. Sync to git weekly. Good for teams under 50 prompts who want zero setup.
+**Option 1: Spreadsheet (Google Sheets)**, add columns for cluster, owner, approval status, model tags, live version link. Sync to git weekly. Good for teams under 50 prompts who want zero setup.
 
-**Option 2: Simple registry in code** — a TypeScript or Python index file that imports all prompts and exposes them as objects:
+**Option 2: Simple registry in code**, a TypeScript or Python index file that imports all prompts and exposes them as objects:
 
 \`\`\`typescript
 export const prompts = {
@@ -132,7 +132,7 @@ export const prompts = {
 
 This is what Onie does. Import it in your CLI or web app, search it, version it with git. Beats spreadsheets for teams that ship code.
 
-**Option 3: Dedicated prompt tool** — Prompt Wallet, TeamPrompt, or SpacePrompts handle search, versioning, one-click insertion into ChatGPT or Claude. These add UI overhead but save time for teams that do not write code. Pick one if your team uses Claude Web or ChatGPT more than the API.
+**Option 3: Dedicated prompt tool**, Prompt Wallet, TeamPrompt, or SpacePrompts handle search, versioning, one-click insertion into ChatGPT or Claude. These add UI overhead but save time for teams that do not write code. Pick one if your team uses Claude Web or ChatGPT more than the API.
 
 ## Governance patterns that work
 
@@ -154,7 +154,7 @@ If you are building a shared prompt library and want to share your governance pa
 - Sample prompts in each cluster
 - Deployment strategy (which versions go to prod)
 
-Other teams can fork your setup, adapt the folder names and cluster labels, and start immediately. This is why Onie collects practitioner workflows — shared prompt governance is too useful to invent solo.
+Other teams can fork your setup, adapt the folder names and cluster labels, and start immediately. This is why Onie collects practitioner workflows, shared prompt governance is too useful to invent solo.
 
 ## Common mistakes and fixes
 
@@ -189,7 +189,7 @@ Once you have a shared library, the next frontier is tracking which prompts run 
 
 This is how Onie approaches prompt observability: the library is the starting point. Tracking performance is the output.
 
-Start with a shared git folder. Commit with discipline. Add approval gates when you hit 20 people. Scale to dedicated tooling when you hit 100+ prompts across 3+ teams. The framework stays the same — only the implementation grows.
+Start with a shared git folder. Commit with discipline. Add approval gates when you hit 20 people. Scale to dedicated tooling when you hit 100+ prompts across 3+ teams. The framework stays the same, only the implementation grows.
 `.trim(),
   faqs: [
     {

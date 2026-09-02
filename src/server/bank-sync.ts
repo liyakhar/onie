@@ -14,7 +14,7 @@ import {
 import { loadEnableBankingData } from '#/server/enable-banking-sync'
 import { getFinanceHouseholdForUser } from '#/server/household-access.server'
 
-export type BankSyncProviderId = 'demo' | 'simplefin' | 'enable-banking' | 'plaid'
+export type BankSyncProviderId = 'demo' | 'simplefin' | 'synci' | 'enable-banking' | 'plaid'
 
 const SIMPLEFIN_REQUEST_TIMEOUT_MS = 15_000
 const MAX_SIMPLEFIN_TOKEN_LENGTH = 8_192
@@ -25,7 +25,6 @@ export type NormalizedBankConnection = {
   accounts: FinancialAccount[]
   transactions: FinanceTransaction[]
 }
-
 type SimpleFinResponse = {
   errlist?: SimpleFinError[]
   accounts?: SimpleFinAccount[]
@@ -875,9 +874,11 @@ const loadPersistedHouseholdSnapshot = createServerOnlyFn(async (
       recurring: transaction.recurring,
     })))
     .sort((left, right) => new Date(right.date).getTime() - new Date(left.date).getTime())
-  const provider: BankSyncProviderId = connections.some((connection) => connection.provider === 'ENABLE_BANKING')
-    ? 'enable-banking'
-    : 'simplefin'
+  const provider: BankSyncProviderId = connections.some((connection) => connection.provider === 'SYNCI')
+    ? 'synci'
+    : connections.some((connection) => connection.provider === 'ENABLE_BANKING')
+      ? 'enable-banking'
+      : 'simplefin'
   return {
     provider,
     status: {

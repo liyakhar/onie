@@ -4,6 +4,7 @@ const mocks = vi.hoisted(() => ({
   billing: vi.fn(),
   partnerCount: vi.fn(),
   revoke: vi.fn(),
+  revokeSynci: vi.fn(),
   transaction: vi.fn(),
 }))
 
@@ -34,6 +35,10 @@ vi.mock('#/server/enable-banking-sync', () => ({
   revokeEnableBankingBeforeUserDeletion: mocks.revoke,
 }))
 
+vi.mock('#/server/synci-sync', () => ({
+  revokeSynciBeforeUserDeletion: mocks.revokeSynci,
+}))
+
 import { assertHouseholdDeletionAllowed, prepareUserDeletion } from './user-deletion.server'
 
 describe('account deletion safety', () => {
@@ -41,6 +46,7 @@ describe('account deletion safety', () => {
     mocks.billing.mockReset().mockResolvedValue(null)
     mocks.partnerCount.mockReset().mockResolvedValue(0)
     mocks.revoke.mockReset().mockResolvedValue(undefined)
+    mocks.revokeSynci.mockReset().mockResolvedValue(undefined)
     mocks.transaction.mockReset().mockImplementation(async (callback) => callback(tx))
   })
 
@@ -57,6 +63,7 @@ describe('account deletion safety', () => {
 
     await expect(prepareUserDeletion('user_1')).rejects.toThrow('Cancel subscription renewal')
     expect(mocks.revoke).not.toHaveBeenCalled()
+    expect(mocks.revokeSynci).not.toHaveBeenCalled()
     expect(mocks.transaction).not.toHaveBeenCalled()
   })
 
@@ -65,6 +72,7 @@ describe('account deletion safety', () => {
 
     await expect(prepareUserDeletion('user_1')).resolves.toBeUndefined()
     expect(mocks.revoke).toHaveBeenCalledWith('user_1')
+    expect(mocks.revokeSynci).toHaveBeenCalledWith('user_1')
     expect(mocks.transaction).toHaveBeenCalledOnce()
     expect(tx.bankConnection.findMany).toHaveBeenCalledWith(expect.objectContaining({
       where: { userId: 'user_1' },

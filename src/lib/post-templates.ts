@@ -31,7 +31,7 @@ Your prompt here…
 
 ## Variables
 
-- \`{topic}\` — what to fill in
+- \`{topic}\`, what to fill in
 
 ## Example output
 

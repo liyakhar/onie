@@ -1,6 +1,6 @@
 import { DEMO_ACCOUNT_IDS } from '#/lib/demo-accounts'
 
-/** IDs from `prisma/seed.ts` — demo workflows and builders for cold-start / staging. */
+/** IDs from `prisma/seed.ts`, demo workflows and builders for cold-start / staging. */
 export const EXAMPLE_POST_IDS = new Set([
   'post-liya-ui-audit',
   'post-liya-research-skill',

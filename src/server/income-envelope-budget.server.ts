@@ -97,6 +97,7 @@ export function projectIncomeEnvelopePlan(options: {
   const currency = normalizeCurrency(options.currency)
   const categoryToBucket = new Map<string, string>()
   const categoryNamesByBucket = new Map<string, string[]>()
+  const extraRule = options.rules.find((rule) => rule.type === 'REMAINDER' && rule.purpose === 'SPENDING')
   for (const rule of options.rules) {
     const categoryNames = [...new Set(rule.categoryNames)]
     categoryNamesByBucket.set(rule.bucketId, categoryNames)
@@ -135,11 +136,12 @@ export function projectIncomeEnvelopePlan(options: {
       continue
     }
 
-    const bucketId = categoryToBucket.get(normalizeCategoryName(transaction.category))
-    if (!bucketId) {
+    const mappedBucketId = categoryToBucket.get(normalizeCategoryName(transaction.category))
+    if (!mappedBucketId) {
       unassignedSpendMinor += spendMinor
-      continue
     }
+    const bucketId = mappedBucketId ?? extraRule?.bucketId
+    if (!bucketId) continue
 
     const spending = spendingByBucket[bucketId] ?? { clearedMinor: 0, pendingMinor: 0 }
     if (transaction.status === 'pending') spending.pendingMinor += spendMinor
@@ -185,7 +187,10 @@ export function projectIncomeEnvelopePlan(options: {
     excludedSpendMinor,
     clearedSpendMinor: projection.clearedSpendMinor,
     pendingSpendMinor: projection.pendingSpendMinor,
-    flexibleAvailableMinor: projection.flexibleAvailableMinor,
+    // Purchases without a category mapping still reduce the amount safe for everyday
+    // spending. When the plan has an Extra envelope, they are recorded there; plans
+    // without one still receive the same truthful total.
+    flexibleAvailableMinor: projection.flexibleAvailableMinor - (extraRule?.group === 'FLEXIBLE' ? 0 : unassignedSpendMinor),
     reservedInPlanMinor: projection.reservedInPlanMinor,
     contributedMinor: projection.contributedMinor,
     pendingContributionMinor: projection.pendingContributionMinor,

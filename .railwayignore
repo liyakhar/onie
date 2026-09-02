@@ -5,3 +5,16 @@ node_modules
 .output
 outputs
 todos
+docs
+tmp
+output
+redirect-onie-temp
+redirect-railway-temp
+.agents
+.hallmark
+.lighthouse
+.tanstack
+outreach
+references
+design.md
+keywords.csv

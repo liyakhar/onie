@@ -40,6 +40,10 @@ const optionalEnv = [
   'RESEND_API_KEY',
   'ENABLE_LIVE_BANK_SYNC',
   'BANK_SYNC_ENCRYPTION_KEY',
+  'SYNCI_PUBLIC_ACCESS_ENABLED',
+  'SYNCI_MANAGED_CLIENT_ID',
+  'SYNCI_MANAGED_CLIENT_SECRET',
+  'SYNCI_PORTAL_RETURN_URL',
   'SIMPLEFIN_ACCESS_URL',
   'ENABLE_BANKING_APPLICATION_ID',
   'ENABLE_BANKING_PRIVATE_KEY',
@@ -100,6 +104,10 @@ const hasGoogleClientId = Boolean(value('GOOGLE_CLIENT_ID'))
 const hasGoogleClientSecret = Boolean(value('GOOGLE_CLIENT_SECRET'))
 const liveBankSyncEnabled = value('ENABLE_LIVE_BANK_SYNC') === 'true'
 const bankSyncEncryptionKey = value('BANK_SYNC_ENCRYPTION_KEY')
+const synciPublicAccessEnabled = value('SYNCI_PUBLIC_ACCESS_ENABLED') === 'true'
+const synciClientId = value('SYNCI_MANAGED_CLIENT_ID')
+const synciClientSecret = value('SYNCI_MANAGED_CLIENT_SECRET')
+const synciPortalReturnUrl = value('SYNCI_PORTAL_RETURN_URL')
 const hasSimpleFinAccessUrl = Boolean(value('SIMPLEFIN_ACCESS_URL'))
 const enableBankingApplicationId = value('ENABLE_BANKING_APPLICATION_ID')
 const enableBankingPrivateKey = value('ENABLE_BANKING_PRIVATE_KEY')
@@ -149,22 +157,33 @@ if (value('ENABLE_LIVE_BANK_SYNC') && !['true', 'false'].includes(value('ENABLE_
   failures.push('ENABLE_LIVE_BANK_SYNC must be either true or false')
 }
 
-if (liveBankSyncEnabled && !bankSyncEncryptionKey) {
-  failures.push('ENABLE_LIVE_BANK_SYNC=true requires BANK_SYNC_ENCRYPTION_KEY')
+if (value('SYNCI_PUBLIC_ACCESS_ENABLED') && !['true', 'false'].includes(value('SYNCI_PUBLIC_ACCESS_ENABLED'))) {
+  failures.push('SYNCI_PUBLIC_ACCESS_ENABLED must be either true or false')
 }
 
-if (liveBankSyncEnabled && (!enableBankingApplicationId || !enableBankingPrivateKey || !enableBankingRedirectUrl)) {
-  failures.push('ENABLE_LIVE_BANK_SYNC=true requires the Enable Banking application ID, private key, and redirect URL')
+if (liveBankSyncEnabled && !bankSyncEncryptionKey) {
+  failures.push('ENABLE_LIVE_BANK_SYNC=true requires BANK_SYNC_ENCRYPTION_KEY')
 }
 
 if (!liveBankSyncEnabled) {
   failures.push('ENABLE_LIVE_BANK_SYNC must be true while paid pricing promises bank connections')
 }
-if (liveBankSyncEnabled && value('ENABLE_BANKING_ENVIRONMENT') !== 'production') {
-  failures.push('ENABLE_BANKING_ENVIRONMENT must be production for paid users')
-}
-if (liveBankSyncEnabled && value('ENABLE_BANKING_PUBLIC_ACCESS_APPROVED') !== 'true') {
-  failures.push('ENABLE_BANKING_PUBLIC_ACCESS_APPROVED must be true after contract, KYB, and unrestricted activation')
+
+if (liveBankSyncEnabled && synciPublicAccessEnabled) {
+  if (!synciClientId || !synciClientSecret || !synciPortalReturnUrl) {
+    failures.push('Public Synci bank sync requires the managed client ID, secret, and portal return URL')
+  }
+  if (synciPortalReturnUrl) assertHttpsUrl('SYNCI_PORTAL_RETURN_URL')
+} else if (liveBankSyncEnabled) {
+  if (!enableBankingApplicationId || !enableBankingPrivateKey || !enableBankingRedirectUrl) {
+    failures.push('Live bank sync requires either Synci Managed Apps or a complete Enable Banking configuration')
+  }
+  if (value('ENABLE_BANKING_ENVIRONMENT') !== 'production') {
+    failures.push('ENABLE_BANKING_ENVIRONMENT must be production for paid users')
+  }
+  if (value('ENABLE_BANKING_PUBLIC_ACCESS_APPROVED') !== 'true') {
+    failures.push('Enable Banking public access requires contract, KYB, and unrestricted activation')
+  }
 }
 
 if (enableBankingRedirectUrl) {

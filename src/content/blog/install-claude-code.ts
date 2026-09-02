@@ -79,8 +79,8 @@ brew install --cask claude-code
 \`\`\`
 
 Two casks are available:
-- \`claude-code\` — tracks the stable release (about a week behind latest, skips regressions)
-- \`claude-code@latest\` — tracks the latest channel
+- \`claude-code\`, tracks the stable release (about a week behind latest, skips regressions)
+- \`claude-code@latest\`, tracks the latest channel
 
 **Important:** Homebrew installations do not auto-update. To get new versions, run:
 
@@ -173,7 +173,7 @@ Then close and reopen your terminal.
 
 **On Windows PowerShell:**
 
-PATH is usually set by the installer, but if the \`claude\` command is not found, use WinGet or Homebrew instead — they handle PATH automatically.
+PATH is usually set by the installer, but if the \`claude\` command is not found, use WinGet or Homebrew instead, they handle PATH automatically.
 
 ### Verify the fix
 
@@ -229,7 +229,7 @@ Then re-run the installer.
 
 ### Desktop app alternative
 
-If terminal setup feels daunting, Claude Code also ships as a desktop application. Download it for macOS or Windows, then open it directly — no terminal required. On Linux, use \`sudo apt install claude-code\` to install the app alongside the CLI.
+If terminal setup feels daunting, Claude Code also ships as a desktop application. Download it for macOS or Windows, then open it directly, no terminal required. On Linux, use \`sudo apt install claude-code\` to install the app alongside the CLI.
 
 ## Next steps
 

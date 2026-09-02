@@ -4,7 +4,7 @@ export const documentWorkflowsPost: BlogPost = {
   slug: 'document-ai-agent-workflows',
   title: 'How to document AI agent workflows others can reuse',
   description:
-    'A practical template for documenting agent workflows — prompts, skills, tools, inputs, outputs, and failure modes — so teammates can fork and ship faster.',
+    'A practical template for documenting agent workflows, prompts, skills, tools, inputs, outputs, and failure modes, so teammates can fork and ship faster.',
   publishedAt: '2026-06-10',
   updatedAt: '2026-06-16',
   readingMinutes: 10,
@@ -22,14 +22,14 @@ export const documentWorkflowsPost: BlogPost = {
     bio: 'Ships product loops with Cursor and Claude Code. Documents every harness before it becomes tribal knowledge.',
   },
   tldr:
-    'Document agent workflows like small services: purpose, inputs, tool boundaries, numbered steps, verification, and known failure modes. Keep instructions self-contained, version the harness, and publish the whole setup — not just the prompt paragraph.',
+    'Document agent workflows like small services: purpose, inputs, tool boundaries, numbered steps, verification, and known failure modes. Keep instructions self-contained, version the harness, and publish the whole setup, not just the prompt paragraph.',
   relatedSlugs: ['how-to-write-claude-code-skills', 'claude-code-workflow-examples', 'shared-prompt-library-for-teams'],
   body: `
 ## Why most agent docs fail
 
 Most teams share a prompt snippet in Slack. Two weeks later nobody remembers which model it was tuned for, which files to attach, or what "done" looked like. The model changed, the repo moved, and the workflow died in a pinned message.
 
-**How to document AI agent workflows** properly means capturing the harness — prompts, skills, tools, context files, and verification — in one place a stranger could run on Monday morning.
+**How to document AI agent workflows** properly means capturing the harness, prompts, skills, tools, context files, and verification, in one place a stranger could run on Monday morning.
 
 ## The minimum viable workflow doc
 
@@ -49,7 +49,7 @@ List every input with format expectations:
 - Environment (API keys, MCP servers, database access)
 - Human decisions required before start
 
-If an input is missing, the doc should say **stop** — not guess.
+If an input is missing, the doc should say **stop**, not guess.
 
 ### 3. Tool and agent boundaries
 
@@ -62,15 +62,15 @@ Draw a simple boundary table:
 | Scripts | Deterministic transforms (parse CSV, lint output) |
 | Skills | Loaded for specialized sub-tasks |
 
-AWS's agentic AI guidance calls this **decoupling logic from authoring** — the workflow spec should survive a runtime swap. See [Agentic AI Lens — document agents as production software](https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsus03-bp03.html).
+AWS's agentic AI guidance calls this **decoupling logic from authoring**, the workflow spec should survive a runtime swap. See [Agentic AI Lens, document agents as production software](https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsus03-bp03.html).
 
 ### 4. Numbered steps with verification
 
 Each step needs:
 
-1. **Action** — imperative, one verb per step where possible.
-2. **Output** — file name, section heading, or schema.
-3. **Check** — how a human or script confirms success before the next step.
+1. **Action**, imperative, one verb per step where possible.
+2. **Output**, file name, section heading, or schema.
+3. **Check**, how a human or script confirms success before the next step.
 
 Bad: "Analyze the data."
 Good: "Cluster quotes by theme into \`themes.md\`. Check: at least 5 themes, each with 3+ quotes and a one-line insight."
@@ -115,14 +115,14 @@ Document what usually breaks:
 - [Symptom] → [Fix]
 
 ## Version
-- v1.0 — [date] — [what changed]
+- v1.0, [date], [what changed]
 \`\`\`
 
-Keep the logic in this doc or in a linked SKILL.md — not split across three Notion pages and a verbal tradition.
+Keep the logic in this doc or in a linked SKILL.md, not split across three Notion pages and a verbal tradition.
 
 ## Observability: design vs runtime
 
-Production agent systems compare **runtime traces** to design specs to catch drift. You do not need a full observability stack on day one — but you do need:
+Production agent systems compare **runtime traces** to design specs to catch drift. You do not need a full observability stack on day one, but you do need:
 
 - A changelog on the workflow doc when prompts or tools change.
 - A note on which model version you last validated against.
@@ -142,7 +142,7 @@ Keep internal when credentials, customer data, or unreleased strategy are embedd
 
 ## Internal links worth adding
 
-Cross-link related workflows in your doc body — "After synthesis, run the [design QA checklist](/app/explore)" — so readers stay in a graph of setups, not isolated prompts.
+Cross-link related workflows in your doc body, "After synthesis, run the [design QA checklist](/app/explore)", so readers stay in a graph of setups, not isolated prompts.
 
 On Onie, fork someone else's workflow and note what you changed. Forks are documentation of adaptation.
 
@@ -160,11 +160,11 @@ If a step repeats inside many workflows, extract it to a [Claude Code skill](/bl
 
 You do not need a custom platform to document agent workflows. You need a consistent template, a habit of versioning, and a place teammates actually look.
 
-Onie is that place for practitioners who want public, field-tagged workflows — but the template above works in any repo README or internal wiki until you are ready to publish.
+Onie is that place for practitioners who want public, field-tagged workflows, but the template above works in any repo README or internal wiki until you are ready to publish.
 
 ## Start with one workflow you run weekly
 
-Pick the loop you already run every Monday. Document it with the skeleton above. Run it once from the doc alone — if you had to explain verbally, the doc is not done yet.
+Pick the loop you already run every Monday. Document it with the skeleton above. Run it once from the doc alone, if you had to explain verbally, the doc is not done yet.
 
 Then publish it, tag your discipline and stack, and let the next person fork instead of reinventing.
 `.trim(),
@@ -187,12 +187,12 @@ Then publish it, tag your discipline and stack, and let the next person fork ins
     {
       question: 'How do I version agent workflows?',
       answer:
-        'Add a version section with date and changelog. Note the model or tool versions you validated against. When prompts change, bump the version and record what broke or improved — same discipline as API changelogs.',
+        'Add a version section with date and changelog. Note the model or tool versions you validated against. When prompts change, bump the version and record what broke or improved, same discipline as API changelogs.',
     },
     {
       question: 'What is workflow drift in agent systems?',
       answer:
-        'Drift happens when runtime behavior diverges from the documented design — new tools added informally, prompts edited in chat but not in the repo, or model updates changing output shape. Comparing traces to your spec catches drift early.',
+        'Drift happens when runtime behavior diverges from the documented design, new tools added informally, prompts edited in chat but not in the repo, or model updates changing output shape. Comparing traces to your spec catches drift early.',
     },
     {
       question: 'Where should teams publish reusable agent workflows?',

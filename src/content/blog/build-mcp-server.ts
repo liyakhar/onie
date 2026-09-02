@@ -32,10 +32,10 @@ You build an MCP server when you need to connect Claude, Cursor, or Claude Code 
 The payoff is high: write the server once, and every MCP-compatible AI host your team uses gets that capability automatically. No additional integration work. The other reason to build your own: control. Your server runs in your infrastructure, uses your credentials, and does exactly what you specify. You are not sending data to a third party's system or waiting for someone else's release schedule.
 
 Common use cases:
-- Internal APIs — HR systems, billing data, CRMs, internal knowledge bases
-- Local tooling — shell commands, file watchers, build system integration
-- Air-gapped environments — data that must not leave your network
-- Custom logic — domain-specific calculations no generic server covers
+- Internal APIs, HR systems, billing data, CRMs, internal knowledge bases
+- Local tooling, shell commands, file watchers, build system integration
+- Air-gapped environments, data that must not leave your network
+- Custom logic, domain-specific calculations no generic server covers
 
 ## How MCP works end to end
 
@@ -159,7 +159,7 @@ npm run build
 
 ## Test with MCP Inspector
 
-Before connecting to Claude Desktop, test your server with the MCP Inspector — a browser-based tool that connects to your server, lists tools, and lets you invoke them without any Claude configuration.
+Before connecting to Claude Desktop, test your server with the MCP Inspector, a browser-based tool that connects to your server, lists tools, and lets you invoke them without any Claude configuration.
 
 \`\`\`bash
 npx @modelcontextprotocol/inspector node dist/index.js
@@ -267,7 +267,7 @@ FastMCP reads your function's type hints to build the JSON Schema automatically.
 
 ## Adding resources (read-only data)
 
-Resources are read-only data the host loads as context — like attached files. Register one in TypeScript:
+Resources are read-only data the host loads as context, like attached files. Register one in TypeScript:
 
 \`\`\`typescript
 server.resource(
@@ -311,16 +311,16 @@ await server.connect(transport);
 console.error("Server running on http://0.0.0.0:3000");
 \`\`\`
 
-Add bearer-token authentication on any Streamable HTTP server — an open HTTP endpoint is an unauthenticated remote execution risk.
+Add bearer-token authentication on any Streamable HTTP server, an open HTTP endpoint is an unauthenticated remote execution risk.
 
 ## Next steps
 
 You now have a working MCP server. Next:
 
-1. Add more tools — each following the same registerTool pattern.
-2. Add resources — read-only data the model uses as context.
-3. Test with real workflows — try it in Claude Desktop with multi-step tasks that use your tools repeatedly.
-4. Share your server — publish to npm so others can install it with npx.
+1. Add more tools, each following the same registerTool pattern.
+2. Add resources, read-only data the model uses as context.
+3. Test with real workflows, try it in Claude Desktop with multi-step tasks that use your tools repeatedly.
+4. Share your server, publish to npm so others can install it with npx.
 
 Build in public. The setups that survive real work are worth shipping. Explore workflows for inspiration, then share yours on Onie.
 `.trim(),
@@ -328,7 +328,7 @@ Build in public. The setups that survive real work are worth shipping. Explore w
     {
       question: 'Which language should I use, Python or TypeScript?',
       answer:
-        'Both are fully supported and work identically from the host\'s perspective. Python with FastMCP is fastest to prototype — a decorator and docstring are all you need. TypeScript is a natural fit if your team already works in Node.js or you want strict compile-time types. Choose based on your team\'s existing stack.',
+        'Both are fully supported and work identically from the host\'s perspective. Python with FastMCP is fastest to prototype, a decorator and docstring are all you need. TypeScript is a natural fit if your team already works in Node.js or you want strict compile-time types. Choose based on your team\'s existing stack.',
     },
     {
       question: 'Do I need to write JSON Schema manually?',
@@ -338,12 +338,12 @@ Build in public. The setups that survive real work are worth shipping. Explore w
     {
       question: 'My server works in MCP Inspector but not in Claude Desktop. What should I check?',
       answer:
-        'First verify the path in your config is absolute. Second, confirm the command and args exactly match what you ran in Inspector. Third, completely quit and relaunch Claude Desktop after every config change — a restart is required. Finally, check stderr output for startup errors.',
+        'First verify the path in your config is absolute. Second, confirm the command and args exactly match what you ran in Inspector. Third, completely quit and relaunch Claude Desktop after every config change, a restart is required. Finally, check stderr output for startup errors.',
     },
     {
       question: 'Can I run multiple tools in one server?',
       answer:
-        'Yes. You can register as many tools, resources, and prompts as you like in a single server instance. In practice, keep a server focused on one domain — one for your CRM, another for your file system — so the tool list stays short and the model chooses accurately.',
+        'Yes. You can register as many tools, resources, and prompts as you like in a single server instance. In practice, keep a server focused on one domain, one for your CRM, another for your file system, so the tool list stays short and the model chooses accurately.',
     },
     {
       question: 'What happens if my tool raises an exception?',
@@ -353,7 +353,7 @@ Build in public. The setups that survive real work are worth shipping. Explore w
     {
       question: 'Can I connect my MCP server to clients other than Claude Desktop?',
       answer:
-        'Yes. MCP is an open standard supported by Claude Desktop, Claude Code, Cursor, Windsurf, VS Code Copilot, and many others. A server you write today connects to any of them without changes — just add it to each host\'s config file.',
+        'Yes. MCP is an open standard supported by Claude Desktop, Claude Code, Cursor, Windsurf, VS Code Copilot, and many others. A server you write today connects to any of them without changes, just add it to each host\'s config file.',
     },
   ],
 }

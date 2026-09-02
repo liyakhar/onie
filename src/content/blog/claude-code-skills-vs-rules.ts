@@ -30,19 +30,19 @@ export const claudeCodeSkillsVsRulesPost: BlogPost = {
   body: `
 ## The short answer
 
-**Claude Code rules** (\`CLAUDE.md\` and files under \`.claude/rules/\`) load automatically into context at every session start — full content, costing tokens on every turn. They apply to every action, including tasks that have nothing to do with their topic.
+**Claude Code rules** (\`CLAUDE.md\` and files under \`.claude/rules/\`) load automatically into context at every session start, full content, costing tokens on every turn. They apply to every action, including tasks that have nothing to do with their topic.
 
-**Claude Code skills** (folders under \`.claude/skills/\`) load on demand: at session start, only the name and description sit in context (a few tokens). The full body loads only when you invoke the skill — either by typing a slash command (\`/deploy\`) or when Claude detects the description matches what you are doing.
+**Claude Code skills** (folders under \`.claude/skills/\`) load on demand: at session start, only the name and description sit in context (a few tokens). The full body loads only when you invoke the skill, either by typing a slash command (\`/deploy\`) or when Claude detects the description matches what you are doing.
 
 The decision rule is simple: **what must always apply becomes a rule; what runs on command becomes a skill.**
 
 ## Why the difference matters
 
-Every token in context competes for the model's attention. A rule that loads into every session — even sessions that have nothing to do with it — costs you:
+Every token in context competes for the model's attention. A rule that loads into every session, even sessions that have nothing to do with it, costs you:
 
-1. **Context window space** — fewer tokens left for the actual task
-2. **Model attention** — a fuller context means weaker adherence to each instruction
-3. **Relevance** — instructions about database migrations distract when you are writing frontend code
+1. **Context window space**, fewer tokens left for the actual task
+2. **Model attention**, a fuller context means weaker adherence to each instruction
+3. **Relevance**, instructions about database migrations distract when you are writing frontend code
 
 Skills solve this by paying the token cost only when relevant. The trade-off: the agent can only use a skill if it has loaded.
 
@@ -56,17 +56,17 @@ Rules can operate in three modes:
 | Path-scoped (globs) | Only when touching matching files | Language- or folder-specific conventions |
 | Snapshot at session start | Full content cached, not re-read | Facts that change mid-session may be stale |
 
-The key mechanics: rules are a **snapshot from session start**. If you edit a rule file during a session, the running session still uses the old version. Start a new session to pick up the change — this is by design, not a bug.
+The key mechanics: rules are a **snapshot from session start**. If you edit a rule file during a session, the running session still uses the old version. Start a new session to pick up the change, this is by design, not a bug.
 
 ### Path scoping with globs
 
-A rule with \`paths: ["db/**"]\` in its frontmatter loads only when Claude touches a file matching that pattern — anything under the \`db/\` directory, however deep. This is the middle ground: you get the enforcement without the session-wide context cost.
+A rule with \`paths: ["db/**"]\` in its frontmatter loads only when Claude touches a file matching that pattern, anything under the \`db/\` directory, however deep. This is the middle ground: you get the enforcement without the session-wide context cost.
 
 Common patterns:
 
-- \`paths: ["src/api/**"]\` — API-specific rules
-- \`paths: ["*.sql"]\` — All SQL files
-- \`paths: ["{lib,utils}/**"]\` — Multiple directories
+- \`paths: ["src/api/**"]\`, API-specific rules
+- \`paths: ["*.sql"]\`, All SQL files
+- \`paths: ["{lib,utils}/**"]\`, Multiple directories
 
 ## How skills load
 
@@ -95,11 +95,11 @@ description: >
 1. Run tests...
 \`\`\`
 
-At session start, only the \`name\` and \`description\` sit in context — negligible token cost. The agent reads the description to decide relevance. If the description matches what you are doing, the full body loads into context. If not, the skill stays on disk.
+At session start, only the \`name\` and \`description\` sit in context, negligible token cost. The agent reads the description to decide relevance. If the description matches what you are doing, the full body loads into context. If not, the skill stays on disk.
 
 ### The description is the trigger
 
-The description is not just documentation — it is how Claude decides whether to load the skill. A sharp description gets matched reliably; a vague one does not.
+The description is not just documentation, it is how Claude decides whether to load the skill. A sharp description gets matched reliably; a vague one does not.
 
 **Weak descriptions:**
 - "Helps with deployment"
@@ -168,11 +168,11 @@ Document the split in your README or a separate agent workflow doc so new contri
 
 | Artifact | Load time | Token cost | Why |
 | --- | --- | --- | --- |
-| \`CLAUDE.md\` | Session start | High — every session | Always in context |
-| Rule without globs | Session start | High — every session | Always in context |
-| Rule with \`paths: ["db/**"]\` | When matching file touched | Low — only on match | Conditional trigger |
-| Skill (default) | Session start + invocation | Low — few tokens until invoked | Only name + description at start |
-| Skill, invoked | On \`/name\` or auto-match | Medium — full body loads | Body subject to shared budget |
+| \`CLAUDE.md\` | Session start | High, every session | Always in context |
+| Rule without globs | Session start | High, every session | Always in context |
+| Rule with \`paths: ["db/**"]\` | When matching file touched | Low, only on match | Conditional trigger |
+| Skill (default) | Session start + invocation | Low, few tokens until invoked | Only name + description at start |
+| Skill, invoked | On \`/name\` or auto-match | Medium, full body loads | Body subject to shared budget |
 
 The insight: if a 50-line rule is only relevant 10% of the time, move the procedural part to a skill and leave a one-liner rule that points to it.
 
@@ -201,11 +201,11 @@ The strong version:
 
 ## Common mistakes
 
-**Putting a 40-line checklist in a rule.** Checklists are procedures — move them to a skill and reference it from a one-liner rule.
+**Putting a 40-line checklist in a rule.** Checklists are procedures, move them to a skill and reference it from a one-liner rule.
 
 **Vague skill descriptions.** "Helps with testing" will not load reliably. Use "Runs unit and integration tests. Use when the user says run tests, check coverage, or CI failed."
 
-**Duplicating text in rules and skills.** Pick one source of truth. If a rule mentions a convention, do not repeat it in the skill — reference the rule instead.
+**Duplicating text in rules and skills.** Pick one source of truth. If a rule mentions a convention, do not repeat it in the skill, reference the rule instead.
 
 **Mega-rules that never change.** If you wrote 100 lines once and have not touched it in months, it might belong in a skill with the trigger split into a tiny rule.
 
@@ -218,7 +218,7 @@ A rule's snapshot behavior means:
 - **Fact files change mid-session:** If a rule imports or loads a file with deployment targets, endpoints, or credentials, re-read it at execution time instead of relying on the context copy from session start.
 - **Skills re-read too:** Skills can include "Read \`.claude/rules/stack.md\`" to get fresh facts, even though rules loaded at the beginning of the session.
 
-This is why documentation often includes "read this file" instructions — not because the file does not load at all, but because a session-old copy might be stale.
+This is why documentation often includes "read this file" instructions, not because the file does not load at all, but because a session-old copy might be stale.
 
 ## When to use neither
 
@@ -230,29 +230,29 @@ Skip both for:
 
 These do not need to be in configuration. Use a prompt, run it once, and move on.
 
-Promote to a **skill** when you have run the same workflow three times and can describe "done" — procedures belong in skills.
+Promote to a **skill** when you have run the same workflow three times and can describe "done", procedures belong in skills.
 
-Promote to a **rule** when the whole team must follow a constraint on every change — policy belongs in rules.
+Promote to a **rule** when the whole team must follow a constraint on every change, policy belongs in rules.
 
 ## Onie: publish what your team agreed on
 
-The setups that survive contact with real work are worth sharing. After you settle rules-vs-skills boundaries and the split works, publish the \`.claude/\` folder structure on [Onie](/app/explore) so others can fork your layout — not just the theory.
+The setups that survive contact with real work are worth sharing. After you settle rules-vs-skills boundaries and the split works, publish the \`.claude/\` folder structure on [Onie](/app/explore) so others can fork your layout, not just the theory.
 `.trim(),
   faqs: [
     {
       question: 'What is the main difference between Claude Code rules and skills?',
       answer:
-        'Rules load automatically at session start and stay in context for every action. Skills load only when invoked — either by slash command or when Claude detects the description matches the current task. Use rules for always-on policy; use skills for on-demand procedures.',
+        'Rules load automatically at session start and stay in context for every action. Skills load only when invoked, either by slash command or when Claude detects the description matches the current task. Use rules for always-on policy; use skills for on-demand procedures.',
     },
     {
       question: 'When should I use rules instead of skills?',
       answer:
-        'Use rules when the instruction must apply even if the task seems unrelated — coding style, security constraints, framework conventions, naming standards. Use skills when the content is long, procedural, and only relevant for specific tasks.',
+        'Use rules when the instruction must apply even if the task seems unrelated, coding style, security constraints, framework conventions, naming standards. Use skills when the content is long, procedural, and only relevant for specific tasks.',
     },
     {
       question: 'Do skills cost tokens even if I never use them?',
       answer:
-        'Very little. At session start, only the name and description sit in context — a few tokens per skill. The full body stays on disk until invoked. Skills are much cheaper than rules unless you explicitly need the always-on behavior.',
+        'Very little. At session start, only the name and description sit in context, a few tokens per skill. The full body stays on disk until invoked. Skills are much cheaper than rules unless you explicitly need the always-on behavior.',
     },
     {
       question: 'How do I know if my skill description is good enough?',

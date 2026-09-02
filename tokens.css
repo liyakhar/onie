@@ -14,12 +14,63 @@
   --color-accent-ink: oklch(15%  0.055 188);
   --color-focus:      oklch(79%  0.145 176);
 
-  /* Wollie brand emerald — the single product accent across auth and app UI */
-  --color-wollie-accent:          #008b68;
-  --color-wollie-accent-hover:    #007457;
-  --color-wollie-accent-deep:     #00664d;
-  --color-wollie-accent-light:    #83d8bf;
-  --color-wollie-accent-contrast: #ffffff;
+  /* Wollie household brand — drawn from the shared-plan illustrations */
+  --color-brand-cream:       oklch(97% 0.018 78);
+  --color-brand-cream-deep:  oklch(92% 0.036 76);
+  --color-brand-paper:       oklch(99% 0.010 78);
+  --color-brand-ink:         oklch(20% 0.052 250);
+  --color-brand-ink-soft:    oklch(42% 0.045 248);
+  --color-brand-blue:        oklch(38% 0.125 250);
+  --color-brand-blue-deep:   oklch(23% 0.085 250);
+  --color-brand-blue-light:  oklch(84% 0.060 240);
+  --color-brand-orange:      oklch(68% 0.160 43);
+  --color-brand-orange-deep: oklch(57% 0.165 41);
+  --color-brand-orange-soft: oklch(88% 0.070 53);
+  --color-brand-sage:        oklch(65% 0.080 142);
+  --color-brand-rule:        oklch(82% 0.030 76);
+  --color-brand-focus:       oklch(62% 0.205 252);
+  --color-brand-on-blue:     oklch(97% 0.018 78);
+  --color-brand-on-orange:   oklch(20% 0.052 250);
+
+  /* Semantic product roles. Components consume these roles, not colour names. */
+  --color-semantic-primary: var(--color-brand-blue-deep);
+  --color-semantic-active: var(--color-brand-orange);
+  --color-semantic-active-soft: var(--color-brand-orange-soft);
+  --color-semantic-positive: var(--color-brand-sage);
+  --color-semantic-positive-strong: color-mix(
+    in oklch,
+    var(--color-brand-sage) 72%,
+    var(--color-brand-ink)
+  );
+  --color-semantic-positive-soft: color-mix(
+    in oklch,
+    var(--color-brand-sage) 18%,
+    var(--color-brand-paper)
+  );
+  --color-semantic-negative: oklch(50% 0.19 28);
+  --color-semantic-negative-soft: oklch(95% 0.028 28);
+  --color-semantic-negative-border: oklch(82% 0.08 28);
+  --color-semantic-neutral: var(--color-brand-ink-soft);
+  --color-semantic-neutral-soft: color-mix(
+    in oklch,
+    var(--color-brand-cream-deep) 46%,
+    var(--color-brand-paper)
+  );
+  --color-money-actual: var(--color-brand-blue-deep);
+  --color-money-available: var(--color-semantic-positive);
+  --color-money-available-soft: var(--color-semantic-positive-soft);
+  --color-money-missing: color-mix(
+    in oklch,
+    var(--color-brand-ink-soft) 16%,
+    var(--color-brand-paper)
+  );
+
+  /* Deprecated aliases retained temporarily for non-workspace routes. */
+  --color-wollie-accent: var(--color-semantic-positive);
+  --color-wollie-accent-hover: var(--color-semantic-positive-strong);
+  --color-wollie-accent-deep: var(--color-semantic-positive-strong);
+  --color-wollie-accent-light: var(--color-semantic-positive-soft);
+  --color-wollie-accent-contrast: var(--color-brand-ink);
 
   /* Off-register misprint ghosts — translucent, decorative only */
   --ghost-cyan:  oklch(70% 0.16 220 / 0.42);
@@ -38,6 +89,8 @@
   --font-display: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-body:    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono:    ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+  --font-brand-display: "Bricolage Grotesque", "Arial Narrow", sans-serif;
+  --font-brand-body: "Manrope", "Segoe UI", sans-serif;
 
   /* ── Type scale — major third (1.25), clamped display ─────── */
   --text-xs:   0.75rem;
@@ -92,6 +145,10 @@
   --radius-card:  1.75rem;
   --radius-pill:  999px;
   --radius-input: 1rem;
+  --radius-brand-sm: 0.875rem;
+  --radius-brand-md: 1.5rem;
+  --radius-brand-lg: 2.25rem;
+  --radius-brand-xl: 3.25rem;
 
   /* ── Motion ───────────────────────────────────────────────── */
   --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);

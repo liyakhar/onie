@@ -27,7 +27,7 @@ export const mcpServerCursorSetupPost: BlogPost = {
   body: `
 ## Why Cursor's MCP support matters
 
-Cursor is an AI-native IDE with first-class Model Context Protocol (MCP) support. Once you configure an MCP server in Cursor, the Agent can call its tools directly from the editor without any extensions or middleware. This means your AI coding assistant gets access to your database, internal APIs, GitHub, Supabase, or any custom server you write — all from one place.
+Cursor is an AI-native IDE with first-class Model Context Protocol (MCP) support. Once you configure an MCP server in Cursor, the Agent can call its tools directly from the editor without any extensions or middleware. This means your AI coding assistant gets access to your database, internal APIs, GitHub, Supabase, or any custom server you write, all from one place.
 
 The setup is a one-time task per server. After you configure it, every AI interaction in that workspace automatically includes the server's capabilities.
 
@@ -71,7 +71,7 @@ Add a server entry under \`mcpServers\`. Here is a complete example with a local
 }
 \`\`\`
 
-Save the file. Go back to the **MCP & Integrations** tab — your servers should appear with green status dots. If not, click the refresh icon.
+Save the file. Go back to the **MCP & Integrations** tab, your servers should appear with green status dots. If not, click the refresh icon.
 
 ## Project-scoped setup for teams
 
@@ -155,10 +155,10 @@ For servers running on your machine (e.g., a Node.js script, a Python subprocess
 
 Key details:
 
-- **\`command\`** — the executable on your PATH (node, python, npx, uvx, docker)
-- **\`args\`** — command-line arguments; the first is usually the script/package name
-- **\`env\`** — environment variables for the subprocess
-- **Paths must be absolute** — relative paths do not work
+- **\`command\`**, the executable on your PATH (node, python, npx, uvx, docker)
+- **\`args\`**, command-line arguments; the first is usually the script/package name
+- **\`env\`**, environment variables for the subprocess
+- **Paths must be absolute**, relative paths do not work
 
 ## Configuring remote servers (HTTP or SSE)
 
@@ -200,7 +200,7 @@ After saving \`mcp.json\`, Cursor must reload to pick up the changes:
 1. Press Cmd+Shift+P (macOS) or Ctrl+Shift+P (Windows/Linux)
 2. Type "Reload Window" and press Enter
 
-Cursor restarts and loads your new server config. If a server shows a red X in the **MCP & Integrations** tab, the connection failed — click the server name to see the error details.
+Cursor restarts and loads your new server config. If a server shows a red X in the **MCP & Integrations** tab, the connection failed, click the server name to see the error details.
 
 ## Verifying your servers
 
@@ -272,21 +272,21 @@ in their shell profile. When they open the project in Cursor, all four servers a
 
 ## Best practices
 
-- **Use project config for team workflows** — commit \`.cursor/mcp.json\` to git so all contributors get the same setup
-- **Keep secrets in environment variables** — never hardcode tokens or API keys in the config file
-- **Start with one server** — test it works before adding more; each new server is one config entry
-- **Name servers clearly** — use the server's purpose in the name (github, database, internal-api) not generic names
-- **Document custom servers** — if your team wrote a custom MCP server, add a README explaining how to install and authenticate
-- **Use absolute paths for local servers** — relative paths fail silently; always use /home/user/path/to/server or \`$(pwd)/relative/path\`
+- **Use project config for team workflows**, commit \`.cursor/mcp.json\` to git so all contributors get the same setup
+- **Keep secrets in environment variables**, never hardcode tokens or API keys in the config file
+- **Start with one server**, test it works before adding more; each new server is one config entry
+- **Name servers clearly**, use the server's purpose in the name (github, database, internal-api) not generic names
+- **Document custom servers**, if your team wrote a custom MCP server, add a README explaining how to install and authenticate
+- **Use absolute paths for local servers**, relative paths fail silently; always use /home/user/path/to/server or \`$(pwd)/relative/path\`
 
 ## Next steps
 
 Once your MCP servers are set up in Cursor:
 
-1. Test them in the Agent chat — ask it to use each tool
-2. Extend your workflow — integrate with your IDE for code generation, testing, or deployment
-3. Share with your team — commit the config and document setup in your project README
-4. Build more servers — as you discover gaps, write custom MCP servers to fill them
+1. Test them in the Agent chat, ask it to use each tool
+2. Extend your workflow, integrate with your IDE for code generation, testing, or deployment
+3. Share with your team, commit the config and document setup in your project README
+4. Build more servers, as you discover gaps, write custom MCP servers to fill them
 
 The MCP ecosystem is growing rapidly. Browse the [Cursor Marketplace](/marketplace) and [cursor.directory](https://cursor.directory) for more servers, and share yours when you build one.
 `.trim(),
@@ -309,7 +309,7 @@ The MCP ecosystem is growing rapidly. Browse the [Cursor Marketplace](/marketpla
     {
       question: 'How do I know if my server is working?',
       answer:
-        'Open Settings > MCP & Integrations. If your server shows a green dot, it is connected. Red X means an error — click the server name to see details. You can also test it by asking the Agent to use one of its tools in the chat.',
+        'Open Settings > MCP & Integrations. If your server shows a green dot, it is connected. Red X means an error, click the server name to see details. You can also test it by asking the Agent to use one of its tools in the chat.',
     },
     {
       question: 'What if my server command works in the terminal but fails in Cursor?',

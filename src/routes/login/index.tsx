@@ -1,4 +1,9 @@
-import { createFileRoute, Link, useRouter, useSearch } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  Link,
+  useRouter,
+  useSearch,
+} from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { authClient } from '#/lib/auth-client'
 import type { LoginSearch } from '#/lib/auth-nav'
@@ -18,7 +23,9 @@ export type { LoginSearch }
 
 function safeAppRedirect(value: unknown) {
   if (typeof value !== 'string') return '/app'
-  return value === '/app' || value.startsWith('/app/') || value.startsWith('/invite/')
+  return value === '/app' ||
+    value.startsWith('/app/') ||
+    value.startsWith('/invite/')
     ? value
     : '/app'
 }
@@ -59,13 +66,21 @@ type AuthMode = 'signin' | 'signup' | 'forgot' | 'forgot-sent'
 
 function AuthVisual() {
   return (
-    <aside className="auth-visual" aria-label="Wollie">
-      <div className="auth-visual__flow" aria-hidden="true">
-        <span className="auth-visual__ribbon auth-visual__ribbon--back" />
-        <span className="auth-visual__ribbon auth-visual__ribbon--middle" />
-        <span className="auth-visual__ribbon auth-visual__ribbon--front" />
-      </div>
-      <p className="auth-visual__wordmark">Wollie</p>
+    <aside className="auth-visual" aria-label="A shared money plan for couples">
+      <picture className="auth-visual__picture">
+        <source
+          srcSet="/brand/wollie-auth-illustration-v1.webp"
+          type="image/webp"
+        />
+        <img
+          className="auth-visual__image"
+          src="/brand/wollie-auth-illustration-v1.png"
+          alt="A couple bringing their accounts, everyday spending, and future goals into one plan"
+          width="1536"
+          height="1024"
+          fetchPriority="high"
+        />
+      </picture>
     </aside>
   )
 }
@@ -74,6 +89,9 @@ function AuthFrame({ children }: { children: React.ReactNode }) {
   return (
     <main id="main" className="auth-page auth-page--split">
       <section className="auth-page__panel">
+        <Link to="/" className="auth-page__brand" aria-label="Wollie home">
+          Wollie
+        </Link>
         <div className="auth-page__content">{children}</div>
       </section>
       <AuthVisual />
@@ -87,7 +105,9 @@ function LoginPage() {
   const redirectTo = redirect ?? '/app'
   const { isDev, emailReadiness } = Route.useLoaderData()
   const { data: session, isPending } = authClient.useSession()
-  const [mode, setMode] = useState<AuthMode>(signup === '1' ? 'signup' : 'signin')
+  const [mode, setMode] = useState<AuthMode>(
+    signup === '1' ? 'signup' : 'signin',
+  )
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -123,7 +143,9 @@ function LoginPage() {
       if (isSignUp) {
         const trimmedFirstName = firstName.trim()
         const trimmedLastName = lastName.trim()
-        const fullName = [trimmedFirstName, trimmedLastName].filter(Boolean).join(' ')
+        const fullName = [trimmedFirstName, trimmedLastName]
+          .filter(Boolean)
+          .join(' ')
 
         if (!trimmedFirstName || !trimmedLastName) {
           setError('Enter your first and last name to create an account.')
@@ -134,7 +156,9 @@ function LoginPage() {
           return
         }
         if (!acceptedLegal) {
-          setError('Accept the Terms and acknowledge the Privacy Policy to create an account.')
+          setError(
+            'Accept the Terms and acknowledge the Privacy Policy to create an account.',
+          )
           return
         }
         const result = await authClient.signUp.email({
@@ -151,7 +175,10 @@ function LoginPage() {
           await goAfterAuth(router, redirectTo)
         }
       } else {
-        const result = await authClient.signIn.email({ email: email.trim().toLowerCase(), password })
+        const result = await authClient.signIn.email({
+          email: email.trim().toLowerCase(),
+          password,
+        })
         if (result.error) {
           setError(result.error.message || 'Sign in failed')
         } else {
@@ -170,7 +197,9 @@ function LoginPage() {
     setError('')
 
     if (!emailReadiness.configured) {
-      setError('Password reset is temporarily unavailable. Please try again later.')
+      setError(
+        'Password reset is temporarily unavailable. Please try again later.',
+      )
       return
     }
 
@@ -273,16 +302,26 @@ function LoginPage() {
               {error && <p className="post-detail__error">{error}</p>}
               {!emailReadiness.configured && (
                 <p className="app-form__hint">
-                  Email delivery is not set up yet, so a reset link cannot be sent. Need help?{' '}
-                  <a className="underline underline-offset-4" href={`mailto:${site.email}`}>
+                  Email delivery is not set up yet, so a reset link cannot be
+                  sent. Need help?{' '}
+                  <a
+                    className="underline underline-offset-4"
+                    href={`mailto:${site.email}`}
+                  >
                     Email Wollie support
                   </a>
                   .
                 </p>
               )}
               <div className="app-form__actions">
-                <button type="submit" className="btn" disabled={loading || !emailReadiness.configured}>
-                  <span className="btn__label">{loading ? 'Sending…' : 'Send reset link'}</span>
+                <button
+                  type="submit"
+                  className="btn"
+                  disabled={loading || !emailReadiness.configured}
+                >
+                  <span className="btn__label">
+                    {loading ? 'Sending…' : 'Send reset link'}
+                  </span>
                 </button>
               </div>
             </form>
@@ -295,7 +334,11 @@ function LoginPage() {
           )}
 
           <footer className="auth-footer">
-            <button type="button" className="login-switch" onClick={backToSignIn}>
+            <button
+              type="button"
+              className="login-switch"
+              onClick={backToSignIn}
+            >
               Back to sign in
             </button>
           </footer>
@@ -307,11 +350,13 @@ function LoginPage() {
   return (
     <AuthFrame>
       <header className="app-page__head auth-page__head">
-        <h1 className="app-page__title">{isSignUp ? 'Create account' : 'Sign in'}</h1>
+        <h1 className="app-page__title">
+          {isSignUp ? 'Create account' : 'Sign in'}
+        </h1>
         <p className="auth-page__intro">
           {isSignUp
             ? 'Start with one clear view of your money.'
-            : 'Your accounts, bills, and spending in one calm place.'}
+            : 'Your money in one place.'}
         </p>
       </header>
 
@@ -366,12 +411,22 @@ function LoginPage() {
               <input
                 type="checkbox"
                 checked={acceptedLegal}
-                onChange={(event) => setAcceptedLegal(event.currentTarget.checked)}
+                onChange={(event) =>
+                  setAcceptedLegal(event.currentTarget.checked)
+                }
                 required
                 className="mt-1 size-4"
               />
               <span>
-                I accept the <Link to="/terms" className="underline underline-offset-4">Terms</Link> and acknowledge the <Link to="/privacy" className="underline underline-offset-4">Privacy Policy</Link>.
+                I accept the{' '}
+                <Link to="/terms" className="underline underline-offset-4">
+                  Terms
+                </Link>{' '}
+                and acknowledge the{' '}
+                <Link to="/privacy" className="underline underline-offset-4">
+                  Privacy Policy
+                </Link>
+                .
               </span>
             </label>
           )}
@@ -425,14 +480,22 @@ function LoginPage() {
           <div className="app-form__actions">
             <button type="submit" className="btn" disabled={loading}>
               <span className="btn__label">
-                {loading ? 'Please wait…' : isSignUp ? 'Create account' : 'Sign in'}
+                {loading
+                  ? 'Please wait…'
+                  : isSignUp
+                    ? 'Create account'
+                    : 'Sign in'}
               </span>
             </button>
           </div>
         </form>
 
         <footer className="auth-footer">
-          <Link to="/pricing" search={{ checkout: undefined }} className="login-switch">
+          <Link
+            to="/pricing"
+            search={{ checkout: undefined }}
+            className="login-switch"
+          >
             Pricing
           </Link>
           <button
@@ -443,9 +506,7 @@ function LoginPage() {
             }}
             className="login-switch"
           >
-            {isSignUp
-              ? 'Already have an account? Sign in'
-              : 'Create account'}
+            {isSignUp ? 'Already have an account? Sign in' : 'Create account'}
           </button>
           {isDev && !isSignUp && (
             <button

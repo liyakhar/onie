@@ -21,6 +21,15 @@ const securityHeaders = {
   'x-frame-options': 'DENY',
 } as const
 
+// The public demo is the only page intentionally embedded in Wollie's own
+// landing page. It contains static example data and may be framed by this
+// origin only; every other route keeps the stricter anti-framing policy.
+const embeddedDemoSecurityHeaders = {
+  ...securityHeaders,
+  'content-security-policy': "default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self' data:; form-action 'self'; frame-ancestors 'self'; img-src 'self' data: https://enablebanking.com; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; upgrade-insecure-requests",
+  'x-frame-options': 'SAMEORIGIN',
+} as const
+
 function prismaCloudflareRollupShim() {
   const patch = (code: string) => {
     if (!code.includes('fileURLToPath(import.meta.url)')) return null
@@ -60,6 +69,8 @@ const config = defineConfig({
     nitro({
       routeRules: {
         '/**': { headers: securityHeaders },
+        '/demo': { headers: embeddedDemoSecurityHeaders },
+        '/demo/**': { headers: embeddedDemoSecurityHeaders },
         '/app/**': { headers: { ...securityHeaders, 'cache-control': 'private, no-store' } },
         '/settings/**': { headers: { ...securityHeaders, 'cache-control': 'private, no-store' } },
         '/billing/**': { headers: { ...securityHeaders, 'cache-control': 'private, no-store' } },

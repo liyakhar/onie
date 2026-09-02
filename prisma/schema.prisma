@@ -112,6 +112,7 @@ enum FinanceAccountType {
 enum FinanceConnectionProvider {
   DEMO
   SIMPLEFIN
+  SYNCI
   GOCARDLESS
   ENABLE_BANKING
   OPEN_BANKING_IO

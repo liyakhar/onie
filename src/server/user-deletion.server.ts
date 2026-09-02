@@ -1,5 +1,6 @@
 import { getDb } from '#/server/db-access.server'
 import { revokeEnableBankingBeforeUserDeletion } from '#/server/enable-banking-sync'
+import { revokeSynciBeforeUserDeletion } from '#/server/synci-sync'
 import { combineBasisPointShares } from '#/lib/household-finance'
 
 const LIVE_SUBSCRIPTION_STATUSES = new Set(['active', 'trialing', 'past_due'])
@@ -22,13 +23,15 @@ export async function prepareUserDeletion(userId: string) {
     throw new Error('Cancel subscription renewal in Billing before deleting your account.')
   }
 
-  await revokeEnableBankingBeforeUserDeletion(userId)
+  await Promise.all([
+    revokeEnableBankingBeforeUserDeletion(userId),
+    revokeSynciBeforeUserDeletion(userId),
+  ])
   await deleteUserOwnedBankData(userId)
   await leaveMemberHouseholdsBeforeUserDeletion(userId)
   // Prisma cascade rules remove the remaining Wollie profile, bank credentials,
   // accounts, transactions, budgets, sessions, and related app data.
 }
-
 export function assertHouseholdDeletionAllowed(partnerCount: number) {
   if (partnerCount > 0) {
     throw new Error('Remove your partner from the household before deleting the owner account.')

@@ -58,7 +58,7 @@ function HouseholdInvitationPage() {
               </p>
               {!isPending && !session?.user && (
                 <Button asChild className="min-h-11 wollie-primary-action">
-                  <Link to="/login" search={loginSearch({ redirect: `/invite/${token}` })}>Sign in to accept</Link>
+                  <Link to="/login" search={loginSearch({ redirect: `/invite/${token}` })}>Sign in or create an account to accept</Link>
                 </Button>
               )}
               {session?.user && (

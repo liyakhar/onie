@@ -4,7 +4,7 @@ export const claudeCodeWorkflowExamplesPost: BlogPost = {
   slug: 'claude-code-workflow-examples',
   title: 'Claude Code workflow examples that scale past one chat',
   description:
-    'Real Claude Code workflow patterns — fan-out research, classify-and-act, pipelines — plus when to use workflows vs skills and how to publish yours on Onie.',
+    'Real Claude Code workflow patterns, fan-out research, classify-and-act, pipelines, plus when to use workflows vs skills and how to publish yours on Onie.',
   publishedAt: '2026-06-16',
   readingMinutes: 11,
   primaryKeyword: 'claude code workflow examples',
@@ -21,18 +21,18 @@ export const claudeCodeWorkflowExamplesPost: BlogPost = {
     bio: 'Runs migration sweeps and research pipelines with Claude Code workflows. Shares the scripts that survived production on Onie.',
   },
   tldr:
-    'Claude Code workflows are JavaScript harnesses that spawn subagents in parallel or sequence — fan-out-and-synthesize, classify-and-act, and pipeline are the three patterns you will reuse most. Use `/deep-research` to see a bundled example, then save your own to `~/.claude/workflows/` or publish the harness on Onie.',
+    'Claude Code workflows are JavaScript harnesses that spawn subagents in parallel or sequence, fan-out-and-synthesize, classify-and-act, and pipeline are the three patterns you will reuse most. Use `/deep-research` to see a bundled example, then save your own to `~/.claude/workflows/` or publish the harness on Onie.',
   relatedSlugs: ['how-to-write-claude-code-skills', 'document-ai-agent-workflows'],
   body: `
 ## What counts as a Claude Code workflow
 
-A **workflow** is an executable script Claude writes (or you save) that orchestrates multiple subagents instead of doing everything in one linear chat. Anthropic calls these [dynamic workflows](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code): a harness built for one job — codebase audit, migration sweep, cross-checked research.
+A **workflow** is an executable script Claude writes (or you save) that orchestrates multiple subagents instead of doing everything in one linear chat. Anthropic calls these [dynamic workflows](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code): a harness built for one job, codebase audit, migration sweep, cross-checked research.
 
 This is different from a [skill](/blog/how-to-write-claude-code-skills) (on-demand instructions) and different from a single-session prompt. Workflows are for tasks that need **parallelism**, **structured handoffs**, or **reruns** with the same topology.
 
 **Claude Code workflow examples** you can run today without writing code:
 
-- \`/deep-research\` — fans out web research, cross-checks sources, returns a cited report ([docs](https://code.claude.com/docs/en/workflows))
+- \`/deep-research\`, fans out web research, cross-checks sources, returns a cited report ([docs](https://code.claude.com/docs/en/workflows))
 - Ask Claude to "write a workflow for…" or include the keyword \`ultracode\` in your prompt
 - Set \`/effort ultracode\` so substantive tasks auto-plan a workflow
 
@@ -50,7 +50,7 @@ Add \`phase(title)\` to group steps in the progress UI so humans can see where a
 
 ## Example 1: Fan-out-and-synthesize (research)
 
-**Problem:** You need a weekly digest from nine sources — release notes, blogs, forums — and one agent times out if you dump everything in one prompt.
+**Problem:** You need a weekly digest from nine sources, release notes, blogs, forums, and one agent times out if you dump everything in one prompt.
 
 **Pattern:** Fan out one agent per source with a strict JSON schema, reduce in plain JavaScript, synthesize with a final agent.
 
@@ -83,19 +83,19 @@ This mirrors production newsletter workflows described by practitioners running 
 
 ## Example 2: Classify-and-act (triage at scale)
 
-**Problem:** Hundreds of files need different handling — tests get one playbook, configs another, docs a third.
+**Problem:** Hundreds of files need different handling, tests get one playbook, configs another, docs a third.
 
 **Pattern:** One classification agent per batch (or per path), route to specialized follow-up agents.
 
 1. \`agent("Classify this diff: test | prod | docs")\`
-2. Branch on label — run the matching remediation agent
+2. Branch on label, run the matching remediation agent
 3. Aggregate results into a single PR description
 
 Use this when **homogeneous parallel work** is wrong but **typed parallel work** is right. Do not fan out 200 identical prompts; classify first, then fan out per bucket.
 
 ## Example 3: Pipeline (migrate many packages)
 
-**Problem:** Monorepo with 30 packages — each needs the same ordered steps: codemod, typecheck, snapshot tests.
+**Problem:** Monorepo with 30 packages, each needs the same ordered steps: codemod, typecheck, snapshot tests.
 
 **Pattern:** \`pipeline(packages, codemodStage, typecheckStage, testStage)\` where each stage receives the previous output.
 
@@ -126,7 +126,7 @@ If you rerun the same topology weekly, save the workflow. If you need judgment o
 
 **With skills:** Put workflow JS files in a skill folder and reference them from SKILL.md as templates Claude can adapt per run.
 
-**With Onie:** [Document the harness](/blog/document-ai-agent-workflows) — inputs, phases, verification, failure modes — and publish the workflow body plus tool versions. Teammates fork your setup instead of reverse-engineering your terminal history.
+**With Onie:** [Document the harness](/blog/document-ai-agent-workflows), inputs, phases, verification, failure modes, and publish the workflow body plus tool versions. Teammates fork your setup instead of reverse-engineering your terminal history.
 
 Browse field-tagged examples in [Explore](/app/explore) and filter by \`claude-code\` or \`engineering\`.
 
@@ -140,7 +140,7 @@ Browse field-tagged examples in [Explore](/app/explore) and filter by \`claude-c
 
 **Workflow as god script.** Split into composable workflows; nest one level deep per Claude Code limits.
 
-**Skipping the doc.** A script nobody can run is not a workflow — it is a one-off. Write the minimum workflow doc template alongside the JS.
+**Skipping the doc.** A script nobody can run is not a workflow, it is a one-off. Write the minimum workflow doc template alongside the JS.
 
 ## Start with a bundled example, then fork
 
@@ -150,7 +150,7 @@ Browse field-tagged examples in [Explore](/app/explore) and filter by \`claude-c
 4. Save, rerun on a second input, tighten schemas.
 5. Publish the harness on Onie with tags and a link to your saved script shape.
 
-The goal is not the cleverest orchestration — it is the one your team reruns next quarter without you in the room.
+The goal is not the cleverest orchestration, it is the one your team reruns next quarter without you in the room.
 `.trim(),
   faqs: [
     {

@@ -8,7 +8,7 @@ export const POST_KINDS: {
   {
     value: 'WORKFLOW',
     label: 'Workflow',
-    description: 'End-to-end process — steps, files, and how you run it',
+    description: 'End-to-end process, steps, files, and how you run it',
   },
   {
     value: 'PROMPT',

@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import { Download, Users } from 'lucide-react'
-import { Badge } from '#/components/ui/badge'
-import { Button } from '#/components/ui/button'
+import { useEffect, useRef, useState } from "react";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { Download, Users } from "lucide-react";
+import { Badge } from "#/components/ui/badge";
+import { Button } from "#/components/ui/button";
 import {
   Card,
   CardAction,
@@ -10,11 +10,11 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '#/components/ui/card'
-import { formatMoney } from '#/lib/finance-demo'
-import { buildPageMeta } from '#/lib/seo'
-import { getFinanceAccounts } from '#/server/finance'
-import { exportFinanceCsv } from '#/server/account-data'
+} from "#/components/ui/card";
+import { formatMoney } from "#/lib/finance-demo";
+import { buildPageMeta } from "#/lib/seo";
+import { getFinanceAccounts } from "#/server/finance";
+import { exportFinanceCsv } from "#/server/account-data";
 import {
   completeEnableBankingConnection,
   disconnectEnableBanking,
@@ -22,217 +22,435 @@ import {
   getEnableBankingStatus,
   startEnableBankingConnection,
   syncEnableBanking,
-} from '#/server/enable-banking-sync'
+} from "#/server/enable-banking-sync";
+import {
+  disconnectSynciConnection,
+  getSynciStatus,
+  startSynciConnection,
+  syncSynciConnection,
+} from "#/server/synci-sync";
 
 type AccountsSearch = {
-  code?: string
-  state?: string
-  error?: string
-  error_description?: string
-}
-type Institution = { name: string; country: string; beta: boolean }
+  code?: string;
+  state?: string;
+  error?: string;
+  error_description?: string;
+  bank?: string;
+};
+type Institution = { name: string; country: string; beta: boolean };
 
 const supportedCountries = [
-  { code: 'AT', name: 'Austria' },
-  { code: 'BE', name: 'Belgium' },
-  { code: 'BG', name: 'Bulgaria' },
-  { code: 'HR', name: 'Croatia' },
-  { code: 'CY', name: 'Cyprus' },
-  { code: 'DK', name: 'Denmark' },
-  { code: 'EE', name: 'Estonia' },
-  { code: 'FI', name: 'Finland' },
-  { code: 'FR', name: 'France' },
-  { code: 'DE', name: 'Germany' },
-  { code: 'GR', name: 'Greece' },
-  { code: 'HU', name: 'Hungary' },
-  { code: 'IS', name: 'Iceland' },
-  { code: 'IE', name: 'Ireland' },
-  { code: 'IT', name: 'Italy' },
-  { code: 'LV', name: 'Latvia' },
-  { code: 'LI', name: 'Liechtenstein' },
-  { code: 'LT', name: 'Lithuania' },
-  { code: 'LU', name: 'Luxembourg' },
-  { code: 'MT', name: 'Malta' },
-  { code: 'NL', name: 'Netherlands' },
-  { code: 'NO', name: 'Norway' },
-  { code: 'PL', name: 'Poland' },
-  { code: 'PT', name: 'Portugal' },
-  { code: 'RO', name: 'Romania' },
-  { code: 'SK', name: 'Slovakia' },
-  { code: 'SI', name: 'Slovenia' },
-  { code: 'ES', name: 'Spain' },
-  { code: 'SE', name: 'Sweden' },
-] as const
+  { code: "AT", name: "Austria" },
+  { code: "BE", name: "Belgium" },
+  { code: "BG", name: "Bulgaria" },
+  { code: "HR", name: "Croatia" },
+  { code: "CY", name: "Cyprus" },
+  { code: "DK", name: "Denmark" },
+  { code: "EE", name: "Estonia" },
+  { code: "FI", name: "Finland" },
+  { code: "FR", name: "France" },
+  { code: "DE", name: "Germany" },
+  { code: "GR", name: "Greece" },
+  { code: "HU", name: "Hungary" },
+  { code: "IS", name: "Iceland" },
+  { code: "IE", name: "Ireland" },
+  { code: "IT", name: "Italy" },
+  { code: "LV", name: "Latvia" },
+  { code: "LI", name: "Liechtenstein" },
+  { code: "LT", name: "Lithuania" },
+  { code: "LU", name: "Luxembourg" },
+  { code: "MT", name: "Malta" },
+  { code: "NL", name: "Netherlands" },
+  { code: "NO", name: "Norway" },
+  { code: "PL", name: "Poland" },
+  { code: "PT", name: "Portugal" },
+  { code: "RO", name: "Romania" },
+  { code: "SK", name: "Slovakia" },
+  { code: "SI", name: "Slovenia" },
+  { code: "ES", name: "Spain" },
+  { code: "SE", name: "Sweden" },
+] as const;
 
-export const Route = createFileRoute('/app/accounts')({
+export const Route = createFileRoute("/app/accounts")({
   validateSearch: (search: Record<string, unknown>): AccountsSearch => ({
-    code: typeof search.code === 'string' ? search.code : undefined,
-    state: typeof search.state === 'string' ? search.state : undefined,
-    error: typeof search.error === 'string' ? search.error : undefined,
-    error_description: typeof search.error_description === 'string' ? search.error_description : undefined,
+    code: typeof search.code === "string" ? search.code : undefined,
+    state: typeof search.state === "string" ? search.state : undefined,
+    error: typeof search.error === "string" ? search.error : undefined,
+    error_description:
+      typeof search.error_description === "string"
+        ? search.error_description
+        : undefined,
+    bank: typeof search.bank === "string" ? search.bank : undefined,
   }),
   loader: async () => {
-    const [finance, enableBanking] = await Promise.all([
+    const [finance, synci, enableBanking] = await Promise.all([
       getFinanceAccounts(),
+      getSynciStatus(),
       getEnableBankingStatus(),
-    ])
-    return { ...finance, enableBanking }
+    ]);
+    return { ...finance, synci, enableBanking };
   },
   head: () => ({
     meta: buildPageMeta({
-      path: '/app/accounts',
-      title: 'Bank sync',
-      description: 'Connected accounts and provider status.',
+      path: "/app/accounts",
+      title: "Bank sync",
+      description: "Connected accounts and provider status.",
       noindex: true,
     }).meta,
   }),
   component: AccountsPage,
-})
+});
 
 function AccountsPage() {
-  const { accounts, enableBanking, household } = Route.useLoaderData()
-  const search = Route.useSearch()
-  const router = useRouter()
-  const callbackStarted = useRef(false)
-  const [country, setCountry] = useState('BE')
-  const [bankName, setBankName] = useState('')
-  const [institutions, setInstitutions] = useState<Institution[]>([])
-  const [loadingBanks, setLoadingBanks] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [exportingAccountId, setExportingAccountId] = useState<string | null>(null)
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState(search.error_description || search.error || '')
+  const { accounts, synci, enableBanking, household } = Route.useLoaderData();
+  const search = Route.useSearch();
+  const router = useRouter();
+  const callbackStarted = useRef(false);
+  const synciCallbackStarted = useRef(false);
+  const useSynci = synci.openForConnections || synci.registered;
+  const [country, setCountry] = useState("BE");
+  const [bankName, setBankName] = useState("");
+  const [institutions, setInstitutions] = useState<Institution[]>([]);
+  const [loadingBanks, setLoadingBanks] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [exportingAccountId, setExportingAccountId] = useState<string | null>(
+    null,
+  );
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState(
+    search.error_description || search.error || "",
+  );
 
   useEffect(() => {
-    if (!enableBanking.configured) return
-    setLoadingBanks(true)
-    setBankName('')
+    if (useSynci || !enableBanking.configured) return;
+    setLoadingBanks(true);
+    setBankName("");
     void getEnableBankingInstitutions({ data: { country } })
       .then((banks) => setInstitutions(banks))
-      .catch((reason) => setError(errorMessage(reason, 'Could not load available banks.')))
-      .finally(() => setLoadingBanks(false))
-  }, [country, enableBanking.configured])
+      .catch((reason) =>
+        setError(errorMessage(reason, "Could not load available banks.")),
+      )
+      .finally(() => setLoadingBanks(false));
+  }, [country, enableBanking.configured, useSynci]);
 
   useEffect(() => {
-    if (!search.code || !search.state || callbackStarted.current) return
-    callbackStarted.current = true
-    setLoading(true)
-    setError('')
-    void completeEnableBankingConnection({ data: { code: search.code, state: search.state } })
+    if (!search.code || !search.state || callbackStarted.current) return;
+    callbackStarted.current = true;
+    setLoading(true);
+    setError("");
+    void completeEnableBankingConnection({
+      data: { code: search.code, state: search.state },
+    })
       .then(async ({ accounts: connectedAccounts }) => {
-        setMessage(`Connected ${connectedAccounts} account${connectedAccounts === 1 ? '' : 's'}.`)
-        await router.navigate({ to: '/app/accounts', search: {}, replace: true })
-        await router.invalidate()
+        setMessage(
+          `Connected ${connectedAccounts} account${connectedAccounts === 1 ? "" : "s"}.`,
+        );
+        await router.navigate({
+          to: "/app/accounts",
+          search: {},
+          replace: true,
+        });
+        await router.invalidate();
       })
-      .catch((reason) => setError(errorMessage(reason, 'Could not finish the bank connection.')))
-      .finally(() => setLoading(false))
-  }, [router, search.code, search.state])
+      .catch((reason) =>
+        setError(errorMessage(reason, "Could not finish the bank connection.")),
+      )
+      .finally(() => setLoading(false));
+  }, [router, search.code, search.state]);
+
+  useEffect(() => {
+    if (search.bank !== "connected" || synciCallbackStarted.current) return;
+    synciCallbackStarted.current = true;
+    setLoading(true);
+    setError("");
+    void syncSynciConnection()
+      .then(async ({ accounts: connectedAccounts }) => {
+        setMessage(
+          connectedAccounts
+            ? `Connected ${connectedAccounts} account${connectedAccounts === 1 ? "" : "s"}.`
+            : "Your bank is connected. Transactions will appear after its first sync.",
+        );
+        await router.navigate({
+          to: "/app/accounts",
+          search: {},
+          replace: true,
+        });
+        await router.invalidate();
+      })
+      .catch((reason) =>
+        setError(errorMessage(reason, "Could not finish the bank connection.")),
+      )
+      .finally(() => setLoading(false));
+  }, [router, search.bank]);
 
   function connectBank() {
-    if (!bankName) return
-    setMessage('')
-    setError('')
-    setLoading(true)
+    if (useSynci) {
+      setMessage("");
+      setError("");
+      setLoading(true);
+      void startSynciConnection()
+        .then(({ url }) => window.location.assign(url))
+        .catch((reason) => {
+          setError(
+            errorMessage(reason, "Could not start the bank connection."),
+          );
+          setLoading(false);
+        });
+      return;
+    }
+    if (!bankName) return;
+    setMessage("");
+    setError("");
+    setLoading(true);
     void startEnableBankingConnection({ data: { country, bankName } })
       .then(({ url }) => window.location.assign(url))
       .catch((reason) => {
-        setError(errorMessage(reason, 'Could not start the bank connection.'))
-        setLoading(false)
+        setError(errorMessage(reason, "Could not start the bank connection."));
+        setLoading(false);
+      });
+  }
+
+  function syncConnectedBank() {
+    if (!useSynci) {
+      syncBank();
+      return;
+    }
+    setMessage("");
+    setError("");
+    setLoading(true);
+    void syncSynciConnection()
+      .then(async ({ accounts: syncedAccounts }) => {
+        setMessage(
+          `Synced ${syncedAccounts} account${syncedAccounts === 1 ? "" : "s"}.`,
+        );
+        await router.invalidate();
       })
+      .catch((reason) =>
+        setError(errorMessage(reason, "Could not sync the bank.")),
+      )
+      .finally(() => setLoading(false));
+  }
+
+  function disconnectConnectedBank() {
+    if (!useSynci) {
+      disconnectBank();
+      return;
+    }
+    setMessage("");
+    setError("");
+    setLoading(true);
+    void disconnectSynciConnection()
+      .then(async () => {
+        setMessage("Bank access revoked and local bank data removed.");
+        await router.invalidate();
+      })
+      .catch((reason) =>
+        setError(errorMessage(reason, "Could not disconnect the bank.")),
+      )
+      .finally(() => setLoading(false));
   }
 
   function syncBank() {
-    setMessage('')
-    setError('')
-    setLoading(true)
+    setMessage("");
+    setError("");
+    setLoading(true);
     void syncEnableBanking()
       .then(async ({ accounts: syncedAccounts }) => {
-        setMessage(`Synced ${syncedAccounts} account${syncedAccounts === 1 ? '' : 's'}.`)
-        await router.invalidate()
+        setMessage(
+          `Synced ${syncedAccounts} account${syncedAccounts === 1 ? "" : "s"}.`,
+        );
+        await router.invalidate();
       })
-      .catch((reason) => setError(errorMessage(reason, 'Could not sync the bank.')))
-      .finally(() => setLoading(false))
+      .catch((reason) =>
+        setError(errorMessage(reason, "Could not sync the bank.")),
+      )
+      .finally(() => setLoading(false));
   }
 
   function disconnectBank() {
-    setMessage('')
-    setError('')
-    setLoading(true)
+    setMessage("");
+    setError("");
+    setLoading(true);
     void disconnectEnableBanking()
       .then(async () => {
-        setMessage('Bank access revoked and local bank data removed.')
-        await router.invalidate()
+        setMessage("Bank access revoked and local bank data removed.");
+        await router.invalidate();
       })
-      .catch((reason) => setError(errorMessage(reason, 'Could not disconnect the bank.')))
-      .finally(() => setLoading(false))
+      .catch((reason) =>
+        setError(errorMessage(reason, "Could not disconnect the bank.")),
+      )
+      .finally(() => setLoading(false));
   }
 
   async function exportAccount(accountId: string, accountName: string) {
-    setExportingAccountId(accountId)
-    setError('')
-    setMessage('')
+    setExportingAccountId(accountId);
+    setError("");
+    setMessage("");
     try {
-      const data = await exportFinanceCsv({ data: { scope: 'account', accountId } })
+      const data = await exportFinanceCsv({
+        data: { scope: "account", accountId },
+      });
       downloadBlob({
         content: data.content,
         filename: data.filename.replace(accountId, slugify(accountName)),
         type: data.mimeType,
-      })
-      setMessage(`${accountName} export downloaded.`)
+      });
+      setMessage(`${accountName} export downloaded.`);
     } catch (reason) {
-      setError(errorMessage(reason, 'Could not export this account.'))
+      setError(errorMessage(reason, "Could not export this account."));
     } finally {
-      setExportingAccountId(null)
+      setExportingAccountId(null);
     }
   }
 
   return (
-    <main id="main" className="mx-auto grid w-full max-w-7xl gap-5 bg-white px-4 py-5 text-zinc-950 sm:px-6 lg:px-8">
+    <main
+      id="main"
+      className="wollie-workspace-page mx-auto grid w-full max-w-7xl gap-5 bg-white px-4 py-5 text-zinc-950 sm:px-6 lg:px-8"
+    >
       <header className="flex flex-col gap-4 border-b border-zinc-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Accounts</h1>
-          <p className="mt-1 text-sm text-zinc-500">Connected banks and balances.</p>
+          <p className="mt-1 text-sm text-zinc-500">
+            Connected banks and balances.
+          </p>
         </div>
-        <Button asChild variant="outline" className="min-h-11 sm:justify-self-end">
-          <Link to="/app/household"><Users aria-hidden="true" /> Manage ownership</Link>
+        <Button
+          asChild
+          variant="outline"
+          className="min-h-11 sm:justify-self-end"
+        >
+          <Link to="/app/household">
+            <Users aria-hidden="true" /> Manage ownership
+          </Link>
         </Button>
       </header>
 
-      {enableBanking.environment?.toLowerCase() === 'sandbox' && (
-        <p className="border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950" role="status">
-          Sandbox data: these balances and transactions are sample data, not a connected bank account.
+      {!useSynci && enableBanking.environment?.toLowerCase() === "sandbox" && (
+        <p
+          className="rounded-lg border border-[var(--color-brand-rule)] bg-[var(--color-semantic-neutral-soft)] px-4 py-3 text-sm text-[var(--color-brand-ink)]"
+          role="status"
+        >
+          Sandbox data: these balances and transactions are sample data, not a
+          connected bank account.
         </p>
       )}
 
       <Card className="rounded-lg border-zinc-200 bg-white shadow-none">
         <CardHeader className="border-b border-zinc-200 pb-4">
-          <CardTitle>European banks</CardTitle>
-          <CardDescription>Banks are loaded directly from the regulated provider</CardDescription>
+          <CardTitle>Bank connections</CardTitle>
+          <CardDescription>
+            Secure, read-only access to your balances and transactions.
+          </CardDescription>
           <CardAction>
-            <Badge variant="outline" className="rounded-md border-zinc-200 bg-white text-zinc-700">
-              {enableBanking.connected
-                ? enableBanking.needsReconnect
-                  ? 'Reconnect'
-                  : `Synced ${enableBanking.lastSynced}`
-                : enableBanking.openForConnections
-                  ? enableBanking.environment
-                  : 'Coming soon'}
+            <Badge
+              variant="outline"
+              className="rounded-md border-zinc-200 bg-white text-zinc-700"
+            >
+              {useSynci
+                ? synci.connected
+                  ? synci.needsReconnect
+                    ? "Reconnect"
+                    : `Synced ${synci.lastSynced}`
+                  : synci.registered
+                    ? "Connecting"
+                    : synci.openForConnections
+                      ? "Available"
+                      : "Coming soon"
+                : enableBanking.connected
+                  ? enableBanking.needsReconnect
+                    ? "Reconnect"
+                    : `Synced ${enableBanking.lastSynced}`
+                  : enableBanking.openForConnections
+                    ? enableBanking.environment
+                    : "Coming soon"}
             </Badge>
           </CardAction>
         </CardHeader>
         <CardContent className="grid gap-6 pt-6">
-          {!enableBanking.openForConnections ? (
+          {useSynci ? (
+            !synci.openForConnections && !synci.registered ? (
+              <p className="text-sm text-zinc-600">
+                Bank connections are not open yet.
+              </p>
+            ) : synci.registered ? (
+              <div className="grid gap-3">
+                <div className="flex flex-wrap gap-2">
+                  {synci.openForConnections && (
+                    <Button
+                      type="button"
+                      disabled={loading}
+                      onClick={connectBank}
+                      className="wollie-primary-action"
+                    >
+                      {loading ? "Working…" : "Add or manage banks"}
+                    </Button>
+                  )}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={loading}
+                    onClick={syncConnectedBank}
+                  >
+                    Sync now
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    disabled={loading}
+                    onClick={disconnectConnectedBank}
+                    className="text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
+                  >
+                    Disconnect all
+                  </Button>
+                </div>
+                {!synci.connected && (
+                  <p className="text-xs leading-5 text-zinc-500">
+                    Finish connecting in the secure bank portal. Your accounts
+                    may take a moment to appear.
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-col items-start gap-3">
+                <p className="text-sm text-zinc-600">
+                  Connect up to two banks. You will sign in securely with each
+                  bank.
+                </p>
+                <Button
+                  type="button"
+                  disabled={loading}
+                  onClick={connectBank}
+                  className="wollie-primary-action"
+                >
+                  {loading ? "Connecting…" : "Connect a bank"}
+                </Button>
+              </div>
+            )
+          ) : !enableBanking.openForConnections ? (
             <div className="flex flex-col items-start gap-3 text-sm text-zinc-600">
               <p>
-                Bank connections are not open yet. We are finishing the secure provider setup before testers connect real accounts.
+                Bank connections are not open yet. We are finishing the secure
+                provider setup before testers connect real accounts.
               </p>
             </div>
           ) : enableBanking.connected ? (
             <div className="flex flex-wrap gap-2">
-              <Button type="button" disabled={loading} onClick={syncBank} className="wollie-primary-action">
-                {loading ? 'Working…' : 'Sync now'}
+              <Button
+                type="button"
+                disabled={loading}
+                onClick={syncConnectedBank}
+                className="wollie-primary-action"
+              >
+                {loading ? "Working…" : "Sync now"}
               </Button>
-              <Button type="button" variant="ghost" disabled={loading} onClick={disconnectBank} className="text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950">
+              <Button
+                type="button"
+                variant="ghost"
+                disabled={loading}
+                onClick={disconnectConnectedBank}
+                className="text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
+              >
                 Disconnect
               </Button>
             </div>
@@ -247,7 +465,9 @@ function AccountsPage() {
                   className="h-9 rounded-md border border-zinc-200 bg-white px-3 text-sm font-normal outline-none focus-visible:ring-2 focus-visible:ring-zinc-950"
                 >
                   {supportedCountries.map((item) => (
-                    <option key={item.code} value={item.code}>{item.name}</option>
+                    <option key={item.code} value={item.code}>
+                      {item.name}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -259,23 +479,47 @@ function AccountsPage() {
                   disabled={loading || loadingBanks}
                   className="h-9 rounded-md border border-zinc-200 bg-white px-3 text-sm font-normal outline-none focus-visible:ring-2 focus-visible:ring-zinc-950"
                 >
-                  <option value="">{loadingBanks ? 'Loading banks…' : 'Choose a bank'}</option>
+                  <option value="">
+                    {loadingBanks ? "Loading banks…" : "Choose a bank"}
+                  </option>
                   {institutions.map((bank) => (
-                    <option key={`${bank.country}:${bank.name}`} value={bank.name}>
-                      {bank.name}{bank.beta ? ' (beta)' : ''}
+                    <option
+                      key={`${bank.country}:${bank.name}`}
+                      value={bank.name}
+                    >
+                      {bank.name}
+                      {bank.beta ? " (beta)" : ""}
                     </option>
                   ))}
                 </select>
               </label>
-              <Button type="button" disabled={loading || loadingBanks || !bankName} onClick={connectBank} className="wollie-primary-action">
-                {loading ? 'Connecting…' : 'Connect bank'}
+              <Button
+                type="button"
+                disabled={loading || loadingBanks || !bankName}
+                onClick={connectBank}
+                className="wollie-primary-action"
+              >
+                {loading ? "Connecting…" : "Connect bank"}
               </Button>
             </div>
           )}
 
-          {!enableBanking.connected && <p className="text-xs leading-5 text-zinc-500">Coverage varies by country and bank. Wollie never asks for or stores your bank password.</p>}
-          {error && <p className="text-sm font-medium text-zinc-950" role="alert">{error}</p>}
-          {message && <p className="text-sm text-zinc-700" role="status">{message}</p>}
+          {!(useSynci ? synci.connected : enableBanking.connected) && (
+            <p className="text-xs leading-5 text-zinc-500">
+              Coverage varies by bank. Wollie never asks for or stores your bank
+              password.
+            </p>
+          )}
+          {error && (
+            <p className="text-sm font-medium text-zinc-950" role="alert">
+              {error}
+            </p>
+          )}
+          {message && (
+            <p className="text-sm text-zinc-700" role="status">
+              {message}
+            </p>
+          )}
         </CardContent>
       </Card>
 
@@ -288,14 +532,21 @@ function AccountsPage() {
           <CardContent className="pt-2">
             <ul className="divide-y divide-zinc-200">
               {accounts.map((account) => (
-                <li key={account.id} className="flex flex-col gap-3 py-3 first:pt-2 last:pb-1 sm:flex-row sm:items-center sm:justify-between">
+                <li
+                  key={account.id}
+                  className="flex flex-col gap-3 py-3 first:pt-2 last:pb-1 sm:flex-row sm:items-center sm:justify-between"
+                >
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium">{account.name}</p>
+                    <p className="truncate text-sm font-medium">
+                      {account.name}
+                    </p>
                     <p className="mt-0.5 truncate text-xs text-zinc-500">
-                      {account.institution} · {account.type} · {account.lastSynced}
+                      {account.institution} · {account.type} ·{" "}
+                      {account.lastSynced}
                     </p>
                     <p className="mt-1 text-xs text-zinc-500">
-                      {connectionLabel(account.connectionStatus)} · {ownershipLabel(account.ownership, household.members)}
+                      {connectionLabel(account.connectionStatus)} ·{" "}
+                      {ownershipLabel(account.ownership, household.members)}
                     </p>
                   </div>
                   <div className="flex shrink-0 items-center gap-3 sm:justify-end">
@@ -306,11 +557,13 @@ function AccountsPage() {
                       type="button"
                       variant="outline"
                       disabled={exportingAccountId === account.id}
-                      onClick={() => void exportAccount(account.id, account.name)}
+                      onClick={() =>
+                        void exportAccount(account.id, account.name)
+                      }
                       className="min-h-10 border-zinc-200 bg-white text-zinc-950 hover:bg-zinc-100"
                     >
                       <Download aria-hidden="true" />
-                      {exportingAccountId === account.id ? 'Exporting…' : 'CSV'}
+                      {exportingAccountId === account.id ? "Exporting…" : "CSV"}
                     </Button>
                   </div>
                 </li>
@@ -320,44 +573,58 @@ function AccountsPage() {
         </Card>
       )}
     </main>
-  )
+  );
 }
 
 function errorMessage(value: unknown, fallback: string) {
-  return value instanceof Error ? value.message : fallback
+  return value instanceof Error ? value.message : fallback;
 }
 
 function connectionLabel(status?: string) {
-  if (status === 'CONNECTED') return 'Connected'
-  if (status === 'NEEDS_RECONNECT') return 'Connection needs attention'
-  if (status === 'FAILED') return 'Connection failed'
-  if (status === 'SYNCING') return 'Updating'
-  return 'Not connected'
+  if (status === "CONNECTED") return "Connected";
+  if (status === "NEEDS_RECONNECT") return "Connection needs attention";
+  if (status === "FAILED") return "Connection failed";
+  if (status === "SYNCING") return "Updating";
+  return "Not connected";
 }
 
 function ownershipLabel(
   ownership: Array<{ memberId: string; shareBasisPoints: number }> | undefined,
   members: Array<{ id: string; name: string }>,
 ) {
-  if (!ownership?.length) return 'Ownership not assigned'
+  if (!ownership?.length) return "Ownership not assigned";
   return ownership
     .filter((share) => share.shareBasisPoints > 0)
     .map((share) => {
-      const member = members.find((item) => item.id === share.memberId)
-      return `${member?.name || 'Member'} ${share.shareBasisPoints / 100}%`
+      const member = members.find((item) => item.id === share.memberId);
+      return `${member?.name || "Member"} ${share.shareBasisPoints / 100}%`;
     })
-    .join(' · ')
+    .join(" · ");
 }
 
-function downloadBlob({ content, filename, type }: { content: string; filename: string; type: string }) {
-  const url = URL.createObjectURL(new Blob([content], { type }))
-  const anchor = document.createElement('a')
-  anchor.href = url
-  anchor.download = filename
-  anchor.click()
-  URL.revokeObjectURL(url)
+function downloadBlob({
+  content,
+  filename,
+  type,
+}: {
+  content: string;
+  filename: string;
+  type: string;
+}) {
+  const url = URL.createObjectURL(new Blob([content], { type }));
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
 }
 
 function slugify(value: string) {
-  return value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'account'
+  return (
+    value
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "") || "account"
+  );
 }

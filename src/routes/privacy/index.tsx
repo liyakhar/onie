@@ -51,7 +51,7 @@ function PrivacyPage() {
       </LegalSection>
 
       <LegalSection title="Service providers">
-        <p>We share only the information needed to operate Wollie with providers supporting bank connectivity (Enable Banking and participating banks), payment and invoices (Stripe), hosting and delivery (Cloudflare), database infrastructure, and transactional email (Resend). Authentication is operated within Wollie using its database and authentication software.</p>
+        <p>We share only the information needed to operate Wollie with providers supporting bank connectivity (Synci, its regulated connectivity providers, and participating banks; Enable Banking for restricted testing), payment and invoices (Stripe), hosting and delivery (Cloudflare), database infrastructure, and transactional email (Resend). Authentication is operated within Wollie using its database and authentication software.</p>
         <p>Provider roles and locations differ. When personal data is transferred outside the European Economic Area, we use an applicable transfer mechanism such as an adequacy decision or contractual safeguards, as supported by the relevant provider agreement.</p>
         <p>We may also disclose information when required by law or when reasonably necessary to protect users, Wollie, or others.</p>
       </LegalSection>
