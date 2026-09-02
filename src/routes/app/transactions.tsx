@@ -332,81 +332,95 @@ export function TransactionsContent({
         </section>
       )}
 
-      <section
-        aria-label="Transaction filters"
-        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_11rem_11rem_11rem]"
-      >
+      <section aria-label="Transaction filters" className="wollie-transaction-filters">
         <Input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search merchant or account…"
           aria-label="Search transactions"
-          className="min-h-11 border-zinc-200 bg-white"
+          className="wollie-transaction-filters__search min-h-11 border-zinc-200 bg-white"
         />
-        <Select
-          value={status}
-          onValueChange={(value) => setStatus(value as typeof status)}
-        >
-          <SelectTrigger
-            className="min-h-11 border-zinc-200 bg-white"
-            aria-label="Transaction status"
+        <div className="wollie-transaction-filters__controls">
+          <Select
+            value={status}
+            onValueChange={(value) => setStatus(value as typeof status)}
           >
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {["all", "needs-review", "pending", "cleared"].map((item) => (
-              <SelectItem key={item} value={item}>
-                {labelStatus(item)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select
-          value={category}
-          onValueChange={(value) => {
-            if (value === CREATE_CATEGORY_VALUE && !readOnly) {
-              setShowCategoryCreator(true);
-              return;
-            }
-            setCategory(value as typeof category);
-          }}
-        >
-          <SelectTrigger
-            className="min-h-11 border-zinc-200 bg-white"
-            aria-label="Transaction category"
+            <SelectTrigger
+              className="wollie-transaction-filters__trigger min-h-11 border-zinc-200 bg-white"
+              aria-label="Transaction status"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent
+              align="start"
+              className="wollie-transaction-filters__content"
+              position="popper"
+              sideOffset={8}
+            >
+              {["all", "needs-review", "pending", "cleared"].map((item) => (
+                <SelectItem key={item} value={item}>
+                  {labelStatus(item)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select
+            value={category}
+            onValueChange={(value) => {
+              if (value === CREATE_CATEGORY_VALUE && !readOnly) {
+                setShowCategoryCreator(true);
+                return;
+              }
+              setCategory(value as typeof category);
+            }}
           >
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All categories</SelectItem>
-            {allCategoryOptions.map((item) => (
-              <SelectItem key={item} value={item}>
-                {item}
-              </SelectItem>
-            ))}
-            {!readOnly && (
-              <SelectItem value={CREATE_CATEGORY_VALUE}>
-                + Create category
-              </SelectItem>
-            )}
-          </SelectContent>
-        </Select>
-        <Select value={month} onValueChange={setMonth}>
-          <SelectTrigger
-            className="min-h-11 border-zinc-200 bg-white"
-            aria-label="Transaction month"
-          >
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All months</SelectItem>
-            {months.map((item) => (
-              <SelectItem key={item} value={item}>
-                {formatMonth(item)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+            <SelectTrigger
+              className="wollie-transaction-filters__trigger min-h-11 border-zinc-200 bg-white"
+              aria-label="Transaction category"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent
+              align="start"
+              className="wollie-transaction-filters__content"
+              position="popper"
+              sideOffset={8}
+            >
+              <SelectItem value="all">All categories</SelectItem>
+              {allCategoryOptions.map((item) => (
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
+              {!readOnly && (
+                <SelectItem value={CREATE_CATEGORY_VALUE}>
+                  + Create category
+                </SelectItem>
+              )}
+            </SelectContent>
+          </Select>
+          <Select value={month} onValueChange={setMonth}>
+            <SelectTrigger
+              className="wollie-transaction-filters__trigger min-h-11 border-zinc-200 bg-white"
+              aria-label="Transaction month"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent
+              align="start"
+              className="wollie-transaction-filters__content"
+              position="popper"
+              sideOffset={8}
+            >
+              <SelectItem value="all">All months</SelectItem>
+              {months.map((item) => (
+                <SelectItem key={item} value={item}>
+                  {formatMonth(item)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </section>
 
       <CategoryTotals
