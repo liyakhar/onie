@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wollie Homepage Money Report Mockup</title>
+    <style>
+      :root {
+        --cream: oklch(97% 0.018 78);
+        --paper: oklch(99% 0.01 78);
+        --ink: oklch(20% 0.052 250);
+        --ink-soft: oklch(43% 0.04 250);
+        --blue: oklch(23% 0.085 250);
+        --orange: oklch(68% 0.16 43);
+        --orange-soft: oklch(93% 0.055 64);
+        --sage: oklch(65% 0.08 142);
+        --sage-soft: oklch(92% 0.04 142);
+        --rule: oklch(87% 0.018 78);
+        --danger: oklch(57% 0.15 28);
+        font-family: Manrope, Inter, system-ui, sans-serif;
+        color: var(--ink);
+        background: var(--cream);
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        overflow-x: clip;
+        background:
+          linear-gradient(180deg, var(--cream), oklch(95% 0.025 86));
+      }
+
+      .page {
+        width: min(1180px, calc(100vw - 40px));
+        margin: 0 auto;
+        padding: 28px 0 52px;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 0 34px;
+      }
+
+      .logo {
+        font-family: "Bricolage Grotesque", Manrope, sans-serif;
+        font-size: 25px;
+        font-weight: 800;
+        letter-spacing: 0;
+        color: var(--blue);
+      }
+
+      .nav {
+        display: flex;
+        gap: 22px;
+        align-items: center;
+        font-size: 14px;
+        color: var(--ink-soft);
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0 18px;
+        border-radius: 10px;
+        background: var(--blue);
+        color: var(--paper);
+        font-weight: 760;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+        gap: 42px;
+        align-items: center;
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 620px;
+        font-family: "Bricolage Grotesque", Manrope, sans-serif;
+        font-size: clamp(52px, 7vw, 88px);
+        line-height: 0.94;
+        letter-spacing: 0;
+        color: var(--blue);
+      }
+
+      .lede {
+        max-width: 520px;
+        margin: 24px 0 28px;
+        font-size: 20px;
+        line-height: 1.45;
+        color: var(--ink-soft);
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .secondary {
+        background: var(--paper);
+        color: var(--blue);
+        border: 1px solid var(--rule);
+      }
+
+      .report {
+        border: 1px solid var(--rule);
+        border-radius: 22px;
+        background: color-mix(in oklch, var(--paper) 92%, white);
+        box-shadow: 0 24px 70px color-mix(in oklch, var(--blue) 12%, transparent);
+        padding: 22px;
+      }
+
+      .report-top {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 16px;
+        align-items: start;
+        border-bottom: 1px solid var(--rule);
+        padding-bottom: 18px;
+      }
+
+      .eyebrow {
+        margin: 0 0 6px;
+        color: var(--orange);
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .report h2 {
+        margin: 0;
+        font-family: "Bricolage Grotesque", Manrope, sans-serif;
+        font-size: 30px;
+        line-height: 1.05;
+        color: var(--blue);
+        letter-spacing: 0;
+      }
+
+      .safe {
+        text-align: right;
+      }
+
+      .safe strong {
+        display: block;
+        font-family: "Bricolage Grotesque", Manrope, sans-serif;
+        font-size: 46px;
+        line-height: 0.95;
+        color: var(--sage);
+      }
+
+      .safe span {
+        display: block;
+        margin-top: 6px;
+        font-size: 13px;
+        color: var(--ink-soft);
+      }
+
+      .flow {
+        margin: 22px 0;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .flow-step {
+        min-height: 98px;
+        border-radius: 16px;
+        border: 1px solid var(--rule);
+        padding: 14px;
+        background: var(--cream);
+      }
+
+      .flow-step span {
+        display: block;
+        font-size: 12px;
+        color: var(--ink-soft);
+      }
+
+      .flow-step strong {
+        display: block;
+        margin-top: 10px;
+        font-size: 24px;
+        color: var(--blue);
+      }
+
+      .report-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 14px;
+      }
+
+      .panel {
+        border: 1px solid var(--rule);
+        border-radius: 18px;
+        background: var(--paper);
+        padding: 16px;
+      }
+
+      .panel h3 {
+        margin: 0 0 14px;
+        font-size: 15px;
+        color: var(--blue);
+      }
+
+      .bar-row {
+        display: grid;
+        grid-template-columns: 84px minmax(0, 1fr) 48px;
+        align-items: center;
+        gap: 10px;
+        margin: 11px 0;
+        font-size: 13px;
+      }
+
+      .track {
+        height: 10px;
+        border-radius: 999px;
+        background: var(--orange-soft);
+        overflow: hidden;
+      }
+
+      .fill {
+        height: 100%;
+        width: var(--w);
+        border-radius: inherit;
+        background: var(--orange);
+      }
+
+      .fill.sage { background: var(--sage); }
+      .fill.danger { background: var(--danger); }
+
+      .reserves {
+        display: grid;
+        gap: 10px;
+      }
+
+      .reserve {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        min-height: 48px;
+        padding: 10px 12px;
+        border-radius: 14px;
+        background: var(--sage-soft);
+        font-size: 13px;
+      }
+
+      .reserve strong {
+        color: var(--blue);
+      }
+
+      .partners {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .person {
+        border-radius: 15px;
+        background: var(--cream);
+        padding: 14px;
+      }
+
+      .person b {
+        display: block;
+        color: var(--blue);
+      }
+
+      .person span {
+        display: block;
+        margin-top: 7px;
+        color: var(--ink-soft);
+        font-size: 12px;
+      }
+
+      .demo-strip {
+        margin-top: 34px;
+        border-top: 1px solid var(--rule);
+        padding-top: 30px;
+        display: grid;
+        grid-template-columns: 0.75fr 1.25fr;
+        gap: 28px;
+        align-items: center;
+      }
+
+      .demo-strip h2 {
+        margin: 0;
+        font-family: "Bricolage Grotesque", Manrope, sans-serif;
+        font-size: 34px;
+        line-height: 1.05;
+        color: var(--blue);
+      }
+
+      .mini-demo {
+        height: 180px;
+        border-radius: 18px;
+        border: 1px solid var(--rule);
+        background: var(--paper);
+        display: grid;
+        place-items: center;
+        color: var(--ink-soft);
+        font-weight: 700;
+      }
+
+      @media (max-width: 760px) {
+        .page { width: min(100% - 24px, 1180px); padding-top: 16px; }
+        .nav span { display: none; }
+        .hero,
+        .report-grid,
+        .demo-strip {
+          grid-template-columns: 1fr;
+        }
+        h1 { font-size: 48px; }
+        .report-top,
+        .flow,
+        .partners {
+          grid-template-columns: 1fr;
+        }
+        .safe { text-align: left; }
+        .flow-step { min-height: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <div class="logo">Wollie</div>
+        <nav class="nav">
+          <span>Pricing</span>
+          <span>Bank coverage</span>
+          <span>Sign in</span>
+          <div class="button">Start free</div>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div>
+            <h1>Money planning, built for couples.</h1>
+            <p class="lede">See what is safe to spend, what is already spoken for, and how the month looks for both of you.</p>
+            <div class="actions">
+              <div class="button">Start planning together</div>
+              <div class="button secondary">Use for free</div>
+            </div>
+          </div>
+
+          <section class="report" aria-label="Homepage money report mockup">
+            <div class="report-top">
+              <div>
+                <p class="eyebrow">Shared monthly report</p>
+                <h2>Your month, in one report.</h2>
+              </div>
+              <div class="safe">
+                <strong>€333</strong>
+                <span>safe to spend</span>
+              </div>
+            </div>
+
+            <div class="flow">
+              <div class="flow-step"><span>Income</span><strong>€8,680</strong></div>
+              <div class="flow-step"><span>Bills</span><strong>€300</strong></div>
+              <div class="flow-step"><span>Future</span><strong>€7,646</strong></div>
+              <div class="flow-step"><span>Flexible</span><strong>€333</strong></div>
+            </div>
+
+            <div class="report-grid">
+              <div class="panel">
+                <h3>Spending by category</h3>
+                <div class="bar-row"><span>Food</span><div class="track"><div class="fill" style="--w: 44%"></div></div><span>44%</span></div>
+                <div class="bar-row"><span>Transport</span><div class="track"><div class="fill" style="--w: 68%"></div></div><span>68%</span></div>
+                <div class="bar-row"><span>Home</span><div class="track"><div class="fill sage" style="--w: 13%"></div></div><span>13%</span></div>
+                <div class="bar-row"><span>Extra</span><div class="track"><div class="fill danger" style="--w: 100%"></div></div><span>over</span></div>
+              </div>
+
+              <div class="panel">
+                <h3>Future reserves</h3>
+                <div class="reserves">
+                  <div class="reserve"><span>Savings</span><strong>€2,249 set aside</strong></div>
+                  <div class="reserve"><span>Tax</span><strong>€3,148 set aside</strong></div>
+                  <div class="reserve"><span>Pension</span><strong>€2,249 set aside</strong></div>
+                </div>
+                <div class="partners">
+                  <div class="person"><b>Liya</b><span>sees shared totals and own accounts</span></div>
+                  <div class="person"><b>Alex</b><span>same plan, separate accounts</span></div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section class="demo-strip">
+          <div>
+            <h2>Then explore the real workspace.</h2>
+          </div>
+          <div class="mini-demo">Interactive demo iframe comes here</div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
