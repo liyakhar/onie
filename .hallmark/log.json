@@ -1,5 +1,43 @@
 [
   {
+    "date": "2026-08-31",
+    "scope": "auth",
+    "macrostructure": "Illustrated split entry",
+    "theme": "custom",
+    "theme_axes": "warm cream / Bricolage + Manrope / navy-orange",
+    "vibe": "calm shared household welcome",
+    "enrichment": "E5 transparent editorial illustration",
+    "brief": "Redesign Wollie sign-in with the couples illustration directly on the page canvas"
+  },
+  {
+    "date": "2026-08-31",
+    "scope": "app",
+    "macrostructure": "Workbench",
+    "theme": "custom",
+    "theme_axes": "warm cream / Bricolage + Manrope / navy-orange-sage",
+    "vibe": "calm shared household workspace",
+    "enrichment": "none",
+    "brief": "Unify every logged-in Wollie page with the new landing-page design system"
+  },
+  {
+    "date": "2026-08-31",
+    "macrostructure": "Interactive Workbench",
+    "theme": "custom",
+    "theme_axes": "light / geometric-sans / orange-blue",
+    "vibe": "warm minimal product clarity",
+    "enrichment": "E5 illustration + live product demo",
+    "brief": "Shorter Wollie landing page with clickable Overview, Transactions, and Money plan demo"
+  },
+  {
+    "date": "2026-08-31",
+    "macrostructure": "Illustrated Journey",
+    "theme": "custom",
+    "theme_axes": "light / geometric-sans / orange-blue",
+    "vibe": "calm human shared future",
+    "enrichment": "E5 generated editorial illustration",
+    "brief": "Wollie shared money plan landing page for couples"
+  },
+  {
     "date": "2026-06-16",
     "macrostructure": "Type Specimen",
     "theme": "studied-DNA (source: https://www.usehallmark.com/examples/press-01/)",

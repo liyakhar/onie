@@ -1,6 +1,6 @@
 # Wollie bank-data DPIA / AIPD
 
-Status: first founder draft for restricted staging, dated 2026-07-16. **This document does not approve unrestricted public processing.** Complete the evidence and sign-off sections before enabling public bank connections.
+Status: founder draft for public-launch review, updated 2026-07-17. **This document does not approve unrestricted public processing.** Complete the evidence, professional review, and sign-off sections before enabling public paid bank connections.
 
 ## 1. Decision and ownership
 
@@ -11,11 +11,21 @@ Status: first founder draft for restricted staging, dated 2026-07-16. **This doc
 | Assessment owner | Founder/controller — name required |
 | Technical owner | Founder/maintainer — name required |
 | Privacy contact | Final monitored privacy email required |
-| Assessment date | 2026-07-16 |
+| Assessment date | 2026-07-17 |
 | Review date | Before unrestricted public bank sync, then after any material change or incident |
-| Current decision | Restricted private staging only; no public users and no live payments |
+| Current decision | Public paid launch is not approved yet. Technical work may continue, but unrestricted public bank sync needs the remaining legal, provider, and tax evidence below. |
 
 An AIPD is treated as required because the service continuously combines bank-account and transaction data, categorizes spending, detects recurring payments, and may reveal highly personal behavior even though it does not intentionally collect GDPR Article 9 categories. The processing combines highly personal data, systematic evaluation, multiple data sources, and new aggregation technology.
+
+## 1.1 Public-launch blockers
+
+The following items must be resolved before public paid users are invited to connect banks:
+
+- Final controller identity: Belgian sole proprietor or SRL/BV legal name, address, enterprise/VAT number, monitored privacy email, and customer support route.
+- Enable Banking production approval: written confirmation that Wollie's planned consumer budgeting app may use Enable Banking's AISP authorisation for public commercial use, and whether Wollie is a customer/application, processor, controller, joint controller, agent, outsourcing provider, or regulated TPP for each flow.
+- Enable Banking contract/DPA evidence: signed agreement or explicit production activation terms, subprocessor list, breach contact, retention/deletion terms, and unrestricted production status.
+- Accountant VAT/OSS answer: Belgian VAT regime, small-business exemption availability, tax-inclusive pricing, EU B2C OSS threshold/registration plan, invoice/recordkeeping requirements, and whether Stripe Tax should remain disabled.
+- Legal/privacy review: Belgian/EU consumer terms, withdrawal/refund wording, privacy notice, DPIA conclusion, and bank-data/PSD2 positioning reviewed against the final facts.
 
 ## 2. Processing scope
 
@@ -106,7 +116,7 @@ No risk above is accepted yet. A founder/controller and reviewer must confirm ea
 - [x] Security headers include CSP, HSTS, frame denial, MIME sniffing protection, restrictive permissions policy, and referrer policy.
 - [x] Export, bank disconnect, and verified account-deletion paths exist.
 - [ ] Authorization integration-test report attached.
-- [ ] Stripe test-mode journey report attached.
+- [x] Stripe test-mode journey report attached in `precompany-readiness-evidence.md`.
 - [ ] Enable Banking sandbox journey report attached.
 - [ ] Email reset/deletion delivery report attached.
 - [ ] Separate staging database and secrets evidenced.
@@ -116,9 +126,11 @@ No risk above is accepted yet. A founder/controller and reviewer must confirm ea
 ### Organizational and contractual controls
 
 - [ ] Final controller, privacy contact, business address and enterprise/VAT number inserted.
+- [ ] Accountant confirms VAT/OSS treatment and whether Stripe Tax may be enabled.
 - [ ] Named list of people with production access and the minimum access each needs.
 - [ ] MFA enabled for domain, Cloudflare, database, Stripe, Enable Banking, Resend, source control and business bank.
 - [ ] Provider agreements, DPAs, subprocessors, regions, transfer mechanisms, breach contacts and deletion terms archived.
+- [ ] Enable Banking confirms public commercial production use and regulated-role allocation for Wollie's consumer budgeting app.
 - [ ] Retention schedule approved and reflected in the public Privacy Policy.
 - [ ] Rights-request and incident-response owners assigned.
 - [ ] Staff/founder confidentiality and security obligations signed.
@@ -157,4 +169,3 @@ Final public-launch decision: **NOT YET APPROVED**.
 - Belgian Data Protection Authority DPIA guidance: https://www.dataprotectionauthority.be/index.php/professionnel/rgpd-/analyse-d-impact-relative-a-la-protection-des-donnees
 - Belgian processing-register guidance: https://www.dataprotectionauthority.be/professioneel/avg/register-van-verwerkingsactiviteiten
 - GDPR: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679
-

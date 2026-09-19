@@ -21,7 +21,7 @@ Status: in progress. This records technical evidence for private staging; it is 
 | --- | --- | --- |
 | 2026-07-16 | Existing Enable Banking sandbox credentials; Belgian AIS institution list | Passed: BBVA and Mock ASPSP returned |
 | 2026-07-16 | Built app loaded Belgian institutions and reached Mock ASPSP consent | Passed until provider control-panel sign-in; founder must finish consent |
-| Pending | Stripe hosted test payment/subscription/refund/cancellation | Requires founders to add free Stripe test keys and test Price IDs |
+| 2026-07-16 | Stripe sandbox product, prices, Checkout, subscription, scheduled cancellation, refund, final cancellation, and portal | Passed; all objects reported `livemode: false` and the disposable customer was deleted |
 | 2026-07-16 | Account-deletion confirmation request from built app | Local request path passed; remote staging correctly disables the action until transactional email is configured |
 | Pending | Password-reset and verified deletion-email delivery | Requires verified Resend staging sender and a founder-controlled test inbox |
 
@@ -59,6 +59,19 @@ Status: in progress. This records technical evidence for private staging; it is 
 6. Stripe unavailable state: passed safely; plan selection reports that the test Price is not configured.
 7. Account deletion readiness: corrected after the first run exposed a false success message when email was absent. The deployed UI now disables deletion and explains that secure confirmation email must be configured.
 8. Full suite after the correction: 59 tests across 14 files, TypeScript check, and Node production build passed.
+
+## Stripe sandbox journey, 2026-07-16
+
+1. A separate full Stripe account and isolated `Wollie sandbox` were created; live activation was not started.
+2. Product `Wollie` was created with recurring test Prices of EUR 7.99/month and EUR 59/year.
+3. The Railway staging webhook endpoint was created for `checkout.session.completed` and subscription created/updated/deleted events.
+4. A restricted test key named `Wollie Railway staging` was created with only the runtime permissions needed for Checkout, customer records, portal sessions, subscription reads, Prices and Products.
+5. The restricted key successfully retrieved the monthly Price and created an unpaid EUR 7.99 test Checkout Session.
+6. A separate Stripe sandbox card journey created an active EUR 7.99 subscription, scheduled cancellation at period end, produced a successful EUR 7.99 refund, and completed final cancellation.
+7. The disposable Stripe customer was deleted after the journey.
+8. The default test Customer Portal was configured for payment/billing-detail updates, invoice history, cancellation at period end, cancellation reasons, and Wollie Terms/Privacy links.
+9. Stripe Checkout's duplicate Terms checkbox remains disabled only for private pre-company staging because Stripe requires completed legal business details before accepting the public Terms URL. Wollie's own signup consent remains active. Production preflight requires the Stripe checkbox to be enabled.
+10. The non-secret test Price IDs and explicit `STRIPE_AUTOMATIC_TAX=false` were added to Railway staging. The restricted API key and webhook signing secret must be pasted manually into Railway because automated secret transfer was blocked by the credential-disclosure safeguard.
 
 ## Manual operating rule for a withdrawal/refund
 
