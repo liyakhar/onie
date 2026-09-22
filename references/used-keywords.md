@@ -367,6 +367,21 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - when to use mcp tools resources prompts ✓
   - mcp architecture primitives ✓
 
+### claude code dynamic workflows
+
+- **Page:** `/blog/claude-code-dynamic-workflows`
+- **Published:** 2026-09-22
+- **Intent:** Informational
+- **Volume / KD:** pending (serp-2026-09 validated)
+- **Cluster:**
+  - claude code dynamic workflows ✓
+  - dynamic workflows ai agents examples ✓
+  - claude code orchestration ✓
+  - multi-agent Claude Code ✓
+  - workflow orchestration patterns ✓
+  - ultracode Claude Code ✓
+  - agent parallel orchestration ✓
+
 ### agent observability for developers
 
 - **Page:** `/blog/agent-observability-for-developers`

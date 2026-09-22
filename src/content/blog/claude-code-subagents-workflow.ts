@@ -24,6 +24,7 @@ export const claudeCodeSubagentsWorkflowPost: BlogPost = {
   tldr:
     'Claude Code offers three ways to parallelize work: subagents (Claude decides turn-by-turn what to spawn), agent teams (workers coordinate with each other), and dynamic workflows (a JavaScript script holds the plan). Use subagents for a few side tasks per turn. Use agent teams when workers need to debate or share findings. Use workflows when the same operation repeats across many items or the plan is stable enough to freeze into code.',
   relatedSlugs: [
+    'claude-code-dynamic-workflows',
     'claude-code-workflow-examples',
     'agent-workflow-template',
     'agent-skills-best-practices',

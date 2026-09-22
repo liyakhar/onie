@@ -26,8 +26,10 @@ import { literatureReviewAiAgentWorkflowPost } from '#/content/blog/literature-r
 import { saasMvpAgentWorkflowPost } from '#/content/blog/saas-mvp-agent-workflow'
 import { cursorAgentSkillsMigratePost } from '#/content/blog/cursor-agent-skills-migrate'
 import { publicAgentWorkflowFeedPost } from '#/content/blog/public-agent-workflow-feed'
+import { claudeCodeDynamicWorkflowsPost } from '#/content/blog/claude-code-dynamic-workflows'
 
 const posts: BlogPost[] = [
+  claudeCodeDynamicWorkflowsPost,
   publicAgentWorkflowFeedPost,
   cursorAgentSkillsMigratePost,
   saasMvpAgentWorkflowPost,

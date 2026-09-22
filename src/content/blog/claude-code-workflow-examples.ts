@@ -22,7 +22,7 @@ export const claudeCodeWorkflowExamplesPost: BlogPost = {
   },
   tldr:
     'Claude Code workflows are JavaScript harnesses that spawn subagents in parallel or sequence — fan-out-and-synthesize, classify-and-act, and pipeline are the three patterns you will reuse most. Use `/deep-research` to see a bundled example, then save your own to `~/.claude/workflows/` or publish the harness on Onie.',
-  relatedSlugs: ['how-to-write-claude-code-skills', 'document-ai-agent-workflows', 'claude-code-subagents-workflow'],
+  relatedSlugs: ['claude-code-dynamic-workflows', 'how-to-write-claude-code-skills', 'document-ai-agent-workflows'],
   body: `
 ## What counts as a Claude Code workflow
 
