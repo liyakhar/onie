@@ -448,7 +448,7 @@ export function TransactionsContent({
               return (
                 <li
                   key={transaction.id}
-                  className="grid gap-3 px-4 py-4 sm:grid-cols-[minmax(0,1fr)_12rem_auto] sm:items-center sm:px-5"
+                  className="wollie-transaction-row grid gap-3 px-4 py-4 sm:grid-cols-[minmax(0,1fr)_12rem_auto] sm:items-center sm:px-5"
                 >
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
@@ -486,7 +486,7 @@ export function TransactionsContent({
                       className="min-h-11 border-zinc-200 bg-white"
                       aria-label={`Category for ${transaction.merchant}`}
                     >
-                      <SelectValue />
+                      <SelectValue>{transaction.category}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       {allCategoryOptions.map((item) => (

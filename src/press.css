@@ -8190,6 +8190,28 @@ body {
     min-width: 0;
   }
 
+  .wollie-transaction-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+
+  .wollie-transaction-row > :first-child {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .wollie-transaction-row > [role="combobox"] {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+  }
+
+  .wollie-transaction-row > p:last-child {
+    grid-column: 2;
+    grid-row: 1;
+    white-space: nowrap;
+  }
+
   .money-plan-view-switch {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
