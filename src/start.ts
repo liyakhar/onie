@@ -1,8 +1,13 @@
 import { createCsrfMiddleware, createMiddleware, createStart } from '@tanstack/react-start'
 import { canonicalAppResponse, stagingAccessResponse } from '#/lib/staging-access'
+import { bankReturnHandoffResponse } from '#/lib/native-bank-return'
 
 const canonicalApp = createMiddleware().server(async ({ next, request }) => {
   return (await canonicalAppResponse(request)) || next()
+})
+
+const bankReturnHandoff = createMiddleware().server(async ({ next, request }) => {
+  return bankReturnHandoffResponse(request) || next()
 })
 
 const stagingAccess = createMiddleware().server(async ({ next, request }) => {
@@ -20,5 +25,5 @@ const csrfProtection = createCsrfMiddleware({
 })
 
 export const startInstance = createStart(() => ({
-  requestMiddleware: [canonicalApp, stagingAccess, csrfProtection],
+  requestMiddleware: [canonicalApp, bankReturnHandoff, stagingAccess, csrfProtection],
 }))

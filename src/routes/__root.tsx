@@ -4,6 +4,7 @@ import {
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 import { NotFoundPage } from '#/components/NotFoundPage'
+import { NativeBankReturn } from '#/components/NativeBankReturn'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
@@ -52,6 +53,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="antialiased [overflow-wrap:anywhere]">
+        <NativeBankReturn />
         <a className="skip-link" href="#main">
           Skip to content
         </a>

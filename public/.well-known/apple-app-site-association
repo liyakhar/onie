@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["GD7PWQBWJV.com.wollie.app"],
+        "components": [
+          { "/": "/app/accounts", "?": { "code": "*", "state": "*" } },
+          { "/": "/app/accounts", "?": { "bank": "connected" } },
+          { "/": "/app/accounts", "?": { "error": "*" } }
+        ]
+      }
+    ]
+  }
+}

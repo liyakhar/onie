@@ -57,6 +57,7 @@
     "outreach:copy": "node scripts/outreach/copy.mjs"
   },
   "dependencies": {
+    "@capacitor/app": "8.1.1",
     "@capacitor/core": "8.5.2",
     "@capacitor/ios": "8.5.2",
     "@prisma/adapter-pg": "^7.4.2",

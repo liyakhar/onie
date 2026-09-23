@@ -23,6 +23,7 @@ export async function canonicalAppResponse(
   headers.delete('host')
   headers.set('x-forwarded-host', source.host)
   headers.set('x-forwarded-proto', source.protocol.slice(0, -1))
+  headers.set('x-wollie-source-host', source.host)
 
   if (headers.get('origin') === source.origin) {
     headers.set('origin', target.origin)

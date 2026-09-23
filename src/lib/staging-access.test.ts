@@ -68,6 +68,7 @@ describe('canonical app response', () => {
       'https://onie-web-production.up.railway.app/app/accounts?state=test',
     )
     expect(upstreamRequest.headers.get('x-forwarded-host')).toBe('wollie.pages.dev')
+    expect(upstreamRequest.headers.get('x-wollie-source-host')).toBe('wollie.pages.dev')
     expect(await response?.text()).toBe('Wollie from Railway')
   })
 
