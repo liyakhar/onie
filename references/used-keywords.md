@@ -382,6 +382,21 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - ultracode Claude Code ✓
   - agent parallel orchestration ✓
 
+### dynamic workflows ai agents examples
+
+- **Page:** `/blog/dynamic-workflow-examples`
+- **Published:** 2026-09-23
+- **Intent:** Informational
+- **Volume / KD:** pending
+- **Cluster:**
+  - dynamic workflows ai agents examples ✓
+  - ai agent workflow examples ✓
+  - multi-agent workflow patterns ✓
+  - workflow orchestration examples ✓
+  - agent orchestration patterns ✓
+  - parallel agent workflows ✓
+  - agent workflow use cases ✓
+
 ### agent observability for developers
 
 - **Page:** `/blog/agent-observability-for-developers`

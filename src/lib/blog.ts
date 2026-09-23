@@ -27,8 +27,10 @@ import { saasMvpAgentWorkflowPost } from '#/content/blog/saas-mvp-agent-workflow
 import { cursorAgentSkillsMigratePost } from '#/content/blog/cursor-agent-skills-migrate'
 import { publicAgentWorkflowFeedPost } from '#/content/blog/public-agent-workflow-feed'
 import { claudeCodeDynamicWorkflowsPost } from '#/content/blog/claude-code-dynamic-workflows'
+import { dynamicWorkflowExamplesPost } from '#/content/blog/dynamic-workflow-examples'
 
 const posts: BlogPost[] = [
+  dynamicWorkflowExamplesPost,
   claudeCodeDynamicWorkflowsPost,
   publicAgentWorkflowFeedPost,
   cursorAgentSkillsMigratePost,
