@@ -3,6 +3,8 @@
 .env.*
 node_modules
 .output
+build
+ios
 outputs
 todos
 docs

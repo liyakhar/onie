@@ -349,7 +349,7 @@ export function TransactionsContent({
               className="wollie-transaction-filters__trigger min-h-11 border-zinc-200 bg-white"
               aria-label="Transaction status"
             >
-              <SelectValue />
+              <SelectValue>{labelStatus(status)}</SelectValue>
             </SelectTrigger>
             <SelectContent
               align="start"
@@ -378,7 +378,7 @@ export function TransactionsContent({
               className="wollie-transaction-filters__trigger min-h-11 border-zinc-200 bg-white"
               aria-label="Transaction category"
             >
-              <SelectValue />
+              <SelectValue>{category === "all" ? "All categories" : category}</SelectValue>
             </SelectTrigger>
             <SelectContent
               align="start"
@@ -404,7 +404,7 @@ export function TransactionsContent({
               className="wollie-transaction-filters__trigger min-h-11 border-zinc-200 bg-white"
               aria-label="Transaction month"
             >
-              <SelectValue />
+              <SelectValue>{month === "all" ? "All months" : formatMonth(month)}</SelectValue>
             </SelectTrigger>
             <SelectContent
               align="start"

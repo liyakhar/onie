@@ -8095,3 +8095,215 @@ body {
     display: none;
   }
 }
+
+/* Compact workspace layout for phones and the iOS shell. */
+@media (max-width: 48rem) {
+  .app-shell {
+    min-height: 100svh;
+    overflow-x: clip;
+  }
+
+  .app-shell__main {
+    overflow-x: clip;
+    padding-block-end: calc(6.5rem + env(safe-area-inset-bottom));
+  }
+
+  .app-shell > .app-nav {
+    background: var(--color-brand-cream);
+    box-shadow: none;
+  }
+
+  .app-shell .app-nav__inner {
+    min-height: 3.5rem;
+    padding: 0.375rem 1rem;
+  }
+
+  .app-shell .app-nav__brand {
+    min-height: 2.75rem;
+  }
+
+  .wollie-workspace-page {
+    width: 100% !important;
+    max-width: 32rem !important;
+    gap: 1rem !important;
+    padding: 1rem 1rem calc(7rem + env(safe-area-inset-bottom)) !important;
+  }
+
+  .wollie-workspace-page > header {
+    gap: 0.75rem;
+    padding-bottom: 1rem !important;
+  }
+
+  .wollie-workspace-page h1 {
+    font-size: 1.875rem !important;
+    font-weight: 740 !important;
+    letter-spacing: 0 !important;
+    line-height: 1.1 !important;
+  }
+
+  .wollie-workspace-page h2,
+  .wollie-workspace-page h3 {
+    letter-spacing: 0;
+  }
+
+  .wollie-workspace-page > header p {
+    margin-block-start: 0.25rem !important;
+    font-size: 0.875rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .wollie-workspace-page > *,
+  .wollie-workspace-page [data-slot="card"],
+  .wollie-workspace-page section {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .wollie-workspace-page [data-slot="card"],
+  .wollie-workspace-page section.rounded-lg,
+  .wollie-workspace-page article.rounded-lg,
+  .wollie-workspace-page div.rounded-lg {
+    border-radius: 0.5rem !important;
+    box-shadow: none !important;
+  }
+
+  .wollie-workspace-page [data-slot="card-action"] a {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    padding-inline: 0.5rem;
+  }
+
+  .wollie-transaction-filters__controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .wollie-transaction-filters__controls > :nth-child(2) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .wollie-workspace-page [role="combobox"].wollie-transaction-filters__trigger {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .money-plan-view-switch {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.25rem;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+    background: var(--color-brand-cream-deep);
+  }
+
+  .money-plan-view-switch button {
+    min-width: 0;
+    min-height: 2.75rem;
+    margin: 0;
+    padding: 0.4rem;
+    border: 0 !important;
+    border-radius: 0.375rem;
+    font-size: 0.8125rem;
+    line-height: 1.25;
+    white-space: normal;
+  }
+
+  .money-plan-view-switch button[aria-pressed="true"] {
+    background: var(--color-brand-paper);
+    box-shadow: 0 1px 3px color-mix(in oklch, var(--color-brand-blue-deep) 12%, transparent);
+  }
+
+  .money-plan-section {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+  }
+
+  .money-plan-section__header {
+    padding: 0.5rem 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .money-plan-section__list {
+    gap: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--color-brand-rule);
+    border-radius: 0.5rem;
+    background: var(--color-brand-paper);
+  }
+
+  .money-plan-envelope {
+    padding: 1rem;
+    border: 0;
+    border-bottom: 1px solid var(--color-brand-rule);
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .money-plan-envelope:last-child {
+    border-bottom: 0;
+  }
+
+  .app-shell .app-mobile-nav {
+    inset-inline: 0.75rem;
+    bottom: calc(0.5rem + env(safe-area-inset-bottom));
+    width: calc(100% - 1.5rem);
+    max-width: 29rem;
+    margin-inline: auto;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.125rem;
+    padding: 0.35rem;
+    border: 1px solid color-mix(in oklch, var(--color-brand-on-blue) 18%, transparent);
+    border-radius: 9999px;
+    background: var(--color-brand-blue-deep);
+    box-shadow: 0 0.75rem 2rem color-mix(in oklch, var(--color-brand-blue-deep) 20%, transparent);
+  }
+
+  .app-shell .app-mobile-nav__item {
+    min-width: 0;
+    min-height: 3.5rem;
+    gap: 0.15rem;
+    padding: 0.35rem 0.1rem;
+    border-radius: 9999px;
+    font-size: 0.6875rem;
+    line-height: 1.15;
+  }
+
+  .app-shell .app-mobile-nav__item svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  .app-shell .app-mobile-nav__item.is-active {
+    background: var(--color-brand-orange-soft);
+    color: var(--color-brand-on-orange);
+  }
+
+  .app-mobile-more__scrim {
+    position: fixed;
+    z-index: calc(var(--z-sticky-nav) - 2);
+    inset: 0;
+    width: 100%;
+    border: 0;
+    background: color-mix(in oklch, var(--color-brand-blue-deep) 32%, transparent);
+  }
+
+  .app-mobile-more {
+    z-index: calc(var(--z-sticky-nav) - 1);
+    inset-inline: 0.75rem;
+    bottom: calc(5.25rem + env(safe-area-inset-bottom));
+    max-width: 29rem;
+    margin-inline: auto;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+  }
+
+  button[aria-label="Open TanStack Devtools"] {
+    display: none !important;
+  }
+}

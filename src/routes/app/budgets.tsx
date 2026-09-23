@@ -287,7 +287,7 @@ function EnvelopeStatus({
     >
       <nav
         aria-label="Money plan views"
-        className="flex overflow-x-auto overflow-y-hidden rounded-lg border border-zinc-200 bg-white px-4 sm:px-5"
+        className="money-plan-view-switch flex overflow-x-auto overflow-y-hidden rounded-lg border border-zinc-200 bg-white px-4 sm:px-5"
       >
         <MoneyPlanViewButton
           active={view === "spending"}

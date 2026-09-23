@@ -11,6 +11,10 @@ dist-ssr
 .wrangler
 .output
 .vinxi
+build/
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/App/config.xml
 __unconfig*
 todos.json
 outreach/queue/*.jsonl

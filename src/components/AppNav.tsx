@@ -24,7 +24,7 @@ export default function AppNav({
   return (
     <aside className="app-nav">
       <div className="app-nav__inner">
-        <Link to="/" className="app-nav__brand" aria-label="Wollie home">
+        <Link to={demo ? "/demo" : "/app"} className="app-nav__brand" aria-label="Wollie home">
           <strong>Wollie</strong>
           <span>{demo ? "Interactive demo" : "Shared money"}</span>
         </Link>
