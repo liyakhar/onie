@@ -397,6 +397,21 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - parallel agent workflows ✓
   - agent workflow use cases ✓
 
+### mcp integration claude code
+
+- **Page:** `/blog/mcp-integration-claude-code`
+- **Published:** 2026-09-24
+- **Intent:** Informational
+- **Volume / KD:** pending
+- **Cluster:**
+  - mcp integration claude code ✓
+  - claude code mcp setup ✓
+  - claude mcp add command ✓
+  - mcp stdio configuration ✓
+  - mcp http server claude code ✓
+  - team mcp servers ✓
+  - mcp oauth authentication ✓
+
 ### agent observability for developers
 
 - **Page:** `/blog/agent-observability-for-developers`

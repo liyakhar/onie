@@ -28,8 +28,10 @@ import { cursorAgentSkillsMigratePost } from '#/content/blog/cursor-agent-skills
 import { publicAgentWorkflowFeedPost } from '#/content/blog/public-agent-workflow-feed'
 import { claudeCodeDynamicWorkflowsPost } from '#/content/blog/claude-code-dynamic-workflows'
 import { dynamicWorkflowExamplesPost } from '#/content/blog/dynamic-workflow-examples'
+import { mcpIntegrationClaudeCodePost } from '#/content/blog/mcp-integration-claude-code'
 
 const posts: BlogPost[] = [
+  mcpIntegrationClaudeCodePost,
   dynamicWorkflowExamplesPost,
   claudeCodeDynamicWorkflowsPost,
   publicAgentWorkflowFeedPost,
