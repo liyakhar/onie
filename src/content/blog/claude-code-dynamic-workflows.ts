@@ -24,7 +24,7 @@ export const claudeCodeDynamicWorkflowsPost: BlogPost = {
   },
   tldr:
     'Claude Code dynamic workflows are JavaScript harnesses that fan out work to up to 16 parallel subagents. Three primitives—agent(), parallel(), and pipeline()—compose into audit, migration, and research workflows. Turn on `ultracode` to auto-plan workflows, or ask Claude to write one inline. Save reusable workflows to `~/.claude/workflows/` and share them on Onie.',
-  relatedSlugs: ['dynamic-workflow-examples', 'claude-code-workflow-examples', 'how-to-write-claude-code-skills'],
+  relatedSlugs: ['team-workflow-orchestration-ai', 'dynamic-workflow-examples', 'claude-code-workflow-examples'],
   body: `
 ## What is a dynamic workflow
 

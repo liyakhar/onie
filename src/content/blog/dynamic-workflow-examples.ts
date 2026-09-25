@@ -24,7 +24,7 @@ export const dynamicWorkflowExamplesPost: BlogPost = {
   },
   tldr:
     'Dynamic workflows excel at tasks too large for one agent: fact-checking with adversarial verification, code audits across hundreds of files, large content migrations, and multi-phase research. Each pattern uses fan-out to parallelize independent work, then synthesis to merge results. Control when orchestration scales beyond your context window.',
-  relatedSlugs: ['claude-code-dynamic-workflows', 'claude-code-workflow-examples', 'agent-workflow-template'],
+  relatedSlugs: ['team-workflow-orchestration-ai', 'claude-code-dynamic-workflows', 'agent-workflow-template'],
   body: `
 ## When a single agent breaks
 

@@ -412,6 +412,21 @@ Track primary keywords assigned to published blog posts. Never reuse a primary.
   - team mcp servers ✓
   - mcp oauth authentication ✓
 
+### team workflow orchestration with ai
+
+- **Page:** `/blog/team-workflow-orchestration-ai`
+- **Published:** 2026-09-25
+- **Intent:** Informational
+- **Volume / KD:** pending (serp-2026-09 validated)
+- **Cluster:**
+  - team workflow orchestration with ai ✓
+  - ai agent orchestration patterns ✓
+  - multi-agent workflow coordination ✓
+  - deterministic agent workflows ✓
+  - team collaboration ai agents ✓
+  - agent workflow governance ✓
+  - workflow automation with multiple agents ✓
+
 ### agent observability for developers
 
 - **Page:** `/blog/agent-observability-for-developers`

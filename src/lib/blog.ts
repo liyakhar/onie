@@ -29,8 +29,10 @@ import { publicAgentWorkflowFeedPost } from '#/content/blog/public-agent-workflo
 import { claudeCodeDynamicWorkflowsPost } from '#/content/blog/claude-code-dynamic-workflows'
 import { dynamicWorkflowExamplesPost } from '#/content/blog/dynamic-workflow-examples'
 import { mcpIntegrationClaudeCodePost } from '#/content/blog/mcp-integration-claude-code'
+import { teamWorkflowOrchestrationPost } from '#/content/blog/team-workflow-orchestration-ai'
 
 const posts: BlogPost[] = [
+  teamWorkflowOrchestrationPost,
   mcpIntegrationClaudeCodePost,
   dynamicWorkflowExamplesPost,
   claudeCodeDynamicWorkflowsPost,
